@@ -208,9 +208,10 @@ transition:.25s;
 
 .card img{
   width:100%;
-  height: 260px;
-  object-fit:cover;
-  background:#151515;
+  height:260px;
+  object-fit:contain;
+  background:#fff;
+  padding:10px;
   transition:.35s;
 }
 
@@ -724,7 +725,10 @@ border-radius:12px;
 }
 
 .card img{
-height:155px;
+  height:180px;
+  object-fit:contain;
+  background:#fff;
+  padding:6px;
 }
 
 .card-info{
