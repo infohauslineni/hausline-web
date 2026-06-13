@@ -1612,7 +1612,7 @@ colores:[
   imagenes:[
     "imgP/ropa/007.1.jpeg",
     "imgP/ropa/007.2.jpeg",
-    "imgP/ropa/007.3.jpeg"
+    
   ],
 
   descripcion:"EST TIEMPO DE ENTREGA 15-25 DIAS",
