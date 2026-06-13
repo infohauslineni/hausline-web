@@ -40,7 +40,7 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen: "https://drive.google.com/thumbnail?id=1BTaKMP2O9Sei1d24JzPWijdIf3WfXVdn&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 
@@ -51,7 +51,7 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen: "https://drive.google.com/thumbnail?id=1kUioiql20hDzPvQJvrsGvSM_BVVGnz0v&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
@@ -61,17 +61,17 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen: "https://drive.google.com/thumbnail?id=14n7uVG-5nS1JjX_eEosSltHsoiLidvNa&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#008",
-  nombre: " Louis Junior Spikes CL",
+  nombre: " Christian Loubutin CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1EIA2ffQ_izNBXLHmVYXR5mVT9YzxTtm6&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
@@ -81,17 +81,17 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1NN9htaAwUMYnyG_F7IUdcRp0plvVNdc5&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#010",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1J1Tj3zag-Kf8R7soBRXgBwaoUMTg41SM&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
@@ -101,7 +101,7 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1YzZph89meIBGWYcCcPAYE1I074cEryMJ&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
@@ -111,7 +111,7 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1-QZheSLeM0uPT1Z8ik3xze63dqKTJ1Jd&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
@@ -121,17 +121,17 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1jh3wDLaz2FANq4JxvLuWbLIzSDA3_dXB&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#014",
-  nombre: " FUN aLouis Junior Spikes  CL",
+  nombre: " FUN CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1roDGfvbrBZZ4ItTgZbTPdXM-ph9L8lc-&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
@@ -141,167 +141,167 @@ const productos = [
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1IRESRcRILs-bLAo_u71iE-tahRHgoxiz&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#016",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=15Qh2CBlOAkejheAI4vB1T464y1iJBrk4&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#017",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1-gIzAuMc8s_q5rqXmDzvHoXY0HEwD4xa&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#018",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=14D4HEOOuu-H49ZRxhnwnVuS8bmkbAu4L&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#019",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1fNYJDdQcQlKzCl1NJ6Nu6eLytNZ6E0Ef&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#020",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1eH4oQOvwfrBIyCRUVuH7N0m2iNYVqN46&sz=w10000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#021",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1WxmEQ1YE9xgQuY9gxQTikdwLxSzCgmEf&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#022",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1gBCvEJAnC6At4OJs9S6cfUwSC15J2Hv1&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#023",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1twddvWuEAEw6pEy-ijH5PkOwe8-UPzuq&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#024",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1RzIgXuCp1lGvvgKzCHzEWtBja6KKVRDC&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#025",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1zw8u3KosuVwWmRriRRrwpJ8dcyQrh2xz&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#026",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=13PowIQUP1-qhGGXqb9Wjjit9v2K5gEH8&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#027",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1XDc8KBXu0alFgY7VMisbUAFs7v8IaQZ4&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#028",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1jp_hxvEs3LWrWxrYuK7tAMNB_cuEs8i3&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#029",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1Rk8RDqWUk75lUXgX_u2-NFO2fqaQjweV&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#030",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1NEaBp0cJFqvqnqXgP9Q48Vt0OCmE0G-m&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
   codigo: "#031",
-  nombre: " Louis Junior Spikes  CL",
+  nombre: " CHRISTIAN LOUBUTIN CL",
   precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1YhVBrtyODo8A0mgEj9rZ6vKIR3d54w1Z&sz=w1000",
-  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-35 DIAS",
+  descripcion: "LOUBOUTIN TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
 {
