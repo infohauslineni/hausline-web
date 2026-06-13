@@ -480,9 +480,11 @@ cursor:pointer;
 }
 
 .modal-box img{
-width:100%;
-height:100%;
-object-fit:cover;
+  width:100%;
+  height:320px;
+  object-fit:contain;
+  background:#fff;
+  padding:10px;
 }
 
 .modal-info{
@@ -825,6 +827,13 @@ font-size:15px;
     gap:12px;
   }
 
+  .modal-box img{
+    height:260px;
+    object-fit:contain;
+  }
+
+}
+
   
 
   .nombre-producto{
@@ -845,7 +854,7 @@ font-size:15px;
     flex-shrink:0;
   }
 
-}
+
 .talla-btn.activa{
   background: #b7ff00;
   color: #000;
