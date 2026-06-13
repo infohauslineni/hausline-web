@@ -464,16 +464,7 @@ const productos = [
   descripcion: "GGDB TIEMPO DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
 },
-{
-  codigo: "#049",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Zapatos",
-  nuevo: true,
-  imagen:"https://drive.google.com/thumbnail?id=1Q5_b41W7m0AzeXHLVrekx5vieOpdQX1y&sz=w1000",
-  descripcion: "CH TIEMPO DE ENTREGA 15-35 DIAS",
-  tallas: ["37","38","39","40","41","42","43","44"]
-},
+
 {
   codigo: "#050",
   nombre: " GOLDEN GOOSE GGDB",
