@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hausline | Catálogo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">HAUSLINE</div>
+  <nav>
+    <a href="#inicio">INICIO</a>
+    <a href="#catalogo">CATÁLOGO</a>
+    <a href="#contacto">CONTACTO</a>
+<a href="https://wa.me/50578995116" target="_blank">WHATSAPP</a>
+  </nav>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="hero-content">
+
+    <div class="logo-hero">
+      <h1>HAUSLINE</h1>
+      <span>.NI</span>
+    </div>
+
+    <p class="hero-subtitle">Sneakers • Ropa • Accesorios</p>
+
+    <a href="#catalogo" class="btn-hero">VER CATÁLOGO</a>
+
+  </div>
+</section>
+
+<section id="catalogo">
+
+  <h2>Catálogo</h2>
+
+  <p id="contadorProductos"></p>
+
+  <input
+    type="text"
+    id="buscador"
+    placeholder="Buscar producto o código..."
+  >
+
+  <div class="categorias">
+
+  <button class="filtro-btn activo" data-categoria="Zapatos">👟 Zapatos</button>
+<button class="filtro-btn" data-categoria="Dama">👠 Dama</button>
+<button class="filtro-btn" data-categoria="Accesorios">⌚ Accesorios</button>
+<button class="filtro-btn" data-categoria="Ropa">👕 Ropa</button>
+
+</div>
+
+  <div class="grid" id="productos"></div>
+  <div id="paginacion" class="paginacion"></div>
+</section>
+
+
+
+<section class="catalogo">
+  <div class="top-catalogo">
+    <h2>Recomendados</h2>
+  </div>
+  <div class="grid" id="recomendados"></div>
+</section>
+
+<section class="clientes">
+  <h2>Clientes y entregas</h2>
+
+  <div class="slider">
+    <div class="track">
+
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1r6rIn1tkd2E693gAZl9DVnA6ovDvu9nk&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=17nnIA0mXXQQf4X6W5tQ8--p6OQV9CNN6&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1kwv1msY99OfTrT6uIMPUDup0cU6k50aA&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1xTOWXPVcBUC6JDAIK7FBLUtfcdyarB1n&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1Pt9Pjhtx3Mp5CDrNnhEPJGMhNZASkduD&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1SjSKg1GCnmlUnko_HZCn2swlG4VKVOez&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1LmdJbjRTMBUejJYkVE_XI1pGkEVYz1JU&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1s1eaFlktEO5p_sfrEdpx5HXtQ68siYJR&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1ieylcDX6mvxCKtdlmDntF8d8i3Nu_d6Z&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UasaE-MPH0SiCknfleg0OWFWt8hgCfSJ&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1OH525rENRrVPgIkWxFnSvZy5OIqZxbOj&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1I_-8brV_kGRUPYe68gMq9c2WLuLGy-Uj&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1m6jMoKSRuktbRZFWyKPXSHzJxf-m91Hm&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UNDiOf6VblD6AZGkcBmXxZ5TF4NmbGHv&sz=w1000" alt="Cliente"></div>
+
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1r6rIn1tkd2E693gAZl9DVnA6ovDvu9nk&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=17nnIA0mXXQQf4X6W5tQ8--p6OQV9CNN6&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1kwv1msY99OfTrT6uIMPUDup0cU6k50aA&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1xTOWXPVcBUC6JDAIK7FBLUtfcdyarB1n&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1Pt9Pjhtx3Mp5CDrNnhEPJGMhNZASkduD&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1SjSKg1GCnmlUnko_HZCn2swlG4VKVOez&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1LmdJbjRTMBUejJYkVE_XI1pGkEVYz1JU&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1s1eaFlktEO5p_sfrEdpx5HXtQ68siYJR&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1ieylcDX6mvxCKtdlmDntF8d8i3Nu_d6Z&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UasaE-MPH0SiCknfleg0OWFWt8hgCfSJ&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1OH525rENRrVPgIkWxFnSvZy5OIqZxbOj&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1I_-8brV_kGRUPYe68gMq9c2WLuLGy-Uj&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1m6jMoKSRuktbRZFWyKPXSHzJxf-m91Hm&sz=w1000" alt="Cliente"></div>
+      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UNDiOf6VblD6AZGkcBmXxZ5TF4NmbGHv&sz=w1000" alt="Cliente"></div>
+
+    </div>
+  </div>
+</section>
+<section class="confianza">
+  <h2> +100 Pedidos Entregados en Nicaragua</h2>
+  <p>Pedidos bajo encargo, entregas seguras y atención personalizada.</p>
+</section>
+
+<section class="resenas">
+  <h2>Reseñas de clientes</h2>
+
+  <div class="resenas-grid">
+    <div class="resena">
+      <div class="estrellas">★★★★★</div>
+      <p>Excelente calidad, me llegó tal como lo pedí.</p>
+      <span>Cliente Managua</span>
+    </div>
+
+    <div class="resena">
+      <div class="estrellas">★★★★★</div>
+      <p>Muy buena atención y seguimiento durante todo el proceso.</p>
+      <span>Cliente León</span>
+    </div>
+
+    <div class="resena">
+      <div class="estrellas">★★★★★</div>
+      <p>Muy recomendados, volvería a comprar.</p>
+      <span>Cliente Chinandega</span>
+    </div>
+  </div>
+</section>
+
+<section class="beneficios">
+  <div class="beneficio">
+    <div class="icono">🛡️</div>
+    <h3>PRODUCTOS G5</h3>
+    <p>Calidad premium garantizada</p>
+  </div>
+
+  <div class="beneficio">
+    <div class="icono">🚚</div>
+    <h3>ENVÍO RÁPIDO Y SEGURO</h3>
+    <p>A todo el país</p>
+  </div>
+
+  <div class="beneficio">
+    <div class="icono">🔒</div>
+    <h3>COMPRA SEGURA</h3>
+    <p>Protegemos tu información</p>
+  </div>
+
+  <div class="beneficio">
+    <div class="icono">🎧</div>
+    <h3>ATENCIÓN PERSONALIZADA</h3>
+    <p>Estamos para ayudarte</p>
+  </div>
+</section>
+
+<section class="contacto" id="contacto">
+  <h2>Contacto</h2>
+  
+  <div class="contact-buttons">
+
+  <a href="https://wa.me/50578995116" target="_blank" class="contact-btn whatsapp-btn">
+    WhatsApp
+  </a>
+
+  <a href="https://instagram.com/hausline.ni" target="_blank" class="contact-btn insta-btn">
+    Instagram
+  </a>
+
+  <a href="https://tiktok.com/@hausline.niof" target="_blank" class="contact-btn tiktok-btn">
+    TikTok
+  </a>
+
+</div>
+</section>
+
+<footer>
+  <div class="footer-logo">HAUSLINE</div>
+  <p>© 2026 Hausline. Todos los derechos reservados.</p>
+
+
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="cerrar" id="cerrar" type="button">×</button>
+
+    <div class="modal-galeria">
+  <button class="galeria-btn galeria-prev" id="galeriaPrev">‹</button>
+  <img id="modalImg" src="" alt="Producto">
+  <button class="galeria-btn galeria-next" id="galeriaNext">›</button>
+</div>
+
+    <div class="modal-info">
+      <p id="modalCodigo"></p>
+      <h2 id="modalNombre"></h2>
+      <h3 id="modalPrecio"></h3>
+      <p id="modalDesc"></p>
+
+      <div class="tallas" id="modalTallas"></div>
+
+      <button class="whatsapp" id="whatsapp">
+        Encargar por WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+<a href="https://wa.me/50578995116" target="_blank" class="whatsapp-flotante">
+  💬
+</a>
+<script src="app.js"></script>
+
+</body>
+</html>
