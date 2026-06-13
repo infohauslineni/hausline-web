@@ -223,7 +223,7 @@ padding:18px;
 display:flex;
 flex-direction:column;
 gap:8px;
-min-height:150px;
+min-height:120px;
 }
 
 .badge{
@@ -460,7 +460,7 @@ display:flex;
 background:#0d0d0d;
 border:1px solid #222;
 width:100%;
-max-width:950px;
+max-width:850px;
 display:grid;
 grid-template-columns:1fr 1fr;
 border-radius:20px;
@@ -535,6 +535,64 @@ color:black;
 font-weight:900;
 cursor:pointer;
 }
+
+
+@media (max-width: 768px){
+
+  .modal{
+    padding: 12px;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .modal-box{
+    margin-top: 20px;
+    max-height: 92vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+  }
+
+  .cerrar{
+    position: sticky;
+    top: 8px;
+    align-self: flex-end;
+    z-index: 1000;
+    margin: 8px 10px 0 0;
+    background: #000;
+    color: #fff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 30px;
+    line-height: 38px;
+  }
+
+  .modal-box img{
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: contain;
+  }
+
+  .modal-info{
+    padding: 18px;
+  }
+
+  .modal-info h2{
+    font-size: 24px;
+  }
+
+  .modal-info h3{
+    font-size: 22px;
+  }
+
+  .whatsapp{
+    margin-bottom: 15px;
+  }
+}
+
 
 /* TABLET */
 @media(max-width:768px){
