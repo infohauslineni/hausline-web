@@ -1898,8 +1898,42 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+{
+  codigo:"#023R",
+  nombre:"T-SHIRT AMIRI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/023.1.jpeg",
 
+  imagenes:[
+    "imgP/ropa/023.1.jpeg",
+    "imgP/ropa/023.2.jpeg",
+    "imgP/ropa/023.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"#024R",
+  nombre:"T-SHIRT AMIRI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/024..1.jpg",
+
+  imagenes:[
+    "imgP/ropa/024.1.jpg",
+    "imgP/ropa/024.2.jpg",
+    "imgP/ropa/024.3.jpg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"]
+},
 
 
 
