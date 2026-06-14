@@ -1923,7 +1923,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   categoria:"Ropa",
   nuevo:true,
 
-  imagen:"imgP/ropa/024..1.jpg",
+  imagen:"imgP/ropa/024.1.jpg",
 
   imagenes:[
     "imgP/ropa/024.1.jpg",
