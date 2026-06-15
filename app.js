@@ -1002,7 +1002,7 @@ const productos = [
   precio: 140,
   categoria: "Zapatos",
   nuevo: true,
-  imagen:"https://drive.google.com/thumbnail?id=1rusjj5znpA-mQZoCCAKjn5DEBgOXR6fT&sz=w1000",
+  imagen:"https://drive.google.com/thumbnail?id=1VA3njqw64KfuhNSlLg59OY39h0lJ8r2W&sz=w1000",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
   },
@@ -1012,7 +1012,7 @@ const productos = [
   precio: 105,
   categoria: "Zapatos",
   nuevo: true,
-  imagen:"https://drive.google.com/thumbnail?id=1VA3njqw64KfuhNSlLg59OY39h0lJ8r2W&sz=w1000",
+  imagen:"https://drive.google.com/thumbnail?id=1H7EVr309rt4UplmgCT013tDs7noBmIqV&sz=w1000",
   descripcion: " BK TIEMPO  DE ENTREGA 15-25 DIAS",
   tallas: ["37","38","39","40","41","42","43","44"]
   },
