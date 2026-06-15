@@ -1934,8 +1934,78 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+{
+  codigo:"#025R",
+  nombre:"T-SHIRT AMIRI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/025.1.jpeg",
 
+  imagenes:[
+    "imgP/ropa/025.1.jpeg",
+    "imgP/ropa/025.2.jpeg",
+    "imgP/ropa/025.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"#026R",
+  nombre:"T-SHIRT AMIRI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/026.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/026.1.jpeg",
+    "imgP/ropa/026.2.jpeg",
+    "imgP/ropa/026.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"#027R",
+  nombre:"T-SHIRT AMIRI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/027.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/027.1.jpeg",
+    "imgP/ropa/027.2.jpeg",
+    "imgP/ropa/027.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"#028R",
+  nombre:"T-SHIRT AMIRI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/028.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/028.1.jpeg",
+    "imgP/ropa/028.2.jpeg",
+    "imgP/ropa/028.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"]
+},
 
 
 
