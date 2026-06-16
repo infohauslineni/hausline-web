@@ -1570,7 +1570,10 @@ colores:[
 
   descripcion:"GP TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],  colores:[
+  "Black",
+  "White"
+],
 },
 {
   codigo:"#006R",
@@ -1589,12 +1592,17 @@ colores:[
 
   descripcion:"AMIRI TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+    
+  tallas:["S","M","L","XL"],
+    colores:[
+  "Black",
+  "White"
+],
 },
 {
   codigo:"#007R",
   nombre:"T-SHIRT ESSENSIALTS",
-  precio:50,
+  precio:52,
   categoria:"Ropa",
   nuevo:true,
 
@@ -1608,7 +1616,13 @@ colores:[
 
   descripcion:"EST TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Cream",
+  "Beige",
+  "Coral",
+  "Black"
+],
 },
 {
   codigo:"#008R",
@@ -1650,7 +1664,14 @@ colores:[
 
   descripcion:"EST TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "White",
+  "Grey",
+  "Sand",
+  "Green",
+  "Blue",
+  "Black"
+],
 },
 {
   codigo:"#010R",
@@ -1726,7 +1747,11 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#014R",
@@ -1745,7 +1770,10 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#015R",
@@ -1764,7 +1792,10 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#016R",
@@ -1783,7 +1814,10 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#017R",
@@ -1802,7 +1836,10 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#018R",
@@ -1821,7 +1858,10 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#019R",
@@ -1859,7 +1899,12 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "white",
+  "navy blue",
+],
 },
 {
   codigo:"#021R",
@@ -1878,7 +1923,10 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#022R",
@@ -1968,7 +2016,11 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   ],
 descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
-  tallas:["S","M","L","XL"]
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "white",
+],
 },
 {
   codigo:"#027R",
@@ -1991,7 +2043,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 {
   codigo:"#028R",
   nombre:"T-SHIRT AMIRI",
-  precio:50,
+  precio:62,
   categoria:"Ropa",
   nuevo:true,
 
@@ -2006,19 +2058,453 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+{
+  codigo:"#029R",
+  nombre:"T-SHIRT OFFWHT",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/029.1.jpeg",
 
+  imagenes:[
+    "imgP/ropa/029.1.jpeg",
+    "imgP/ropa/029.2.jpeg",
+  
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
+  tallas:["S","M","L","XL"],  colores:[
+  "Black",
+  "White"
+],
+},
+{
+  codigo:"#031R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/031.1.jpeg",
 
+  imagenes:[
+    "imgP/ropa/031.1.jpeg",
+    "imgP/ropa/031.2.jpeg",
+    "imgP/ropa/031.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
+  tallas:["S","M","L","XL"],  colores:[
+  "Black",
+  
+],
+  
+},
+{
+  codigo:"#032R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/032.1.jpeg",
 
+  imagenes:[
+    "imgP/ropa/032.1.jpeg",
+    "imgP/ropa/032.2.jpeg",
+    "imgP/ropa/032.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "White",
+  "navy blue"
+],
+},
+{
+  codigo:"#034R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/034.1.jpeg",
 
+  imagenes:[
+    "imgP/ropa/034.1.jpeg",
+    "imgP/ropa/034.2.jpeg",
+    "imgP/ropa/034.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "White"
+],
+},
+{
+  codigo:"#035R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/035.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/035.1.jpeg",
+    "imgP/ropa/035.2.jpeg",
+    "imgP/ropa/035.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "White"
+],
+},
+{
+  codigo:"#036R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/036.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/036.1.jpeg",
+    "imgP/ropa/036.2.jpeg",
+    "imgP/ropa/036.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+  colores:[
+  "Black",
+  "Grey",
+  "White",
+
+],
+},
+{
+  codigo:"#037R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/037.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/037.1.jpeg",
+    "imgP/ropa/037.2.jpeg",
+    "imgP/ropa/037.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+  colores:["Negro","Blanco"]
+},
+{
+  codigo:"#038R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/038.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/038.1.jpeg",
+    "imgP/ropa/038.2.jpeg",
+    "imgP/ropa/038.3.jpeg",
+  ],
+descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+colores:[
+  "Pink",
+  "Baby Blue",
+  "Cream",
+  "White",
+  "Black"
+],
+},
+{
+  codigo:"#039R",
+  nombre:"T-SHIRT ASSC",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/039.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/039.1.jpeg",
+    "imgP/ropa/039.2.jpeg",
+    "imgP/ropa/039.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+  colores:["Negro","Blanco"]
+},
+{
+  codigo:"#040R",
+  nombre:"SHORTS BALENCIAGA",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/040.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/040.1.jpg",
+    "imgP/ropa/040.2.jpg",
+    "imgP/ropa/040.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+  colores:["Negro","Blanco"]
+},
+{
+  codigo:"#041R",
+  nombre:"T-SHIRTS BALENCIAGA",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/041.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/041.1.jpg",
+    "imgP/ropa/041.2.jpg",
+    "imgP/ropa/041.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "Black",
+],
+},
+{
+  codigo:"#042R",
+  nombre:"T-SHIRTS BALENCIAGA",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/042.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/042.1.jpg",
+    "imgP/ropa/042.2.jpg",
+    "imgP/ropa/042.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "Black",
+],
+},
+{
+  codigo:"#043R",
+  nombre:"T-SHIRTS BALENCIAGA",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/043.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/043.1.jpg",
+    "imgP/ropa/043.2.jpg",
+    "imgP/ropa/043.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "Black",
+  "white",
+],
+},
+{
+  codigo:"#044R",
+  nombre:"T-SHIRTS B4PE",
+  precio:48,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/044.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/044.1.jpeg",
+    "imgP/ropa/044.2.jpeg",
+    "imgP/ropa/044.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "Black",
+  "Pink",
+  "Gray",
+],
+},
+{
+  codigo:"#045R",
+  nombre:"T-SHIRTS CASA BLANCA",
+  precio:62,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/045.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/045.1.jpg",
+    "imgP/ropa/045.2.jpg",
+    "imgP/ropa/045.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+  
+],
+},
+{
+  codigo:"#047R",
+  nombre:"T-SHIRTS CASA BLANCA",
+  precio:62,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/047.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/047.1.jpg",
+    "imgP/ropa/047.2.jpg",
+    "imgP/ropa/047.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+  
+],
+},
+{
+  codigo:"#048R",
+  nombre:"T-SHIRTS CASA BLANCA",
+  precio:62,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/048.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/048.1.jpg",
+    "imgP/ropa/048.2.jpg",
+    "imgP/ropa/048.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+  
+],
+},
+{
+  codigo:"#051R",
+  nombre:"CONJUNTO CASA BLANCA",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/051.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/051.1.jpeg",
+    "imgP/ropa/051.2.jpeg",
+    "imgP/ropa/051.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+  
+],
+},
+{
+  codigo:"#052R",
+  nombre:"CONJUNTO CASA BLANCA",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/051.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/052.1.jpeg",
+    "imgP/ropa/052.2.jpeg",
+    "imgP/ropa/052.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+  
+],
+},
+{
+  codigo:"#053R",
+  nombre:"CONJUNTO CASA BLANCA",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/054.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/054.1.jpeg",
+    "imgP/ropa/054.2.jpeg",
+    "imgP/ropa/054.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+  
+],
+},
 
 
 
@@ -2231,45 +2717,37 @@ document.getElementById("galeriaNext").style.display =
 const contenedorTallas = document.getElementById("modalTallas");
 
 contenedorTallas.innerHTML = "";
+contenedorTallas.innerHTML = "";
 
-if(productoActual.categoria === "Accesorios"){
+if(productoActual.categoria === "Ropa" &&
+   productoActual.colores &&
+   productoActual.colores.length > 0){
 
-  contenedorTallas.innerHTML = `
+  contenedorTallas.innerHTML += `
     <div class="colores-disponibles">
-      <strong>Colores disponibles:</strong>
+      <strong>Color:</strong>
     </div>
   `;
 
-  if(productoActual.colores && productoActual.colores.length > 0){
-
-    productoActual.colores.forEach(color => {
-      contenedorTallas.innerHTML += `
-        <button class="color-btn">${color}</button>
-      `;
-    });
-
-  }else{
-
+  productoActual.colores.forEach(color => {
     contenedorTallas.innerHTML += `
-      <button class="color-btn">Black</button>
+      <button class="color-btn">${color}</button>
     `;
-
-  }
-
-  document.querySelectorAll(".color-btn").forEach(boton => {
-    boton.addEventListener("click", () => {
-      document.querySelectorAll(".color-btn").forEach(b => b.classList.remove("activa"));
-      boton.classList.add("activa");
-    });
   });
 
-}else if(productoActual.tallas){
+}
+
+if(productoActual.tallas && productoActual.tallas.length > 0){
+
+  contenedorTallas.innerHTML += `
+    <div class="colores-disponibles">
+      <strong>Talla:</strong>
+    </div>
+  `;
 
   productoActual.tallas.forEach(talla => {
     contenedorTallas.innerHTML += `
-      <button class="talla-btn">
-        ${talla}
-      </button>
+      <button class="talla-btn">${talla}</button>
     `;
   });
 
@@ -2314,7 +2792,7 @@ document.addEventListener("click", function(e) {
 
 });
 let tallaSeleccionada = "";
-
+let colorSeleccionado = "";
 document.addEventListener("click", function(e){
 
   const tallaBtn = e.target.closest(".talla-btn");
@@ -2331,7 +2809,22 @@ document.addEventListener("click", function(e){
   }
 
 });
+document.addEventListener("click", function(e){
 
+  const colorBtn = e.target.closest(".color-btn");
+
+  if(colorBtn){
+
+    document.querySelectorAll(".color-btn").forEach(btn => {
+      btn.classList.remove("activa");
+    });
+
+    colorBtn.classList.add("activa");
+    colorSeleccionado = colorBtn.textContent.trim();
+
+  }
+
+});
 document.getElementById("whatsapp").addEventListener("click", function(){
 
   if(!productoActual) return;
@@ -2340,14 +2833,23 @@ document.getElementById("whatsapp").addEventListener("click", function(){
     alert("Selecciona una talla primero");
     return;
   }
+if(productoActual.colores && productoActual.colores.length > 0 && !colorSeleccionado){
+  alert("Selecciona un color primero");
+  return;
+}
+  let mensaje =
+'Hola, quiero encargar este producto:\n\n' +
+`Código: ${productoActual.codigo}\n` +
+`Producto: ${productoActual.nombre}\n` +
+`Categoría: ${productoActual.categoria}\n`;
 
-  const mensaje =
-  'Hola, quiero encargar este producto:\n\n' +
-  `Código: ${productoActual.codigo}\n` +
-  `Producto: ${productoActual.nombre}\n` +
-  `Categoría: ${productoActual.categoria}\n` +
-  `Talla: ${tallaSeleccionada}\n` +
-  `Precio: $${productoActual.precio} USD`;
+if(productoActual.categoria === "Ropa"){
+  mensaje += `Color: ${colorSeleccionado || "No seleccionado"}\n`;
+}
+
+mensaje +=
+`Talla: ${tallaSeleccionada || "No seleccionada"}\n` +
+`Precio: $${productoActual.precio} USD`;
 
   window.open(
   "https://wa.me/50578995116?text=" + encodeURIComponent(mensaje),
