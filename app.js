@@ -1209,7 +1209,7 @@ const productos = [
 {
   codigo: "#125",
   nombre: "ALEXANDER MCQUEEN MQ",
-  precio: 140,
+  precio: 160,
   categoria: "Zapatos",
   nuevo: true,
   imagen:"https://drive.google.com/thumbnail?id=1GXJ-l4OwTdWVdVKLpSgajL2VF6m9-nvg&sz=w1000",
