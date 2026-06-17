@@ -2466,7 +2466,7 @@ colores:[
   categoria:"Ropa",
   nuevo:true,
 
-  imagen:"imgP/ropa/051.1.jpeg",
+  imagen:"imgP/ropa/052.1.jpeg",
 
   imagenes:[
     "imgP/ropa/052.1.jpeg",
