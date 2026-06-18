@@ -2981,7 +2981,7 @@ colores:[
 {
   codigo:"#075R",
   nombre:"T-SHIRT REPRESENT",
-  precio:50,
+  precio:48,
   categoria:"Ropa",
   nuevo:true,
 
