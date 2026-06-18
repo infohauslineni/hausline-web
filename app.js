@@ -2937,12 +2937,12 @@ colores:[
   categoria:"Ropa",
   nuevo:true,
 
-  imagen:"imgP/ropa/073.1.jpeg",
+  imagen:"imgP/ropa/073.1.jpg",
 
   imagenes:[
-    "imgP/ropa/073.1.jpeg",
-    "imgP/ropa/073.2.jpeg",
-    "imgP/ropa/073.3.jpeg",
+    "imgP/ropa/073.1.jpg",
+    "imgP/ropa/073.2.jpg",
+    "imgP/ropa/073.3.jpg",
   ],
 
   descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
@@ -2950,7 +2950,7 @@ colores:[
   tallas:["S","M","L","XL"],
  colores:[
 
-   "White",
+   ,
    "Black",
 ],
 },
@@ -2979,7 +2979,7 @@ colores:[
 ],
 },
 {
-  codigo:"#074R",
+  codigo:"#075R",
   nombre:"T-SHIRT REPRESENT",
   precio:50,
   categoria:"Ropa",
