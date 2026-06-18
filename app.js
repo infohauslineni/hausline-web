@@ -2781,6 +2781,276 @@ colores:[
    "Black",
 ],
 },
+{
+  codigo:"#066R",
+  nombre:"T-SHIRTS CHROME HEARTS",
+  precio:53,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/066.1.jpg",
+
+  imagenes:[
+    "imgP/ropa/066.1.jpg",
+    "imgP/ropa/066.2.jpg",
+    "imgP/ropa/066.3.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+  "White",
+   "Black",
+],
+},
+{
+  codigo:"#067R",
+  nombre:"SHORT MONCLER",
+  precio:48,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/067.1.webp",
+
+  imagenes:[
+    "imgP/ropa/067.1.webp",
+    "imgP/ropa/067.2.webp",
+    "imgP/ropa/067.3.webp",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "Black",
+],
+},
+{
+  codigo:"#069R",
+  nombre:"T-SHIRT OFF WHITE",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/069.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/069.1.jpeg",
+    "imgP/ropa/069.2.jpeg",
+    "imgP/ropa/069.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+],
+},
+{
+  codigo:"#070R",
+  nombre:"T-SHIRT OFF WHITE",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/070.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/070.1.jpeg",
+    "imgP/ropa/070.2.jpeg",
+    "imgP/ropa/070.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+{
+  codigo:"#071R",
+  nombre:"T-SHIRT OFF WHITE",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/071.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/071.1.jpeg",
+    "imgP/ropa/071.2.jpeg",
+    "imgP/ropa/071.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+{
+  codigo:"#072R",
+  nombre:"SHORT OFF WHITE",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/072.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/072.1.jpeg",
+    "imgP/ropa/072.2.jpeg",
+    "imgP/ropa/072.3.jpeg",
+    "imgP/ropa/072.4.jpeg",
+    "imgP/ropa/072.5.jpeg",
+    "imgP/ropa/072.6.jpeg",
+    "imgP/ropa/072.7.jpeg",
+    "imgP/ropa/072.8.jpeg",
+    "imgP/ropa/072.9.jpeg",
+    "imgP/ropa/072.10.jpeg",
+    "imgP/ropa/072.11.jpeg",
+  ],
+
+  descripcion:" ENVIAR MODELO QUE NECESITA AL WHATSASAP TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+{
+  codigo:"#073R",
+  nombre:"T-SHIRT OFF WHITE",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/073.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/073.1.jpeg",
+    "imgP/ropa/073.2.jpeg",
+    "imgP/ropa/073.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+{
+  codigo:"#074R",
+  nombre:"T-SHIRT AMI PLAY",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/074.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/074.1.jpeg",
+    "imgP/ropa/074.2.jpeg",
+    "imgP/ropa/074.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   
+],
+},
+{
+  codigo:"#074R",
+  nombre:"T-SHIRT REPRESENT",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/075.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/075.1.jpeg",
+    "imgP/ropa/075.2.jpeg",
+    "imgP/ropa/075.3.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
