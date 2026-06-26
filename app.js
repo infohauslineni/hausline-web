@@ -545,12 +545,12 @@ const productos = [
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
   nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.jpg",
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.webp",
   imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/4.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.webp",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/2.webp",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/3.webp",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/4.webp",
   ],
   descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
