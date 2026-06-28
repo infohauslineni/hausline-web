@@ -1502,6 +1502,40 @@ const productos = [
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
+{
+  codigo:"MM002",
+  marca:"MAISON MARGIELA",
+  nombre:"Maison Margiela",
+  precio:150,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM002/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Maison Margiela/MM002/1.jpg",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM002/2.jpg",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM002/3.jpg",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM002/4.jpg",
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"MM003",
+  marca:"MAISON MARGIELA",
+  nombre:"Maison Margiela",
+  precio:150,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM003/1.webp",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Maison Margiela/MM003/1.webp",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM003/2.jpg",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM003/3.webp",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM003/4.webp",
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 

@@ -734,10 +734,7 @@ border-radius:12px;
 }
 
 .card img{
-  height:180px;
-  object-fit:contain;
-  background:#fff;
-  padding:6px;
+  object-fit:cover;
 }
 
 .card-info{
@@ -1098,4 +1095,34 @@ font-size:15px;
   align-items:center;
   justify-content:center;
   cursor:pointer;
+}
+.colores-disponibles{
+  color: #b7ff00;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.color-btn,
+.talla-btn{
+  min-width: 55px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid #222;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.color-btn:hover,
+.talla-btn:hover{
+  transform: translateY(-2px);
+}
+
+.color-btn.activa,
+.talla-btn.activa{
+  background: #b7ff00;
+  color: #000;
+  border-color: #b7ff00;
 }
