@@ -15,13 +15,12 @@
     <a href="#inicio">INICIO</a>
     <a href="#catalogo">CATÁLOGO</a>
     <a href="#contacto">CONTACTO</a>
-<a href="https://wa.me/50578995116" target="_blank">WHATSAPP</a>
+    <a href="https://wa.me/50578995116" target="_blank">WHATSAPP</a>
   </nav>
 </header>
 
 <section class="hero" id="inicio">
   <div class="hero-content">
-
     <div class="logo-hero">
       <h1>HAUSLINE</h1>
       <span>.NI</span>
@@ -30,7 +29,6 @@
     <p class="hero-subtitle">Sneakers • Ropa • Accesorios</p>
 
     <a href="#catalogo" class="btn-hero">VER CATÁLOGO</a>
-
   </div>
 </section>
 
@@ -47,20 +45,18 @@
   >
 
   <div class="categorias">
+    <button class="filtro-btn activo" data-categoria="Zapatos">👟 Zapatos</button>
+    <button class="filtro-btn" data-categoria="Dama">👠 Dama</button>
+    <button class="filtro-btn" data-categoria="Accesorios">⌚ Accesorios</button>
+    <button class="filtro-btn" data-categoria="Ropa">👕 Ropa</button>
+  </div>
 
-  <button class="filtro-btn activo" data-categoria="Zapatos">👟 Zapatos</button>
-<button class="filtro-btn" data-categoria="Dama">👠 Dama</button>
-<button class="filtro-btn" data-categoria="Accesorios">⌚ Accesorios</button>
-<button class="filtro-btn" data-categoria="Ropa">👕 Ropa</button>
-
-</div>
+  <div id="marcas" class="marcas"></div>
 
   <div class="grid" id="productos"></div>
   
   <div id="paginacion" class="paginacion"></div>
 </section>
-
-
 
 <section class="catalogo">
   <div class="top-catalogo">
@@ -108,8 +104,9 @@
     </div>
   </div>
 </section>
+
 <section class="confianza">
-  <h2> +100 Pedidos Entregados en Nicaragua</h2>
+  <h2>+100 Pedidos Entregados en Nicaragua</h2>
   <p>Pedidos bajo encargo, entregas seguras y atención personalizada.</p>
 </section>
 
@@ -167,27 +164,15 @@
   <h2>Contacto</h2>
   
   <div class="contact-buttons">
-
-  <a href="https://wa.me/50578995116" target="_blank" class="contact-btn whatsapp-btn">
-    WhatsApp
-  </a>
-
-  <a href="https://instagram.com/hausline.ni" target="_blank" class="contact-btn insta-btn">
-    Instagram
-  </a>
-
-  <a href="https://tiktok.com/@hausline.niof" target="_blank" class="contact-btn tiktok-btn">
-    TikTok
-  </a>
-
-</div>
+    <a href="https://wa.me/50578995116" target="_blank" class="contact-btn whatsapp-btn">WhatsApp</a>
+    <a href="https://instagram.com/hausline.ni" target="_blank" class="contact-btn insta-btn">Instagram</a>
+    <a href="https://tiktok.com/@hausline.niof" target="_blank" class="contact-btn tiktok-btn">TikTok</a>
+  </div>
 </section>
 
 <footer>
   <div class="footer-logo">HAUSLINE</div>
   <p>© 2026 Hausline. Todos los derechos reservados.</p>
-
-
 </footer>
 
 <div class="modal" id="modal">
@@ -195,10 +180,10 @@
     <button class="cerrar" id="cerrar" type="button">×</button>
 
     <div class="modal-galeria">
-  <button class="galeria-btn galeria-prev" id="galeriaPrev">‹</button>
-  <img id="modalImg" src="" alt="Producto">
-  <button class="galeria-btn galeria-next" id="galeriaNext">›</button>
-</div>
+      <button class="galeria-btn galeria-prev" id="galeriaPrev">‹</button>
+      <img id="modalImg" src="" alt="Producto">
+      <button class="galeria-btn galeria-next" id="galeriaNext">›</button>
+    </div>
 
     <div class="modal-info">
       <p id="modalCodigo"></p>
@@ -214,9 +199,11 @@
     </div>
   </div>
 </div>
+
 <a href="https://wa.me/50578995116" target="_blank" class="whatsapp-flotante">
   💬
 </a>
+
 <script src="app.js"></script>
 
 </body>

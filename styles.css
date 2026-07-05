@@ -1126,3 +1126,52 @@ font-size:15px;
   color: #000;
   border-color: #b7ff00;
 }
+.marcas{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    width:100%;
+    padding:18px 0;
+    margin:18px 0;
+    scrollbar-width:thin;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+}
+
+.marcas::-webkit-scrollbar{
+    height:8px;
+}
+
+.marcas::-webkit-scrollbar-thumb{
+    background:#b6ff00;
+    border-radius:20px;
+}
+
+.marcas::-webkit-scrollbar-track{
+    background:#111;
+}
+
+.marca-btn{
+    flex:0 0 auto;
+    background:#111;
+    color:#fff;
+    border:1px solid #2a2a2a;
+    padding:12px 22px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:700;
+    white-space:nowrap;
+    transition:.25s;
+}
+
+.marca-btn:hover{
+    border-color:#b6ff00;
+    color:#b6ff00;
+}
+
+.marca-btn.activo{
+    background:#b6ff00;
+    color:#000;
+    border-color:#b6ff00;
+}

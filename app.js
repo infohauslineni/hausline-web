@@ -3651,6 +3651,7 @@ const modalTallas = document.getElementById("modalTallas");
 let paginaActual = 1;
 const productosPorPagina = 6;
 let categoriaActual = "Zapatos";
+let marcaActual = "Todas";
 let productoActual = null;
 let imagenesActuales = [];
 let indiceImagenActual = 0;
@@ -3721,18 +3722,67 @@ function crearCard(producto){
   `;
 
 }
+function renderizarMarcas() {
+  const marcasContainer = document.getElementById("marcas");
+  if (!marcasContainer) return;
+
+  const marcas = [
+    "Todas",
+    ...new Set(
+      productos
+        .filter(producto => producto.categoria === categoriaActual)
+        .map(producto => producto.marca)
+        .filter(Boolean)
+    )
+  ];
+
+  marcasContainer.innerHTML = marcas.map(marca => `
+    <button class="marca-btn ${marca === marcaActual ? "activo" : ""}" data-marca="${marca}">
+      ${marca}
+    </button>
+  `).join("");
+}
+function renderizarMarcas() {
+  const marcasContainer = document.getElementById("marcas");
+  if (!marcasContainer) return;
+
+  const marcas = [
+    "Todas",
+    ...new Set(
+      productos
+        .filter(producto => producto.categoria === categoriaActual)
+        .map(producto => producto.marca)
+        .filter(Boolean)
+    )
+  ];
+
+  marcasContainer.innerHTML = marcas.map(marca => `
+    <button 
+      class="marca-btn ${marca === marcaActual ? "activo" : ""}" 
+      data-marca="${marca}">
+      ${marca}
+    </button>
+  `).join("");
+} 
 
 function renderizarCatalogo(){
 
   const texto = buscador ? buscador.value.toLowerCase() : "";
 
-  const filtrados = productos.filter(producto =>
-    producto.categoria === categoriaActual &&
-    (
-      producto.nombre.toLowerCase().includes(texto) ||
-      producto.codigo.toLowerCase().includes(texto)
-    )
-  );
+  const filtrados = productos.filter(producto => {
+  const categoriaOk = producto.categoria === categoriaActual;
+
+  const marcaOk =
+    marcaActual === "Todas" ||
+    producto.marca === marcaActual;
+
+  const textoOk =
+    producto.nombre.toLowerCase().includes(texto) ||
+    producto.codigo.toLowerCase().includes(texto) ||
+    producto.marca.toLowerCase().includes(texto);
+
+  return categoriaOk && marcaOk && textoOk;
+});
 
   const inicioProducto = (paginaActual - 1) * productosPorPagina;
   const finProducto = inicioProducto + productosPorPagina;
@@ -3746,7 +3796,7 @@ function renderizarCatalogo(){
   if(contador){
     contador.textContent = `${filtrados.length} productos disponibles`;
   }
-
+  renderizarMarcas();
   renderizarPaginacion(filtrados.length);
 }
 
@@ -3898,17 +3948,26 @@ document.addEventListener("click", function(e) {
 
   const filtro = e.target.closest(".filtro-btn");
   if (filtro) {
-    categoriaActual = filtro.dataset.categoria;
-    paginaActual = 1;
+  categoriaActual = filtro.dataset.categoria;
+  marcaActual = "Todas";
+  paginaActual = 1;
 
-    document.querySelectorAll(".filtro-btn")
-      .forEach(b => b.classList.remove("activo"));
+  document.querySelectorAll(".filtro-btn")
+    .forEach(b => b.classList.remove("activo"));
 
-    filtro.classList.add("activo");
+  filtro.classList.add("activo");
 
-    renderizarCatalogo();
-    return;
-  }
+  renderizarCatalogo();
+  return;
+}
+
+const marcaBtn = e.target.closest(".marca-btn");
+if (marcaBtn) {
+  marcaActual = marcaBtn.dataset.marca;
+  paginaActual = 1;
+  renderizarCatalogo();
+  return;
+}
 
   const card = e.target.closest(".producto-card");
   if (card) {
