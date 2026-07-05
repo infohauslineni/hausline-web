@@ -525,9 +525,9 @@ const productos = [
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
   nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0027/1.jpg",
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0027/2.jpg",
   imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/1.jpg",
+    
      "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/2.jpg",
       "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/3.jpg",
        "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/4.jpg",
@@ -1382,10 +1382,118 @@ const productos = [
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
+{
+  codigo:"GG007",
+  marca:"GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:148,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG007/3.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG007/4.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG007/1.avif",
+    
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"GG008",
+  marca:"GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:148,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG008/2.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG008/3.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG008/4.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG008/5.avif",
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"GG009",
+  marca:"GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:148,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
+    "imgP/ZAPATOS MEN/Golden Goose/GG009/2.webp",
+    "imgP/ZAPATOS MEN/Golden Goose/GG009/3.webp",
+    "imgP/ZAPATOS MEN/Golden Goose/GG009/4.webp",
+    
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"GG010",
+  marca:"GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:148,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
+    "imgP/ZAPATOS MEN/Golden Goose/GG010/2.avif",
+   
+    "imgP/ZAPATOS MEN/Golden Goose/GG010/4.avif",
+  
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
-
-
-
+{
+  codigo:"GG011",
+  marca:"GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:148,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
+    "imgP/ZAPATOS MEN/Golden Goose/GG011/2.jpg",
+   "imgP/ZAPATOS MEN/Golden Goose/GG011/3.jpg",
+    "imgP/ZAPATOS MEN/Golden Goose/GG011/4.jpg",
+  
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"GG012",
+  marca:"GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:148,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
+    "imgP/ZAPATOS MEN/Golden Goose/GG012/2.jpg",
+   "imgP/ZAPATOS MEN/Golden Goose/GG012/3.jpg",
+    "imgP/ZAPATOS MEN/Golden Goose/GG012/4.jpg",
+  
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -1536,13 +1644,178 @@ const productos = [
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
+{
+  codigo:"MM004",
+  marca:"MAISON MARGIELA",
+  nombre:"Maison Margiela",
+  precio:150,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM004/1.webp",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Maison Margiela/MM004/1.webp",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM004/2.webp",
+        "imgP/ZAPATOS MEN/Maison Margiela/MM004/3.webp",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM004/4.webp",
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"MM005",
+  marca:"MAISON MARGIELA",
+  nombre:"Maison Margiela",
+  precio:150,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM005/1.webp",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Maison Margiela/MM005/1.webp",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM005/2.webp",
+        "imgP/ZAPATOS MEN/Maison Margiela/MM005/3.webp",
+    "imgP/ZAPATOS MEN/Maison Margiela/MM005/4.webp",
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"OFW001",
+  marca:"OFF-WHITE",
+  nombre:"Off White Vulcanized",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/2.jpeg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/3.jpeg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/4.jpeg",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"OFW002",
+  marca:"OFF-WHITE",
+  nombre:"Off White Vulcanized",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW002/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/1.jpeg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/2.jpeg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/3.jpeg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/4.jpeg",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"OFW003",
+  marca:"OFF-WHITE",
+  nombre:"Off White Vulcanized",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW003/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/1.jpg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/2.jpg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/3.jpg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/4.jpg",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"OFW004",
+  marca:"OFF-WHITE",
+  nombre:"Off White ",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW004/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/1.jpg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/2.jpg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/3.jpg",
+    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/4.jpg",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
+{
+  codigo:"ST001",
+  marca:"SAINT LAURENT",
+  nombre:"Saint Laurent ",
+  precio:148.5,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/SAINT LAURENT/ST001/1.webp",
+  imagenes:[
+    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/1.webp",
+    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/2.webp",
+    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/3.webp",
+    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/4.webp",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"VL001",
+  marca:"VALENTINO ",
+  nombre:"Valentino Garavani ",
+  precio:164.50,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Valentino/VL001/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Valentino/VL001/1.jpg",
+    "imgP/ZAPATOS MEN/Valentino/VL001/2.jpg",
+    "imgP/ZAPATOS MEN/Valentino/VL001/3.jpg",
+    "imgP/ZAPATOS MEN/Valentino/VL001/4.jpg",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"VL002",
+  marca:"VALENTINO ",
+  nombre:"Valentino Garavani ",
+  precio:164.50,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Valentino/VL002/1.webp",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Valentino/VL002/1.webp",
+    "imgP/ZAPATOS MEN/Valentino/VL002/2.webp",
+    "imgP/ZAPATOS MEN/Valentino/VL002/3.webp",
+    "imgP/ZAPATOS MEN/Valentino/VL002/4.webp",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
-
-
-
-
-
+{
+  codigo:"VJ001",
+  marca:"VEJA ",
+  nombre:"Veja Campo ",
+  precio:148.5,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/VEJA/VJ001/2.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/VEJA/VJ001/2.jpeg",
+    "imgP/ZAPATOS MEN/VEJA/VJ001/1.jpeg",
+    "imgP/ZAPATOS MEN/VEJA/VJ001/3.jpeg",
+    "imgP/ZAPATOS MEN/VEJA/VJ001/4.jpeg",
+],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
