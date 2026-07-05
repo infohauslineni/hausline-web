@@ -3722,9 +3722,7 @@ function crearCard(producto){
   `;
 
 }
-function renderizarMarcas() {
-  const marcasContainer = document.getElementById("marcas");
-  if (!marcasContainer) return;
+
 
   const marcas = [
     "Todas",
@@ -3741,7 +3739,7 @@ function renderizarMarcas() {
       ${marca}
     </button>
   `).join("");
-}
+
 function renderizarMarcas() {
   const marcasContainer = document.getElementById("marcas");
   if (!marcasContainer) return;
@@ -3770,19 +3768,19 @@ function renderizarCatalogo(){
   const texto = buscador ? buscador.value.toLowerCase() : "";
 
   const filtrados = productos.filter(producto => {
-  const categoriaOk = producto.categoria === categoriaActual;
+    const categoriaOk = producto.categoria === categoriaActual;
 
-  const marcaOk =
-    marcaActual === "Todas" ||
-    producto.marca === marcaActual;
+    const marcaOk =
+      marcaActual === "Todas" ||
+      producto.marca === marcaActual;
 
-  const textoOk =
-    producto.nombre.toLowerCase().includes(texto) ||
-    producto.codigo.toLowerCase().includes(texto) ||
-    producto.marca.toLowerCase().includes(texto);
+    const textoOk =
+      producto.nombre.toLowerCase().includes(texto) ||
+      producto.codigo.toLowerCase().includes(texto) ||
+      producto.marca.toLowerCase().includes(texto);
 
-  return categoriaOk && marcaOk && textoOk;
-});
+    return categoriaOk && marcaOk && textoOk;
+  });
 
   const inicioProducto = (paginaActual - 1) * productosPorPagina;
   const finProducto = inicioProducto + productosPorPagina;
@@ -3796,6 +3794,7 @@ function renderizarCatalogo(){
   if(contador){
     contador.textContent = `${filtrados.length} productos disponibles`;
   }
+
   renderizarMarcas();
   renderizarPaginacion(filtrados.length);
 }
