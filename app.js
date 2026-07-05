@@ -3722,24 +3722,6 @@ function crearCard(producto){
   `;
 
 }
-
-
-  const marcas = [
-    "Todas",
-    ...new Set(
-      productos
-        .filter(producto => producto.categoria === categoriaActual)
-        .map(producto => producto.marca)
-        .filter(Boolean)
-    )
-  ];
-
-  marcasContainer.innerHTML = marcas.map(marca => `
-    <button class="marca-btn ${marca === marcaActual ? "activo" : ""}" data-marca="${marca}">
-      ${marca}
-    </button>
-  `).join("");
-
 function renderizarMarcas() {
   const marcasContainer = document.getElementById("marcas");
   if (!marcasContainer) return;
@@ -3761,7 +3743,7 @@ function renderizarMarcas() {
       ${marca}
     </button>
   `).join("");
-} 
+}
 
 function renderizarCatalogo(){
 
@@ -3777,7 +3759,7 @@ function renderizarCatalogo(){
     const textoOk =
       producto.nombre.toLowerCase().includes(texto) ||
       producto.codigo.toLowerCase().includes(texto) ||
-      producto.marca.toLowerCase().includes(texto);
+      (producto.marca || "").toLowerCase().includes(texto);
 
     return categoriaOk && marcaOk && textoOk;
   });
@@ -3798,7 +3780,6 @@ function renderizarCatalogo(){
   renderizarMarcas();
   renderizarPaginacion(filtrados.length);
 }
-
 function renderizarPaginacion(totalProductos){
 
   const paginacion = document.getElementById("paginacion");
