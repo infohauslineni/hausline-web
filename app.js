@@ -555,9 +555,66 @@ const productos = [
   descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
-
-
-
+{
+  codigo:"CL0029",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:165,
+  precioOferta:144,
+  descuento:10,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0029/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0030",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:165,
+  precioOferta:144,
+  descuento:10,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0030/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0031",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:165,
+  precioOferta:144,
+  descuento:10,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0031/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
