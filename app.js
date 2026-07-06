@@ -615,14 +615,222 @@ const productos = [
   descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
-
-
-
-
-
-
-
-
+{
+  codigo:"CL0032",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:144,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0033",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:144,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0034",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:164,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0034/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0035",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:144,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0036",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:144,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0037",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:144,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0038",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0038/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0039",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0039/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0040",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0040/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0041",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0041/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0042",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:172,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0042/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0043",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0043/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
