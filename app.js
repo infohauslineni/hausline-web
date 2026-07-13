@@ -2699,7 +2699,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 {
   codigo:"#019R",
   nombre:"HOODIE alo",
-  precio:50,
+  precio:60,
   categoria:"Ropa",
   nuevo:true,
 
@@ -2742,7 +2742,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 {
   codigo:"#021R",
   nombre:"T-SHIRT ALL-SAINTS",
-  precio:45,
+  precio:48,
   categoria:"Ropa",
   nuevo:true,
 
