@@ -1087,6 +1087,36 @@ const productos = [
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
+{
+  codigo:"BL006",
+  marca:"BALENCIAGA",
+  nombre:"BALENCIAGA",
+  precio:190,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL006/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL006/1.jpeg",
+   
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"BL007",
+  marca:"BALENCIAGA",
+  nombre:"BALENCIAGA",
+  precio:145,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
+   
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -1211,7 +1241,7 @@ const productos = [
   codigo:"BR001",
   marca:"BURBERRY",
   nombre:"BURBERRY",
-  precio:160,
+  precio:150,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BURBERRY/BR001/1.jpeg",
@@ -1223,7 +1253,21 @@ const productos = [
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
-
+{
+  codigo:"BR002",
+  marca:"BURBERRY",
+  nombre:"BURBERRY",
+  precio:105,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
+   
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -1531,10 +1575,78 @@ const productos = [
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
-
-
-
-
+{
+  codigo:"D&C014",
+  marca:"DOLCE&GABANNA",
+  nombre:"Dolce & Gabanna",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/1.jpeg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/2.jpeg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/3.jpeg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/4.jpeg",
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"D&C015",
+  marca:"DOLCE&GABANNA",
+  nombre:"Dolce & Gabanna",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/1.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/4.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/3.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/2.jpg",
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"D&C016",
+  marca:"DOLCE&GABANNA",
+  nombre:"Dolce & Gabanna",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/4.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/4.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/1.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/2.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/3.jpg",
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"D&C017",
+  marca:"DOLCE&GABANNA",
+  nombre:"Dolce & Gabanna",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/3.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/3.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/1.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/2.jpg",
+    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/4.jpg",
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -2082,7 +2194,23 @@ const productos = [
   tallas:["37","38","39","40","41","42","43","44"]
 },
 
-
+{
+  codigo:"PHM001",
+  marca:"PHILIP MODEL",
+  nombre:"Philip Model",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/1.jpeg",
+    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/2.jpeg",
+    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/3.jpeg",
+    
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -2270,6 +2398,60 @@ const productos = [
   tallas: ["37","38","39","40"]
   },
 {
+  codigo: "#016W",
+  nombre: "DIOR",
+  precio: 126,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/DIOR/016.1.jpg",
+ imagenes:[
+    "imgP/dama/DIOR/016.1.jpg",
+    "imgP/dama/DIOR/016.3.jpg",
+    "imgP/dama/DIOR/01632.jpg",
+    
+  ],
+
+
+  descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
+  tallas: ["37","38","39","40"]
+  },
+
+{
+  codigo: "#017W",
+  nombre: "DIOR",
+  precio: 105,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/DIOR/017.1/1.jpeg",
+ imagenes:[
+    "imgP/dama/DIOR/017.1/1.jpeg",
+    
+  ],
+
+
+  descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
+  tallas: ["37","38","39","40"]
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
   codigo: "#ROW1",
   nombre: "SWATCH X AP",
   precio: 152,
@@ -2315,6 +2497,28 @@ colores:[
   "Green"
 ],
   },
+{
+  codigo:"#ROW3",
+  nombre:"BACKPACK alo",
+  precio:57,
+  categoria:"Accesorios",
+  nuevo:true,
+  imagen:"imgP/accesorios/ALOBACL1/1.jpeg",
+  
+  imagenes:[
+    "imgP/accesorios/ALOBACL1/1.jpeg",
+    "imgP/accesorios/ALOBACL1/3.jpeg",
+    "imgP/accesorios/ALOBACL1/2.jpeg"
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  colores:["Black"]
+},
+
+
+
+
+
+
 {
   codigo:"#001R",
   nombre:"JACKET OFFWHITE OFFW",
