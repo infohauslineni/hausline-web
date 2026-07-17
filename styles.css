@@ -49,6 +49,20 @@ nav a:hover{
 color:#b7ff00;
 }
 
+nav .tracking-link{
+color:#050505;
+background:#b7ff00;
+padding:10px 14px;
+border-radius:999px;
+white-space:nowrap;
+}
+
+nav .tracking-link:hover{
+color:#050505;
+background:#d0ff5b;
+transform:translateY(-1px);
+}
+
 /* HERO */
 .hero{
 min-height:78vh;
