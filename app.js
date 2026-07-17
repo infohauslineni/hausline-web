@@ -4391,6 +4391,39 @@ if(buscador){
 renderizarCatalogo();
 renderizarRecomendados();
 
+const menuToggle = document.getElementById("menuToggle");
+const menuCerrar = document.getElementById("menuCerrar");
+const menuPrincipal = document.getElementById("menuPrincipal");
+const menuBackdrop = document.getElementById("menuBackdrop");
+
+function cambiarEstadoMenu(abierto){
+  if(!menuToggle || !menuPrincipal || !menuBackdrop) return;
+
+  menuPrincipal.classList.toggle("activo", abierto);
+  menuBackdrop.classList.toggle("activo", abierto);
+  document.body.classList.toggle("menu-abierto", abierto);
+  menuToggle.setAttribute("aria-expanded", String(abierto));
+
+  if(abierto){
+    menuCerrar?.focus();
+  }
+}
+
+menuToggle?.addEventListener("click", () => cambiarEstadoMenu(true));
+menuCerrar?.addEventListener("click", () => cambiarEstadoMenu(false));
+menuBackdrop?.addEventListener("click", () => cambiarEstadoMenu(false));
+
+menuPrincipal?.addEventListener("click", (e) => {
+  if(e.target.closest("a")) cambiarEstadoMenu(false);
+});
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && menuPrincipal?.classList.contains("activo")){
+    cambiarEstadoMenu(false);
+    menuToggle?.focus();
+  }
+});
+
 console.log("APP CARGADO");
 console.log(productos.length);
 document.addEventListener("click", function(e) {

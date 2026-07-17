@@ -11,12 +11,22 @@
 
 <header class="header">
   <div class="logo">HAUSLINE</div>
-  <nav>
+  <button class="menu-toggle" id="menuToggle" type="button" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <nav id="menuPrincipal" aria-label="Navegacion principal">
+    <div class="menu-cabecera">
+      <span>MENU</span>
+      <button class="menu-cerrar" id="menuCerrar" type="button" aria-label="Cerrar menu">&times;</button>
+    </div>
     <a href="#inicio">INICIO</a>
     <a href="#catalogo">CATÁLOGO</a>
     <a href="#contacto">CONTACTO</a>
-    <a class="tracking-link" href="https://hausline-tracking.vercel.app/tracking">CONSULTA TU ENV&Iacute;O</a>
     <a href="https://wa.me/50578995116" target="_blank">WHATSAPP</a>
+    <a class="tracking-link" href="https://hausline-tracking.vercel.app/tracking">CONSULTA TU ENV&Iacute;O</a>
   </nav>
 </header>
 
@@ -193,6 +203,7 @@
     <a href="https://wa.me/50578995116" target="_blank" class="contact-btn whatsapp-btn">WhatsApp</a>
     <a href="https://instagram.com/hausline.ni" target="_blank" class="contact-btn insta-btn">Instagram</a>
     <a href="https://tiktok.com/@hausline.niof" target="_blank" class="contact-btn tiktok-btn">TikTok</a>
+    <a href="https://hausline-tracking.vercel.app/tracking" target="_blank" rel="noopener noreferrer" class="contact-btn tracking-btn">Consulta tu pedido</a>
   </div>
 </section>
 
@@ -228,6 +239,17 @@
 
 <a href="https://wa.me/50578995116" target="_blank" class="whatsapp-flotante">
   💬
+</a>
+
+<a
+  href="https://hausline-tracking.vercel.app/tracking"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="tracking-flotante"
+  aria-label="Consulta tu pedido"
+>
+  <span aria-hidden="true">&#128230;</span>
+  Consulta tu pedido
 </a>
 
 <script src="app.js"></script>
