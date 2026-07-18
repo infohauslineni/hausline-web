@@ -4523,19 +4523,13 @@ const precioFinal =
     ? productoActual.precioOferta
     : productoActual.precio;
 
-const fotoProducto = new URL(
-  imagenesActuales[indiceImagenActual] || productoActual.imagen,
-  document.baseURI
-).href;
-
 mensaje +=
 `Talla: ${tallaSeleccionada || "No seleccionada"}\n` +
 (
   enPromocion && productoActual.precioOferta
     ? `🔥 Precio Oferta: $${precioFinal} USD\n💰 Precio Normal: $${productoActual.precio} USD`
     : `💰 Precio: $${precioFinal} USD`
-) +
-`\n📷 Foto del producto: ${fotoProducto}`;
+);
 
   window.open(
   "https://wa.me/50578995116?text=" + encodeURIComponent(mensaje),
