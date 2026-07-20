@@ -1222,28 +1222,28 @@ let productos = [
     "imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
     "imgP/ZAPATOS MEN/Birkenstock/BK006/2.jpeg",
     "imgP/ZAPATOS MEN/Birkenstock/BK006/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK006/4.jpeg",
+    "imgP/ZAPATOS MEN/Birkenstock/BK006/4.jpeg"
   ],
-  descripcion:" TIEMPO de entrega 15-25 días",
+  descripcion:"TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
+
 {
-  codigo: "BK007",
-  marca: "BIRKENSTOCK",
-  nombre: "Birkenstock",
-  precio: 95,
-  categoria: "Zapatos",
-  nuevo: true,
-  imagen: "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
-  imagenes: [
+  codigo:"BK007",
+  marca:"BIRKENSTOCK",
+  nombre:"Birkenstock",
+  precio:95,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
+  imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
     "imgP/ZAPATOS MEN/Birkenstock/BK007/1.jpeg",
     "imgP/ZAPATOS MEN/Birkenstock/BK007/2.jpeg"
   ],
-  descripcion: "TIEMPO de entrega 15-25 días",
-  tallas: ["37", "38", "39", "40", "41", "42", "43", "44"]
+  descripcion:"TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
 },
-
 
 
 
@@ -4453,7 +4453,7 @@ async function cargarCatalogoCentral(){
   }
 }
 
-void cargarCatalogoCentral();
+// void cargarCatalogoCentral();
 
 const menuToggle = document.getElementById("menuToggle");
 const menuCerrar = document.getElementById("menuCerrar");
