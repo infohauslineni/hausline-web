@@ -1,4 +1,4 @@
-const productos = [
+let productos = [
 
   {
   codigo:"CL0001",
@@ -4148,7 +4148,10 @@ function crearCard(producto){
   return `
     <div class="card" onclick="abrirProducto('${producto.codigo}')">
 
-      <img src="${producto.imagen}">
+      <div class="producto-imagen-wrap">
+        <img src="${producto.imagen}" alt="${producto.nombre}">
+        <span class="marca-agua-producto">HAUSLINE.NI</span>
+      </div>
 
       <div class="card-info">
 
@@ -4390,6 +4393,45 @@ if(buscador){
 
 renderizarCatalogo();
 renderizarRecomendados();
+
+const SUPABASE_URL = "https://epslwaxjemlysqtubbfu.supabase.co";
+const SUPABASE_PUBLIC_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";
+
+async function cargarCatalogoCentral(){
+  try{
+    const respuesta = await fetch(`${SUPABASE_URL}/rest/v1/rpc/obtener_catalogo_publico`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_PUBLIC_KEY,
+        Authorization: `Bearer ${SUPABASE_PUBLIC_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: "{}"
+    });
+    if(!respuesta.ok) return;
+    const remoto = await respuesta.json();
+    if(!Array.isArray(remoto) || remoto.length === 0) return;
+    productos = remoto.map(producto => ({
+      codigo: producto.codigo,
+      nombre: producto.nombre,
+      marca: producto.marca,
+      categoria: producto.categoria,
+      tallas: producto.tallas || [],
+      precio: Number(producto.precio_venta || 0),
+      imagen: producto.imagen,
+      imagenes: producto.imagen ? [producto.imagen] : [],
+      descripcion: producto.descripcion || "",
+      nuevo: true
+    }));
+    paginaActual = 1;
+    renderizarCatalogo();
+    renderizarRecomendados();
+  }catch(error){
+    console.warn("Se mantiene el catálogo local.", error);
+  }
+}
+
+void cargarCatalogoCentral();
 
 const menuToggle = document.getElementById("menuToggle");
 const menuCerrar = document.getElementById("menuCerrar");
