@@ -4399,6 +4399,10 @@ const SUPABASE_PUBLIC_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";
 
 async function cargarCatalogoCentral(){
   try{
+    const ordenOriginal = new Map(productos.map((producto, indice) => [
+      String(producto.codigo || "").trim().toUpperCase(),
+      indice
+    ]));
     const respuesta = await fetch(`${SUPABASE_URL}/rest/v1/rpc/obtener_catalogo_publico`, {
       method: "POST",
       headers: {
@@ -4422,7 +4426,11 @@ async function cargarCatalogoCentral(){
       imagenes: producto.imagen ? [producto.imagen] : [],
       descripcion: producto.descripcion || "",
       nuevo: true
-    }));
+    })).sort((a, b) => {
+      const posicionA = ordenOriginal.get(String(a.codigo || "").trim().toUpperCase());
+      const posicionB = ordenOriginal.get(String(b.codigo || "").trim().toUpperCase());
+      return (posicionA ?? Number.MAX_SAFE_INTEGER) - (posicionB ?? Number.MAX_SAFE_INTEGER);
+    });
     paginaActual = 1;
     renderizarCatalogo();
     renderizarRecomendados();
