@@ -1106,7 +1106,7 @@ let productos = [
   codigo:"BL007",
   marca:"BALENCIAGA",
   nombre:"BALENCIAGA",
-  precio:145,
+  precio:90,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
@@ -1257,7 +1257,7 @@ let productos = [
   codigo:"BR002",
   marca:"BURBERRY",
   nombre:"BURBERRY",
-  precio:105,
+  precio:90,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
@@ -4317,7 +4317,9 @@ function renderizarRecomendados(){
   const caja = document.getElementById("recomendados");
   if(!caja) return;
 
-  const recomendados = productos.slice(0,4);
+  const recomendados = productos
+    .filter(producto => String(producto.categoria || "").trim().toLowerCase() === "ropa")
+    .slice(0,4);
   caja.innerHTML = recomendados.map(crearCard).join("");
 }
 
