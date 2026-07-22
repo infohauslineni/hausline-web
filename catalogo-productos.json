@@ -1785,15 +1785,16 @@
       "imgP/ZAPATOS MEN/BALENCIAGA/BL001/4.jpeg"
     ],
     "descripcion": "Sneaker tipo calcetín en tejido elástico negro con logo BALENCIAGA en blanco al lateral y suela deportiva negra envolvente.",
-    "entregaInmediata": true,
+    "entregaInmediata": false,
     "tallasEntregaInmediata": [
-      "41",
-      "42",
-      "43"
+      "null",
+      "null",
+      "null"
     ],
-    "cantidadDisponible": 3,
-    "precioEntregaInmediata": 139,
-    "envioRapido": true
+    "cantidadDisponible": null,
+    "precioEntregaInmediata": null,
+    "envioRapido": null
+    
   },
   {
     "codigo": "BL002",
@@ -3786,6 +3787,11 @@
     "precioEntregaInmediata": null,
     "envioRapido": false
   },
+
+
+
+
+  
   {
     "codigo": "ST001",
     "nombre": "Saint Laurent Court Classic Blanco Firma",

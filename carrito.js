@@ -113,11 +113,26 @@ function mensajeCarritoWhatsApp(){
 
   const total = totalCarrito();
   msg += `Total estimado: ${moneda(total)}\n`;
-  msg += `Abono para confirmar (50%): ${moneda(Math.round(total * 0.5))}\n\n`;
-  msg += "Nombre del cliente:\n";
+
+  // El abono del 50% solo aplica a lo que va por encargo.
+  // Los productos de entrega inmediata se pagan al recibir, sin abono.
+  const totalEncargo = items
+    .filter(i => !i.entregaInmediata)
+    .reduce((acc, i) => acc + subtotalItem(i), 0);
+
+  if(totalEncargo > 0){
+    msg += `Abono para confirmar (50%): ${moneda(Math.round(totalEncargo * 0.5))}\n`;
+    if(totalEncargo !== total){
+      msg += `(el abono aplica solo a los productos por encargo)\n`;
+    }
+  }
+
+  msg += `\nNombre del cliente:\n`;
   msg += "Ciudad o departamento:\n";
   msg += "Método de entrega:\n\n";
-  msg += "Quedo atento para confirmar disponibilidad y realizar el abono.";
+  msg += totalEncargo > 0
+    ? "Quedo atento para confirmar disponibilidad y realizar el abono."
+    : "Quedo atento para coordinar la entrega.";
 
   return msg;
 }

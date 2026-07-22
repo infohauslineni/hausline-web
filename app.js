@@ -709,8 +709,11 @@ function abrirProducto(codigo, modoInmediata){
        </div>`
     : "";
 
-  const abono = Math.round(precio * 0.5);
-  $("#modalAbono").innerHTML = `Abono para confirmar: <strong>${formatoPrecio(abono)}</strong> (50%)`;
+  // El abono del 50% solo aplica a pedidos por encargo.
+  // En entrega inmediata se paga completo al recibir, sin abono previo.
+  $("#modalAbono").innerHTML = modoInmediataActual
+    ? `Disponible ahora, sin abono previo.`
+    : `Abono para confirmar: <strong>${formatoPrecio(Math.round(precio * 0.5))}</strong> (50%)`;
 
   // Disponibilidad según el contexto
   $("#modalDisponibilidad").innerHTML = modoInmediataActual
@@ -968,7 +971,10 @@ function pedirProductoWhatsApp(){
   const precio = precioVigente(productoActual, modoInmediataActual);
   const subtotal = precio * cantidadSeleccionada;
 
-  let msg = "Hola, quiero encargar este producto en HAUSLINE:\n\n";
+  // El encabezado y el cierre cambian según sea entrega inmediata o encargo.
+  let msg = modoInmediataActual
+    ? "Hola, quiero este producto de entrega inmediata en HAUSLINE:\n\n"
+    : "Hola, quiero encargar este producto en HAUSLINE:\n\n";
   msg += `CÓDIGO: ${productoActual.codigo}\n`;
   msg += `Producto: ${nombreProducto(productoActual)}\n`;
   if(productoActual.marca) msg += `Marca: ${productoActual.marca}\n`;
@@ -979,9 +985,14 @@ function pedirProductoWhatsApp(){
   msg += `Subtotal: ${formatoPrecio(subtotal)}\n`;
   msg += modoInmediataActual ? "Entrega inmediata: sí\n" : "Disponible por encargo\n";
   if(productoActual.envioRapido) msg += "Envío rápido: sí\n";
-  msg += `\nAbono para confirmar (50%): ${formatoPrecio(Math.round(subtotal * 0.5))}\n\n`;
-  msg += "Nombre del cliente:\nCiudad o departamento:\nMétodo de entrega:\n\n";
-  msg += "Quedo atento para confirmar disponibilidad y realizar el abono.";
+
+  // El abono del 50% solo se pide en los pedidos por encargo.
+  if(modoInmediataActual){
+    msg += `\nQuedo atento para coordinar la entrega.`;
+  } else {
+    msg += `\nAbono para confirmar (50%): ${formatoPrecio(Math.round(subtotal * 0.5))}\n\n`;
+    msg += "Quedo atento para confirmar disponibilidad y realizar el abono.";
+  }
 
   window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
 }
@@ -1048,6 +1059,19 @@ function renderCarrito(){
   }).join("");
 
   $("#carritoTotal").textContent = formatoPrecio(totalCarrito());
+
+  // La nota del abono se adapta a lo que haya en el carrito.
+  const hayEncargo = items.some(i => !i.entregaInmediata);
+  const hayInmediata = items.some(i => i.entregaInmediata);
+  let nota;
+  if(hayEncargo && hayInmediata){
+    nota = "El abono del 50% aplica solo a los productos por encargo. Los de entrega inmediata se pagan al recibir.";
+  } else if(hayEncargo){
+    nota = "Se confirma con un abono del 50%. El total puede variar según disponibilidad.";
+  } else {
+    nota = "Productos disponibles ahora. Se pagan al momento de la entrega, sin abono previo.";
+  }
+  $("#carritoNota").textContent = nota;
   pie.hidden = false;
 }
 
