@@ -1,4634 +1,1470 @@
-let productos = [
-
-  {
-  codigo:"CL0001",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0001/CL001.jfif",
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"CL0002",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0003",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0004",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0005",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0005/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0006",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0006/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0007",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0007/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0008",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0008/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0009",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0009/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0010",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0010/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0011",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0011/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0012",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0012/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0013",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0013/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0014",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0014/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0015",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0015/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0016",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0016/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0017",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0017/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0018",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0018/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0019",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0019/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0020",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0020/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0021",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0021/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0022",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0022/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0023",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0023/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0024",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0024/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0025",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0025/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0026",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0026/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0027",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0027/2.jpg",
-  imagenes:[
-    
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0028",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.webp",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/2.webp",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/3.webp",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/4.webp",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0029",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:165,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0029/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0030",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:165,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0030/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0031",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:165,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0031/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0032",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0033",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0034",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:164,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0034/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0035",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0036",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0037",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0038",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0038/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0039",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0039/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0040",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0040/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0041",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0041/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0042",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:172,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0042/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0043",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0043/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-{
-  codigo:"AM001",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MQCUEEN",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM001/+.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/+.jpeg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/7bb7336a.jpeg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/96548a9c.jpeg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/fd4b494a.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AM002",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MQCUEEN",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/1.jpeg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/2.jpeg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/3.jpeg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AM003",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MQCUEEN",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM003/1.jpg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM003/2.PNG",
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AM004",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MCQUEEN",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM004/1.jpg",
-    
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-{
-  codigo:"AR001",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR001/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR001/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR001/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR001/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR002",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:140,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR002/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR002/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR002/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR002/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR003",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR003/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR003/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR003/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR003/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR004",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR004/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR004/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR004/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR004/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR005",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:170,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR005/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR005/1.webp",
-    "imgP/ZAPATOS MEN/AMIRI/AR005/2.webp",
-    "imgP/ZAPATOS MEN/AMIRI/AR005/3.webp",
-     
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-{
-  codigo:"BL001",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL001/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL001/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL001/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL001/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL002",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL002/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL002/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL002/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL003",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL003/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL003/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL003/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL003/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL004",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL004/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL004/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL004/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL004/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL005",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL005/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL005/1.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL005/2.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL005/3.jpg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL005/4.jpg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL006",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:190,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL006/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL006/1.jpeg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL007",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:90,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-{
-  codigo:"BK001",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK001/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK001/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK001/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK002",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK002/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK002/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK003",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK003/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK003/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK003/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK004",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK004/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK004/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK004/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK005",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK005/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK005/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK005/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK006",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/3.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/4.jpeg"
-  ],
-  descripcion:"TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"BK007",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK007/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK007/2.jpeg"
-  ],
-  descripcion:"TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-{
-  codigo:"BR001",
-  marca:"BURBERRY",
-  nombre:"BURBERRY",
-  precio:150,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BURBERRY/BR001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BURBERRY/BR001/1.jpeg",
-    "imgP/ZAPATOS MEN/BURBERRY/BR001/2.jpeg",
-    "imgP/ZAPATOS MEN/BURBERRY/BR001/3.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BR002",
-  marca:"BURBERRY",
-  nombre:"BURBERRY",
-  precio:90,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-{
-  codigo:"CH001",
-  marca:"CHRISTIAN DIOR",
-  nombre:"Christian Dior",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Dior/CH001/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Dior/CH001/1.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH001/2.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH001/3.webp",
-     "imgP/ZAPATOS MEN/Christian Dior/CH001/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CH002",
-  marca:"CHRISTIAN DIOR",
-  nombre:"Christian Dior",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Dior/CH002/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Dior/CH002/1.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH002/2.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH002/3.webp",
-     "imgP/ZAPATOS MEN/Christian Dior/CH002/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CH003",
-  marca:"CHRISTIAN DIOR",
-  nombre:"Christian Dior",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Dior/CH003/1.jfif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Dior/CH003/1.jfif",
-    "imgP/ZAPATOS MEN/Christian Dior/CH003/2.jfif",
-    "imgP/ZAPATOS MEN/Christian Dior/CH003/3.jfif",
-     "imgP/ZAPATOS MEN/Christian Dior/CH003/4.jfif",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"CV001",
-  marca:"CONVERSE",
-  nombre:"Converse",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Converse/CV001/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Converse/CV001/1.webp",
-    "imgP/ZAPATOS MEN/Converse/CV001/2.webp",
-    "imgP/ZAPATOS MEN/Converse/CV001/3.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"D&C001",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C002",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C003",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C004",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C005",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C006",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C007",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C008",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C009",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C011",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C012",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C013",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/1.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/2.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/3.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/4.jpeg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C014",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/1.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/2.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/3.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/4.jpeg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C015",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/4.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/2.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C016",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/4.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/4.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/3.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C017",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/3.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-{
-  codigo:"GG001",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG001/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/1.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/2.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/5.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/4.avif",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG002",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG002/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/2.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/4.webp",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG003",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/2.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG004",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG004/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG004/2.jpg",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG005",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG005/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/2.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/4.webp",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG006",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG006/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/2.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/4.webp",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG007",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/3.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/4.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/1.avif",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG008",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/2.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/3.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/4.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/5.avif",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG009",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/2.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/3.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/4.webp",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG010",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG010/2.avif",
-   
-    "imgP/ZAPATOS MEN/Golden Goose/GG010/4.avif",
-  
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"GG011",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG011/2.jpg",
-   "imgP/ZAPATOS MEN/Golden Goose/GG011/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG011/4.jpg",
-  
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG012",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:148,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG012/2.jpg",
-   "imgP/ZAPATOS MEN/Golden Goose/GG012/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG012/4.jpg",
-  
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-{
-  codigo:"LP001",
-  marca:"LORO PIANA",
-  nombre:"Loro Piana",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Loro Piana/LP001/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/1.avif",
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/2.avif",
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/3.avif",
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/4.avif",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"LV001",
-  marca:"LOUIS VOUITTON",
-  nombre:"Louis Vuitton",
-  precio:180,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/1.jpg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/2.jpg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/3.jpg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/4.jpg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"LV002",
-  marca:"LOUIS VOUITTON",
-  nombre:"Louis Vuitton",
-  precio:180,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/1.jpeg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/2.jpeg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/3.jpeg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"MM001",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/1.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/2.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM002",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM002/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/1.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/2.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/3.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/4.jpg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM003",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM003/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/1.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/2.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM004",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM004/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM004/1.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM004/2.webp",
-        "imgP/ZAPATOS MEN/Maison Margiela/MM004/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM004/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM005",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM005/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM005/1.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM005/2.webp",
-        "imgP/ZAPATOS MEN/Maison Margiela/MM005/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM005/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW001",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/2.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/3.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/4.jpeg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW002",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/1.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/2.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/3.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/4.jpeg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW003",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/1.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/2.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/3.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/4.jpg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW004",
-  marca:"OFF-WHITE",
-  nombre:"Off White ",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/1.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/2.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/3.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/4.jpg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"ST001",
-  marca:"SAINT LAURENT",
-  nombre:"Saint Laurent ",
-  precio:148.5,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/SAINT LAURENT/ST001/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/1.webp",
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/2.webp",
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/3.webp",
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/4.webp",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"VL001",
-  marca:"VALENTINO ",
-  nombre:"Valentino Garavani ",
-  precio:164.50,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Valentino/VL001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Valentino/VL001/1.jpg",
-    "imgP/ZAPATOS MEN/Valentino/VL001/2.jpg",
-    "imgP/ZAPATOS MEN/Valentino/VL001/3.jpg",
-    "imgP/ZAPATOS MEN/Valentino/VL001/4.jpg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"VL002",
-  marca:"VALENTINO ",
-  nombre:"Valentino Garavani ",
-  precio:164.50,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Valentino/VL002/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Valentino/VL002/1.webp",
-    "imgP/ZAPATOS MEN/Valentino/VL002/2.webp",
-    "imgP/ZAPATOS MEN/Valentino/VL002/3.webp",
-    "imgP/ZAPATOS MEN/Valentino/VL002/4.webp",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"VJ001",
-  marca:"VEJA ",
-  nombre:"Veja Campo ",
-  precio:148.5,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/VEJA/VJ001/2.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/VEJA/VJ001/2.jpeg",
-    "imgP/ZAPATOS MEN/VEJA/VJ001/1.jpeg",
-    "imgP/ZAPATOS MEN/VEJA/VJ001/3.jpeg",
-    "imgP/ZAPATOS MEN/VEJA/VJ001/4.jpeg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"PHM001",
-  marca:"PHILIP MODEL",
-  nombre:"Philip Model",
-  precio:160,
-  categoria:"Zapatos",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/1.jpeg",
-    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/2.jpeg",
-    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/3.jpeg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo: "#001W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/001.jpg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#002W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/002.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#003W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/003.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#004W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/004.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#005W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/005.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#006W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/006.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#007W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/007.jpg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#008W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/008.jpg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#009W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/009.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#010W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/010.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#011W",
-  nombre: "CHRISTIAN LOUBUTIN CL",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/011.jpeg",
-  descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#012W",
-  nombre: "CHRISTIAN DIOR CH",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/012.jpeg",
-  descripcion: " CH TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#013W",
-  nombre: "AMIRI ",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/013.jpeg",
-  descripcion: " AMIRI TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#014W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/014.jpeg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#015W",
-  nombre: "CHISTIAN LOUBUTIN CL",
-  precio: 140,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/015.jpg",
-  descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-{
-  codigo: "#016W",
-  nombre: "DIOR",
-  precio: 126,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/DIOR/016.1.jpg",
- imagenes:[
-    "imgP/dama/DIOR/016.1.jpg",
-    "imgP/dama/DIOR/016.3.jpg",
-    "imgP/dama/DIOR/01632.jpg",
-    
-  ],
-
-
-  descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-
-{
-  codigo: "#017W",
-  nombre: "DIOR",
-  precio: 105,
-  categoria: "Dama",
-  nuevo: true,
-  imagen:"imgP/dama/DIOR/017.1/1.jpeg",
- imagenes:[
-    "imgP/dama/DIOR/017.1/1.jpeg",
-    
-  ],
-
-
-  descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["37","38","39","40"]
-  },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo: "#ROW1",
-  nombre: "SWATCH X AP",
-  precio: 152,
-  categoria: "Accesorios",
-  nuevo: true,
-  imagen:"imgP/accesorios/ROW1.jpeg",
-  descripcion: " AP TIEMPO  DE ENTREGA 15-25 DIAS",
-colores:["Pink","Blue","Green","Black & White"],
-  },
-{
-  codigo:"#ROW2",
-  nombre:"BOLSA LV",
-  precio:140,
-  categoria:"Accesorios",
-  nuevo:true,
-  imagen:"imgP/accesorios/ROW2.jpeg",
-  descripcion:"LV TIEMPO DE ENTREGA 15-25 DIAS",
-  colores:["Black"]
-},
-{
-  codigo: "#ROW3",
-  nombre: "TARJETERO GOYARD GYD",
-  precio: 48,
-  categoria: "Accesorios",
-  nuevo: true,
-  imagen:"imgP/accesorios/ROW3.jpeg",
-  descripcion: " GYD TIEMPO  DE ENTREGA 15-25 DIAS",
-colores:[
-  "Black",
-  "Red",
-  "Navy Blue",
-  "Pink",
-  "Tan",
-  "White",
-  "Orange",
-  "Light Grey",
-  "Dark Grey",
-  "Sky Blue",
-  "Brown",
-  "Yellow",
-  "Burgundy",
-  "Cream",
-  "Green"
-],
-  },
-{
-  codigo:"#ROW4",
-  nombre:"BACKPACK alo",
-  precio:57,
-  categoria:"Accesorios",
-  nuevo:true,
-  imagen:"imgP/accesorios/ALOBACL1/1.jpeg",
-  
-  imagenes:[
-    "imgP/accesorios/ALOBACL1/1.jpeg",
-    "imgP/accesorios/ALOBACL1/3.jpeg",
-    "imgP/accesorios/ALOBACL1/2.jpeg"
-  ],
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-  colores:["Black"]
-},
-
-
-
-
-
-
-{
-  codigo:"#001R",
-  nombre:"JACKET OFFWHITE OFFW",
-  precio:140,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/001.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/001.1.jpg",
-    "imgP/ropa/001.2.jpg"
-  ],
-
-  descripcion:"OFFW TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#002R",
-  nombre:"JACKET OFFWHITE OFFW",
-  precio:140,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/002.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/002.1.jpg",
-    "imgP/ropa/002.2.jpg"
-  ],
-
-  descripcion:"OFFW TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#003R",
-  nombre:"JACKET OFFWHITE OFFW",
-  precio:140,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/003.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/003.1.jpg",
-    "imgP/ropa/003.2.jpg"
-  ],
-
-  descripcion:"OFFW TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#004R",
-  nombre:"JACKET OFFWHITE OFFW",
-  precio:140,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/004.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/004.1.jpeg",
-    "imgP/ropa/004.2.jpeg"
-  ],
-
-  descripcion:"OFFW TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#005R",
-  nombre:"T-SHIRT GALERY DEPT GP",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/005.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/005.1.jpeg",
-    "imgP/ropa/005.2.jpeg"
-  ],
-
-  descripcion:"GP TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],  colores:[
-  "Black",
-  "White"
-],
-},
-{
-  codigo:"#006R",
-  nombre:"T-SHIRT AMIRI",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/006.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/006.1.jpeg",
-    "imgP/ropa/006.2.jpeg",
-    "imgP/ropa/006.3.jpeg"
-  ],
-
-  descripcion:"AMIRI TIEMPO DE ENTREGA 15-25 DIAS",
-
-    
-  tallas:["S","M","L","XL"],
-    colores:[
-  "Black",
-  "White"
-],
-},
-{
-  codigo:"#007R",
-  nombre:"T-SHIRT ESSENSIALTS",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/007.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/007.1.jpeg",
-    "imgP/ropa/007.2.jpeg",
-    
-  ],
-
-  descripcion:"EST TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Cream",
-  "Beige",
-  "Coral",
-  "Black"
-],
-},
-{
-  codigo:"#008R",
-  nombre:"T-SHIRT ESSENSIALTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/008.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/008.1.jpeg",
-    "imgP/ropa/008.2.jpeg",
-    "imgP/ropa/008.3.jpeg"
-  ],
-colores:[
-  "Black",
-  "Cream",
-],
-  descripcion:"EST TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#009R",
-  nombre:"T-SHIRT ESSENSIALTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/009.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/009.1.jpg",
-    "imgP/ropa/009.2.jfif",
-    "imgP/ropa/009.3.jfif",
-    "imgP/ropa/009.4.jfif",
-  ],
-
-  descripcion:"EST TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "White",
-  "Grey",
-  "Sand",
-  "Green",
-  "Blue",
-  "Black"
-],
-},
-{
-  codigo:"#010R",
-  nombre:"SHORTS MONCLER",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/010.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/010.1.jpg",
-    "imgP/ropa/010.2.jpg",
-    "imgP/ropa/010.3.jpg",
-    "imgP/ropa/010.4.jpg"
-  ],
-descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#011R",
-  nombre:"SHORTS MONCLER",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/011.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/011.1.jpg",
-    "imgP/ropa/011.2.jpg",
-    "imgP/ropa/011.3.jpg",
-    "imgP/ropa/011.4.jpg"
-  ],
-descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#012R",
-  nombre:"BAÑADOR MONCLER",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/012.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/012.1.jpg",
-    "imgP/ropa/012.2.jpg",
-    "imgP/ropa/012.3.jpg",
-    
-  ],
-descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#013R",
-  nombre:"T-SHIRT CHROME HEARTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/013.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/013.1.jpg",
-    "imgP/ropa/013.2.jpg",
-    "imgP/ropa/013.3.jpg",
-    "imgP/ropa/013.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#014R",
-  nombre:"T-SHIRT CHROME HEARTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/014.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/014.1.jpg",
-    "imgP/ropa/014.2.jpg",
-    "imgP/ropa/014.3.jpg",
-    "imgP/ropa/014.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#015R",
-  nombre:"T-SHIRT CHROME HEARTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/015.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/015.1.jpg",
-    "imgP/ropa/015.2.jpg",
-    "imgP/ropa/015.3.jpg",
-    "imgP/ropa/015.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#016R",
-  nombre:"T-SHIRT CHROME HEARTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/016.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/016.1.jpg",
-    "imgP/ropa/016.2.jpg",
-    "imgP/ropa/016.3.jpg",
-    "imgP/ropa/016.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#017R",
-  nombre:"T-SHIRT CHROME HEARTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/017.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/017.1.jpg",
-    "imgP/ropa/017.2.jpg",
-    "imgP/ropa/017.3.jpg",
-    "imgP/ropa/017.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#018R",
-  nombre:"T-SHIRT CHROME HEARTS",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/018.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/018.1.jpg",
-    "imgP/ropa/018.2.jpg",
-    "imgP/ropa/018.3.jpg",
-    "imgP/ropa/018.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#019R",
-  nombre:"HOODIE alo",
-  precio:60,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/019.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/019.1.jpg",
-    "imgP/ropa/019.2.jpg",
-    "imgP/ropa/019.3.jpg",
-    "imgP/ropa/019.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#020R",
-  nombre:"T-SHIRT CASA BLANCA",
-  precio:"72",
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/020.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/020.1.jpg",
-    "imgP/ropa/020.2.jpg",
-    "imgP/ropa/020.3.jpg",
-    "imgP/ropa/020.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "white",
-  "navy blue",
-],
-},
-{
-  codigo:"#021R",
-  nombre:"T-SHIRT ALL-SAINTS",
-  precio:48,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/021.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/021.1.jpg",
-    "imgP/ropa/021.2.webp",
-    "imgP/ropa/021.3.webp",
-    "imgP/ropa/021.4.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#022R",
-  nombre:"HOODIE ASSC",
-  precio:45,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/022.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/022.1.jpeg",
-    "imgP/ropa/022.2.jpeg",
- 
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#023R",
-  nombre:"T-SHIRT AMIRI",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/023.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/023.1.jpeg",
-    "imgP/ropa/023.2.jpeg",
-    "imgP/ropa/023.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#024R",
-  nombre:"T-SHIRT AMIRI",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/024.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/024.1.jpg",
-    "imgP/ropa/024.2.jpg",
-    "imgP/ropa/024.3.jpg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#025R",
-  nombre:"T-SHIRT AMIRI",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/025.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/025.1.jpeg",
-    "imgP/ropa/025.2.jpeg",
-    "imgP/ropa/025.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#026R",
-  nombre:"T-SHIRT AMIRI",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/026.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/026.1.jpeg",
-    "imgP/ropa/026.2.jpeg",
-    "imgP/ropa/026.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#027R",
-  nombre:"T-SHIRT AMIRI",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/027.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/027.1.jpeg",
-    "imgP/ropa/027.2.jpeg",
-    "imgP/ropa/027.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#028R",
-  nombre:"T-SHIRT AMIRI",
-  precio:62,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/028.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/028.1.jpeg",
-    "imgP/ropa/028.2.jpeg",
-    "imgP/ropa/028.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"]
-},
-{
-  codigo:"#029R",
-  nombre:"T-SHIRT OFFWHT",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/029.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/029.1.jpeg",
-    "imgP/ropa/029.2.jpeg",
-  
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],  colores:[
-  "Black",
-  "White"
-],
-},
-{
-  codigo:"#031R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/031.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/031.1.jpeg",
-    "imgP/ropa/031.2.jpeg",
-    "imgP/ropa/031.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],  colores:[
-  "Black",
-  
-],
-  
-},
-{
-  codigo:"#032R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/032.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/032.1.jpeg",
-    "imgP/ropa/032.2.jpeg",
-    "imgP/ropa/032.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "White",
-  "navy blue"
-],
-},
-{
-  codigo:"#034R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/034.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/034.1.jpeg",
-    "imgP/ropa/034.2.jpeg",
-    "imgP/ropa/034.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "White"
-],
-},
-{
-  codigo:"#035R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/035.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/035.1.jpeg",
-    "imgP/ropa/035.2.jpeg",
-    "imgP/ropa/035.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "White"
-],
-},
-{
-  codigo:"#036R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/036.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/036.1.jpeg",
-    "imgP/ropa/036.2.jpeg",
-    "imgP/ropa/036.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:[
-  "Black",
-  "Grey",
-  "White",
-
-],
-},
-{
-  codigo:"#037R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/037.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/037.1.jpeg",
-    "imgP/ropa/037.2.jpeg",
-    "imgP/ropa/037.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:["Negro","Blanco"]
-},
-{
-  codigo:"#038R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/038.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/038.1.jpeg",
-    "imgP/ropa/038.2.jpeg",
-    "imgP/ropa/038.3.jpeg",
-  ],
-descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-colores:[
-  "Pink",
-  "Baby Blue",
-  "Cream",
-  "White",
-  "Black"
-],
-},
-{
-  codigo:"#039R",
-  nombre:"T-SHIRT ASSC",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/039.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/039.1.jpeg",
-    "imgP/ropa/039.2.jpeg",
-    "imgP/ropa/039.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:["Negro","Blanco"]
-},
-{
-  codigo:"#040R",
-  nombre:"SHORTS BALENCIAGA",
-  precio:52,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/040.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/040.1.jpg",
-    "imgP/ropa/040.2.jpg",
-    "imgP/ropa/040.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
-  colores:["Negro","Blanco"]
-},
-{
-  codigo:"#041R",
-  nombre:"T-SHIRTS BALENCIAGA",
-  precio:55,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/041.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/041.1.jpg",
-    "imgP/ropa/041.2.jpg",
-    "imgP/ropa/041.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "Black",
-],
-},
-{
-  codigo:"#042R",
-  nombre:"T-SHIRTS BALENCIAGA",
-  precio:55,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/042.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/042.1.jpg",
-    "imgP/ropa/042.2.jpg",
-    "imgP/ropa/042.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "Black",
-],
-},
-{
-  codigo:"#043R",
-  nombre:"T-SHIRTS BALENCIAGA",
-  precio:55,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/043.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/043.1.jpg",
-    "imgP/ropa/043.2.jpg",
-    "imgP/ropa/043.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "Black",
-  "white",
-],
-},
-{
-  codigo:"#044R",
-  nombre:"T-SHIRTS B4PE",
-  precio:48,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/044.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/044.1.jpeg",
-    "imgP/ropa/044.2.jpeg",
-    "imgP/ropa/044.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "Black",
-  "Pink",
-  "Gray",
-],
-},
-{
-  codigo:"#045R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:62,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/045.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/045.1.jpg",
-    "imgP/ropa/045.2.jpg",
-    "imgP/ropa/045.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#047R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:62,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/047.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/047.1.jpg",
-    "imgP/ropa/047.2.jpg",
-    "imgP/ropa/047.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#048R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:62,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/048.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/048.1.jpg",
-    "imgP/ropa/048.2.jpg",
-    "imgP/ropa/048.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#051R",
-  nombre:"CONJUNTO CASA BLANCA",
-  precio:75,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/051.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/051.1.jpeg",
-    "imgP/ropa/051.2.jpeg",
-    "imgP/ropa/051.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#052R",
-  nombre:"CONJUNTO CASA BLANCA",
-  precio:75,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/052.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/052.1.jpeg",
-    "imgP/ropa/052.2.jpeg",
-    "imgP/ropa/052.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#053R",
-  nombre:"CONJUNTO CASA BLANCA",
-  precio:75,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/053.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/053.1.jpeg",
-    "imgP/ropa/053.2.jpeg",
-    "imgP/ropa/053.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#054R",
-  nombre:"CONJUNTO CASA BLANCA",
-  precio:75,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/054.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/054.1.jpeg",
-    "imgP/ropa/054.2.jpeg",
-    "imgP/ropa/054.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#055R",
-  nombre:"CONJUNTO CASA BLANCA",
-  precio:75,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/055.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/055.1.jpeg",
-    "imgP/ropa/055.2.jpeg",
-    "imgP/ropa/055.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#056R",
-  nombre:"CONJUNTO CASA BLANCA",
-  precio:75,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/056.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/056.1.jpeg",
-    "imgP/ropa/056.2.jpeg",
-    "imgP/ropa/056.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#057R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:68,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/057.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/057.1.jpeg",
-    "imgP/ropa/057.2.jpeg",
-    "imgP/ropa/057.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#058R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:68,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/058.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/058.1.jpeg",
-    "imgP/ropa/058.2.jpeg",
-    "imgP/ropa/058.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#059R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:65,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/059.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/059.1.jpeg",
-    "imgP/ropa/059.2.jpeg",
-    "imgP/ropa/059.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  "Black",
-],
-},
-{
-  codigo:"#060R",
-  nombre:"T-SHIRTS CASA BLANCA",
-  precio:65,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/060.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/060.1.jpeg",
-    "imgP/ropa/060.2.jpeg",
-    "imgP/ropa/060.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-   "black",
-],
-},
-{
-  codigo:"#061R",
-  nombre:"Pantalon Chrome Hearts",
-  precio:70,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/061.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/061.1.jpg",
-    "imgP/ropa/061.2.jpg",
-    "imgP/ropa/061.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-  
-],
-},
-{
-  codigo:"#062R",
-  nombre:"HOODIE CHROME HEARTS",
-  precio:70,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/062.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/062.1.jpeg",
-    "imgP/ropa/062.2.jpeg",
-    "imgP/ropa/062.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-   "Black",
-],
-},
-{
-  codigo:"#063R",
-  nombre:"T-SHIRTS CHROME HEARTS",
-  precio:65,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/063.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/063.1.jpg",
-    "imgP/ropa/063.2.jpg",
-    "imgP/ropa/063.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-   "Black",
-],
-},
-{
-  codigo:"#064R",
-  nombre:"T-SHIRTS CHROME HEARTS",
-  precio:53,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/064.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/064.1.jpg",
-    "imgP/ropa/064.2.jpeg",
-    "imgP/ropa/064.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-   "Black",
-],
-},
-{
-  codigo:"#065R",
-  nombre:"T-SHIRTS CHROME HEARTS",
-  precio:53,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/065.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/065.1.jpeg",
-    "imgP/ropa/065.2.jpeg",
-    "imgP/ropa/065.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-   "Black",
-],
-},
-{
-  codigo:"#066R",
-  nombre:"T-SHIRTS CHROME HEARTS",
-  precio:53,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/066.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/066.1.jpg",
-    "imgP/ropa/066.2.jpg",
-    "imgP/ropa/066.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-  "White",
-   "Black",
-],
-},
-{
-  codigo:"#067R",
-  nombre:"SHORT MONCLER",
-  precio:48,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/067.1.webp",
-
-  imagenes:[
-    "imgP/ropa/067.1.webp",
-    "imgP/ropa/067.2.webp",
-    "imgP/ropa/067.3.webp",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "Black",
-],
-},
-{
-  codigo:"#069R",
-  nombre:"T-SHIRT OFF WHITE",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/069.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/069.1.jpeg",
-    "imgP/ropa/069.2.jpeg",
-    "imgP/ropa/069.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "White",
-],
-},
-{
-  codigo:"#070R",
-  nombre:"T-SHIRT OFF WHITE",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/070.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/070.1.jpeg",
-    "imgP/ropa/070.2.jpeg",
-    "imgP/ropa/070.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "White",
-   "Black",
-],
-},
-{
-  codigo:"#071R",
-  nombre:"T-SHIRT OFF WHITE",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/071.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/071.1.jpeg",
-    "imgP/ropa/071.2.jpeg",
-    "imgP/ropa/071.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "White",
-   "Black",
-],
-},
-{
-  codigo:"#072R",
-  nombre:"SHORT OFF WHITE",
-  precio:55,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/072.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/072.1.jpeg",
-    "imgP/ropa/072.2.jpeg",
-    "imgP/ropa/072.3.jpeg",
-    "imgP/ropa/072.4.jpeg",
-    "imgP/ropa/072.5.jpeg",
-    "imgP/ropa/072.6.jpeg",
-    "imgP/ropa/072.7.jpeg",
-    "imgP/ropa/072.8.jpeg",
-    "imgP/ropa/072.9.jpeg",
-    "imgP/ropa/072.10.jpeg",
-    "imgP/ropa/072.11.jpeg",
-  ],
-
-  descripcion:" ENVIAR MODELO QUE NECESITA AL WHATSASAP TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "White",
-   "Black",
-],
-},
-{
-  codigo:"#073R",
-  nombre:"T-SHIRT OFF WHITE",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/073.1.jpg",
-
-  imagenes:[
-    "imgP/ropa/073.1.jpg",
-    "imgP/ropa/073.2.jpg",
-    "imgP/ropa/073.3.jpg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   ,
-   "Black",
-],
-},
-{
-  codigo:"#074R",
-  nombre:"T-SHIRT AMI PLAY",
-  precio:50,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/074.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/074.1.jpeg",
-    "imgP/ropa/074.2.jpeg",
-    "imgP/ropa/074.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "White",
-   
-],
-},
-{
-  codigo:"#075R",
-  nombre:"T-SHIRT REPRESENT",
-  precio:48,
-  categoria:"Ropa",
-  nuevo:true,
-
-  imagen:"imgP/ropa/075.1.jpeg",
-
-  imagenes:[
-    "imgP/ropa/075.1.jpeg",
-    "imgP/ropa/075.2.jpeg",
-    "imgP/ropa/075.3.jpeg",
-  ],
-
-  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
-
-  tallas:["S","M","L","XL"],
- colores:[
-
-   "White",
-   "Black",
-],
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ============================================================
+// HAUSLINE — Lógica de la tienda
+// Los datos viven en: productos.js (catálogo) y clientes.js
+// El carrito y favoritos viven en: carrito.js y favoritos.js
+// ============================================================
+
+const WHATSAPP = "50578995116";
+
+const CATEGORIAS = [
+  { id: "Zapatos",    etiqueta: "Zapatos" },
+  { id: "Ropa",       etiqueta: "Ropa" },
+  { id: "Dama",       etiqueta: "Dama" },
+  { id: "Accesorios", etiqueta: "Accesorios" }
 ];
 
-const contenedor = document.getElementById("productos");
-const nuevosContainer = document.getElementById("nuevosProductos");
-const recomendadosContainer = document.getElementById("recomendados");
-const buscador = document.getElementById("buscador");
+// Políticas de compra de HAUSLINE (se muestran en el modal del producto).
+const POLITICAS = {
+  condiciones: [
+    "Todos los pedidos son bajo encargo salvo los marcados como entrega inmediata.",
+    "Se confirma el pedido con un abono del 50%.",
+    "No se permiten cancelaciones una vez confirmado el pedido."
+  ],
+  entrega: [
+    "Tiempo estimado de 15 a 25 días hábiles.",
+    "El tiempo puede variar por logística internacional.",
+    "Los productos de entrega inmediata se entregan sin espera."
+  ],
+  garantia: [
+    "Garantía de 24 horas por defectos de fábrica.",
+    "Revisa tu pedido al momento de recibirlo."
+  ]
+};
 
-const modal = document.getElementById("modal");
-const cerrar = document.getElementById("cerrar");
-
-const modalImg = document.getElementById("modalImg");
-const modalCodigo = document.getElementById("modalCodigo");
-const modalNombre = document.getElementById("modalNombre");
-const modalPrecio = document.getElementById("modalPrecio");
-const modalDesc = document.getElementById("modalDesc");
-const modalTallas = document.getElementById("modalTallas");
+// ---------- Estado ----------
+let estadoVista = "inicio";          // "inicio" | "coleccion"
+let coleccionActual = null;          // { tipo, valor, titulo }
 let paginaActual = 1;
-const productosPorPagina = 6;
-let categoriaActual = "Zapatos";
-let marcaActual = "Todas";
+let textoBusqueda = "";
+let ordenActual = "recomendados";
+let filtroMarca = "";
+let filtroPrecio = "";
+const filtrosActivos = new Set();    // "nuevo" | "oferta" | "inmediata" | "rapido"
+
 let productoActual = null;
+let modoInmediataActual = false;   // true si se abrió desde "Entrega inmediata"
 let imagenesActuales = [];
-let indiceImagenActual = 0;
-cerrar.addEventListener("click", () => {
-  modal.classList.remove("activo");
-});
-
-modal.addEventListener("click", (e) => {
-  if(e.target === modal){
-    modal.classList.remove("activo");
-  }
-});
-
-
-function formatoPrecio(precio){
-  return "$" + Number(precio).toLocaleString("en-US");
-}
-
-function crearCard(producto){
-
-  const enPromocion =
-    producto.promocionHasta &&
-    new Date() < new Date(producto.promocionHasta);
-
-  return `
-    <div class="card" onclick="abrirProducto('${producto.codigo}')">
-
-      <div class="producto-imagen-wrap">
-        <img src="${producto.imagen}" alt="${producto.nombre}">
-        <span class="marca-agua-producto">HAUSLINE.NI</span>
-      </div>
-
-      <div class="card-info">
-
-        <div class="badge">
-          ${producto.nuevo ? "NUEVO" : ""}
-        </div>
-
-        <h3 class="nombre-producto">${producto.nombre}</h3>
-
-        <div class="codigo">
-          ${producto.codigo}
-        </div>
-
-        <div class="categoria-card">
-          ${producto.categoria}
-        </div>
-
-        <div class="precio">
-          ${
-            enPromocion && producto.precioOferta
-              ? `
-                <span style="text-decoration:line-through;color:#888;font-size:14px;">
-                  $${producto.precio}
-                </span>
-                <br>
-                <span style="color:#b6ff00;font-weight:bold;">
-                  $${producto.precioOferta} USD
-                </span>
-                <div class="badge-descuento">
-                  🔥 -${producto.descuento}%
-                </div>
-              `
-              : `$${producto.precio} USD`
-          }
-        </div>
-
-      </div>
-
-    </div>
-  `;
-
-}
-function renderizarMarcas() {
-  const marcasContainer = document.getElementById("marcas");
-  if (!marcasContainer) return;
-
-  const marcas = [
-    "Todas",
-    ...new Set(
-      productos
-        .filter(producto => producto.categoria === categoriaActual)
-        .map(producto => producto.marca)
-        .filter(Boolean)
-    )
-  ];
-
-  marcasContainer.innerHTML = marcas.map(marca => `
-    <button 
-      class="marca-btn ${marca === marcaActual ? "activo" : ""}" 
-      data-marca="${marca}">
-      ${marca}
-    </button>
-  `).join("");
-}
-
-function renderizarCatalogo(){
-
-  const texto = buscador ? buscador.value.toLowerCase() : "";
-
-  const filtrados = productos.filter(producto => {
-    const categoriaOk = producto.categoria === categoriaActual;
-
-    const marcaOk =
-      marcaActual === "Todas" ||
-      producto.marca === marcaActual;
-
-    const textoOk =
-      producto.nombre.toLowerCase().includes(texto) ||
-      producto.codigo.toLowerCase().includes(texto) ||
-      (producto.marca || "").toLowerCase().includes(texto);
-
-    return categoriaOk && marcaOk && textoOk;
-  });
-
-  const inicioProducto = (paginaActual - 1) * productosPorPagina;
-  const finProducto = inicioProducto + productosPorPagina;
-
-  const productosPagina = filtrados.slice(inicioProducto, finProducto);
-
-  contenedor.innerHTML = productosPagina.map(crearCard).join("");
-
-  const contador = document.getElementById("contadorProductos");
-
-  if(contador){
-    contador.textContent = `${filtrados.length} productos disponibles`;
-  }
-
-  renderizarMarcas();
-  renderizarPaginacion(filtrados.length);
-}
-function renderizarPaginacion(totalProductos){
-
-  const paginacion = document.getElementById("paginacion");
-  if(!paginacion) return;
-
-  const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
-  paginacion.innerHTML = "";
-
-  if(totalPaginas <= 1) return;
-
-  let botones = "";
-
-  botones += `
-    <button class="nav-page" onclick="cambiarPagina(${Math.max(1, paginaActual - 1)})">
-      PREV
-    </button>
-  `;
-
-  let inicio = Math.max(1, paginaActual - 2);
-  let fin = Math.min(totalPaginas, paginaActual + 2);
-
-  if(paginaActual <= 3){
-    inicio = 1;
-    fin = Math.min(5, totalPaginas);
-  }
-
-  if(paginaActual >= totalPaginas - 2){
-    inicio = Math.max(1, totalPaginas - 4);
-    fin = totalPaginas;
-  }
-
-  for(let i = inicio; i <= fin; i++){
-    botones += `
-      <button class="${i === paginaActual ? "activo" : ""}" onclick="cambiarPagina(${i})">
-        ${i}
-      </button>
-    `;
-  }
-
-  botones += `
-    <button class="nav-page" onclick="cambiarPagina(${Math.min(totalPaginas, paginaActual + 1)})">
-      NEXT
-    </button>
-  `;
-
-  paginacion.innerHTML = botones;
-}
-
-function cambiarPagina(numero){
-  paginaActual = numero;
-  renderizarCatalogo();
-
-  setTimeout(() => {
-    document.querySelector("#productos").scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }, 100);
-}
-
-
-function renderizarRecomendados(){
-  const caja = document.getElementById("recomendados");
-  if(!caja) return;
-
-  const recomendados = productos
-    .filter(producto => String(producto.categoria || "").trim().toLowerCase() === "ropa")
-    .slice(0,4);
-  caja.innerHTML = recomendados.map(crearCard).join("");
-}
-
-function abrirProducto(codigo){
-
-  productoActual = productos.find(p => p.codigo === codigo);
-
-  if(!productoActual) return;
-
-  imagenesActuales = productoActual.imagenes || [productoActual.imagen];
-indiceImagenActual = 0;
-
-document.getElementById("modalImg").src = imagenesActuales[indiceImagenActual];
-
-document.getElementById("galeriaPrev").style.display =
-  imagenesActuales.length > 1 ? "flex" : "none";
-
-document.getElementById("galeriaNext").style.display =
-  imagenesActuales.length > 1 ? "flex" : "none";
-  document.getElementById("modalCodigo").textContent = productoActual.codigo;
-  document.getElementById("modalNombre").textContent = productoActual.nombre;
-  document.getElementById("modalPrecio").textContent = "$" + productoActual.precio + " USD";
-  document.getElementById("modalDesc").textContent = productoActual.descripcion || "";
-
-const contenedorTallas = document.getElementById("modalTallas");
-
-contenedorTallas.innerHTML = "";
-contenedorTallas.innerHTML = "";
-
-if(productoActual.categoria === "Ropa" &&
-   productoActual.colores &&
-   productoActual.colores.length > 0){
-
-  contenedorTallas.innerHTML += `
-    <div class="colores-disponibles">
-      <strong>Color:</strong>
-    </div>
-  `;
-
-  productoActual.colores.forEach(color => {
-    contenedorTallas.innerHTML += `
-      <button class="color-btn">${color}</button>
-    `;
-  });
-
-}
-
-if(productoActual.tallas && productoActual.tallas.length > 0){
-
-  contenedorTallas.innerHTML += `
-    <div class="colores-disponibles">
-      <strong>Talla:</strong>
-    </div>
-  `;
-
-  productoActual.tallas.forEach(talla => {
-    contenedorTallas.innerHTML += `
-      <button class="talla-btn">${talla}</button>
-    `;
-  });
-
-}
-  document.getElementById("modal").classList.add("activo");
-
-}
-
-if(buscador){
-  buscador.addEventListener("input", () => {
-    paginaActual = 1;
-    renderizarCatalogo();
-  });
-}
-
-renderizarCatalogo();
-renderizarRecomendados();
-
-const SUPABASE_URL = "https://epslwaxjemlysqtubbfu.supabase.co";
-const SUPABASE_PUBLIC_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";
-
-async function cargarCatalogoCentral(){
-  try{
-    const ordenOriginal = new Map(productos.map((producto, indice) => [
-      String(producto.codigo || "").trim().toUpperCase(),
-      indice
-    ]));
-    const respuesta = await fetch(`${SUPABASE_URL}/rest/v1/rpc/obtener_catalogo_publico`, {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_PUBLIC_KEY,
-        Authorization: `Bearer ${SUPABASE_PUBLIC_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: "{}"
-    });
-    if(!respuesta.ok) return;
-    const remoto = await respuesta.json();
-    if(!Array.isArray(remoto) || remoto.length === 0) return;
-    productos = remoto.map(producto => ({
-      codigo: producto.codigo,
-      nombre: producto.nombre,
-      marca: producto.marca,
-      categoria: producto.categoria,
-      tallas: producto.tallas || [],
-      precio: Number(producto.precio_venta || 0),
-      imagen: producto.imagen,
-      imagenes: producto.imagen ? [producto.imagen] : [],
-      descripcion: producto.descripcion || "",
-      nuevo: true
-    })).sort((a, b) => {
-      const posicionA = ordenOriginal.get(String(a.codigo || "").trim().toUpperCase());
-      const posicionB = ordenOriginal.get(String(b.codigo || "").trim().toUpperCase());
-      return (posicionA ?? Number.MAX_SAFE_INTEGER) - (posicionB ?? Number.MAX_SAFE_INTEGER);
-    });
-    paginaActual = 1;
-    renderizarCatalogo();
-    renderizarRecomendados();
-  }catch(error){
-    console.warn("Se mantiene el catálogo local.", error);
-  }
-}
-
-// void cargarCatalogoCentral();
-
-const menuToggle = document.getElementById("menuToggle");
-const menuCerrar = document.getElementById("menuCerrar");
-const menuPrincipal = document.getElementById("menuPrincipal");
-const menuBackdrop = document.getElementById("menuBackdrop");
-
-function cambiarEstadoMenu(abierto){
-  if(!menuToggle || !menuPrincipal || !menuBackdrop) return;
-
-  menuPrincipal.classList.toggle("activo", abierto);
-  menuBackdrop.classList.toggle("activo", abierto);
-  document.body.classList.toggle("menu-abierto", abierto);
-  menuToggle.setAttribute("aria-expanded", String(abierto));
-
-  if(abierto){
-    menuCerrar?.focus();
-  }
-}
-
-menuToggle?.addEventListener("click", () => cambiarEstadoMenu(true));
-menuCerrar?.addEventListener("click", () => cambiarEstadoMenu(false));
-menuBackdrop?.addEventListener("click", () => cambiarEstadoMenu(false));
-
-menuPrincipal?.addEventListener("click", (e) => {
-  if(e.target.closest("a")) cambiarEstadoMenu(false);
-});
-
-document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape" && menuPrincipal?.classList.contains("activo")){
-    cambiarEstadoMenu(false);
-    menuToggle?.focus();
-  }
-});
-
-console.log("APP CARGADO");
-console.log(productos.length);
-document.addEventListener("click", function(e) {
-
-  const filtro = e.target.closest(".filtro-btn");
-  if (filtro) {
-  categoriaActual = filtro.dataset.categoria;
-  marcaActual = "Todas";
-  paginaActual = 1;
-
-  document.querySelectorAll(".filtro-btn")
-    .forEach(b => b.classList.remove("activo"));
-
-  filtro.classList.add("activo");
-
-  renderizarCatalogo();
-  return;
-}
-
-const marcaBtn = e.target.closest(".marca-btn");
-if (marcaBtn) {
-  marcaActual = marcaBtn.dataset.marca;
-  paginaActual = 1;
-  renderizarCatalogo();
-  return;
-}
-
-  const card = e.target.closest(".producto-card");
-  if (card) {
-    const codigo = card.dataset.codigo;
-    abrirProducto(codigo);
-  }
-
-});
+let indiceImagen = 0;
 let tallaSeleccionada = "";
 let colorSeleccionado = "";
-document.addEventListener("click", function(e){
+let cantidadSeleccionada = 1;
 
-  const tallaBtn = e.target.closest(".talla-btn");
+// ---------- Utilidades ----------
 
-  if(tallaBtn){
+function $(sel){ return document.querySelector(sel); }
+function $$(sel){ return Array.from(document.querySelectorAll(sel)); }
 
-    document.querySelectorAll(".talla-btn").forEach(btn => {
-      btn.classList.remove("activa");
-    });
+function esc(texto){
+  return String(texto == null ? "" : texto)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
-    tallaBtn.classList.add("activa");
-    tallaSeleccionada = tallaBtn.textContent.trim();
+function formatoPrecio(valor){
+  return "$" + Number(valor || 0).toLocaleString("en-US");
+}
 
+function productosPorPagina(){
+  const w = window.innerWidth;
+  if(w < 640) return 6;
+  if(w < 900) return 12;
+  if(w < 1200) return 20;
+  return 24;
+}
+
+let avisoTimer = null;
+function mostrarAviso(texto){
+  const aviso = $("#aviso");
+  $("#avisoTexto").textContent = texto;
+  aviso.classList.add("activo");
+  clearTimeout(avisoTimer);
+  avisoTimer = setTimeout(() => aviso.classList.remove("activo"), 2400);
+}
+
+function animarContador(selector){
+  $$(selector).forEach(el => {
+    el.classList.remove("pulso");
+    void el.offsetWidth;
+    el.classList.add("pulso");
+  });
+}
+
+// ============================================================
+// TARJETA DE PRODUCTO
+// ============================================================
+
+// modoInmediata = la tarjeta se está mostrando dentro de "Entrega inmediata".
+// En ese contexto muestra el precio y las tallas que hay físicamente.
+function crearCard(producto, modoInmediata){
+  const inmediata = !!modoInmediata && producto.entregaInmediata;
+  const oferta = ofertaVigente(producto);
+  const precio = precioVigente(producto, inmediata);
+  const desc = porcentajeDescuento(producto);
+  const fav = esFavorito(producto.codigo);
+
+  let etiquetas = "";
+  if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
+  if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
+  if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
+  // Etiquetas opcionales que hayas activado en el producto
+  etiquetasActivas(producto).forEach(e => {
+    etiquetas += `<span class="etiqueta ${e.color}">${esc(e.texto)}</span>`;
+  });
+
+  const precioHtml = oferta
+    ? `<span class="precio-actual">${formatoPrecio(precio)}</span>
+       <span class="precio-antes">${formatoPrecio(producto.precio)}</span>`
+    : `<span class="precio-actual">${formatoPrecio(precio)}</span>`;
+
+  // Solo en el apartado de entrega inmediata se listan las tallas en stock.
+  let tallasHtml = "";
+  if(inmediata && producto.tallasEntregaInmediata.length){
+    const visibles = producto.tallasEntregaInmediata.slice(0, 4);
+    const resto = producto.tallasEntregaInmediata.length - visibles.length;
+    tallasHtml = `<div class="card-tallas">
+      ${visibles.map(t => `<span class="card-talla">${esc(t)}</span>`).join("")}
+      ${resto > 0 ? `<span class="card-talla mas">+${resto}</span>` : ""}
+    </div>`;
   }
 
-});
-document.addEventListener("click", function(e){
+  // Por defecto la foto se recorta para que el producto llene la tarjeta.
+  // Si el producto trae imagenFit:"contain" se muestra completa.
+  const claseAjuste = producto.imagenFit === "contain" ? "ajuste-contain" : "";
+  const estiloEscala = producto.escalaImagen
+    ? ` style="transform:scale(${Number(producto.escalaImagen)})"` : "";
 
-  const colorBtn = e.target.closest(".color-btn");
+  return `
+    <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : ""}>
+      <div class="card-img">
+        <img class="${claseAjuste}" src="${esc(producto.imagen)}" alt="${esc(nombreProducto(producto))}" loading="lazy"${estiloEscala}
+             onerror="this.closest('.card-img').classList.add('sin-imagen')">
+        <div class="etiquetas">${etiquetas}</div>
+        <button class="btn-fav ${fav ? "activo" : ""}" type="button"
+                data-fav="${esc(producto.codigo)}"
+                aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        </button>
+      </div>
+      <div class="card-info">
+        <div class="card-marca">${esc(marcaProducto(producto))}</div>
+        <h3 class="card-nombre">${esc(nombreProducto(producto))}</h3>
+        <div class="card-codigo">${esc(producto.codigo)}</div>
+        <div class="card-precio">${precioHtml}</div>
+        ${tallasHtml}
+      </div>
+    </article>
+  `;
+}
 
-  if(colorBtn){
+function pintarFila(idSelector, lista, modoInmediata){
+  const cont = $(idSelector);
+  if(!cont) return;
+  cont.innerHTML = lista.map(p => crearCard(p, modoInmediata)).join("");
+}
 
-    document.querySelectorAll(".color-btn").forEach(btn => {
-      btn.classList.remove("activa");
-    });
+// ============================================================
+// SELECCIONES DE PRODUCTOS PARA CADA SECCIÓN
+// Nada de datos inventados: si no marcas "destacado", se usa
+// simplemente el orden del catálogo.
+// ============================================================
 
-    colorBtn.classList.add("activa");
-    colorSeleccionado = colorBtn.textContent.trim();
+// Reparte los productos entre las secciones sin repetir ninguno.
+// Cada sección toma de lo que quedó libre, así un mismo modelo nunca
+// aparece dos veces en la página de inicio.
+let usadosEnInicio = new Set();
 
+function tomar(lista, limite){
+  const salida = [];
+  for(const p of lista){
+    if(salida.length >= limite) break;
+    if(usadosEnInicio.has(p.codigo)) continue;
+    usadosEnInicio.add(p.codigo);
+    salida.push(p);
   }
+  return salida;
+}
 
-});
-document.getElementById("whatsapp").addEventListener("click", function(){
+function seleccionDestacados(lista, limite){
+  const marcados = lista.filter(p => p.destacado);
+  return tomar(marcados.length ? marcados : lista, limite);
+}
 
-  if(!productoActual) return;
+// "Nuevo en HAUSLINE": lo último que agregaste al catálogo, automático.
+// Al agregar un producto al final de productos.js aparece aquí solo.
+function productosNuevos(limite){
+  return tomar([...productos].sort((a, b) => b.orden - a.orden), limite || 12);
+}
 
-  if(!tallaSeleccionada){
-    alert("Selecciona una talla primero");
+function productosTendencia(limite){
+  return seleccionDestacados(productos.filter(p => p.categoria === "Zapatos"), limite || 12);
+}
+
+function productosPopulares(limite){
+  // Muestra equilibrada de todas las categorías, sin repetir lo ya mostrado.
+  const mezcla = [];
+  const porCategoria = CATEGORIAS.map(c => productos.filter(p => p.categoria === c.id));
+  for(let i = 0; i < 8; i++){
+    porCategoria.forEach(grupo => { if(grupo[i]) mezcla.push(grupo[i]); });
+  }
+  return tomar(mezcla, limite || 12);
+}
+
+function productosOferta(){
+  return productos.filter(ofertaVigente);
+}
+
+function productosInmediata(){
+  return productos.filter(p => p.entregaInmediata);
+}
+
+function productosVistos(){
+  return leerVistos().map(buscarProducto).filter(Boolean);
+}
+
+function productosFavoritos(){
+  return leerFavoritos().map(buscarProducto).filter(Boolean);
+}
+
+// ============================================================
+// BANDA DE MENSAJES
+// ============================================================
+
+function renderBanda(){
+  const track = $("#bandaTrack");
+  if(!track || typeof mensajesBanda === "undefined") return;
+  const items = mensajesBanda.map(m => `<span class="banda-item">${esc(m)}</span>`).join("");
+  // Se duplica para que el desplazamiento sea continuo y sin salto.
+  track.innerHTML = items + items;
+}
+
+// ============================================================
+// BANNERS
+// ============================================================
+
+let bannerIndice = 0;
+let bannerTimer = null;
+
+function renderBanners(){
+  const track = $("#bannersTrack");
+  const puntos = $("#bannerPuntos");
+  if(!track || typeof banners === "undefined") return;
+
+  const activos = banners.filter(b => b.activo);
+  if(!activos.length){ $("#banners").hidden = true; return; }
+
+  track.innerHTML = activos.map(b => {
+    const img = b.imagen
+      ? `<img class="banner-img" src="${esc(b.imagen)}" alt="" loading="lazy">`
+      : "";
+    return `
+      <div class="banner">
+        ${img}
+        <div class="banner-contenido">
+          <h2>${esc(b.titulo)}</h2>
+          <p>${esc(b.subtitulo)}</p>
+          <button class="btn-verde" type="button"
+                  data-banner-codigo="${esc(b.codigoProducto || "")}"
+                  data-banner-enlace="${esc(b.enlace || "")}">
+            ${esc(b.textoBoton)}
+          </button>
+        </div>
+      </div>`;
+  }).join("");
+
+  puntos.innerHTML = activos.map((_, i) =>
+    `<button class="banner-punto ${i === 0 ? "activo" : ""}" type="button"
+             data-banner-punto="${i}" aria-label="Banner ${i + 1}"></button>`
+  ).join("");
+
+  bannerIndice = 0;
+  moverBanner(0);
+  iniciarBannerAuto(activos.length);
+}
+
+function moverBanner(indice){
+  const track = $("#bannersTrack");
+  if(!track) return;
+  const total = track.children.length;
+  if(!total) return;
+  bannerIndice = (indice + total) % total;
+  track.style.transform = `translateX(-${bannerIndice * 100}%)`;
+  $$("[data-banner-punto]").forEach((p, i) =>
+    p.classList.toggle("activo", i === bannerIndice)
+  );
+}
+
+function iniciarBannerAuto(total){
+  clearInterval(bannerTimer);
+  if(total <= 1) return;
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  bannerTimer = setInterval(() => moverBanner(bannerIndice + 1), 5500);
+}
+
+// Deslizamiento táctil de los banners
+(function habilitarSwipeBanners(){
+  const cont = $("#banners");
+  if(!cont) return;
+  let x0 = null;
+  cont.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive:true });
+  cont.addEventListener("touchend", e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 45) moverBanner(bannerIndice + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive:true });
+})();
+
+// ============================================================
+// CHIPS Y CATEGORÍAS VISUALES
+// ============================================================
+
+function renderChips(){
+  const cont = $("#chipsCategorias");
+  if(!cont) return;
+  // El acceso a "Ofertas" solo aparece si hay alguna promoción vigente.
+  const hayOfertas = productosOferta().length > 0;
+  cont.innerHTML = `
+    <button class="chip activo" type="button" data-ir-inicio>Inicio</button>
+    ${CATEGORIAS.map(c => `<button class="chip" type="button" data-categoria="${esc(c.id)}">${esc(c.etiqueta)}</button>`).join("")}
+    <button class="chip" type="button" data-coleccion="marcas">Marcas</button>
+    ${hayOfertas ? `<button class="chip" type="button" data-coleccion="ofertas">Ofertas</button>` : ""}
+  `;
+}
+
+// Oculta todos los enlaces a "Ofertas" (menú, footer, barra superior)
+// cuando no hay ninguna promoción activa.
+function actualizarAccesosOfertas(){
+  const hayOfertas = productosOferta().length > 0;
+  $$('[data-coleccion="ofertas"]').forEach(el => {
+    el.hidden = !hayOfertas;
+    el.style.display = hayOfertas ? "" : "none";
+  });
+}
+
+function renderCategoriasVisuales(){
+  const cont = $("#filaCategorias");
+  if(!cont) return;
+  cont.innerHTML = CATEGORIAS.map(c => {
+    const p = productos.find(x => x.categoria === c.id);
+    const img = p ? p.imagen : "";
+    return `
+      <button class="card-categoria" type="button" data-categoria="${esc(c.id)}">
+        ${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ""}
+        <span>${esc(c.etiqueta)}</span>
+      </button>`;
+  }).join("");
+}
+
+// ============================================================
+// MARCAS
+// ============================================================
+
+function renderMarcas(limite){
+  const cont = $("#filaMarcas");
+  if(!cont) return;
+  const lista = limite ? marcasCatalogo.slice(0, limite) : marcasCatalogo;
+  cont.innerHTML = lista.map(m => {
+    // Si la marca tiene su tarjeta en imgP/marcas/ se usa completa.
+    // Si no, se arma con una foto de producto atenuada y el nombre encima.
+    // El onerror cubre el caso de que el archivo no exista todavía.
+    const contenido = m.logo
+      ? `<img class="marca-imagen" src="${esc(m.logo)}" alt="${esc(m.nombre)}" loading="lazy"
+              onerror="this.classList.remove('marca-imagen'); this.classList.add('marca-portada'); this.src='${esc(m.portada)}'; this.insertAdjacentHTML('afterend','<span class=&quot;marca-texto&quot;>'+this.alt+'</span>');">`
+      : `${m.portada ? `<img class="marca-portada" src="${esc(m.portada)}" alt="" loading="lazy">` : ""}
+         <span class="marca-texto">${esc(m.nombre)}</span>`;
+    return `
+      <button class="card-marca-tarjeta" type="button" data-marca="${esc(m.nombre)}" aria-label="Ver productos de ${esc(m.nombre)}">
+        ${contenido}
+      </button>`;
+  }).join("");
+}
+
+// ============================================================
+// EDITORIAL
+// ============================================================
+
+function renderEditorial(){
+  const cont = $("#filaEditorial");
+  if(!cont) return;
+
+  const activos = (typeof editoriales !== "undefined" ? editoriales : [])
+    .filter(e => e && e.activo && e.imagen);
+
+  if(!activos.length){
+    // Espacio preparado: se explica dónde agregar las fotos.
+    cont.innerHTML = `
+      <div class="editorial-vacio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Espacio listo para tus fotos publicitarias.
+        <code>clientes.js → editoriales</code>
+      </div>`;
     return;
   }
-if(productoActual.colores && productoActual.colores.length > 0 && !colorSeleccionado){
-  alert("Selecciona un color primero");
-  return;
+
+  cont.innerHTML = activos.map(e => {
+    const producto = e.codigoProducto ? buscarProducto(e.codigoProducto) : null;
+    const boton = producto
+      ? `<button class="btn-verde" type="button" data-codigo="${esc(producto.codigo)}">${esc(e.textoBoton || "Ver producto")}</button>`
+      : "";
+    return `
+      <div class="card-editorial">
+        <img src="${esc(e.imagen)}" alt="${esc(e.titulo || "")}" loading="lazy">
+        <div class="editorial-info">
+          <h3>${esc(e.titulo || "")}</h3>
+          <p>${esc(e.subtitulo || "")}</p>
+          ${boton}
+        </div>
+      </div>`;
+  }).join("");
 }
-  let mensaje =
-'Hola, quiero encargar este producto:\n\n' +
-`Código: ${productoActual.codigo}\n` +
-`Producto: ${productoActual.nombre}\n` +
-`Categoría: ${productoActual.categoria}\n`;
 
-if(productoActual.categoria === "Ropa"){
-  mensaje += `Color: ${colorSeleccionado || "No seleccionado"}\n`;
+// ============================================================
+// CLIENTES
+// ============================================================
+
+function renderClientes(){
+  const cont = $("#filaClientes");
+  if(!cont || typeof clientes === "undefined") return;
+
+  cont.innerHTML = clientes.map(c => {
+    const img = `<img src="${esc(c.imagen)}" alt="${esc(c.alt || "Entrega a cliente HAUSLINE")}" loading="lazy">`;
+    // Solo se vuelve enlace si realmente hay URL de Instagram.
+    if(c.instagramUrl){
+      return `
+        <a class="cliente" href="${esc(c.instagramUrl)}" target="_blank" rel="noopener noreferrer"
+           aria-label="Ver publicación en Instagram">
+          ${img}
+          <span class="cliente-ig">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+          </span>
+        </a>`;
+    }
+    return `<div class="cliente">${img}</div>`;
+  }).join("");
 }
 
-const enPromocion =
-  productoActual.promocionHasta &&
-  new Date() < new Date(productoActual.promocionHasta);
+// ============================================================
+// SECCIONES DE INICIO
+// ============================================================
 
-const precioFinal =
-  enPromocion && productoActual.precioOferta
-    ? productoActual.precioOferta
-    : productoActual.precio;
+function renderInicio(){
+  // Se reinicia el control de repetidos en cada render.
+  usadosEnInicio = new Set();
 
-mensaje +=
-`Talla: ${tallaSeleccionada || "No seleccionada"}\n` +
-(
-  enPromocion && productoActual.precioOferta
-    ? `🔥 Precio Oferta: $${precioFinal} USD\n💰 Precio Normal: $${productoActual.precio} USD`
-    : `💰 Precio: $${precioFinal} USD`
-);
-
-  window.open(
-  "https://wa.me/50578995116?text=" + encodeURIComponent(mensaje),
-  "_blank"
-);
-
-});
-document.getElementById("cerrar").addEventListener("click", function(e){
-  e.stopPropagation();
-  document.getElementById("modal").classList.remove("activo");
-});
-document.getElementById("galeriaPrev").addEventListener("click", (e) => {
-  e.stopPropagation();
-
-  if(imagenesActuales.length <= 1) return;
-
-  indiceImagenActual--;
-
-  if(indiceImagenActual < 0){
-    indiceImagenActual = imagenesActuales.length - 1;
+  // Entrega inmediata va primero: tiene prioridad sobre el resto de secciones.
+  const inmediata = productosInmediata();
+  const contInmediata = $("#filaInmediata");
+  if(inmediata.length){
+    pintarFila("#filaInmediata", tomar(inmediata, 12), true);
+  } else {
+    contInmediata.innerHTML = `
+      <div class="editorial-vacio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        Aún no hay productos marcados para entrega inmediata.
+        <code>productos.js → entregaInmediata: true</code>
+      </div>`;
   }
 
-  document.getElementById("modalImg").src = imagenesActuales[indiceImagenActual];
-});
-
-document.getElementById("galeriaNext").addEventListener("click", (e) => {
-  e.stopPropagation();
-
-  if(imagenesActuales.length <= 1) return;
-
-  indiceImagenActual++;
-
-  if(indiceImagenActual >= imagenesActuales.length){
-    indiceImagenActual = 0;
+  // Ofertas: la sección se oculta sola si no hay promociones vigentes.
+  const ofertas = productosOferta();
+  const secOfertas = $("#seccionOfertas");
+  if(ofertas.length){
+    secOfertas.hidden = false;
+    pintarFila("#filaOfertas", tomar(ofertas, 12));
+  } else {
+    secOfertas.hidden = true;
   }
 
-  document.getElementById("modalImg").src = imagenesActuales[indiceImagenActual];
+  pintarFila("#filaNuevos", productosNuevos(12));
+  pintarFila("#filaTendencia", productosTendencia(12));
+  pintarFila("#filaPopulares", productosPopulares(12));
+  pintarFila("#filaRopa", seleccionDestacados(productos.filter(p => p.categoria === "Ropa"), 12));
+
+  renderMarcas(10);
+  renderEditorial();
+  renderClientes();
+  renderVistos();
+}
+
+function renderVistos(){
+  const vistos = productosVistos();
+  const sec = $("#seccionVistos");
+  if(!sec) return;
+  if(vistos.length){
+    sec.hidden = false;
+    pintarFila("#filaVistos", vistos);
+  } else {
+    sec.hidden = true;
+  }
+}
+
+// ============================================================
+// VISTA DE COLECCIÓN ("Ver todo")
+// ============================================================
+
+function abrirColeccion(tipo, valor, titulo){
+  coleccionActual = { tipo, valor, titulo };
+  estadoVista = "coleccion";
+  paginaActual = 1;
+  filtroMarca = "";
+  filtroPrecio = "";
+  filtrosActivos.clear();
+
+  document.body.classList.add("en-coleccion");
+  $("#coleccionTitulo").textContent = titulo;
+  $("#selectOrden").value = ordenActual;
+  $("#selectPrecio").value = "";
+  $$("#filtrosBarra .chip").forEach(c => c.classList.remove("activo"));
+
+  poblarSelectMarcas();
+  renderColeccion();
+  window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+}
+
+function irInicio(){
+  estadoVista = "inicio";
+  coleccionActual = null;
+  document.body.classList.remove("en-coleccion");
+  window.scrollTo({ top: 0 });
+}
+
+// Devuelve la lista base de la colección abierta, antes de filtros.
+function baseColeccion(){
+  if(!coleccionActual) return productos;
+  const { tipo, valor } = coleccionActual;
+
+  if(tipo === "categoria") return productos.filter(p => p.categoria === valor);
+  if(tipo === "marca")     return productos.filter(p => p.marca === valor);
+  if(tipo === "busqueda")  return productos;
+
+  switch(valor){
+    case "tendencia":         return productos.filter(p => p.categoria === "Zapatos");
+    case "populares":         return productos;
+    case "nuevos":            return [...productos].sort((a, b) => b.orden - a.orden).slice(0, CANTIDAD_NUEVOS);
+    case "ofertas":           return productosOferta();
+    case "entrega-inmediata": return productosInmediata();
+    case "favoritos":         return productosFavoritos();
+    case "vistos":            return productosVistos();
+    default:                  return productos;
+  }
+}
+
+function aplicarBusqueda(lista){
+  const t = textoBusqueda.trim().toLowerCase();
+  if(!t) return lista;
+  return lista.filter(p =>
+    nombreProducto(p).toLowerCase().includes(t) ||
+    String(p.codigo).toLowerCase().includes(t) ||
+    String(p.marca || "").toLowerCase().includes(t) ||
+    String(p.categoria || "").toLowerCase().includes(t) ||
+    descripcionProducto(p).toLowerCase().includes(t)
+  );
+}
+
+function aplicarFiltros(lista){
+  let out = lista;
+
+  if(filtroMarca) out = out.filter(p => p.marca === filtroMarca);
+
+  if(filtroPrecio){
+    const [min, max] = filtroPrecio.split("-").map(Number);
+    out = out.filter(p => {
+      const v = precioVigente(p);
+      return v >= min && v <= max;
+    });
+  }
+
+  if(filtrosActivos.has("nuevo"))     out = out.filter(esNuevo);
+  if(filtrosActivos.has("oferta"))    out = out.filter(ofertaVigente);
+  if(filtrosActivos.has("inmediata")) out = out.filter(p => p.entregaInmediata);
+  if(filtrosActivos.has("rapido"))    out = out.filter(p => p.envioRapido);
+
+  return out;
+}
+
+function aplicarOrden(lista){
+  const copia = [...lista];
+  switch(ordenActual){
+    case "precio-asc":  return copia.sort((a,b) => precioVigente(a) - precioVigente(b));
+    case "precio-desc": return copia.sort((a,b) => precioVigente(b) - precioVigente(a));
+    case "nombre":      return copia.sort((a,b) => nombreProducto(a).localeCompare(nombreProducto(b)));
+    case "recientes":   return copia.reverse();
+    default:            return copia;
+  }
+}
+
+function poblarSelectMarcas(){
+  const sel = $("#selectMarca");
+  if(!sel) return;
+  const disponibles = [...new Set(baseColeccion().map(p => p.marca).filter(Boolean))].sort();
+  sel.innerHTML = `<option value="">Todas las marcas</option>` +
+    disponibles.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
+  sel.value = filtroMarca;
+}
+
+function renderColeccion(){
+  const grid = $("#gridColeccion");
+  if(!grid) return;
+
+  const filtrados = aplicarOrden(aplicarFiltros(aplicarBusqueda(baseColeccion())));
+  const porPagina = productosPorPagina();
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / porPagina));
+  if(paginaActual > totalPaginas) paginaActual = totalPaginas;
+
+  const inicio = (paginaActual - 1) * porPagina;
+  const pagina = filtrados.slice(inicio, inicio + porPagina);
+
+  $("#coleccionConteo").textContent =
+    filtrados.length === 1 ? "1 producto" : `${filtrados.length} productos`;
+
+  if(!pagina.length){
+    grid.innerHTML = `
+      <div class="sin-resultados">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <p>No encontramos productos</p>
+        <small>Prueba con otra búsqueda o quita algún filtro.</small>
+      </div>`;
+    $("#paginacion").innerHTML = "";
+    return;
+  }
+
+  // En la colección "Entrega inmediata" las tarjetas usan ese modo.
+  const modo = coleccionActual &&
+    coleccionActual.tipo === "seccion" &&
+    coleccionActual.valor === "entrega-inmediata";
+
+  grid.innerHTML = pagina.map(p => crearCard(p, modo)).join("");
+  renderPaginacion(totalPaginas);
+}
+
+function renderPaginacion(totalPaginas){
+  const cont = $("#paginacion");
+  if(!cont) return;
+  if(totalPaginas <= 1){ cont.innerHTML = ""; return; }
+
+  let html = `<button type="button" data-pagina="${paginaActual - 1}" ${paginaActual === 1 ? "disabled" : ""}>Anterior</button>`;
+
+  let desde = Math.max(1, paginaActual - 2);
+  let hasta = Math.min(totalPaginas, desde + 4);
+  desde = Math.max(1, hasta - 4);
+
+  for(let i = desde; i <= hasta; i++){
+    html += `<button type="button" class="${i === paginaActual ? "activo" : ""}" data-pagina="${i}">${i}</button>`;
+  }
+
+  html += `<button type="button" data-pagina="${paginaActual + 1}" ${paginaActual === totalPaginas ? "disabled" : ""}>Siguiente</button>`;
+  cont.innerHTML = html;
+}
+
+function cambiarPagina(n){
+  paginaActual = n;
+  renderColeccion();
+  const destino = $("#gridColeccion");
+  if(destino) destino.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// ============================================================
+// MODAL DE PRODUCTO
+// ============================================================
+
+// modoInmediata = se abrió desde el apartado "Entrega inmediata".
+// Ahí solo se ofrecen las tallas y colores que hay físicamente.
+// Desde el resto del catálogo se ofrecen todas las opciones por encargo.
+function abrirProducto(codigo, modoInmediata){
+  const producto = buscarProducto(codigo);
+  if(!producto) return;
+
+  productoActual = producto;
+  modoInmediataActual = !!modoInmediata && producto.entregaInmediata;
+  imagenesActuales = producto.imagenes.length ? producto.imagenes : [producto.imagen];
+  indiceImagen = 0;
+  tallaSeleccionada = "";
+  colorSeleccionado = "";
+  cantidadSeleccionada = 1;
+
+  const oferta = ofertaVigente(producto);
+  const precio = precioVigente(producto, modoInmediataActual);
+
+  $("#modalMarca").textContent = marcaProducto(producto);
+  $("#modalNombre").textContent = nombreProducto(producto);
+  $("#modalCodigo").textContent = "Código: " + producto.codigo;
+
+  // Si hay promoción se muestra el precio anterior tachado y el descuento.
+  // Al vencer la fecha vuelve solo al precio normal.
+  const enOferta = oferta && !modoInmediataActual;
+  $("#modalPrecio").innerHTML = enOferta
+    ? `<span class="actual">${formatoPrecio(precio)}</span>
+       <span class="antes">${formatoPrecio(producto.precio)}</span>
+       <span class="desc">-${porcentajeDescuento(producto)}%</span>`
+    : `<span class="actual">${formatoPrecio(precio)}</span>`;
+
+  const promo = enOferta ? nombrePromocion(producto) : "";
+  $("#modalPromocion").innerHTML = promo
+    ? `<div class="promo-activa">
+         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4L12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor"/></svg>
+         ${esc(promo)}
+       </div>`
+    : "";
+
+  const abono = Math.round(precio * 0.5);
+  $("#modalAbono").innerHTML = `Abono para confirmar: <strong>${formatoPrecio(abono)}</strong> (50%)`;
+
+  // Disponibilidad según el contexto
+  $("#modalDisponibilidad").innerHTML = modoInmediataActual
+    ? `<div class="disponibilidad inmediata">Entrega inmediata</div>`
+    : `<div class="disponibilidad encargo">Disponible por encargo</div>`;
+
+  // Etiquetas
+  let etiquetas = "";
+  if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
+  etiquetasActivas(producto).forEach(e => {
+    etiquetas += `<span class="etiqueta ${e.color}">${esc(e.texto)}</span>`;
+  });
+  if(modoInmediataActual && producto.cantidadDisponible)
+    etiquetas += `<span class="etiqueta inmediata">${producto.cantidadDisponible} disponibles</span>`;
+  $("#modalEtiquetas").innerHTML = etiquetas;
+
+  // Si el producto tiene stock pero se abrió desde el catálogo, se avisa
+  // que hay unidades listas, con acceso directo al apartado.
+  $("#modalAvisoInmediata").innerHTML =
+    (!modoInmediataActual && producto.entregaInmediata)
+      ? `<button class="aviso-inmediata" type="button" data-ver-inmediata="${esc(producto.codigo)}">
+           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+           <span>Hay unidades listas para entrega inmediata en
+           ${esc(producto.tallasEntregaInmediata.join(", "))}${
+             producto.coloresEntregaInmediata.length
+               ? " · " + esc(producto.coloresEntregaInmediata.join(", ")) : ""
+           }. Verlas</span>
+         </button>`
+      : "";
+
+  renderGaleria();
+  renderSelectores(producto);
+  renderAcordeon(producto);
+  actualizarFavModal();
+  $("#cantidadValor").textContent = "1";
+
+  pintarFila("#filaRelacionados", relacionados(producto));
+
+  $("#modal").classList.add("activo");
+  document.body.classList.add("sin-scroll");
+  $("#modalCerrar").focus();
+
+  registrarVisto(producto.codigo);
+  renderVistos();
+}
+
+function relacionados(producto){
+  const mismaMarca = productos.filter(p =>
+    p.codigo !== producto.codigo && p.marca && p.marca === producto.marca);
+  const mismaCategoria = productos.filter(p =>
+    p.codigo !== producto.codigo && p.categoria === producto.categoria);
+  const juntos = [...mismaMarca, ...mismaCategoria];
+  const unicos = [];
+  const vistos = new Set();
+  juntos.forEach(p => {
+    if(!vistos.has(p.codigo)){ vistos.add(p.codigo); unicos.push(p); }
+  });
+  return unicos.slice(0, 12);
+}
+
+function renderGaleria(){
+  const img = $("#modalImg");
+  img.src = imagenesActuales[indiceImagen];
+  img.alt = nombreProducto(productoActual);
+  img.className = productoActual.imagenFit === "contain" ? "ajuste-contain" : "";
+
+  const varias = imagenesActuales.length > 1;
+  $("#galeriaPrev").style.display = varias ? "flex" : "none";
+  $("#galeriaNext").style.display = varias ? "flex" : "none";
+  $("#galeriaContador").textContent = varias
+    ? `${indiceImagen + 1} / ${imagenesActuales.length}` : "";
+
+  $("#miniaturas").innerHTML = varias
+    ? imagenesActuales.map((src, i) => `
+        <button class="miniatura ${i === indiceImagen ? "activa" : ""}" type="button"
+                data-miniatura="${i}" aria-label="Ver imagen ${i + 1}">
+          <img src="${esc(src)}" alt="" loading="lazy">
+        </button>`).join("")
+    : "";
+}
+
+function cambiarImagen(delta){
+  if(imagenesActuales.length <= 1) return;
+  indiceImagen = (indiceImagen + delta + imagenesActuales.length) % imagenesActuales.length;
+  renderGaleria();
+}
+
+function renderSelectores(producto){
+  // Tallas: en el apartado de entrega inmediata solo las que hay en stock;
+  // en el catálogo normal todas, porque se piden por encargo.
+  const tallas = tallasDisponibles(producto, modoInmediataActual);
+  const selTallas = $("#selectorTallas");
+  if(tallas.length){
+    selTallas.hidden = false;
+    selTallas.classList.remove("error");
+    $("#opcionesTallas").innerHTML = tallas
+      .map(t => `<button class="opcion" type="button" data-talla="${esc(t)}">${esc(t)}</button>`).join("");
+    $("#tallasNota").textContent = modoInmediataActual
+      ? "Disponibles ahora, listas para entrega"
+      : "Bajo encargo · 15 a 25 días hábiles";
+  } else {
+    selTallas.hidden = true;
+    $("#opcionesTallas").innerHTML = "";
+  }
+
+  // Colores — solo si el producto realmente tiene colores.
+  const colores = coloresDisponibles(producto, modoInmediataActual);
+  const selColores = $("#selectorColores");
+  if(colores.length){
+    selColores.hidden = false;
+    selColores.classList.remove("error");
+    $("#opcionesColores").innerHTML = colores
+      .map(c => `<button class="opcion" type="button" data-color="${esc(c)}">${esc(c)}</button>`).join("");
+  } else {
+    selColores.hidden = true;
+    $("#opcionesColores").innerHTML = "";
+  }
+}
+
+function renderAcordeon(producto){
+  const secciones = [];
+  const descripcion = descripcionProducto(producto);
+
+  if(descripcion){
+    secciones.push({ titulo: "Descripción", cuerpo: `<p>${esc(descripcion)}</p>` });
+  }
+
+  const detalles = [];
+  detalles.push(`Código: ${esc(producto.codigo)}`);
+  if(producto.marca) detalles.push(`Marca: ${esc(producto.marca)}`);
+  detalles.push(`Categoría: ${esc(producto.categoria)}`);
+  detalles.push(modoInmediataActual ? "Entrega inmediata" : "Disponible por encargo");
+  if(producto.envioRapido) detalles.push("Envío rápido");
+  secciones.push({ titulo: "Detalles", cuerpo: `<ul>${detalles.map(d => `<li>${d}</li>`).join("")}</ul>` });
+
+  const tallas = tallasDisponibles(producto, modoInmediataActual);
+  if(tallas.length){
+    secciones.push({
+      titulo: "Tallas disponibles",
+      cuerpo: `<p>${tallas.map(esc).join(" · ")}</p>` +
+        (modoInmediataActual
+          ? `<p>Estas son las tallas que hay físicamente ahora mismo.</p>`
+          : (producto.entregaInmediata
+              ? `<p>Todas se piden por encargo. Algunas tallas están disponibles para entrega inmediata.</p>`
+              : ""))
+    });
+  }
+
+  secciones.push({ titulo: "Condiciones de compra", cuerpo: `<ul>${POLITICAS.condiciones.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` });
+  secciones.push({ titulo: "Tiempo de entrega",     cuerpo: `<ul>${POLITICAS.entrega.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` });
+  secciones.push({ titulo: "Garantía",              cuerpo: `<ul>${POLITICAS.garantia.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` });
+
+  $("#acordeon").innerHTML = secciones.map((s, i) => `
+    <div class="acordeon-item ${i === 0 ? "abierto" : ""}">
+      <button class="acordeon-btn" type="button">
+        ${esc(s.titulo)}
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="acordeon-cuerpo">${s.cuerpo}</div>
+    </div>`).join("");
+}
+
+// ============================================================
+// GUÍA DE TALLAS
+// ============================================================
+
+function abrirGuiaTallas(){
+  if(!productoActual) return;
+  const guia = guiaParaProducto(productoActual);
+  if(!guia) return;
+
+  $("#guiaTitulo").textContent = guia.titulo;
+  $("#guiaNota").textContent = guia.nota;
+
+  // Se resalta la talla que el cliente tenga seleccionada.
+  const filas = guia.filas.map(fila => {
+    const coincide = tallaSeleccionada &&
+      fila.some(celda => String(celda).trim() === String(tallaSeleccionada).trim());
+    return `<tr class="${coincide ? "destacada" : ""}">
+      ${fila.map(c => `<td>${esc(c)}</td>`).join("")}
+    </tr>`;
+  }).join("");
+
+  $("#guiaTabla").innerHTML = `
+    <thead><tr>${guia.columnas.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+    <tbody>${filas}</tbody>`;
+
+  $("#guiaFondo").classList.add("activo");
+}
+
+function cerrarGuiaTallas(){
+  $("#guiaFondo").classList.remove("activo");
+}
+
+$("#btnGuiaTallas").addEventListener("click", abrirGuiaTallas);
+$("#guiaCerrar").addEventListener("click", cerrarGuiaTallas);
+$("#guiaFondo").addEventListener("click", e => {
+  if(e.target.id === "guiaFondo") cerrarGuiaTallas();
 });
+
+function cerrarModal(){
+  $("#modal").classList.remove("activo");
+  document.body.classList.remove("sin-scroll");
+  productoActual = null;
+}
+
+function actualizarFavModal(){
+  if(!productoActual) return;
+  const activo = esFavorito(productoActual.codigo);
+  const btn = $("#btnFavModal");
+  btn.classList.toggle("activo", activo);
+  btn.setAttribute("aria-label", activo ? "Quitar de favoritos" : "Guardar en favoritos");
+}
+
+// Valida talla y color antes de agregar al carrito o pedir por WhatsApp.
+function validarSeleccion(){
+  let ok = true;
+
+  const selTallas = $("#selectorTallas");
+  if(!selTallas.hidden && !tallaSeleccionada){
+    selTallas.classList.add("error");
+    ok = false;
+  }
+
+  const selColores = $("#selectorColores");
+  if(!selColores.hidden && !colorSeleccionado){
+    selColores.classList.add("error");
+    ok = false;
+  }
+
+  if(!ok) mostrarAviso("Falta seleccionar una opción");
+  return ok;
+}
+
+function itemDesdeProducto(){
+  return {
+    codigo: productoActual.codigo,
+    nombre: nombreProducto(productoActual),
+    marca: productoActual.marca || "",
+    categoria: productoActual.categoria,
+    imagen: productoActual.imagen,
+    talla: tallaSeleccionada,
+    color: colorSeleccionado,
+    precioUnitario: precioVigente(productoActual, modoInmediataActual),
+    envioRapido: productoActual.envioRapido,
+    // Solo cuenta como entrega inmediata si se pidió desde ese apartado.
+    entregaInmediata: modoInmediataActual
+  };
+}
+
+// Mensaje de WhatsApp para un solo producto (botón individual).
+function pedirProductoWhatsApp(){
+  if(!productoActual || !validarSeleccion()) return;
+
+  const precio = precioVigente(productoActual, modoInmediataActual);
+  const subtotal = precio * cantidadSeleccionada;
+
+  let msg = "Hola, quiero encargar este producto en HAUSLINE:\n\n";
+  msg += `CÓDIGO: ${productoActual.codigo}\n`;
+  msg += `Producto: ${nombreProducto(productoActual)}\n`;
+  if(productoActual.marca) msg += `Marca: ${productoActual.marca}\n`;
+  if(tallaSeleccionada) msg += `Talla: ${tallaSeleccionada}\n`;
+  if(colorSeleccionado) msg += `Color: ${colorSeleccionado}\n`;
+  msg += `Cantidad: ${cantidadSeleccionada}\n`;
+  msg += `Precio unitario: ${formatoPrecio(precio)}\n`;
+  msg += `Subtotal: ${formatoPrecio(subtotal)}\n`;
+  msg += modoInmediataActual ? "Entrega inmediata: sí\n" : "Disponible por encargo\n";
+  if(productoActual.envioRapido) msg += "Envío rápido: sí\n";
+  msg += `\nAbono para confirmar (50%): ${formatoPrecio(Math.round(subtotal * 0.5))}\n\n`;
+  msg += "Nombre del cliente:\nCiudad o departamento:\nMétodo de entrega:\n\n";
+  msg += "Quedo atento para confirmar disponibilidad y realizar el abono.";
+
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+// ============================================================
+// PANELES (carrito / favoritos)
+// ============================================================
+
+function abrirPanel(id){
+  $("#panelFondo").classList.add("activo");
+  const panel = $(id);
+  panel.classList.add("activo");
+  panel.setAttribute("aria-hidden", "false");
+  document.body.classList.add("sin-scroll");
+}
+
+function cerrarPaneles(){
+  $("#panelFondo").classList.remove("activo");
+  $$(".panel").forEach(p => {
+    p.classList.remove("activo");
+    p.setAttribute("aria-hidden", "true");
+  });
+  if(!$("#modal").classList.contains("activo")){
+    document.body.classList.remove("sin-scroll");
+  }
+}
+
+function renderCarrito(){
+  const items = leerCarrito();
+  const cuerpo = $("#carritoCuerpo");
+  const pie = $("#carritoPie");
+
+  if(!items.length){
+    cuerpo.innerHTML = `
+      <div class="panel-vacio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Tu carrito está vacío
+      </div>`;
+    pie.hidden = true;
+    return;
+  }
+
+  cuerpo.innerHTML = items.map(it => {
+    const clave = claveVariante(it.codigo, it.talla, it.color);
+    const meta = [it.codigo, it.talla && `Talla ${it.talla}`, it.color]
+      .filter(Boolean).join(" · ");
+    return `
+      <div class="linea">
+        <div class="linea-img"><img src="${esc(it.imagen)}" alt="" loading="lazy"></div>
+        <div class="linea-info">
+          <div class="linea-nombre">${esc(it.nombre)}</div>
+          <div class="linea-meta">${esc(meta)}</div>
+          <div class="linea-pie">
+            <div class="cantidad">
+              <button type="button" data-cantidad="${esc(clave)}" data-delta="-1" aria-label="Reducir cantidad">−</button>
+              <span>${it.cantidad}</span>
+              <button type="button" data-cantidad="${esc(clave)}" data-delta="1" aria-label="Aumentar cantidad">+</button>
+            </div>
+            <span class="linea-subtotal">${formatoPrecio(subtotalItem(it))}</span>
+          </div>
+          <button class="btn-quitar" type="button" data-quitar="${esc(clave)}">Eliminar</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  $("#carritoTotal").textContent = formatoPrecio(totalCarrito());
+  pie.hidden = false;
+}
+
+function renderFavoritos(){
+  const favs = productosFavoritos();
+  const cuerpo = $("#favoritosCuerpo");
+
+  if(!favs.length){
+    cuerpo.innerHTML = `
+      <div class="panel-vacio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        Todavía no tienes favoritos
+      </div>`;
+    return;
+  }
+
+  cuerpo.innerHTML = favs.map(p => `
+    <div class="linea">
+      <div class="linea-img"><img src="${esc(p.imagen)}" alt="" loading="lazy"></div>
+      <div class="linea-info">
+        <div class="linea-nombre">${esc(nombreProducto(p))}</div>
+        <div class="linea-meta">${esc(p.codigo)} · ${esc(marcaProducto(p))}</div>
+        <div class="linea-pie">
+          <button class="btn-secundario" style="height:34px;margin:0;width:auto;padding:0 14px;"
+                  type="button" data-codigo="${esc(p.codigo)}">Ver producto</button>
+          <span class="linea-subtotal">${formatoPrecio(precioVigente(p))}</span>
+        </div>
+        <button class="btn-quitar" type="button" data-fav="${esc(p.codigo)}">Quitar de favoritos</button>
+      </div>
+    </div>`).join("");
+}
+
+// ============================================================
+// EVENTOS
+// ============================================================
+
+// --- Delegación general de clics ---
+document.addEventListener("click", e => {
+
+  // Abrir producto desde una tarjeta.
+  // Si la tarjeta viene del apartado de entrega inmediata se abre en ese modo.
+  const card = e.target.closest(".card");
+  if(card && !e.target.closest("[data-fav]")){
+    abrirProducto(card.dataset.codigo, card.dataset.modo === "inmediata");
+    return;
+  }
+
+  // Desde el catálogo, ir a ver las unidades en entrega inmediata
+  const verInmediata = e.target.closest("[data-ver-inmediata]");
+  if(verInmediata){
+    abrirProducto(verInmediata.dataset.verInmediata, true);
+    return;
+  }
+
+  // Botón "Ver producto" (favoritos, editorial, banners)
+  const verProducto = e.target.closest("[data-codigo]");
+  if(verProducto && !verProducto.closest(".card")){
+    cerrarPaneles();
+    abrirProducto(verProducto.dataset.codigo);
+    return;
+  }
+
+  // Favorito
+  const fav = e.target.closest("[data-fav]");
+  if(fav){
+    e.stopPropagation();
+    const activo = alternarFavorito(fav.dataset.fav);
+    fav.classList.toggle("activo", activo);
+    fav.classList.add("late");
+    setTimeout(() => fav.classList.remove("late"), 360);
+    mostrarAviso(activo ? "Guardado en favoritos" : "Quitado de favoritos");
+    animarContador("[data-contador-favoritos]");
+    if($("#panelFavoritos").classList.contains("activo")) renderFavoritos();
+    if(productoActual) actualizarFavModal();
+    return;
+  }
+
+  // Ir al inicio
+  if(e.target.closest("[data-ir-inicio]")){
+    e.preventDefault();
+    irInicio();
+    cerrarMenu();
+    return;
+  }
+
+  // Abrir colección por categoría
+  const cat = e.target.closest("[data-categoria]");
+  if(cat){
+    e.preventDefault();
+    abrirColeccion("categoria", cat.dataset.categoria, cat.dataset.categoria);
+    cerrarMenu();
+    return;
+  }
+
+  // Abrir colección por marca
+  const marca = e.target.closest("[data-marca]");
+  if(marca){
+    e.preventDefault();
+    abrirColeccion("marca", marca.dataset.marca, marca.dataset.marca);
+    cerrarMenu();
+    return;
+  }
+
+  // Colecciones especiales
+  const col = e.target.closest("[data-coleccion]");
+  if(col){
+    e.preventDefault();
+    const valor = col.dataset.coleccion;
+    const titulos = {
+      "tendencia": "Sneakers en tendencia",
+      "populares": "Más populares",
+      "nuevos": "Nuevo en HAUSLINE",
+      "ofertas": "Ofertas",
+      "entrega-inmediata": "Entrega inmediata",
+      "favoritos": "Tus favoritos",
+      "vistos": "Vistos recientemente",
+      "marcas": "Marcas"
+    };
+    if(valor === "marcas"){
+      irInicio();
+      renderMarcas();
+      $("#filaMarcas").scrollIntoView({ behavior:"smooth", block:"center" });
+      cerrarMenu();
+      return;
+    }
+    abrirColeccion("seccion", valor, titulos[valor] || "Catálogo");
+    cerrarMenu();
+    cerrarPaneles();
+    return;
+  }
+
+  // Paginación
+  const pag = e.target.closest("[data-pagina]");
+  if(pag && !pag.disabled){
+    cambiarPagina(Number(pag.dataset.pagina));
+    return;
+  }
+
+  // Filtros rápidos
+  const filtro = e.target.closest("[data-filtro]");
+  if(filtro){
+    const f = filtro.dataset.filtro;
+    if(filtrosActivos.has(f)) filtrosActivos.delete(f);
+    else filtrosActivos.add(f);
+    filtro.classList.toggle("activo", filtrosActivos.has(f));
+    paginaActual = 1;
+    renderColeccion();
+    return;
+  }
+
+  // Banners
+  const punto = e.target.closest("[data-banner-punto]");
+  if(punto){ moverBanner(Number(punto.dataset.bannerPunto)); return; }
+
+  const btnBanner = e.target.closest("[data-banner-codigo]");
+  if(btnBanner){
+    const codigo = btnBanner.dataset.bannerCodigo;
+    const producto = codigo ? buscarProducto(codigo) : null;
+    if(producto){ abrirProducto(producto.codigo); return; }
+    const enlace = btnBanner.dataset.bannerEnlace;
+    if(enlace === "#entrega-inmediata"){
+      abrirColeccion("seccion", "entrega-inmediata", "Entrega inmediata");
+    } else {
+      abrirColeccion("categoria", "Zapatos", "Zapatos");
+    }
+    return;
+  }
+
+  // Miniaturas de la galería
+  const mini = e.target.closest("[data-miniatura]");
+  if(mini){
+    indiceImagen = Number(mini.dataset.miniatura);
+    renderGaleria();
+    return;
+  }
+
+  // Tallas
+  const talla = e.target.closest("[data-talla]");
+  if(talla){
+    $$("#opcionesTallas .opcion").forEach(b => b.classList.remove("activa"));
+    talla.classList.add("activa");
+    tallaSeleccionada = talla.dataset.talla;
+    $("#selectorTallas").classList.remove("error");
+    return;
+  }
+
+  // Colores
+  const color = e.target.closest("[data-color]");
+  if(color){
+    $$("#opcionesColores .opcion").forEach(b => b.classList.remove("activa"));
+    color.classList.add("activa");
+    colorSeleccionado = color.dataset.color;
+    $("#selectorColores").classList.remove("error");
+    return;
+  }
+
+  // Acordeón
+  const acordeon = e.target.closest(".acordeon-btn");
+  if(acordeon){
+    acordeon.parentElement.classList.toggle("abierto");
+    return;
+  }
+
+  // Cantidad en el carrito
+  const btnCant = e.target.closest("[data-cantidad]");
+  if(btnCant){
+    cambiarCantidad(btnCant.dataset.cantidad, Number(btnCant.dataset.delta));
+    renderCarrito();
+    return;
+  }
+
+  // Quitar del carrito
+  const quitar = e.target.closest("[data-quitar]");
+  if(quitar){
+    eliminarDelCarrito(quitar.dataset.quitar);
+    renderCarrito();
+    mostrarAviso("Producto eliminado");
+    return;
+  }
+
+  // Cerrar paneles
+  if(e.target.closest("[data-cerrar-panel]") || e.target.id === "panelFondo"){
+    cerrarPaneles();
+    return;
+  }
+
+  // Enlaces informativos del footer
+  const info = e.target.closest("[data-info]");
+  if(info){
+    e.preventDefault();
+    const clave = info.dataset.info;
+    const titulos = { condiciones:"Condiciones de compra", entrega:"Tiempo de entrega", garantia:"Garantía" };
+    alert(titulos[clave] + "\n\n• " + POLITICAS[clave].join("\n• "));
+    return;
+  }
+});
+
+// --- Menú lateral ---
+function abrirMenu(){
+  $("#menuLateral").classList.add("activo");
+  $("#menuFondo").classList.add("activo");
+  $("#menuToggle").setAttribute("aria-expanded", "true");
+  document.body.classList.add("sin-scroll");
+  $("#menuCerrar").focus();
+}
+
+function cerrarMenu(){
+  $("#menuLateral").classList.remove("activo");
+  $("#menuFondo").classList.remove("activo");
+  $("#menuToggle").setAttribute("aria-expanded", "false");
+  if(!$("#modal").classList.contains("activo")) document.body.classList.remove("sin-scroll");
+}
+
+$("#menuToggle").addEventListener("click", abrirMenu);
+$("#menuCerrar").addEventListener("click", cerrarMenu);
+$("#menuFondo").addEventListener("click", cerrarMenu);
+
+// --- Cabecera: carrito y favoritos ---
+$("#btnCarrito").addEventListener("click", () => { renderCarrito(); abrirPanel("#panelCarrito"); });
+$("#btnFavoritos").addEventListener("click", () => { renderFavoritos(); abrirPanel("#panelFavoritos"); });
+$("#navCarrito").addEventListener("click", () => { renderCarrito(); abrirPanel("#panelCarrito"); });
+$("#navFavoritos").addEventListener("click", () => { renderFavoritos(); abrirPanel("#panelFavoritos"); });
+$("#navCategorias").addEventListener("click", abrirMenu);
+
+// --- Modal ---
+$("#modalCerrar").addEventListener("click", cerrarModal);
+$("#modal").addEventListener("click", e => { if(e.target.id === "modal") cerrarModal(); });
+$("#galeriaPrev").addEventListener("click", () => cambiarImagen(-1));
+$("#galeriaNext").addEventListener("click", () => cambiarImagen(1));
+
+// Deslizamiento táctil en la galería
+(function swipeGaleria(){
+  const zona = $("#galeriaPrincipal");
+  let x0 = null;
+  zona.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive:true });
+  zona.addEventListener("touchend", e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 45) cambiarImagen(dx < 0 ? 1 : -1);
+    x0 = null;
+  }, { passive:true });
+})();
+
+// Cantidad en el modal
+$("#cantidadMenos").addEventListener("click", () => {
+  cantidadSeleccionada = Math.max(1, cantidadSeleccionada - 1);
+  $("#cantidadValor").textContent = cantidadSeleccionada;
+});
+$("#cantidadMas").addEventListener("click", () => {
+  cantidadSeleccionada++;
+  $("#cantidadValor").textContent = cantidadSeleccionada;
+});
+
+// Agregar al carrito
+$("#btnAgregarCarrito").addEventListener("click", () => {
+  if(!productoActual || !validarSeleccion()) return;
+  agregarAlCarrito(itemDesdeProducto(), cantidadSeleccionada);
+  animarContador("[data-contador-carrito]");
+  mostrarAviso("Agregado al carrito");
+});
+
+// Encargar por WhatsApp (producto individual)
+$("#btnWhatsappProducto").addEventListener("click", pedirProductoWhatsApp);
+
+// Favorito en el modal
+$("#btnFavModal").addEventListener("click", () => {
+  if(!productoActual) return;
+  const activo = alternarFavorito(productoActual.codigo);
+  actualizarFavModal();
+  animarContador("[data-contador-favoritos]");
+  mostrarAviso(activo ? "Guardado en favoritos" : "Quitado de favoritos");
+  // Refresca el corazón de la tarjeta correspondiente
+  $$(`[data-fav="${productoActual.codigo}"]`).forEach(b => b.classList.toggle("activo", activo));
+});
+
+// --- Carrito: acciones del pie ---
+$("#btnEnviarPedido").addEventListener("click", enviarPedidoWhatsApp);
+$("#btnVaciarCarrito").addEventListener("click", () => {
+  vaciarCarrito();
+  renderCarrito();
+  mostrarAviso("Carrito vaciado");
+});
+
+// --- Búsqueda ---
+function manejarBusqueda(valor){
+  textoBusqueda = valor;
+  paginaActual = 1;
+  if(!valor.trim()){
+    if(coleccionActual && coleccionActual.tipo === "busqueda") irInicio();
+    return;
+  }
+  if(estadoVista !== "coleccion" || (coleccionActual && coleccionActual.tipo !== "busqueda")){
+    abrirColeccion("busqueda", "", `Resultados para "${valor}"`);
+  } else {
+    $("#coleccionTitulo").textContent = `Resultados para "${valor}"`;
+    renderColeccion();
+  }
+}
+
+let busquedaTimer = null;
+["#buscador", "#buscadorMovil"].forEach(sel => {
+  const input = $(sel);
+  if(!input) return;
+  input.addEventListener("input", e => {
+    const valor = e.target.value;
+    // Mantiene ambos buscadores sincronizados
+    ["#buscador", "#buscadorMovil"].forEach(otro => {
+      if(otro !== sel && $(otro)) $(otro).value = valor;
+    });
+    clearTimeout(busquedaTimer);
+    busquedaTimer = setTimeout(() => manejarBusqueda(valor), 220);
+  });
+});
+
+// --- Filtros de la colección ---
+$("#selectOrden").addEventListener("change", e => {
+  ordenActual = e.target.value;
+  paginaActual = 1;
+  renderColeccion();
+});
+$("#selectMarca").addEventListener("change", e => {
+  filtroMarca = e.target.value;
+  paginaActual = 1;
+  renderColeccion();
+});
+$("#selectPrecio").addEventListener("change", e => {
+  filtroPrecio = e.target.value;
+  paginaActual = 1;
+  renderColeccion();
+});
+
+// --- Teclado ---
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape"){
+    if($("#guiaFondo").classList.contains("activo")) cerrarGuiaTallas();
+    else if($("#modal").classList.contains("activo")) cerrarModal();
+    else if($$(".panel.activo").length) cerrarPaneles();
+    else if($("#menuLateral").classList.contains("activo")) cerrarMenu();
+  }
+  if($("#modal").classList.contains("activo")){
+    if(e.key === "ArrowLeft") cambiarImagen(-1);
+    if(e.key === "ArrowRight") cambiarImagen(1);
+  }
+});
+
+// --- Reajuste de paginación al cambiar el tamaño ---
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if(estadoVista === "coleccion") renderColeccion();
+  }, 200);
+});
+
+// --- Sincronía entre pestañas / cambios de estado ---
+document.addEventListener("carrito:cambio", () => {
+  if($("#panelCarrito").classList.contains("activo")) renderCarrito();
+});
+
+// ============================================================
+// ARRANQUE
+// ============================================================
+
+function iniciar(){
+  $("#anioActual").textContent = new Date().getFullYear();
+
+  renderBanda();
+  renderBanners();
+  renderChips();
+  renderCategoriasVisuales();
+  renderInicio();
+  actualizarAccesosOfertas();
+
+  actualizarContadorCarrito();
+  actualizarContadorFavoritos();
+
+  console.log(`HAUSLINE · ${productos.length} productos · ${marcasCatalogo.length} marcas`);
+}
+
+iniciar();

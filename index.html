@@ -2,258 +2,543 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hausline | Catálogo</title>
-  <link rel="stylesheet" href="styles.css?v=20260719-2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>HAUSLINE | Sneakers, Ropa y Accesorios en Nicaragua</title>
+  <meta name="description" content="Catálogo HAUSLINE: sneakers, ropa y accesorios de marcas premium. Pedidos bajo encargo y entrega inmediata en productos seleccionados. Envíos a toda Nicaragua.">
+  <meta name="theme-color" content="#050505">
+
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="logo.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="HAUSLINE">
+  <meta property="og:title" content="HAUSLINE | Sneakers, Ropa y Accesorios">
+  <meta property="og:description" content="Sneakers, ropa y accesorios de marcas premium. Envíos a toda Nicaragua.">
+  <meta property="og:image" content="hero-hausline.png">
+  <meta property="og:url" content="https://hauslineshopni.es/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="styles.css?v=20260722a">
 </head>
 
 <body>
 
+<!-- ============================ HEADER ============================ -->
 <header class="header">
-  <div class="logo">HAUSLINE</div>
-  <button class="menu-toggle" id="menuToggle" type="button" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-  <div class="menu-backdrop" id="menuBackdrop"></div>
-  <nav id="menuPrincipal" aria-label="Navegacion principal">
-    <div class="menu-cabecera">
-      <span>MENU</span>
-      <button class="menu-cerrar" id="menuCerrar" type="button" aria-label="Cerrar menu">&times;</button>
+  <div class="contenedor">
+    <div class="header-fila">
+      <button class="btn-icono menu-toggle" id="menuToggle" type="button"
+              aria-label="Abrir menú" aria-expanded="false" aria-controls="menuLateral">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+
+      <button class="logo" type="button" data-ir-inicio>HAUS<span>LINE</span></button>
+
+      <nav class="menu-desktop" aria-label="Navegación principal">
+        <button type="button" data-ir-inicio class="activo">Inicio</button>
+        <button type="button" data-categoria="Zapatos">Zapatos</button>
+        <button type="button" data-categoria="Ropa">Ropa</button>
+        <button type="button" data-categoria="Dama">Dama</button>
+        <button type="button" data-categoria="Accesorios">Accesorios</button>
+        <button type="button" data-coleccion="marcas">Marcas</button>
+        <button type="button" data-coleccion="ofertas">Ofertas</button>
+      </nav>
+
+      <div class="buscador-caja">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="buscador" placeholder="Buscar marca, producto o código…"
+               aria-label="Buscar marca, producto o código" autocomplete="off">
+      </div>
+
+      <button class="btn-icono" id="btnFavoritos" type="button" aria-label="Ver favoritos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="contador vacio" data-contador-favoritos>0</span>
+      </button>
+
+      <button class="btn-icono" id="btnCarrito" type="button" aria-label="Ver carrito">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="contador vacio" data-contador-carrito>0</span>
+      </button>
     </div>
-    <a href="#inicio">INICIO</a>
-    <a href="#catalogo">CATÁLOGO</a>
-    <a href="#contacto">CONTACTO</a>
-    <a href="https://wa.me/50578995116" target="_blank">WHATSAPP</a>
-    <a class="tracking-link" href="https://hausline-tracking.vercel.app/tracking">CONSULTA TU ENV&Iacute;O</a>
-  </nav>
+
+    <div class="fila-buscador">
+      <div class="buscador-caja">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="search" id="buscadorMovil" placeholder="Buscar marca, producto o código…"
+               aria-label="Buscar marca, producto o código" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div class="chips" id="chipsCategorias" role="tablist" aria-label="Categorías"></div>
 </header>
 
-<section class="hero" id="inicio">
-  <div class="hero-content">
-    <div class="logo-hero">
-      <h1>HAUSLINE</h1>
-      <span>.NI</span>
+<!-- ============================ BANDA ============================ -->
+<div class="banda" aria-hidden="true">
+  <div class="banda-track" id="bandaTrack"></div>
+</div>
+
+<!-- ============================ INICIO ============================ -->
+<main class="vista-inicio" id="vistaInicio">
+  <div class="contenedor">
+
+    <!-- Banners -->
+    <section class="banners" aria-label="Destacados" id="banners">
+      <div class="banners-track" id="bannersTrack"></div>
+      <div class="banner-puntos" id="bannerPuntos"></div>
+    </section>
+
+    <!-- Categorías visuales -->
+    <section class="seccion" aria-labelledby="tit-categorias">
+      <div class="seccion-cabecera">
+        <h2 id="tit-categorias">Explora por categoría</h2>
+      </div>
+      <div class="fila fila-ancha" id="filaCategorias"></div>
+    </section>
+
+    <!-- Entrega inmediata -->
+    <section class="seccion" id="entrega-inmediata" aria-labelledby="tit-inmediata">
+      <div class="seccion-cabecera">
+        <h2 id="tit-inmediata">Entrega inmediata</h2>
+        <button class="ver-todo" type="button" data-coleccion="entrega-inmediata">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaInmediata"></div>
+    </section>
+
+    <!-- Sneakers en tendencia -->
+    <section class="seccion" aria-labelledby="tit-tendencia">
+      <div class="seccion-cabecera">
+        <h2 id="tit-tendencia">Sneakers en tendencia</h2>
+        <button class="ver-todo" type="button" data-coleccion="tendencia">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaTendencia"></div>
+    </section>
+
+    <!-- Más populares -->
+    <section class="seccion" aria-labelledby="tit-populares">
+      <div class="seccion-cabecera">
+        <h2 id="tit-populares">Más populares</h2>
+        <button class="ver-todo" type="button" data-coleccion="populares">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaPopulares"></div>
+    </section>
+
+    <!-- Ropa popular -->
+    <section class="seccion" aria-labelledby="tit-ropa">
+      <div class="seccion-cabecera">
+        <h2 id="tit-ropa">Ropa popular</h2>
+        <button class="ver-todo" type="button" data-categoria="Ropa">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaRopa"></div>
+    </section>
+
+    <!-- Nuevo en HAUSLINE -->
+    <section class="seccion" aria-labelledby="tit-nuevos">
+      <div class="seccion-cabecera">
+        <h2 id="tit-nuevos">Nuevo en HAUSLINE</h2>
+        <button class="ver-todo" type="button" data-coleccion="nuevos">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaNuevos"></div>
+    </section>
+
+    <!-- Ofertas -->
+    <section class="seccion" id="seccionOfertas" aria-labelledby="tit-ofertas" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-ofertas">Ofertas</h2>
+        <button class="ver-todo" type="button" data-coleccion="ofertas">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaOfertas"></div>
+    </section>
+
+    <!-- Marcas -->
+    <section class="seccion" aria-labelledby="tit-marcas">
+      <div class="seccion-cabecera">
+        <h2 id="tit-marcas">Marcas populares</h2>
+        <button class="ver-todo" type="button" data-coleccion="marcas">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila fila-ancha" id="filaMarcas"></div>
+    </section>
+
+    <!-- Editorial -->
+    <section class="seccion" aria-labelledby="tit-editorial">
+      <div class="seccion-cabecera">
+        <h2 id="tit-editorial">Estilo HAUSLINE</h2>
+      </div>
+      <div class="fila fila-ancha" id="filaEditorial"></div>
+    </section>
+
+    <!-- Vistos recientemente -->
+    <section class="seccion" id="seccionVistos" aria-labelledby="tit-vistos" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-vistos">Vistos recientemente</h2>
+      </div>
+      <div class="fila" id="filaVistos"></div>
+    </section>
+
+    <!-- Clientes -->
+    <section class="seccion" id="clientes" aria-labelledby="tit-clientes">
+      <div class="seccion-cabecera">
+        <h2 id="tit-clientes">Clientes y entregas</h2>
+      </div>
+      <div class="fila fila-ancha" id="filaClientes"></div>
+    </section>
+
+    <!-- Envío rápido + rastreo -->
+    <section class="seccion" aria-label="Envío y rastreo">
+      <div class="tarjeta-envio">
+        <div class="icono">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div>
+          <h3>Envío rápido</h3>
+          <p>Productos seleccionados con tiempo de entrega reducido. Busca la etiqueta azul en el catálogo.</p>
+        </div>
+      </div>
+
+      <div class="franja-rastreo">
+        <div>
+          <h3>¿Ya hiciste tu pedido?</h3>
+          <p>Consulta el estado de tu envío en cualquier momento.</p>
+        </div>
+        <a class="btn-rastreo" href="https://hausline-tracking.vercel.app/tracking"
+           target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Rastrear mi pedido
+        </a>
+      </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section class="seccion" aria-label="Beneficios de comprar en HAUSLINE">
+      <div class="beneficios">
+        <div class="beneficio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <h3>Envíos a todo el país</h3>
+          <p>Cobertura en toda Nicaragua</p>
+        </div>
+        <div class="beneficio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <h3>Compra segura</h3>
+          <p>Protegemos tu información</p>
+        </div>
+        <div class="beneficio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          <h3>Atención personalizada</h3>
+          <p>Te acompañamos en el proceso</p>
+        </div>
+        <div class="beneficio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+          <h3>Soporte por WhatsApp</h3>
+          <p>Respuesta directa</p>
+        </div>
+        <div class="beneficio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+          <h3>Pedidos bajo encargo</h3>
+          <p>Traemos lo que buscas</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ======================= VISTA DE COLECCIÓN ======================= -->
+<main class="vista-coleccion" id="vistaColeccion">
+  <div class="contenedor">
+    <div class="coleccion-cabecera">
+      <button class="btn-volver" type="button" data-ir-inicio>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Volver al inicio
+      </button>
+      <h1 id="coleccionTitulo">Catálogo</h1>
+      <p class="coleccion-conteo" id="coleccionConteo"></p>
     </div>
 
-    <p class="hero-subtitle">Sneakers • Ropa • Accesorios</p>
-
-    <a href="#catalogo" class="btn-hero">VER CATÁLOGO</a>
-  </div>
-</section>
-
-<section id="catalogo">
-
-  <h2>Catálogo</h2>
-
-  <p id="contadorProductos"></p>
-
-  <input
-    type="text"
-    id="buscador"
-    placeholder="Buscar producto o código..."
-  >
-
-  <div class="categorias">
-    <button class="filtro-btn activo" data-categoria="Zapatos">👟 Zapatos</button>
-    <button class="filtro-btn" data-categoria="Dama">👠 Dama</button>
-    <button class="filtro-btn" data-categoria="Accesorios">⌚ Accesorios</button>
-    <button class="filtro-btn" data-categoria="Ropa">👕 Ropa</button>
-  </div>
-
-  <div id="marcas" class="marcas"></div>
-
-  <div class="grid" id="productos"></div>
-  
-  <div id="paginacion" class="paginacion"></div>
-</section>
-
-<section class="catalogo">
-  <div class="top-catalogo">
-    <h2>Recomendados</h2>
-  </div>
-  <div class="grid" id="recomendados"></div>
-</section>
-
-<section class="clientes">
-  <h2>Clientes y entregas</h2>
-
-  <div class="slider">
-    <div class="track">
-
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1r6rIn1tkd2E693gAZl9DVnA6ovDvu9nk&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=17nnIA0mXXQQf4X6W5tQ8--p6OQV9CNN6&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1kwv1msY99OfTrT6uIMPUDup0cU6k50aA&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1xTOWXPVcBUC6JDAIK7FBLUtfcdyarB1n&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1Pt9Pjhtx3Mp5CDrNnhEPJGMhNZASkduD&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1SjSKg1GCnmlUnko_HZCn2swlG4VKVOez&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1LmdJbjRTMBUejJYkVE_XI1pGkEVYz1JU&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1s1eaFlktEO5p_sfrEdpx5HXtQ68siYJR&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1ieylcDX6mvxCKtdlmDntF8d8i3Nu_d6Z&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UasaE-MPH0SiCknfleg0OWFWt8hgCfSJ&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1OH525rENRrVPgIkWxFnSvZy5OIqZxbOj&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1I_-8brV_kGRUPYe68gMq9c2WLuLGy-Uj&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1m6jMoKSRuktbRZFWyKPXSHzJxf-m91Hm&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UNDiOf6VblD6AZGkcBmXxZ5TF4NmbGHv&sz=w1000" alt="Cliente"></div>
-
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1r6rIn1tkd2E693gAZl9DVnA6ovDvu9nk&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=17nnIA0mXXQQf4X6W5tQ8--p6OQV9CNN6&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1kwv1msY99OfTrT6uIMPUDup0cU6k50aA&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1xTOWXPVcBUC6JDAIK7FBLUtfcdyarB1n&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1Pt9Pjhtx3Mp5CDrNnhEPJGMhNZASkduD&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1SjSKg1GCnmlUnko_HZCn2swlG4VKVOez&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1LmdJbjRTMBUejJYkVE_XI1pGkEVYz1JU&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1s1eaFlktEO5p_sfrEdpx5HXtQ68siYJR&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1ieylcDX6mvxCKtdlmDntF8d8i3Nu_d6Z&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UasaE-MPH0SiCknfleg0OWFWt8hgCfSJ&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1OH525rENRrVPgIkWxFnSvZy5OIqZxbOj&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1I_-8brV_kGRUPYe68gMq9c2WLuLGy-Uj&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1m6jMoKSRuktbRZFWyKPXSHzJxf-m91Hm&sz=w1000" alt="Cliente"></div>
-      <div class="cliente"><img src="https://drive.google.com/thumbnail?id=1UNDiOf6VblD6AZGkcBmXxZ5TF4NmbGHv&sz=w1000" alt="Cliente"></div>
-    
-  </div>
-</section>
-<div class="slider">
-  <div class="track">
-
-    <!-- Primera vuelta -->
-    <div class="cliente"><img src="./imgP/clientes/1.jpeg" alt="Cliente"></div>
-    <div class="cliente"><img src="./imgP/clientes/2.jpeg" alt="Cliente"></div>
-    <div class="cliente"><img src="./imgP/clientes/3.jpeg" alt="Cliente"></div>
-  <div class="cliente"><img src="./imgP/clientes/4.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/5.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/6.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/7.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/8.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/9.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/10.jpeg" alt="Cliente"></div>
-    <!-- Copia exacta para movimiento infinito -->
-    <div class="cliente"><img src="./imgP/clientes/1.jpeg" alt="Cliente"></div>
-    <div class="cliente"><img src="./imgP/clientes/2.jpeg" alt="Cliente"></div>
-    <div class="cliente"><img src="./imgP/clientes/3.jpeg" alt="Cliente"></div>
-  <div class="cliente"><img src="./imgP/clientes/4.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/5.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/6.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/7.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/8.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/9.jpeg" alt="Cliente"></div>
-<div class="cliente"><img src="./imgP/clientes/10.jpeg" alt="Cliente"></div>
-  </div>
-</div> 
-<section class="confianza">
-  <h2>+100 Pedidos Entregados en Nicaragua</h2>
-  <p>Pedidos bajo encargo, entregas seguras y atención personalizada.</p>
-</section>
-
-<section class="resenas">
-  <h2>Reseñas de clientes</h2>
-
-  <div class="resenas-grid">
-    <div class="resena">
-      <div class="estrellas">★★★★★</div>
-      <p>Excelente calidad, me llegó tal como lo pedí.</p>
-      <span>Cliente Managua</span>
+    <div class="filtros-barra" id="filtrosBarra">
+      <select class="select-orden" id="selectOrden" aria-label="Ordenar productos">
+        <option value="recomendados">Recomendados</option>
+        <option value="recientes">Más recientes</option>
+        <option value="precio-asc">Precio: menor a mayor</option>
+        <option value="precio-desc">Precio: mayor a menor</option>
+        <option value="nombre">Nombre A-Z</option>
+      </select>
+      <select class="select-orden" id="selectMarca" aria-label="Filtrar por marca"></select>
+      <select class="select-orden" id="selectPrecio" aria-label="Filtrar por precio">
+        <option value="">Cualquier precio</option>
+        <option value="0-100">Hasta $100</option>
+        <option value="100-150">$100 – $150</option>
+        <option value="150-200">$150 – $200</option>
+        <option value="200-99999">Más de $200</option>
+      </select>
+      <button class="chip" type="button" data-filtro="nuevo">Nuevo</button>
+      <button class="chip" type="button" data-filtro="oferta">Oferta</button>
+      <button class="chip" type="button" data-filtro="inmediata">Entrega inmediata</button>
+      <button class="chip" type="button" data-filtro="rapido">Envío rápido</button>
     </div>
 
-    <div class="resena">
-      <div class="estrellas">★★★★★</div>
-      <p>Muy buena atención y seguimiento durante todo el proceso.</p>
-      <span>Cliente León</span>
-    </div>
-
-    <div class="resena">
-      <div class="estrellas">★★★★★</div>
-      <p>Muy recomendados, volvería a comprar.</p>
-      <span>Cliente Chinandega</span>
-    </div>
+    <div class="grid" id="gridColeccion"></div>
+    <nav class="paginacion" id="paginacion" aria-label="Paginación"></nav>
   </div>
-</section>
+</main>
 
-<section class="beneficios">
-  <div class="beneficio">
-    <div class="icono">🛡️</div>
-    <h3>PRODUCTOS G5</h3>
-    <p>Calidad premium garantizada</p>
-  </div>
-
-  <div class="beneficio">
-    <div class="icono">🚚</div>
-    <h3>ENVÍO RÁPIDO Y SEGURO</h3>
-    <p>A todo el país</p>
-  </div>
-
-  <div class="beneficio">
-    <div class="icono">🔒</div>
-    <h3>COMPRA SEGURA</h3>
-    <p>Protegemos tu información</p>
-  </div>
-
-  <div class="beneficio">
-    <div class="icono">🎧</div>
-    <h3>ATENCIÓN PERSONALIZADA</h3>
-    <p>Estamos para ayudarte</p>
-  </div>
-</section>
-
-<section class="contacto" id="contacto">
-  <h2>Contacto</h2>
-  
-  <div class="contact-buttons">
-    <a href="https://wa.me/50578995116" target="_blank" class="contact-btn whatsapp-btn">WhatsApp</a>
-    <a href="https://instagram.com/hausline.ni" target="_blank" class="contact-btn insta-btn">Instagram</a>
-    <a href="https://tiktok.com/@hausline.niof" target="_blank" class="contact-btn tiktok-btn">TikTok</a>
-    <a href="https://hausline-tracking.vercel.app/tracking" target="_blank" rel="noopener noreferrer" class="contact-btn tracking-btn">Consulta tu pedido</a>
-  </div>
-</section>
-
+<!-- ============================ FOOTER ============================ -->
 <footer>
-  <div class="footer-logo">HAUSLINE</div>
-  <p>© 2026 Hausline. Todos los derechos reservados.</p>
+  <div class="contenedor">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">HAUS<span>LINE</span></div>
+        <p>Sneakers, ropa y accesorios de marcas premium. Pedidos bajo encargo y entrega inmediata en productos seleccionados.</p>
+        <div class="footer-social">
+          <a href="https://instagram.com/hausline.ni" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+          </a>
+          <a href="https://tiktok.com/@hausline.niof" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4c.5 2 2 3.5 4 4"/></svg>
+          </a>
+          <a href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Compra</h4>
+        <a href="#" data-coleccion="entrega-inmediata">Entrega inmediata</a>
+        <a href="#" data-coleccion="ofertas">Ofertas</a>
+        <a href="#" data-coleccion="marcas">Marcas</a>
+        <a href="https://hausline-tracking.vercel.app/tracking" target="_blank" rel="noopener noreferrer">Consulta tu envío</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Información</h4>
+        <a href="#" data-info="condiciones">Condiciones de compra</a>
+        <a href="#" data-info="entrega">Tiempo de entrega</a>
+        <a href="#" data-info="garantia">Garantía</a>
+        <a href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer">Contacto</a>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      © <span id="anioActual">2026</span> HAUSLINE. Todos los derechos reservados.
+    </div>
+  </div>
 </footer>
 
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <button class="cerrar" id="cerrar" type="button">×</button>
+<!-- ========================= NAV INFERIOR ========================= -->
+<nav class="nav-inferior" aria-label="Navegación rápida">
+  <button class="nav-item activo" type="button" data-ir-inicio>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+    Inicio
+  </button>
+  <button class="nav-item" type="button" id="navCategorias">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Categorías
+  </button>
+  <button class="nav-item" type="button" id="navFavoritos">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+    Favoritos
+    <span class="contador vacio" data-contador-favoritos>0</span>
+  </button>
+  <button class="nav-item" type="button" id="navCarrito">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    Carrito
+    <span class="contador vacio" data-contador-carrito>0</span>
+  </button>
+  <a class="nav-item" href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+    Contacto
+  </a>
+</nav>
 
-    <div class="modal-galeria">
-      <button class="galeria-btn galeria-prev" id="galeriaPrev">‹</button>
-      <img id="modalImg" src="" alt="Producto">
-      <button class="galeria-btn galeria-next" id="galeriaNext">›</button>
+<!-- ========================= MENÚ LATERAL ========================= -->
+<div class="menu-fondo" id="menuFondo"></div>
+<aside class="menu-lateral" id="menuLateral" aria-label="Menú">
+  <div class="menu-cabecera">
+    <span>MENÚ</span>
+    <button class="btn-icono" id="menuCerrar" type="button" aria-label="Cerrar menú">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <button class="menu-link" type="button" data-ir-inicio>Inicio</button>
+  <button class="menu-link" type="button" data-categoria="Zapatos">Zapatos</button>
+  <button class="menu-link" type="button" data-categoria="Ropa">Ropa</button>
+  <button class="menu-link" type="button" data-categoria="Dama">Dama</button>
+  <button class="menu-link" type="button" data-categoria="Accesorios">Accesorios</button>
+  <div class="menu-sep"></div>
+  <button class="menu-link" type="button" data-coleccion="entrega-inmediata">Entrega inmediata</button>
+  <button class="menu-link" type="button" data-coleccion="ofertas">Ofertas</button>
+  <button class="menu-link" type="button" data-coleccion="marcas">Marcas</button>
+  <div class="menu-sep"></div>
+  <a href="https://hausline-tracking.vercel.app/tracking" target="_blank" rel="noopener noreferrer">Consulta tu envío</a>
+  <a href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+  <a href="https://instagram.com/hausline.ni" target="_blank" rel="noopener noreferrer">Instagram</a>
+</aside>
+
+<!-- ====================== PANEL DE CARRITO ====================== -->
+<div class="panel-fondo" id="panelFondo"></div>
+
+<aside class="panel" id="panelCarrito" aria-label="Carrito de compras" aria-hidden="true">
+  <div class="panel-cabecera">
+    <h2>Tu carrito</h2>
+    <button class="btn-icono" data-cerrar-panel type="button" aria-label="Cerrar carrito">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="panel-cuerpo" id="carritoCuerpo"></div>
+  <div class="panel-pie" id="carritoPie" hidden>
+    <div class="total-fila">
+      <span>Total estimado</span>
+      <strong id="carritoTotal">$0</strong>
+    </div>
+    <p class="total-nota">Se confirma con un abono del 50%. El total puede variar según disponibilidad.</p>
+    <button class="btn-whatsapp" id="btnEnviarPedido" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+      Enviar pedido por WhatsApp
+    </button>
+    <button class="btn-secundario" id="btnVaciarCarrito" type="button">Vaciar carrito</button>
+  </div>
+</aside>
+
+<!-- ====================== PANEL DE FAVORITOS ====================== -->
+<aside class="panel" id="panelFavoritos" aria-label="Favoritos" aria-hidden="true">
+  <div class="panel-cabecera">
+    <h2>Tus favoritos</h2>
+    <button class="btn-icono" data-cerrar-panel type="button" aria-label="Cerrar favoritos">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="panel-cuerpo" id="favoritosCuerpo"></div>
+</aside>
+
+<!-- ========================= MODAL PRODUCTO ========================= -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalNombre">
+  <div class="modal-caja">
+    <div class="modal-cerrar-wrap">
+      <button class="modal-cerrar" id="modalCerrar" type="button" aria-label="Cerrar producto">&times;</button>
     </div>
 
-    <div class="modal-info">
-      <p id="modalCodigo"></p>
-      <h2 id="modalNombre"></h2>
-      <h3 id="modalPrecio"></h3>
-      <p id="modalDesc"></p>
+    <div class="modal-grid">
+      <div class="galeria">
+        <div class="galeria-principal" id="galeriaPrincipal">
+          <img id="modalImg" src="" alt="">
+          <button class="galeria-btn galeria-prev" id="galeriaPrev" type="button" aria-label="Imagen anterior">‹</button>
+          <button class="galeria-btn galeria-next" id="galeriaNext" type="button" aria-label="Imagen siguiente">›</button>
+          <span class="galeria-contador" id="galeriaContador"></span>
+        </div>
+        <div class="miniaturas" id="miniaturas"></div>
+      </div>
 
-      <div class="tallas" id="modalTallas"></div>
+      <div class="modal-info">
+        <div class="modal-marca" id="modalMarca"></div>
+        <h2 class="modal-nombre" id="modalNombre"></h2>
+        <p class="modal-codigo" id="modalCodigo"></p>
 
-      <button class="whatsapp" id="whatsapp">
-        Encargar por WhatsApp
-      </button>
+        <div class="modal-precio" id="modalPrecio"></div>
+        <div id="modalPromocion"></div>
+        <p class="modal-abono" id="modalAbono"></p>
+
+        <div id="modalDisponibilidad"></div>
+        <div class="modal-etiquetas" id="modalEtiquetas"></div>
+        <div id="modalAvisoInmediata"></div>
+
+        <div class="selector" id="selectorTallas" hidden>
+          <div class="selector-titulo">
+            <strong>Talla</strong>
+            <button class="btn-guia" id="btnGuiaTallas" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8h20v8H2z"/><path d="M6 8v3M10 8v5M14 8v3M18 8v5"/></svg>
+              Guía de tallas
+            </button>
+          </div>
+          <p class="selector-titulo" style="margin:-4px 0 9px;"><span id="tallasNota"></span></p>
+          <div class="opciones" id="opcionesTallas"></div>
+          <p class="selector-aviso">Selecciona una talla para continuar.</p>
+        </div>
+
+        <div class="selector" id="selectorColores" hidden>
+          <div class="selector-titulo"><strong>Color</strong></div>
+          <div class="opciones" id="opcionesColores"></div>
+          <p class="selector-aviso">Selecciona un color para continuar.</p>
+        </div>
+
+        <div class="selector">
+          <div class="selector-titulo"><strong>Cantidad</strong></div>
+          <div class="cantidad-modal">
+            <button type="button" id="cantidadMenos" aria-label="Reducir cantidad">−</button>
+            <span id="cantidadValor">1</span>
+            <button type="button" id="cantidadMas" aria-label="Aumentar cantidad">+</button>
+          </div>
+        </div>
+
+        <div class="modal-acciones">
+          <button class="btn-whatsapp" id="btnWhatsappProducto" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+            Encargar por WhatsApp
+          </button>
+          <button class="btn-fav-grande" id="btnFavModal" type="button" aria-label="Guardar en favoritos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          </button>
+        </div>
+
+        <button class="btn-secundario" id="btnAgregarCarrito" type="button">Agregar al carrito</button>
+
+        <div class="acordeon" id="acordeon"></div>
+      </div>
+    </div>
+
+    <div class="modal-relacionados">
+      <div class="seccion-cabecera"><h2>También te puede gustar</h2></div>
+      <div class="fila" id="filaRelacionados"></div>
     </div>
   </div>
 </div>
 
-<a href="https://wa.me/50578995116" target="_blank" class="whatsapp-flotante">
-  💬
+<!-- ========================= GUÍA DE TALLAS ========================= -->
+<div class="guia-fondo" id="guiaFondo" role="dialog" aria-modal="true" aria-labelledby="guiaTitulo">
+  <div class="guia-caja">
+    <div class="guia-cabecera">
+      <h2 id="guiaTitulo">Guía de tallas</h2>
+      <button class="btn-icono" id="guiaCerrar" type="button" aria-label="Cerrar guía de tallas">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="guia-cuerpo">
+      <p class="guia-nota" id="guiaNota"></p>
+      <table class="tabla-tallas" id="guiaTabla"></table>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= AVISO FLOTANTE ========================= -->
+<div class="aviso" id="aviso" role="status" aria-live="polite">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+  <span id="avisoTexto"></span>
+</div>
+
+<!-- ========================= WHATSAPP FLOTANTE ========================= -->
+<a href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer"
+   class="whatsapp-flotante" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5v-.5c-.1-.2-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
 </a>
 
-<a
-  href="https://hausline-tracking.vercel.app/tracking"
-  target="_blank"
-  rel="noopener noreferrer"
-  class="tracking-flotante"
-  aria-label="Consulta tu pedido"
->
-  <span aria-hidden="true">&#128230;</span>
-  Consulta tu pedido
-</a>
-
-<script src="app.js?v=20260719-2"></script>
-
+<script src="productos.js?v=20260722a"></script>
+<script src="clientes.js?v=20260722a"></script>
+<script src="favoritos.js?v=20260722a"></script>
+<script src="carrito.js?v=20260722a"></script>
+<script src="app.js?v=20260722a"></script>
 
 </body>
 </html>
