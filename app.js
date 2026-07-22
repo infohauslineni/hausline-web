@@ -386,6 +386,36 @@ function renderMarcas(limite){
 // EDITORIAL
 // ============================================================
 
+// Banner grande con varias fotos de un mismo estilo + botón a la marca.
+function renderLookbook(){
+  const cont = $("#lookbook");
+  if(!cont || typeof lookbook === "undefined") return;
+
+  if(!lookbook.activo || !lookbook.imagenes || !lookbook.imagenes.length){
+    cont.innerHTML = "";
+    return;
+  }
+
+  const fotos = lookbook.imagenes.map((src, i) => `
+    <div class="lookbook-foto">
+      <img src="${esc(src)}" alt="${esc(lookbook.titulo)} ${i + 1}" loading="lazy"
+           onerror="this.closest('.lookbook-foto').style.display='none'">
+    </div>`).join("");
+
+  cont.innerHTML = `
+    <div class="lookbook">
+      <div class="lookbook-info">
+        <h2>${esc(lookbook.titulo)}</h2>
+        <p>${esc(lookbook.subtitulo)}</p>
+        <button class="btn-verde" type="button" data-marca="${esc(lookbook.marca)}">
+          ${esc(lookbook.textoBoton)}
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="lookbook-fotos">${fotos}</div>
+    </div>`;
+}
+
 function renderEditorial(){
   const cont = $("#filaEditorial");
   if(!cont) return;
@@ -478,15 +508,45 @@ function renderInicio(){
     secOfertas.hidden = true;
   }
 
-  pintarFila("#filaNuevos", productosNuevos(12));
   pintarFila("#filaTendencia", productosTendencia(12));
   pintarFila("#filaPopulares", productosPopulares(12));
   pintarFila("#filaRopa", seleccionDestacados(productos.filter(p => p.categoria === "Ropa"), 12));
+  pintarFila("#filaAccesorios", seleccionDestacados(productos.filter(p => p.categoria === "Accesorios"), 12));
+  pintarFila("#filaNuevos", productosNuevos(12));
 
   renderMarcas(10);
-  renderEditorial();
+  renderLookbook();
   renderClientes();
   renderVistos();
+
+  activarRevelado();
+}
+
+// Hace que las secciones aparezcan suavemente al ir bajando.
+// Respeta "reducir movimiento" del dispositivo.
+let observadorRevelado = null;
+function activarRevelado(){
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if(!("IntersectionObserver" in window)) return;
+
+  if(!observadorRevelado){
+    observadorRevelado = new IntersectionObserver(entradas => {
+      entradas.forEach(e => {
+        if(e.isIntersecting){
+          e.target.classList.add("revelado");
+          observadorRevelado.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+  }
+
+  document.querySelectorAll(".vista-inicio .seccion, .vista-inicio .banners")
+    .forEach(el => {
+      if(!el.classList.contains("revelado")){
+        el.classList.add("por-revelar");
+        observadorRevelado.observe(el);
+      }
+    });
 }
 
 function renderVistos(){

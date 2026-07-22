@@ -20,7 +20,7 @@
   --radio-sm:10px;
   --radio-pill:999px;
 
-  --ancho-max:1440px;
+  --ancho-max:1600px;
   --header-h:60px;
   --nav-h:64px;
 
@@ -529,10 +529,12 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 
 /* Fila deslizable. En celular se asoma la siguiente tarjeta para que se note
    que hay más contenido, y ninguna tarjeta ocupa la pantalla completa. */
+/* IMPORTANTE: el ancho de cada tarjeta es FIJO (no %), para que las filas
+   siempre se deslicen y las tarjetas no se encojan en pantallas anchas. */
 .fila{
   display:grid;
   grid-auto-flow:column;
-  grid-auto-columns:42%;
+  grid-auto-columns:44vw;
   gap:9px;
   overflow-x:auto;
   scroll-snap-type:x proximity;
@@ -544,23 +546,26 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 .fila > *{ scroll-snap-align:start; }
 
 @media(min-width:480px){
-  .fila{ grid-auto-columns:minmax(0,32%); gap:10px; }
+  .fila{ grid-auto-columns:30vw; gap:10px; }
 }
 @media(min-width:640px){
-  .fila{ grid-auto-columns:minmax(0,24%); gap:14px; }
+  .fila{ grid-auto-columns:210px; gap:16px; }
 }
 @media(min-width:900px){
-  .fila{ grid-auto-columns:minmax(0,20%); }
+  .fila{ grid-auto-columns:240px; gap:18px; }
 }
 @media(min-width:1100px){
-  .fila{ grid-auto-columns:minmax(0,16.5%); gap:16px; }
+  .fila{ grid-auto-columns:265px; gap:20px; }
+}
+@media(min-width:1500px){
+  .fila{ grid-auto-columns:290px; gap:22px; }
 }
 
 /* Las tarjetas grandes (categoría, marca, editorial) necesitan más ancho */
-.fila.fila-ancha{ grid-auto-columns:60%; }
-@media(min-width:640px){ .fila.fila-ancha{ grid-auto-columns:minmax(0,32%); } }
-@media(min-width:900px){ .fila.fila-ancha{ grid-auto-columns:minmax(0,24%); } }
-@media(min-width:1200px){ .fila.fila-ancha{ grid-auto-columns:minmax(0,20%); } }
+.fila.fila-ancha{ grid-auto-columns:62vw; }
+@media(min-width:640px){ .fila.fila-ancha{ grid-auto-columns:300px; } }
+@media(min-width:900px){ .fila.fila-ancha{ grid-auto-columns:340px; } }
+@media(min-width:1200px){ .fila.fila-ancha{ grid-auto-columns:380px; } }
 
 .grid{
   display:grid;
@@ -571,13 +576,13 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   .grid{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
 }
 @media(min-width:900px){
-  .grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+  .grid{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
 }
 @media(min-width:1200px){
-  .grid{ grid-template-columns:repeat(5,minmax(0,1fr)); }
+  .grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; }
 }
 @media(min-width:1500px){
-  .grid{ grid-template-columns:repeat(6,minmax(0,1fr)); }
+  .grid{ grid-template-columns:repeat(5,minmax(0,1fr)); gap:22px; }
 }
 
 /* ============================================================
@@ -681,6 +686,12 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 @media(min-width:640px){
   .card-nombre{ font-size:13.5px; }
 }
+@media(min-width:900px){
+  .card-nombre{ font-size:15px; }
+  .card-marca{ font-size:11px; }
+  .card-codigo{ font-size:11.5px; }
+  .card-info{ padding:13px 15px 15px; gap:3px; }
+}
 
 .card-codigo{
   font-size:10.5px;
@@ -701,6 +712,7 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   letter-spacing:-.01em;
 }
 @media(min-width:640px){ .precio-actual{ font-size:16px; } }
+@media(min-width:900px){ .precio-actual{ font-size:18px; } }
 .precio-antes{
   font-size:11.5px;
   color:var(--texto-3);
@@ -921,6 +933,77 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   font-size:11px;
   color:var(--texto-2);
 }
+
+/* ============================================================
+   LOOKBOOK — banner grande con varias fotos
+   ============================================================ */
+
+.lookbook{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+  background:linear-gradient(120deg,#141414 0%,#0b0b0b 100%);
+  border:1px solid var(--borde);
+  border-radius:var(--radio);
+  padding:20px;
+  overflow:hidden;
+}
+@media(min-width:900px){
+  .lookbook{
+    grid-template-columns:300px 1fr;
+    gap:26px;
+    align-items:center;
+    padding:28px;
+  }
+}
+
+.lookbook-info h2{
+  font-size:clamp(20px,3.6vw,30px);
+  line-height:1.12;
+  margin-bottom:8px;
+}
+.lookbook-info p{
+  margin:0 0 16px;
+  color:var(--texto-2);
+  font-size:14px;
+  line-height:1.55;
+}
+
+/* Tira de fotos: en celular se desliza, en PC se ve todo a lo ancho */
+.lookbook-fotos{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:46%;
+  gap:10px;
+  overflow-x:auto;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding-bottom:2px;
+}
+.lookbook-fotos::-webkit-scrollbar{ display:none; }
+.lookbook-fotos > *{ scroll-snap-align:start; }
+
+@media(min-width:640px){
+  .lookbook-fotos{ grid-auto-columns:30%; gap:12px; }
+}
+@media(min-width:900px){
+  .lookbook-fotos{ grid-auto-columns:1fr; overflow:visible; }
+}
+
+.lookbook-foto{
+  aspect-ratio:3/4;
+  border-radius:var(--radio-sm);
+  overflow:hidden;
+  background:var(--card);
+}
+.lookbook-foto img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center 68%;
+  transition:transform var(--t-media) var(--ease);
+}
+.lookbook-foto:hover img{ transform:scale(1.05); }
 
 /* ============================================================
    CLIENTES
@@ -2124,6 +2207,20 @@ body.en-coleccion .vista-inicio{ display:none; }
    MOVIMIENTO REDUCIDO
    ============================================================ */
 
+/* ============================================================
+   APARICIÓN AL HACER SCROLL
+   ============================================================ */
+
+.por-revelar{
+  opacity:0;
+  transform:translateY(24px);
+}
+.por-revelar.revelado{
+  opacity:1;
+  transform:none;
+  transition:opacity .55s var(--ease), transform .55s var(--ease);
+}
+
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{
     animation-duration:.01ms !important;
@@ -2132,4 +2229,5 @@ body.en-coleccion .vista-inicio{ display:none; }
     scroll-behavior:auto !important;
   }
   .banda-track{ animation:none; }
+  .por-revelar{ opacity:1; transform:none; }
 }

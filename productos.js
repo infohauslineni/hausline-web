@@ -1073,7 +1073,7 @@ const productosBase = [
 
   // ---- ETIQUETAS OPCIONALES (ejemplo activado) ----
   // Ver la lista completa en ETIQUETAS_OPCIONALES más abajo.
-  ultimasUnidades:true,        // enciende la etiqueta
+  ultimasUnidades:false,        // enciende la etiqueta
 cantidadDisponible:1,        // este número decide el texto                      // etiqueta roja "Últimas unidades"
 },
 {
@@ -1342,6 +1342,7 @@ tallasEntregaInmediata:["39"],
 coloresEntregaInmediata:["Negro"],
 cantidadDisponible:1,
 precioEntregaInmediata:90,
+envioRapido: true ,
 },
 
 
@@ -2219,8 +2220,9 @@ tallasEntregaInmediata:["42"],
 coloresEntregaInmediata:["BLANCO"],
 cantidadDisponible:1,
 precioEntregaInmediata:160,
-ultimasUnidades:true,        // enciende la etiqueta
-cantidadDisponible:1,        // este número decide el texto  
+ultimasUnidades:false,        // enciende la etiqueta
+cantidadDisponible: 1 ,     
+envioRapido: true    // este número decide el texto  
 },
 
 
@@ -2557,7 +2559,24 @@ cantidadDisponible:1,        // este número decide el texto
 
 
 
-
+{
+  codigo: "BEAR001",
+  marca: "Bearbrick",
+  nombre: "Bearbrick 400% Louis Vuitton Multicolor",
+  precio: 120,
+  categoria: "Accesorios",
+  nuevo: true,
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR001/1.png",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR001/1.png",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR001/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR001/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR001/4.jpeg",
+     "imgP/accesorios/KAWA/Bearbricks/BEAR001/5.jpeg",
+  ],
+  descripcion: "Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+  },
 
 
 
@@ -4166,6 +4185,34 @@ colores:[
 ],
 },
 
+{
+  codigo:"#RR001",
+  nombre:"T-SHIRT BURBERRY",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/BURBERRY/RR001/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/BURBERRY/RR001/1.jpg",
+    "imgP/ropa/BURBERRY/RR001/2.jpg",
+    "imgP/ropa/BURBERRY/RR001/3.jpg",
+    "imgP/ropa/BURBERRY/RR001/4.jpg",
+    "imgP/ropa/BURBERRY/RR001/5.jpg",
+    "imgP/ropa/BURBERRY/RR001/6.jpg",
+    "imgP/ropa/BURBERRY/RR001/7.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
 
 
 
@@ -4193,8 +4240,303 @@ colores:[
 
 
 
+{
+  codigo:"#BP001",
+  nombre:"T-SHIRT B4PE",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
 
+  imagen:"imgP/ropa/B4PE/BP001/1.jpg",
 
+  imagenes:[
+    "imgP/ropa/B4PE/BP001/1.jpg",
+    "imgP/ropa/B4PE/BP001/2.jpg",
+    "imgP/ropa/B4PE/BP001/3.jpg",
+    "imgP/ropa/B4PE/BP001/4.jpg",
+    "imgP/ropa/B4PE/BP001/5.jpg",
+
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+
+// ============================================================
+//  ACCESORIOS — Figuras Bearbrick, KAWS, lentes y manta
+//  Sin tallas. Algunos tienen colores para elegir.
+// ============================================================
+{
+  codigo:"BEAR002",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% Iron Spider",
+  precio:190,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR002/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/4.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/5.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/6.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/7.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR002/8.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"BEAR003",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% Iron Man Cromado",
+  precio:110,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR003/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR003/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR003/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR003/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR003/4.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR003/5.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"BEAR004",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% BAPE Camo",
+  precio:190,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR004/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/4.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/5.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/6.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/7.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/8.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR004/9.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"BEAR005",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% Mona Lisa",
+  precio:190,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR005/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR005/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR005/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR005/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR005/4.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR005/5.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR005/6.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"BEAR006",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% BAPE Dorado",
+  precio:190,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR006/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR006/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR006/2.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"BEAR007",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% Stormtrooper",
+  precio:240,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR007/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/4.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/5.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/6.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/7.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/8.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR007/9.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"BEAR008",
+  marca:"Bearbrick",
+  nombre:"Bearbrick 400% Pikachu",
+  precio:190,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR008/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/Bearbricks/BEAR008/1.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR008/2.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR008/3.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR008/4.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR008/5.jpeg",
+    "imgP/accesorios/KAWA/Bearbricks/BEAR008/6.jpeg",
+  ],
+  descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
+  tallas:[]
+},
+{
+  codigo:"KAW001",
+  marca:"KAWS",
+  nombre:"KAWS Cash 30 cm",
+  precio:125,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/KAWS/KAW001/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/KAWS/KAW001/1.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW001/2.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW001/3.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW001/4.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW001/5.jpeg",
+  ],
+  descripcion:"Figura KAWS · 30 cm · PVC.",
+  tallas:[],
+  colores:["Negro","Gris","Café"]
+},
+{
+  codigo:"KAW002",
+  marca:"KAWS",
+  nombre:"KAWS Companion 37 cm",
+  precio:100,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/KAWS/KAW002/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/KAWA/KAWS/KAW002/1.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW002/2.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW002/3.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW002/4.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW002/5.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW002/6.jpeg",
+  ],
+  descripcion:"Figura KAWS Figure Toys · 37 cm · PVC.",
+  tallas:[],
+  colores:["Negro","Gris","Celeste","Rosado"]
+},
+{
+  codigo:"KAW003",
+  marca:"KAWS",
+  nombre:"KAWS Time Off Azul 29 cm",
+  precio:190,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/KAWS/KAW003/1.jpg",
+  imagenes:[
+    "imgP/accesorios/KAWA/KAWS/KAW003/1.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/2.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/3.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/4.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/5.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/6.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/7.jpeg",
+    "imgP/accesorios/KAWA/KAWS/KAW003/8.jpeg",
+  ],
+  descripcion:"Figura KAWS Time Off · 29 cm · PVC. Incluye caja.",
+  tallas:[]
+},
+{
+  codigo:"KAW004",
+  marca:"KAWS",
+  nombre:"KAWS Astro Boy 37 cm",
+  precio:100,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/KAWS/KAW004/1.jpg",
+  imagenes:[
+    "imgP/accesorios/KAWA/KAWS/KAW004/1.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW004/2.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW004/3.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW004/4.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW004/5.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW004/6.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW004/7.jpg",
+  ],
+  descripcion:"Figura KAWS Astro Boy · 37 cm · sin caja.",
+  tallas:[],
+  colores:["Gris","Piel"]
+},
+{
+  codigo:"KAW005",
+  marca:"KAWS",
+  nombre:"KAWS Dior BFF Rosado 30 cm",
+  precio:130,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/KAWA/KAWS/KAW005/1.jpg",
+  imagenes:[
+    "imgP/accesorios/KAWA/KAWS/KAW005/1.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW005/2.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW005/3.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW005/4.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW005/5.jpg",
+    "imgP/accesorios/KAWA/KAWS/KAW005/6.jpg",
+  ],
+  descripcion:"Figura KAWS BFF rosado con traje · 30 cm · PVC.",
+  tallas:[]
+},
+{
+  codigo:"CHROME001",
+  marca:"Chrome Hearts",
+  nombre:"Lentes Chrome Hearts",
+  precio:50,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/CHROME HEARTS/CHROME001/1.jpg",
+  imagenes:[
+    "imgP/accesorios/CHROME HEARTS/CHROME001/1.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/2.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/3.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/4.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/5.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/6.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/7.jpg",
+    "imgP/accesorios/CHROME HEARTS/CHROME001/8.jpg",
+  ],
+  descripcion:"Lentes Chrome Hearts con detalle de cruz. Incluye estuche.",
+  tallas:[],
+  colores:["Transparente / Dorado","Transparente / Plateado","Negro / Dorado","Negro / Plateado"]
+},
+{
+  codigo:"OFC001",
+  marca:"Off-White",
+  nombre:"Manta Off-White Industrial",
+  precio:100,
+  categoria:"Accesorios",
+  imagen:"imgP/accesorios/OFFW/OFC001/1.jpeg",
+  imagenes:[
+    "imgP/accesorios/OFFW/OFC001/1.jpeg",
+    "imgP/accesorios/OFFW/OFC001/2.jpeg",
+    "imgP/accesorios/OFFW/OFC001/3.jpeg",
+    "imgP/accesorios/OFFW/OFC001/4.jpeg",
+    "imgP/accesorios/OFFW/OFC001/5.jpeg",
+    "imgP/accesorios/OFFW/OFC001/6.jpeg",
+    "imgP/accesorios/OFFW/OFC001/7.jpeg",
+    "imgP/accesorios/OFFW/OFC001/8.jpeg",
+  ],
+  descripcion:"Manta tejida Off-White \"Industrial by Nature\" · 130 x 160 cm · 1 kg.",
+  tallas:[]
+},
 
 
 
@@ -4479,7 +4821,7 @@ const marcasEquivalentes = {
   "philippe model":       "Philippe Model",
   "valentino":            "Valentino",
   "veja":                 "Veja",
-  "converse":             "Converse",
+  "BE@RBRICK":            "Bearbricks",
   "moncler":              "Moncler",
   "casablanca":           "Casablanca",
   "chrome hearts":        "Chrome Hearts",
@@ -4491,7 +4833,7 @@ const marcasEquivalentes = {
   "allsaints":            "AllSaints",
   "alo":                  "Alo Yoga",
   "alo yoga":             "Alo Yoga",
-  "bape":                 "BAPE",
+  "b4pe":                 "B4PE",
   "fear of god essentials": "Fear of God Essentials",
   "comme des garcons play": "Comme des Garçons PLAY",
   "comme des garçons play": "Comme des Garçons PLAY",
@@ -4781,6 +5123,8 @@ function logoDeMarca(marca){
 }
 
 // Catálogo de marcas ordenado por cantidad de productos.
+// SOLO se muestran las marcas que tienen su logo/portada en imgP/marcas/.
+// Para que aparezca una marca nueva: sube su imagen y agrégala a logosMarcas.
 const marcasCatalogo = [...new Set(productos.map(p => p.marca).filter(Boolean))]
   .map(marca => ({
     nombre: marca,
@@ -4788,6 +5132,7 @@ const marcasCatalogo = [...new Set(productos.map(p => p.marca).filter(Boolean))]
     portada: (productos.find(p => p.marca === marca) || {}).imagen || "",
     total: productos.filter(p => p.marca === marca).length
   }))
+  .filter(m => m.logo)   // ← solo marcas con logo subido
   .sort((a, b) => b.total - a.total || a.nombre.localeCompare(b.nombre));
 
 // ============================================================
