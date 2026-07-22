@@ -2374,7 +2374,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/001.jpg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#002W",
@@ -2384,7 +2384,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/002.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#003W",
@@ -2394,7 +2394,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/003.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#004W",
@@ -2404,7 +2404,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/004.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#005W",
@@ -2414,7 +2414,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/005.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#006W",
@@ -2424,7 +2424,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/006.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#007W",
@@ -2434,7 +2434,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/007.jpg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#008W",
@@ -2444,7 +2444,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/008.jpg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#009W",
@@ -2454,7 +2454,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/009.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#010W",
@@ -2464,7 +2464,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/010.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#011W",
@@ -2474,7 +2474,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/011.jpeg",
   descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#012W",
@@ -2484,7 +2484,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/012.jpeg",
   descripcion: " CH TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#013W",
@@ -2494,7 +2494,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/013.jpeg",
   descripcion: " AMIRI TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#014W",
@@ -2504,7 +2504,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/014.jpeg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#015W",
@@ -2514,7 +2514,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/015.jpg",
   descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 {
   codigo: "#016W",
@@ -2532,7 +2532,7 @@ envioRapido: true    // este número decide el texto
 
 
   descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 
 {
@@ -2549,7 +2549,7 @@ envioRapido: true    // este número decide el texto
 
 
   descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["37","38","39","40"]
   },
 
 
@@ -5149,7 +5149,6 @@ const guiaTallas = {
     nota: "Mide tu pie descalzo, del talón al dedo más largo, y busca la medida en CM. Es la equivalencia más confiable entre marcas.",
     columnas: ["EUR", "US", "CM"],
     filas: [
-      ["35", "3.5",  "22.0"],
       ["36", "4",    "22.5"],
       ["37", "4.5",  "23.0"],
       ["38", "5.5",  "24.0"],

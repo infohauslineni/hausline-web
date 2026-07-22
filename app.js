@@ -386,6 +386,22 @@ function renderMarcas(limite){
 // EDITORIAL
 // ============================================================
 
+// Carrusel infinito de marcas (solo imágenes, sin enlaces ni clics).
+// Usa las mismas imágenes de imgP/marcas/. Se duplica para que el
+// desplazamiento sea continuo y sin saltos.
+function renderMarcasMarquee(){
+  const cont = $("#marcasMarquee");
+  if(!cont) return;
+  const conLogo = marcasCatalogo.filter(m => m.logo);
+  if(!conLogo.length){ cont.style.display = "none"; return; }
+
+  const tiles = conLogo.map(m =>
+    `<div class="marca-tile"><img src="${esc(m.logo)}" alt="${esc(m.nombre)}" loading="lazy"></div>`
+  ).join("");
+
+  cont.innerHTML = `<div class="marcas-marquee-track">${tiles}${tiles}</div>`;
+}
+
 // Banner grande con varias fotos de un mismo estilo + botón a la marca.
 function renderLookbook(){
   const cont = $("#lookbook");
@@ -733,7 +749,9 @@ function cambiarPagina(n){
 // modoInmediata = se abrió desde el apartado "Entrega inmediata".
 // Ahí solo se ofrecen las tallas y colores que hay físicamente.
 // Desde el resto del catálogo se ofrecen todas las opciones por encargo.
-function abrirProducto(codigo, modoInmediata){
+// sinHistorial = true cuando se abre desde el enlace directo o el botón atrás,
+// para no volver a empujar la URL (evita duplicados en el historial).
+function abrirProducto(codigo, modoInmediata, sinHistorial){
   const producto = buscarProducto(codigo);
   if(!producto) return;
 
@@ -816,6 +834,12 @@ function abrirProducto(codigo, modoInmediata){
   document.body.classList.add("sin-scroll");
   $("#modalCerrar").focus();
 
+  // Cambia la URL a este producto para poder compartir el enlace directo.
+  // Ej: hauslineshopni.es/?p=KAW002
+  if(!sinHistorial){
+    try{ history.pushState({ p: producto.codigo }, "", "?p=" + encodeURIComponent(producto.codigo)); }catch(e){}
+  }
+
   registrarVisto(producto.codigo);
   renderVistos();
 }
@@ -836,9 +860,23 @@ function relacionados(producto){
 
 function renderGaleria(){
   const img = $("#modalImg");
-  img.src = imagenesActuales[indiceImagen];
+  const claseBase = productoActual.imagenFit === "contain" ? "ajuste-contain" : "";
+  const nuevaSrc = imagenesActuales[indiceImagen];
+
+  // Transición suave entre fotos: se desvanece, cambia y vuelve a aparecer.
+  if(img.src && !img.src.endsWith(nuevaSrc) && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    img.style.opacity = "0";
+    setTimeout(() => {
+      img.src = nuevaSrc;
+      img.className = claseBase;
+      img.onload = () => { img.style.opacity = "1"; };
+    }, 130);
+  } else {
+    img.src = nuevaSrc;
+    img.style.opacity = "1";
+    img.className = claseBase;
+  }
   img.alt = nombreProducto(productoActual);
-  img.className = productoActual.imagenFit === "contain" ? "ajuste-contain" : "";
 
   const varias = imagenesActuales.length > 1;
   $("#galeriaPrev").style.display = varias ? "flex" : "none";
@@ -974,10 +1012,44 @@ $("#guiaFondo").addEventListener("click", e => {
   if(e.target.id === "guiaFondo") cerrarGuiaTallas();
 });
 
-function cerrarModal(){
+function cerrarModal(sinHistorial){
   $("#modal").classList.remove("activo");
   document.body.classList.remove("sin-scroll");
   productoActual = null;
+  // Quita el ?p= de la URL al cerrar.
+  if(!sinHistorial && location.search.includes("p=")){
+    try{ history.pushState({}, "", location.pathname); }catch(e){}
+  }
+}
+
+// Botón atrás del teléfono / navegador: abre o cierra el producto según la URL.
+window.addEventListener("popstate", () => {
+  const codigo = new URLSearchParams(location.search).get("p");
+  if(codigo){
+    abrirProducto(codigo, false, true);
+  } else if($("#modal").classList.contains("activo")){
+    cerrarModal(true);
+  }
+});
+
+// Compartir el producto actual (enlace directo).
+async function compartirProducto(){
+  if(!productoActual) return;
+  const url = location.origin + location.pathname + "?p=" + encodeURIComponent(productoActual.codigo);
+  const titulo = nombreProducto(productoActual) + " · HAUSLINE";
+
+  // En celular usa el menú de compartir del sistema (WhatsApp, etc.)
+  if(navigator.share){
+    try{ await navigator.share({ title: titulo, text: titulo, url }); return; }
+    catch(e){ if(e && e.name === "AbortError") return; }
+  }
+  // En computadora copia el enlace al portapapeles.
+  try{
+    await navigator.clipboard.writeText(url);
+    mostrarAviso("Enlace copiado");
+  }catch(e){
+    prompt("Copia el enlace del producto:", url);
+  }
 }
 
 function actualizarFavModal(){
@@ -1447,6 +1519,9 @@ $("#btnFavModal").addEventListener("click", () => {
   $$(`[data-fav="${productoActual.codigo}"]`).forEach(b => b.classList.toggle("activo", activo));
 });
 
+// Compartir producto (enlace directo)
+$("#btnCompartir").addEventListener("click", compartirProducto);
+
 // --- Carrito: acciones del pie ---
 $("#btnEnviarPedido").addEventListener("click", enviarPedidoWhatsApp);
 $("#btnVaciarCarrito").addEventListener("click", () => {
@@ -1540,6 +1615,7 @@ function iniciar(){
 
   renderBanda();
   renderBanners();
+  renderMarcasMarquee();
   renderChips();
   renderCategoriasVisuales();
   renderInicio();
@@ -1547,6 +1623,12 @@ function iniciar(){
 
   actualizarContadorCarrito();
   actualizarContadorFavoritos();
+
+  // Enlace directo: si la URL trae ?p=CODIGO, abre ese producto al cargar.
+  const directo = new URLSearchParams(location.search).get("p");
+  if(directo && buscarProducto(directo)){
+    abrirProducto(directo, false, true);
+  }
 
   console.log(`HAUSLINE · ${productos.length} productos · ${marcasCatalogo.length} marcas`);
 }
