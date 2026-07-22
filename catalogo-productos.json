@@ -17,7 +17,7 @@
     ],
     "colores": [],
     "precio_venta": 160,
-    "precio_oferta": 144,
+    "precio_oferta": 0,
     "promocion_hasta": "2026-07-10T23:59:59",
     "imagen": "imgP/ZAPATOS MEN/Christian Loubutin/CL0001/CL001.jfif",
     "imagenes": [
@@ -3974,9 +3974,9 @@
       "40"
     ],
     "colores": [],
-    "precio_venta": 140,
-    "precio_oferta": null,
-    "promocion_hasta": null,
+    "precio_venta": 149.99,
+    "precio_oferta": 0,
+    "promocion_hasta": "",
     "imagen": "imgP/dama/001.jpg",
     "imagenes": [
       "imgP/dama/001.jpg"
@@ -4285,6 +4285,66 @@
     "precioEntregaInmediata": null,
     "envioRapido": false
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   {
     "codigo": "#013W",
     "nombre": "AMIRI Stars Court Plataforma Blanco Rosa",
@@ -4537,6 +4597,109 @@
     "precioEntregaInmediata": null,
     "envioRapido": false
   },
+
+{
+    "codigo": "BEAR001",
+    "nombre": "Figura de oso de juguete",
+    "nombreOriginal": "BE@RBRICK Louis Vuitton Monogram Multicolor White",
+    "marca": "BEARBRICK",
+    "categoria": "Accesorios",
+    "tallas": [],
+    "colores": [
+      ""
+    ],
+    "precio_venta": 110,
+    "precio_oferta": null,
+    "promocion_hasta": null,
+    "imagen": "imgP/accesorios/KAWA/Bearbricks/BEAR001/1.png",
+    "imagenes": [
+      
+      "imgP/accesorios/KAWA/Bearbricks/BEAR001/1.png",
+      "imgP/accesorios/KAWA/Bearbricks/BEAR001/2.jpeg",
+      "imgP/accesorios/KAWA/Bearbricks/BEAR001/3.jpeg",
+      "imgP/accesorios/KAWA/Bearbricks/BEAR001/4.jpeg",
+      "imgP/accesorios/KAWA/Bearbricks/BEAR001/5.jpeg"
+    ],
+    "descripcion": "Es una figura estilo BE@RBRICK con el icónico patrón Louis Vuitton Monogram Multicolor sobre fondo blanco, inspirada en la colaboración artística del monograma multicolor de Louis Vuitton.",
+    "entregaInmediata": false,
+    "tallasEntregaInmediata": [],
+    "cantidadDisponible": null,
+    "precioEntregaInmediata": null,
+    "envioRapido": false
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   {
     "codigo": "#001R",
     "nombre": "Chaqueta Varsity Off-White AC Milan Gris",
@@ -6710,4 +6873,80 @@
     "precioEntregaInmediata": null,
     "envioRapido": false
   }
+
+,{
+    "codigo": "#RR001",
+    "nombre": "Camiseta Burberry",
+    "nombreOriginal": "T-SHIRT BURBERRY",
+    "marca": "Burberry",
+    "categoria": "Ropa",
+    "tallas": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colores": [
+      "White",
+      "Black"
+    ],
+    "precio_venta": 55,
+    "precio_oferta": null,
+    "promocion_hasta": null,
+    "imagen": "imgP/ropa/BURBERRY/RR001/1.jpg",
+    "imagenes": [
+      "imgP/ropa/BURBERRY/RR001/1.jpg",
+    "imgP/ropa/BURBERRY/RR001/2.jpg",
+    "imgP/ropa/BURBERRY/RR001/3.jpg",
+    "imgP/ropa/BURBERRY/RR001/4.jpg",
+    "imgP/ropa/BURBERRY/RR001/5.jpg",
+    "imgP/ropa/BURBERRY/RR001/6.jpg",
+    "imgP/ropa/BURBERRY/RR001/7.jpg"
+    ],
+    "descripcion": "Eleva tu estilo con esta camiseta de diseño minimalista y detalles exclusivos. Su corte moderno combina un cuerpo liso con mangas de patrón tipo cuadros, logrando un look elegante y urbano que destaca sin exagerar. Fabricada con tela suave, ligera y cómoda para usar durante todo el día.",
+    "entregaInmediata": false,
+    "tallasEntregaInmediata": [],
+    "cantidadDisponible": null,
+    "precioEntregaInmediata": null,
+    "envioRapido": false
+  }
+,{
+    "codigo": "BP001",
+    "nombre": "Camiseta BAPESTAS",
+    "nombreOriginal": "T-SHIRT B4PE",
+    "marca": "B4PE",
+    "categoria": "Ropa",
+    "tallas": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colores": [
+      "White",
+      "Black"
+    ],
+    "precio_venta": 50,
+    "precio_oferta": null,
+    "promocion_hasta": null,
+    "imagen": "imgP/ropa/B4PE/BP001/1.jpg",
+    "imagenes":[
+    "imgP/ropa/B4PE/BP001/1.jpg",
+    "imgP/ropa/B4PE/BP001/2.jpg",
+    "imgP/ropa/B4PE/BP001/3.jpg",
+    "imgP/ropa/B4PE/BP001/4.jpg",
+    "imgP/ropa/B4PE/BP001/5.jpg"
+    
+  ],
+
+    "descripcion": "Luce un estilo auténtico con esta camiseta BAPE, diseñada para quienes buscan destacar con un look urbano y exclusivo. Su gráfico frontal inspirado en la icónica estética de la marca aporta un toque llamativo sin perder la versatilidad para el uso diario.",
+    "entregaInmediata": false,
+    "tallasEntregaInmediata": [],
+    "cantidadDisponible": null,
+    "precioEntregaInmediata": null,
+    "envioRapido": false
+  }
+
+
+
 ]

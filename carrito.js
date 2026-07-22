@@ -127,9 +127,7 @@ function mensajeCarritoWhatsApp(){
     }
   }
 
-  msg += `\nNombre del cliente:\n`;
-  msg += "Ciudad o departamento:\n";
-  msg += "Método de entrega:\n\n";
+
   msg += totalEncargo > 0
     ? "Quedo atento para confirmar disponibilidad y realizar el abono."
     : "Quedo atento para coordinar la entrega.";
