@@ -1729,7 +1729,7 @@ envioRapido: true ,
   codigo:"GG001",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG001/1.avif",
@@ -1747,7 +1747,7 @@ envioRapido: true ,
   codigo:"GG002",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG002/1.jpg",
@@ -1765,7 +1765,7 @@ envioRapido: true ,
   codigo:"GG003",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG003/1.jpg",
@@ -1783,7 +1783,7 @@ envioRapido: true ,
   codigo:"GG004",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG004/1.jpg",
@@ -1800,7 +1800,7 @@ envioRapido: true ,
   codigo:"GG005",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG005/1.jpg",
@@ -1819,7 +1819,7 @@ envioRapido: true ,
   codigo:"GG006",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG006/1.jpg",
@@ -1838,7 +1838,7 @@ envioRapido: true ,
   codigo:"GG007",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
@@ -1857,7 +1857,7 @@ envioRapido: true ,
   codigo:"GG008",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
@@ -1876,7 +1876,7 @@ envioRapido: true ,
   codigo:"GG009",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
@@ -1895,7 +1895,7 @@ envioRapido: true ,
   codigo:"GG010",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
@@ -1914,7 +1914,7 @@ envioRapido: true ,
   codigo:"GG011",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:149.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
@@ -1932,7 +1932,7 @@ envioRapido: true ,
   codigo:"GG012",
   marca:"GOLDEN GOOSE",
   nombre:"Golden Goose",
-  precio:148,
+  precio:1499.99,
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
@@ -1946,7 +1946,25 @@ envioRapido: true ,
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
-
+{
+  codigo:"GG013",
+  marca:"GOLDEN GOOSE",
+  "marca": "GOLDEN GOOSE",
+  nombre:"Golden Goose",
+  precio:149.99,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG013/1.png",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Golden Goose/GG013/1.png",
+    "imgP/ZAPATOS MEN/Golden Goose/GG013/2.png",
+   "imgP/ZAPATOS MEN/Golden Goose/GG013/3.png",
+    "imgP/ZAPATOS MEN/Golden Goose/GG013/4.png",
+  
+  ],
+  descripcion:" Men's Ball Star in white nappa with dove gray suede star ,TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -2369,102 +2387,111 @@ envioRapido: true    // este número decide el texto
 {
   codigo: "#001W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/001.jpg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"],
+  precioOferta:0,
+promocionHasta:"",
+
+
+"entregaInmediata": false,
+    "tallasEntregaInmediata": [40],
+    "cantidadDisponible": 1,
+    "precioEntregaInmediata": 140,
+    "envioRapido": false
   },
 {
   codigo: "#002W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/002.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#003W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/003.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#004W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/004.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#005W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/005.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#006W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/006.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#007W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/007.jpg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#008W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/008.jpg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#009W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/009.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#010W",
   nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
+  precio: 149.99,
   categoria: "Dama",
   nuevo: true,
   imagen:"imgP/dama/010.png",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#011W",
@@ -2474,7 +2501,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/011.jpeg",
   descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#012W",
@@ -2484,7 +2511,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/012.jpeg",
   descripcion: " CH TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#013W",
@@ -2494,7 +2521,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/013.jpeg",
   descripcion: " AMIRI TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#014W",
@@ -2504,7 +2531,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/014.jpeg",
   descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#015W",
@@ -2514,7 +2541,7 @@ envioRapido: true    // este número decide el texto
   nuevo: true,
   imagen:"imgP/dama/015.jpg",
   descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
 {
   codigo: "#016W",
@@ -2532,8 +2559,9 @@ envioRapido: true    // este número decide el texto
 
 
   descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
+
 
 {
   codigo: "#017W",
@@ -2549,8 +2577,298 @@ envioRapido: true    // este número decide el texto
 
 
   descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas:["35","36","37","38","39","40"]
+  tallas: ["35","36","37","38","39","40"]
   },
+
+{
+  codigo: "GGW001",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW001/1.png",
+  descripcion: " Women’s Super-Star in worn white leather with tone-on-tone star, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW001/1.png",
+"imgP/dama/GOLDE/GGW001/2.png",
+"imgP/dama/GOLDE/GGW001/3.png",
+"imgP/dama/GOLDE/GGW001/4.png"
+],
+
+
+
+  tallas: ["35","36","37","38","39","40"]
+ },
+
+
+{
+  codigo: "GGW002",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW002/1.png",
+  descripcion: " Women's Super-Star in silver glitter with ice-gray suede star, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW002/1.png",
+"imgP/dama/GOLDE/GGW002/2.png",
+"imgP/dama/GOLDE/GGW002/3.png",
+"imgP/dama/GOLDE/GGW002/4.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+
+{
+  codigo: "GGW003",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW003/4.png",
+  descripcion: " Women's Super-Star in silver glitter with ice-gray suede star, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW003/4.png",
+"imgP/dama/GOLDE/GGW003/3.png",
+"imgP/dama/GOLDE/GGW003/2.png",
+"imgP/dama/GOLDE/GGW003/1.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+{
+  codigo: "GGW004",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW004/1.png",
+  descripcion: " Women's Ball Star with silver Swarovski micro-crystal star and metallic silver leather heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW004/1.png",
+"imgP/dama/GOLDE/GGW004/2.png",
+"imgP/dama/GOLDE/GGW004/3.png",
+"imgP/dama/GOLDE/GGW004/4.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+
+{
+  codigo: "GGW005",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW005/1.png",
+  descripcion: " Women's Ball Star in white nappa leather with green leather star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW005/1.png",
+"imgP/dama/GOLDE/GGW005/2.png",
+"imgP/dama/GOLDE/GGW005/3.png",
+"imgP/dama/GOLDE/GGW005/4.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+{
+  codigo: "GGW006",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW006/1.png",
+  descripcion: " Women’s Ball Star Wishes in white leather with a red star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW006/1.png",
+"imgP/dama/GOLDE/GGW006/2.png",
+"imgP/dama/GOLDE/GGW006/3.png",
+"imgP/dama/GOLDE/GGW006/4.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+
+{
+  codigo: "GGW007",
+  nombre: "GOLDEN GOOSE GGDB",
+  
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW007/1.png",
+  descripcion: " Women’s Ball Star Wishes in white nappa leather with bright blue star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW007/1.png",
+"imgP/dama/GOLDE/GGW007/2.png",
+"imgP/dama/GOLDE/GGW007/3.png",
+"imgP/dama/GOLDE/GGW007/4.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+
+{
+  codigo: "GGW008",
+  nombre: "GOLDEN GOOSE GGDB",
+  "marca": "GOLDEN GOOSE",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/GOLDE/GGW006/1.png",
+  descripcion: " Women’s Ball Star Wishes in white nappa leather with bright blue star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/GOLDE/GGW006/1.png",
+"imgP/dama/GOLDE/GGW006/2.png",
+"imgP/dama/GOLDE/GGW006/3.png",
+"imgP/dama/GOLDE/GGW006/4.png"
+],
+
+
+  tallas: ["35","36","37","38","39","40"]
+  },
+
+
+{
+  codigo: "VJW001",
+  nombre: "VEJA CAMPO",
+  "marca": "VEJA",
+  precio: 149.99,
+  categoria: "Dama",
+  nuevo: true,
+  imagen:"imgP/dama/VEJA/VJW001/1.jpg",
+  descripcion: "VEJA Leather Extra Sneakers , TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/VEJA/VJW001/1.jpg",
+"imgP/dama/VEJA/VJW001/2.jpg",
+"imgP/dama/VEJA/VJW001/3.jpg",
+"imgP/dama/VEJA/VJW001/4.jpg",
+"imgP/dama/VEJA/VJW001/5.jpg",
+"imgP/dama/VEJA/VJW001/8.jpg",
+"imgP/dama/VEJA/VJW001/9.jpg",
+"imgP/dama/VEJA/VJW001/10.jpg",
+],
+
+
+  tallas: ["35","36","37","38","39","40","41","42","43","44","45",
+  ]
+  },
+
+{
+  codigo: "VJW-M002",
+  nombre: "VEJA CAMPO",
+  "marca": "VEJA",
+  precio: 149.99,
+  categoria: "Zapatos",
+  nuevo: true,
+  imagen:"imgP/dama/VEJA/VJW-M002/1.jpg",
+  descripcion: "VEJA Leather Extra Sneakers , TIEMPO  DE ENTREGA 15-25 DIAS",
+imagenes:[
+   "imgP/dama/VEJA/VJW-M002/1.jpg",
+"imgP/dama/VEJA/VJW-M002/2.jpg",
+"imgP/dama/VEJA/VJW-M002/3.jpg",
+"imgP/dama/VEJA/VJW-M002/4.jpg",
+"imgP/dama/VEJA/VJW-M002/5.jpg",
+"imgP/dama/VEJA/VJW-M002/6.jpg",
+"imgP/dama/VEJA/VJW-M002/7.jpg",
+"imgP/dama/VEJA/VJW-M002/8.jpg",
+],
+
+
+  tallas: ["35","36","37","38","39","40","41","42","43","44","45",
+  ]
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4656,6 +4974,7 @@ const nombresReales = {
   "GG010": { nombre:"Golden Goose Super-Star Blanco Estrella Roja", descripcion:"Sneaker de piel blanca con estrella lateral en ante rojo, talonera de piel oscura y cordones grises. Suela envejecida con marcado GGDB/SSTAR." },
   "GG011": { nombre:"Golden Goose Super-Star Estrella Azul Eléctrico", descripcion:"Sneaker de piel blanca con estrella lateral en ante azul eléctrico, talonera azul marino y puntera de ante claro. Suela desgastada con logo GGDB." },
   "GG012": { nombre:"Golden Goose Super-Star Estrella Gris Oscuro", descripcion:"Sneaker de piel blanca con estrella lateral y talonera en piel gris oscuro, detalle rojo en la lengüeta y cordones grises. Suela envejecida con marcado GGDB/SSTAR." },
+  "GG013": { nombre:"Golden Goose Ball-Star ", descripcion:"Men's Ball Star in white nappa with dove gray suede star." },
   "BL001": { nombre:"Balenciaga Speed Trainer Negro Total", descripcion:"Sneaker tipo calcetín en tejido elástico negro con logo BALENCIAGA en blanco al lateral y suela deportiva negra envolvente." },
   "BL002": { nombre:"Balenciaga Speed 2.0 Gris", descripcion:"Sneaker tipo calcetín de punto gris con logo BALENCIAGA al lateral y suela segmentada en bloques blancos y negros." },
   "BL003": { nombre:"Balenciaga Speed 2.0 Negro y Blanco", descripcion:"Sneaker tipo calcetín de punto negro con logo BALENCIAGA en blanco y suela segmentada en bloques blancos y negros." },
@@ -4719,6 +5038,33 @@ const nombresReales = {
   "#015W": { nombre:"Louboutin Stiletto Charol Negro Suela Roja", descripcion:"Zapatilla de tacón de aguja alto en charol negro con punta fina y la característica suela roja. Caja original 'Christian Louboutin Paris' en la foto.", marca:"CHRISTIAN LOUBOUTIN" },
   "#016W": { nombre:"Dior Slide Denim Azul Logo Bordado", descripcion:"Sandalia slide con tira de denim azul oscuro y medallón ovalado 'Dior' bordado tono sobre tono, plantilla de cuero beige con el sello de la casa.", marca:"CHRISTIAN DIOR" },
   "#017W": { nombre:"Dior Dway Slide Dorado Mariposas", descripcion:"Sandalia slide con tira bordada en hilo dorado con 'CHRISTIAN DIOR PARIS' y plantilla blanca con estampado de mariposas doradas firmada 'Christian Dior Paris'.", marca:"CHRISTIAN DIOR" },
+"GGW001": { nombre:"GOLDEN GOOSE Super-Star", descripcion:"Women’s Super-Star in worn white leather with tone-on-tone star" },
+"GGW002": { nombre:"GOLDEN GOOSE Super-Star", descripcion:"Women's Super-Star in silver glitter with ice-gray suede star"}, 
+"GGW003": { nombre:"GOLDEN GOOSE Ball Star ", descripcion:"Women's Super-Star in silver glitter with ice-gray suede star"}, 
+"GGW004": { nombre:"GOLDEN GOOSE Ball Star", descripcion:"Women's Ball Star with silver Swarovski "},
+"GGW005": { nombre:"GOLDEN GOOSE Ball Star", descripcion:" Women's Ball Star in white nappa leather with green leather star and heel tab"}, 
+"GGW006": { nombre:"GOLDEN GOOSE Ball Star", descripcion:"Women’s Ball Star Wishes in white leather with a red star and heel tab"}, 
+"GGW007": { nombre:"GOLDEN GOOSE Ball Star", descripcion:"Women’s Ball Star Wishes in white nappa leather with bright blue star and heel tab"}, 
+"GGW008": { nombre:"GOLDEN GOOSEBall Star", descripcion:"Women’s Ball Star Wishes in white nappa leather with bright blue star and heel tab"}, 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   "#ROW1": { nombre:"Reloj Colgante Octagonal Royal Pop Colores", descripcion:"Lámina con ocho variantes de un reloj colgante de caja octogonal con tornillos a la vista, esfera texturizada tipo tapicería y fondo esqueletado con la leyenda 'Royal Pop'; cada versión combina caja y correa de un color distinto (rojo, azul, blanco, amarillo, verde, negro, celeste y azul marino).", marca:"AUDEMARS PIGUET" },
   "#ROW2": { nombre:"Louis Vuitton S-Lock Messenger Monogram Eclipse", descripcion:"Bolso messenger de lona Monogram Eclipse negra y gris con cierre S-Lock metálico negro grabado 'LOUIS VUITTON PARIS' y correa de hombro ancha ajustable.", marca:"LOUIS VUITTON" },
   "#ROW3": { nombre:"Goyard Tarjetero Goyardine Varios Colores", descripcion:"Tarjeteros planos en lona Goyardine con el estampado de chevrones y logo 'GOYARD' impreso, disponibles en muchos colores (rojo, azul, rosa, blanco, negro, naranja, amarillo, verde, burdeos, celeste, gris y beige).", marca:"GOYARD" },
@@ -5149,7 +5495,6 @@ const guiaTallas = {
     nota: "Mide tu pie descalzo, del talón al dedo más largo, y busca la medida en CM. Es la equivalencia más confiable entre marcas.",
     columnas: ["EUR", "US", "CM"],
     filas: [
-      ["35", "3.5",  "22.0"],
       ["36", "4",    "22.5"],
       ["37", "4.5",  "23.0"],
       ["38", "5.5",  "24.0"],
