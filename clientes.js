@@ -17,34 +17,17 @@ const clientes = [
 // Fotos editoriales / publicitarias ("Estilo HAUSLINE").
 // codigoProducto: código real de un producto para enlazarlo. Si está vacío o no existe,
 // el botón se desactiva de forma segura (sin error, sin redirigir a otro producto).
-// IMPORTANTE: para que una foto aparezca NO debe llevar "//" adelante
-// y tiene que tener activo: true.
-// Para ocultarla sin borrarla, cambia activo a false.
 const editoriales = [
+  // Ejemplo de estructura (dejar preparado para que agregues fotos reales):
   {
-    imagen: "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
-    titulo: "Completa tu estilo",
-    subtitulo: "Descubre este look",
-    codigoProducto: "BK007",
-    textoBoton: "Ver producto",
-    activo: true
-  },
-  {
-    imagen: "imgP/ropa/072.1.jpeg",
-    titulo: "Estilo HAUSLINE",
-    subtitulo: "Piezas seleccionadas",
-    codigoProducto: "#072R",
-    textoBoton: "Ver producto",
-    activo: true
-  },
-  {
-    imagen: "imgP/ZAPATOS MEN/BALENCIAGA/BL001/2.jpeg",
-    titulo: "Descubre el look",
-    subtitulo: "Entrega inmediata",
-    codigoProducto: "BL001",
-    textoBoton: "Ver producto",
-    activo: true
-  }
+  imagen: "imgP/ZAPATOS MEN/Birkenstock/BK007/1.jpeg",
+  titulo: "Completa tu estilo",
+  subtitulo: "BIRKENSTOCK",
+  codigoProducto: "BK007",
+  textoBoton: "Ver producto",
+  activo: true
+},
+
 ];
 
 // Banners del carrusel principal.
@@ -56,25 +39,25 @@ const banners = [
   {
     // IMAGEN DE PRUEBA: reemplázala por tu foto publicitaria.
     // Al poner un codigoProducto, el botón abre ese producto directamente.
-    imagen: "imgP/ZAPATOS MEN/BALENCIAGA/BL001/1.jpeg",
+    imagen: "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
     titulo: "Nueva colección",
     subtitulo: "Estilo que te define",
     textoBoton: "Ver producto",
-    codigoProducto: "BL001",
+    codigoProducto: "BK007",
     enlace: "#catalogo",
     activo: true
   },
   {
-    imagen: "",
+    imagen: "imgP/ropa/009.4.jfif",
     titulo: "Entrega inmediata",
     subtitulo: "Productos disponibles ahora en Nicaragua",
     textoBoton: "Ver disponibles",
-    codigoProducto: "",
+    codigoProducto: "#009R",
     enlace: "#entrega-inmediata",
     activo: true
   },
   {
-    imagen: "",
+    imagen: "imgP/clientes/7.jpeg",
     titulo: "Pedidos bajo encargo",
     subtitulo: "Abono del 50% para confirmar tu pedido",
     textoBoton: "Ver catálogo",
