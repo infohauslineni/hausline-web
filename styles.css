@@ -837,7 +837,7 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   overflow:hidden;
   cursor:pointer;
   border:1px solid var(--borde);
-  background:var(--card);
+  background:#fff;               /* fondo blanco para el logo negro */
   display:flex;
   align-items:center;
   justify-content:center;
@@ -845,16 +845,21 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   width:100%;
 }
 
-/* Tarjeta de marca ya diseñada (imagen completa con foto y nombre). */
+/* Logo de la marca centrado y completo (no se recorta). */
 .marca-imagen{
   position:absolute;
   inset:0;
   width:100%;height:100%;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center;
+  padding:18%;
   transition:transform var(--t-media) var(--ease);
 }
-.card-marca-tarjeta:hover .marca-imagen{ transform:scale(1.05); }
+.card-marca-tarjeta:hover .marca-imagen{ transform:scale(1.06); }
+.marca-imagen-destacada{
+  padding:0;
+  object-fit:cover;
+}
 
 /* Respaldo para marcas sin tarjeta: foto de producto atenuada + nombre. */
 .marca-portada{
@@ -946,17 +951,17 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 
 .marcas-marquee{
   overflow:hidden;
-  margin:18px 0 4px;
+  margin:14px 0 2px;
   border-top:1px solid var(--borde);
   border-bottom:1px solid var(--borde);
-  padding:14px 0;
+  padding:7px 0;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
           mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
 .marcas-marquee-track{
   display:flex;
   width:max-content;
-  gap:14px;
+  gap:10px;
   animation:marquee-marcas 40s linear infinite;
   will-change:transform;
 }
@@ -964,27 +969,30 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 
 .marca-tile{
   flex:0 0 auto;
-  width:150px;
-  height:74px;
-  border-radius:var(--radio-sm);
+  width:126px;
+  height:38px;
+  border-radius:8px;
   overflow:hidden;
-  border:1px solid var(--borde);
-  background:var(--card);
+  border:0;
+  background:transparent;
 }
 @media(min-width:900px){
-  .marca-tile{ width:190px; height:92px; }
+  .marca-tile{ width:148px; height:42px; }
 }
 .marca-tile img{
   width:100%;height:100%;
   object-fit:cover;
   object-position:center;
+  padding:0;
+  filter:grayscale(1) invert(1) contrast(1.45);
+  transform:scale(1.12);
   transition:transform .5s var(--ease);
 }
-.marca-tile:hover img{ transform:scale(1.08); }
+.marca-tile:hover img{ transform:scale(1.2); }
 
 @keyframes marquee-marcas{
   from{ transform:translateX(0); }
-  to{ transform:translateX(calc(-50% - 7px)); }
+  to{ transform:translateX(calc(-50% - 5px)); }
 }
 
 /* ============================================================
@@ -2269,6 +2277,269 @@ body.en-coleccion .vista-inicio{ display:none; }
    ============================================================ */
 
 /* ============================================================
+   CONVERSOR DE MONEDA
+   ============================================================ */
+
+.conversor{
+  display:inline-flex;
+  flex-shrink:0;
+  border:1px solid var(--borde);
+  border-radius:var(--radio-pill);
+  overflow:hidden;
+  background:var(--card);
+}
+.conversor button{
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:7px 11px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--texto-3);
+  transition:color var(--t-rapida) var(--ease), background var(--t-rapida) var(--ease);
+}
+.conversor button.activo{
+  background:var(--verde);
+  color:#050505;
+}
+@media(max-width:480px){
+  .conversor button{ padding:6px 9px; font-size:11px; }
+}
+
+/* ============================================================
+   SUBTÍTULO DE SECCIÓN + ESTADO VACÍO
+   ============================================================ */
+
+.seccion-sub{
+  margin:2px 0 0;
+  font-size:12.5px;
+  color:var(--texto-3);
+}
+
+.estado-vacio{
+  grid-column:1/-1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding:34px 20px;
+  border:1px dashed var(--borde-fuerte);
+  border-radius:var(--radio);
+  color:var(--texto-3);
+  width:100%;
+}
+.estado-vacio svg{
+  width:30px;height:30px;
+  stroke:var(--borde-fuerte);
+  fill:none;stroke-width:1.5;
+  margin-bottom:10px;
+}
+.estado-vacio p{ margin:0 0 4px; font-size:14px; color:var(--texto-2); }
+.estado-vacio small{ font-size:12.5px; }
+
+/* ============================================================
+   INSTAGRAM / TIKTOK (tarjetas sociales)
+   ============================================================ */
+
+.social-card{
+  position:relative;
+  display:block;
+  aspect-ratio:1/1;
+  border-radius:var(--radio);
+  overflow:hidden;
+  border:1px solid var(--borde);
+  background:var(--card);
+}
+.social-card.vertical{ aspect-ratio:9/16; }
+.social-card img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform var(--t-media) var(--ease);
+}
+.social-card:hover img{ transform:scale(1.06); }
+.social-ic,.social-play{
+  position:absolute;
+  right:9px;bottom:9px;
+  width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(5,5,5,.6);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  border-radius:8px;
+}
+.social-ic svg{ width:15px;height:15px;stroke:#fff;fill:none;stroke-width:1.8; }
+.social-play{ left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%; }
+.social-play svg{ width:20px;height:20px;fill:#fff;stroke:none;margin-left:2px; }
+
+/* ============================================================
+   COTIZACIÓN
+   ============================================================ */
+
+.cotizacion{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+  padding:24px;
+  background:linear-gradient(120deg,rgba(183,255,0,.08),var(--card) 60%);
+  border:1px solid var(--borde);
+  border-radius:var(--radio);
+}
+@media(min-width:820px){
+  .cotizacion{ grid-template-columns:1fr 1.2fr; align-items:center; gap:30px; padding:30px; }
+}
+.cotizacion-texto h2{ font-size:clamp(19px,3.4vw,26px); margin-bottom:6px; }
+.cotizacion-texto p{ margin:0; color:var(--texto-2); font-size:14.5px; }
+.cotizacion-form{ display:grid; gap:10px; }
+@media(min-width:520px){
+  .cotizacion-form{ grid-template-columns:1fr 1fr; }
+  .cotizacion-form .btn-whatsapp{ grid-column:1/-1; }
+}
+.cotizacion-form input{
+  height:46px;
+  padding:0 14px;
+  background:var(--bg);
+  border:1px solid var(--borde);
+  border-radius:var(--radio-sm);
+  color:var(--texto);
+  font-size:14px;
+}
+.cotizacion-form input::placeholder{ color:var(--texto-3); }
+.cotizacion-form input:focus{ outline:none; border-color:var(--verde); }
+
+/* ============================================================
+   MODAL: FECHA DE ENTREGA + VISTAS
+   ============================================================ */
+
+.modal-codigo-fila{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:15px;
+}
+.modal-codigo-fila .modal-codigo{ margin:0; }
+.modal-vistas{
+  font-size:12px;
+  color:var(--texto-3);
+  white-space:nowrap;
+}
+.modal-vistas .ojo{ margin-right:2px; }
+
+.entrega-estim{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  padding:11px 13px;
+  margin:0 0 16px;
+  background:var(--card);
+  border:1px solid var(--borde);
+  border-radius:var(--radio-sm);
+  font-size:12.5px;
+  line-height:1.5;
+  color:var(--texto-2);
+}
+.entrega-estim svg{ width:17px;height:17px;stroke:var(--verde);fill:none;stroke-width:1.7;flex-shrink:0;margin-top:1px; }
+.entrega-estim strong{ color:var(--texto); }
+
+/* ============================================================
+   PANEL COMPARTIR
+   ============================================================ */
+
+.compartir-fondo{
+  position:fixed;inset:0;z-index:150;
+  background:rgba(0,0,0,.72);
+  opacity:0;visibility:hidden;
+  display:flex;align-items:flex-end;justify-content:center;
+  transition:opacity var(--t-media) var(--ease), visibility var(--t-media);
+}
+.compartir-fondo.activo{ opacity:1;visibility:visible; }
+@media(min-width:700px){ .compartir-fondo{ align-items:center; padding:24px; } }
+
+.compartir-caja{
+  width:100%;max-width:440px;
+  background:var(--bg-2);
+  border:1px solid var(--borde);
+  border-radius:var(--radio) var(--radio) 0 0;
+  transform:translateY(20px);
+  transition:transform var(--t-media) var(--ease);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.compartir-fondo.activo .compartir-caja{ transform:translateY(0); }
+@media(min-width:700px){ .compartir-caja{ border-radius:var(--radio); } }
+
+.compartir-cabecera{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;border-bottom:1px solid var(--borde);
+}
+.compartir-opciones{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px;
+}
+.compartir-op{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 14px;
+  background:var(--card);
+  border:1px solid var(--borde);
+  border-radius:var(--radio-sm);
+  font-size:13.5px;font-weight:500;
+  color:var(--texto);cursor:pointer;
+  transition:border-color var(--t-rapida) var(--ease), transform var(--t-rapida) var(--ease);
+}
+.compartir-op:hover{ border-color:var(--borde-fuerte); }
+.compartir-op:active{ transform:scale(.97); }
+.compartir-op .ic{ width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.compartir-op .ic svg{ width:17px;height:17px;stroke:#fff;fill:none;stroke-width:1.9; }
+.compartir-op .ic.wa{ background:#25D366; }
+.compartir-op .ic.fb{ background:#1877F2; }
+.compartir-op .ic.tg{ background:#28a8e9; }
+.compartir-op .ic.cp{ background:#444; }
+
+/* ============================================================
+   VOLVER ARRIBA
+   ============================================================ */
+
+.volver-arriba{
+  position:fixed;
+  right:14px;
+  bottom:calc(var(--nav-h) + 72px + env(safe-area-inset-bottom));
+  z-index:64;
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--card-2);
+  border:1px solid var(--borde-fuerte);
+  border-radius:50%;
+  cursor:pointer;
+  opacity:0;visibility:hidden;transform:translateY(10px);
+  transition:opacity var(--t-media) var(--ease), transform var(--t-media) var(--ease), visibility var(--t-media);
+}
+.volver-arriba.visible{ opacity:1;visibility:visible;transform:translateY(0); }
+.volver-arriba svg{ width:20px;height:20px;stroke:var(--texto);fill:none;stroke-width:2; }
+@media(min-width:900px){
+  .volver-arriba{ right:24px; bottom:92px; }
+}
+
+/* ============================================================
+   GLOW VERDE HAUSLINE (sutil)
+   ============================================================ */
+
+.btn-verde:hover,
+.btn-whatsapp:hover{
+  box-shadow:0 0 0 1px rgba(183,255,0,.5), 0 6px 22px rgba(183,255,0,.22);
+}
+.chip.activo,
+.conversor button.activo,
+.paginacion button.activo{
+  box-shadow:0 0 14px rgba(183,255,0,.28);
+}
+@media(hover:hover){
+  .card:hover{ box-shadow:0 8px 26px rgba(0,0,0,.5), 0 0 0 1px rgba(183,255,0,.14); }
+}
+.whatsapp-flotante{ box-shadow:0 3px 14px rgba(0,0,0,.35), 0 0 0 4px rgba(37,211,102,.12); }
+.btn-fav.activo,
+.btn-fav-grande.activo{ box-shadow:0 0 12px rgba(183,255,0,.3); }
+#btnCarrito .contador:not(.vacio),
+.nav-item .contador:not(.vacio){ box-shadow:0 0 8px rgba(183,255,0,.55); }
+
+/* ============================================================
    APARICIÓN AL HACER SCROLL
    ============================================================ */
 
@@ -2293,4 +2564,5 @@ body.en-coleccion .vista-inicio{ display:none; }
   .marcas-marquee-track{ animation:none; }
   .por-revelar{ opacity:1; transform:none; }
   body{ animation:none; }
+  .volver-arriba{ transition:opacity .01ms; }
 }

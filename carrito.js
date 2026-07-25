@@ -87,7 +87,10 @@ function actualizarContadorCarrito(){
 }
 
 function moneda(n){
-  return "$" + Number(n).toLocaleString("en-US");
+  // Usa el formateador central para respetar la moneda elegida (USD o C$).
+  return typeof formatearMoneda === "function"
+    ? formatearMoneda(n)
+    : "$" + Number(n).toLocaleString("en-US");
 }
 
 // Construye el mensaje profesional para WhatsApp con todo el pedido.
@@ -104,15 +107,15 @@ function mensajeCarritoWhatsApp(){
     if(it.talla) msg += `Talla: ${it.talla}\n`;
     if(it.color) msg += `Color: ${it.color}\n`;
     msg += `Cantidad: ${it.cantidad}\n`;
-    msg += `Precio unitario: ${moneda(it.precioUnitario)}\n`;
-    msg += `Subtotal: ${moneda(subtotalItem(it))}\n`;
+    msg += `Precio unitario: ${precioUSD(it.precioUnitario)}\n`;
+    msg += `Subtotal: ${precioUSD(subtotalItem(it))}\n`;
     if(it.envioRapido) msg += `Envío rápido: sí\n`;
     if(it.entregaInmediata) msg += `Entrega inmediata: sí\n`;
     msg += `\n`;
   });
 
   const total = totalCarrito();
-  msg += `Total estimado: ${moneda(total)}\n`;
+  msg += `Total estimado: ${precioUSD(total)}\n`;
 
   // El abono del 50% solo aplica a lo que va por encargo.
   // Los productos de entrega inmediata se pagan al recibir, sin abono.
@@ -121,7 +124,7 @@ function mensajeCarritoWhatsApp(){
     .reduce((acc, i) => acc + subtotalItem(i), 0);
 
   if(totalEncargo > 0){
-    msg += `Abono para confirmar (50%): ${moneda(Math.round(totalEncargo * 0.5))}\n`;
+    msg += `Abono para confirmar (50%): ${precioUSD(Math.round(totalEncargo * 0.5))}\n`;
     if(totalEncargo !== total){
       msg += `(el abono aplica solo a los productos por encargo)\n`;
     }

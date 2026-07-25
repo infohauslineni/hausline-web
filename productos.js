@@ -56,7 +56,9 @@ const productosBase = [
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0001/CL001.jfif",
   descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
+  tallas:["37","38","39","40","41","42","43","44"],
+ promocionHasta:"",
+ 
 },
 
 {
@@ -5443,29 +5445,55 @@ function coloresDisponibles(producto, modoInmediata){
 // ============================================================
 
 const logosMarcas = {
-  "Alexander McQueen":      "Alexander Mcqueen.png",
+  "Alexander McQueen":      "mcqueen.jpg",
+  "Amiri":                  "amiri.jpg",
+  "Balenciaga":             "balenciaga.jpg",
+  "Birkenstock":            "birkenstock.jpg",
+  "Burberry":               "burberry.jpg",
+  "Christian Dior":         "dior.jpg",
+  "Christian Louboutin":    "louboutin.jpg",
+  "Dolce & Gabbana":        "dolcegabbana.jpg",
+  "Golden Goose":           "goldengoose.jpg",
+  "Loro Piana":             "loropiana.jpg",
+  "Louis Vuitton":          "louisvuitton.jpg",
+  "Maison Margiela":        "margiela.jpg",
+  "Off-White":              "offwhite.jpg",
+  "Philippe Model":         "philippemodel.jpg",
+  "Saint Laurent":          "saintlaurent.jpg",
+  "Valentino":              "valentino.jpg",
+  "Veja":                   "veja.jpg",
+  "Comme des Garçons PLAY": "cdg.jpg"
+};
+
+const tarjetasMarcas = {
+  "Alexander McQueen":      "ALEXANDER MCQUEEN.png",
   "Amiri":                  "AMIRI.png",
   "Balenciaga":             "BALENCIAGA.png",
   "Birkenstock":            "BIRKENSTOCK.png",
-  "Burberry":               "BURBERRY.png",
+  "Burberry":               "BURBERRU.png",
   "Christian Dior":         "DIOR.png",
-  "Christian Louboutin":    "CHRISTIAN LOUBUTIN.png",
-  "Dolce & Gabbana":        "DOLCE & GABANNA.png",
+  "Christian Louboutin":    "LOUBUTINS.png",
+  "Dolce & Gabbana":        "DOLCE GABNNA.png",
   "Golden Goose":           "GOLDEN GOOSE.png",
   "Loro Piana":             "LORO PIANA.png",
-  "Louis Vuitton":          "LOUIS VUITTON.png",
+  "Louis Vuitton":          "LV.png",
   "Maison Margiela":        "MAISON MARGIELA.png",
   "Off-White":              "OFF WHITE.png",
   "Philippe Model":         "PHILIP MODEL.png",
   "Saint Laurent":          "SAINT LAURENT.png",
   "Valentino":              "VALENTINO.png",
   "Veja":                   "VEJA.png",
-  "Comme des Garçons PLAY": "CDG.png"
+  "Comme des Garçons PLAY": "COMME DES.png"
 };
 
 function logoDeMarca(marca){
   const archivo = logosMarcas[marca];
   return archivo ? "imgP/marcas/" + archivo : "";
+}
+
+function tarjetaDeMarca(marca){
+  const archivo = tarjetasMarcas[marca];
+  return archivo ? "imgP/marcas 2/" + archivo : "";
 }
 
 // Catálogo de marcas ordenado por cantidad de productos.
@@ -5475,6 +5503,7 @@ const marcasCatalogo = [...new Set(productos.map(p => p.marca).filter(Boolean))]
   .map(marca => ({
     nombre: marca,
     logo: logoDeMarca(marca),
+    tarjeta: tarjetaDeMarca(marca),
     portada: (productos.find(p => p.marca === marca) || {}).imagen || "",
     total: productos.filter(p => p.marca === marca).length
   }))

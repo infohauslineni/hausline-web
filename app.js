@@ -64,7 +64,10 @@ function esc(texto){
 }
 
 function formatoPrecio(valor){
-  return "$" + Number(valor || 0).toLocaleString("en-US");
+  // Usa el formateador central (respeta la moneda elegida: USD o C$).
+  return typeof formatearMoneda === "function"
+    ? formatearMoneda(valor)
+    : "$" + Number(valor || 0).toLocaleString("en-US");
 }
 
 function productosPorPagina(){
@@ -370,8 +373,9 @@ function renderMarcas(limite){
     // Si la marca tiene su tarjeta en imgP/marcas/ se usa completa.
     // Si no, se arma con una foto de producto atenuada y el nombre encima.
     // El onerror cubre el caso de que el archivo no exista todavía.
-    const contenido = m.logo
-      ? `<img class="marca-imagen" src="${esc(m.logo)}" alt="${esc(m.nombre)}" loading="lazy"
+    const imagenMarca = m.tarjeta || m.logo;
+    const contenido = imagenMarca
+      ? `<img class="marca-imagen ${m.tarjeta ? "marca-imagen-destacada" : ""}" src="${esc(imagenMarca)}" alt="${esc(m.nombre)}" loading="lazy"
               onerror="this.classList.remove('marca-imagen'); this.classList.add('marca-portada'); this.src='${esc(m.portada)}'; this.insertAdjacentHTML('afterend','<span class=&quot;marca-texto&quot;>'+this.alt+'</span>');">`
       : `${m.portada ? `<img class="marca-portada" src="${esc(m.portada)}" alt="" loading="lazy">` : ""}
          <span class="marca-texto">${esc(m.nombre)}</span>`;
@@ -490,6 +494,115 @@ function renderClientes(){
     }
     return `<div class="cliente">${img}</div>`;
   }).join("");
+}
+
+// ============================================================
+// INSTAGRAM
+// ============================================================
+function renderInstagram(){
+  const sec = $("#seccionInstagram");
+  const cont = $("#filaInstagram");
+  if(!sec || !cont) return;
+  const posts = (typeof instagramPosts !== "undefined" ? instagramPosts : []).filter(p => p && p.imagen);
+  if(!posts.length){ sec.hidden = true; return; }
+  sec.hidden = false;
+  cont.innerHTML = posts.map(p => `
+    <a class="social-card" href="${esc(p.url || HAUSLINE_INSTAGRAM)}" target="_blank" rel="noopener noreferrer"
+       aria-label="Ver publicación en Instagram">
+      <img src="${esc(p.imagen)}" alt="Publicación de HAUSLINE en Instagram" loading="lazy">
+      <span class="social-ic">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+      </span>
+    </a>`).join("");
+}
+
+// ============================================================
+// TIKTOK
+// ============================================================
+function renderTiktok(){
+  const sec = $("#seccionTiktok");
+  const cont = $("#filaTiktok");
+  if(!sec || !cont) return;
+  const vids = (typeof tiktokVideos !== "undefined" ? tiktokVideos : []).filter(v => v && v.portada);
+  if(!vids.length){ sec.hidden = true; return; }
+  sec.hidden = false;
+  cont.innerHTML = vids.map(v => `
+    <a class="social-card vertical" href="${esc(v.url || HAUSLINE_TIKTOK)}" target="_blank" rel="noopener noreferrer"
+       aria-label="Ver video en TikTok">
+      <img src="${esc(v.portada)}" alt="Video de HAUSLINE en TikTok" loading="lazy">
+      <span class="social-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg></span>
+    </a>`).join("");
+}
+
+// ============================================================
+// TENDENCIAS (más vistos, contador REAL de Supabase)
+// ============================================================
+function renderTendencias(){
+  const sec = $("#seccionTendencias");
+  const cont = $("#filaTendencias");
+  if(!sec || !cont) return;
+
+  // Sin Supabase configurado, o sin vistas aún: la sección se oculta.
+  const top = (typeof hlTopVistos === "function") ? hlTopVistos(productos, 12) : [];
+  if(!top.length){ sec.hidden = true; return; }
+  sec.hidden = false;
+  cont.innerHTML = top.map(crearCard).join("");
+}
+
+// ============================================================
+// MÁS VENDIDOS ESTA SEMANA (datos reales; estado vacío elegante)
+// ============================================================
+async function renderMasVendidos(){
+  const sec = $("#seccionVendidos");
+  const cont = $("#filaVendidos");
+  if(!sec || !cont) return;
+
+  const data = (typeof hlMasVendidosSemana === "function") ? await hlMasVendidosSemana() : null;
+
+  // null = Supabase no configurado → ocultar sección por completo.
+  if(data === null){ sec.hidden = true; return; }
+
+  const items = data
+    .map(r => ({ p: buscarProducto(r.codigo), total: r.total }))
+    .filter(x => x.p);
+
+  sec.hidden = false;
+
+  // Configurado pero sin ventas registradas → estado vacío elegante.
+  if(!items.length){
+    cont.innerHTML = `
+      <div class="estado-vacio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg>
+        <p>Aún no hay suficientes datos de ventas.</p>
+        <small>Esta sección se llenará sola cuando se registren pedidos.</small>
+      </div>`;
+    return;
+  }
+  cont.innerHTML = items.map(x => crearCard(x.p)).join("");
+}
+
+// ============================================================
+// FECHA ESTIMADA DE ENTREGA (15–25 días hábiles, automática)
+// ============================================================
+function sumarDiasHabiles(desde, dias){
+  const d = new Date(desde);
+  let restantes = dias;
+  while(restantes > 0){
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay();          // 0=domingo, 6=sábado
+    if(dow !== 0 && dow !== 6) restantes--;
+  }
+  return d;
+}
+
+function textoEntregaEstimada(){
+  const meses = ["enero","febrero","marzo","abril","mayo","junio",
+                 "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  const hoy = new Date();
+  const desde = sumarDiasHabiles(hoy, 15);
+  const hasta = sumarDiasHabiles(hoy, 25);
+  const fmt = f => `${f.getDate()} de ${meses[f.getMonth()]}`;
+  return `Encargando hoy, recibirías aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
 }
 
 // ============================================================
@@ -798,6 +911,17 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     ? `<div class="disponibilidad inmediata">Entrega inmediata</div>`
     : `<div class="disponibilidad encargo">Disponible por encargo</div>`;
 
+  // Fecha estimada de entrega (solo para pedidos por encargo).
+  $("#modalEntrega").innerHTML = modoInmediataActual
+    ? ""
+    : `<div class="entrega-estim">
+         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+         <span>${textoEntregaEstimada()}</span>
+       </div>`;
+
+  // Vistas (se llena cuando Supabase responde)
+  $("#modalVistas").textContent = "";
+
   // Etiquetas
   let etiquetas = "";
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
@@ -835,13 +959,29 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   $("#modalCerrar").focus();
 
   // Cambia la URL a este producto para poder compartir el enlace directo.
-  // Ej: hauslineshopni.es/?p=KAW002
+  // Ej: hauslineshopni.es/?producto=KAW002
   if(!sinHistorial){
-    try{ history.pushState({ p: producto.codigo }, "", "?p=" + encodeURIComponent(producto.codigo)); }catch(e){}
+    try{ history.pushState({ producto: producto.codigo }, "", "?producto=" + encodeURIComponent(producto.codigo)); }catch(e){}
   }
 
   registrarVisto(producto.codigo);
   renderVistos();
+
+  // Registra la visualización REAL (Supabase) y muestra el total.
+  mostrarVistas(producto.codigo);
+}
+
+// Muestra "👁 N visualizaciones" y registra la vista al abrir.
+function mostrarVistas(codigo){
+  const cont = $("#modalVistas");
+  if(!cont) return;
+  cont.textContent = "";
+  if(typeof hlRegistrarVista !== "function" || !HL_VIEWS.activo){ return; }
+  hlRegistrarVista(codigo).then(total => {
+    if(total != null && productoActual && productoActual.codigo === codigo){
+      cont.innerHTML = `<span class="ojo">👁</span> ${Number(total).toLocaleString("en-US")} visualizaciones`;
+    }
+  });
 }
 
 function relacionados(producto){
@@ -1016,15 +1156,15 @@ function cerrarModal(sinHistorial){
   $("#modal").classList.remove("activo");
   document.body.classList.remove("sin-scroll");
   productoActual = null;
-  // Quita el ?p= de la URL al cerrar.
-  if(!sinHistorial && location.search.includes("p=")){
+  // Quita el ?producto= de la URL al cerrar.
+  if(!sinHistorial && location.search.includes("producto=")){
     try{ history.pushState({}, "", location.pathname); }catch(e){}
   }
 }
 
 // Botón atrás del teléfono / navegador: abre o cierra el producto según la URL.
 window.addEventListener("popstate", () => {
-  const codigo = new URLSearchParams(location.search).get("p");
+  const codigo = new URLSearchParams(location.search).get("producto");
   if(codigo){
     abrirProducto(codigo, false, true);
   } else if($("#modal").classList.contains("activo")){
@@ -1032,24 +1172,51 @@ window.addEventListener("popstate", () => {
   }
 });
 
-// Compartir el producto actual (enlace directo).
+// Enlace directo del producto actual.
+function urlProducto(codigo){
+  return location.origin + location.pathname + "?producto=" + encodeURIComponent(codigo);
+}
+
+// Abre el panel de compartir (WhatsApp, Facebook, Telegram, copiar, sistema).
 async function compartirProducto(){
   if(!productoActual) return;
-  const url = location.origin + location.pathname + "?p=" + encodeURIComponent(productoActual.codigo);
+  const url = urlProducto(productoActual.codigo);
   const titulo = nombreProducto(productoActual) + " · HAUSLINE";
 
-  // En celular usa el menú de compartir del sistema (WhatsApp, etc.)
+  // En celular: menú nativo del teléfono (WhatsApp, Instagram, etc.)
   if(navigator.share){
     try{ await navigator.share({ title: titulo, text: titulo, url }); return; }
     catch(e){ if(e && e.name === "AbortError") return; }
   }
-  // En computadora copia el enlace al portapapeles.
-  try{
-    await navigator.clipboard.writeText(url);
-    mostrarAviso("Enlace copiado");
-  }catch(e){
-    prompt("Copia el enlace del producto:", url);
-  }
+  // En computadora / sin menú nativo: panel con opciones.
+  abrirPanelCompartir(titulo, url);
+}
+
+function abrirPanelCompartir(titulo, url){
+  const texto = encodeURIComponent(titulo + " ");
+  const u = encodeURIComponent(url);
+  $("#compartirOpciones").innerHTML = `
+    <a class="compartir-op" href="https://wa.me/?text=${texto}${u}" target="_blank" rel="noopener noreferrer">
+      <span class="ic wa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg></span>
+      WhatsApp
+    </a>
+    <a class="compartir-op" href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener noreferrer">
+      <span class="ic fb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h2V5h-2a3 3 0 0 0-3 3v2H9v3h2v6h3v-6h2l1-3h-3V8a1 1 0 0 1 1-1z" fill="currentColor" stroke="none"/></svg></span>
+      Facebook
+    </a>
+    <a class="compartir-op" href="https://t.me/share/url?url=${u}&text=${texto}" target="_blank" rel="noopener noreferrer">
+      <span class="ic tg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4L3 11l5 2 2 6 3-4 4 3z"/></svg></span>
+      Telegram
+    </a>
+    <button class="compartir-op" type="button" data-copiar="${esc(url)}">
+      <span class="ic cp"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></span>
+      Copiar enlace
+    </button>`;
+  $("#compartirFondo").classList.add("activo");
+}
+
+function cerrarPanelCompartir(){
+  $("#compartirFondo").classList.remove("activo");
 }
 
 function actualizarFavModal(){
@@ -1113,8 +1280,8 @@ function pedirProductoWhatsApp(){
   if(tallaSeleccionada) msg += `Talla: ${tallaSeleccionada}\n`;
   if(colorSeleccionado) msg += `Color: ${colorSeleccionado}\n`;
   msg += `Cantidad: ${cantidadSeleccionada}\n`;
-  msg += `Precio unitario: ${formatoPrecio(precio)}\n`;
-  msg += `Subtotal: ${formatoPrecio(subtotal)}\n`;
+  msg += `Precio unitario: ${precioUSD(precio)}\n`;
+  msg += `Subtotal: ${precioUSD(subtotal)}\n`;
   msg += modoInmediataActual ? "Entrega inmediata: sí\n" : "Disponible por encargo\n";
   if(productoActual.envioRapido) msg += "Envío rápido: sí\n";
 
@@ -1122,7 +1289,7 @@ function pedirProductoWhatsApp(){
   if(modoInmediataActual){
     msg += `\nQuedo atento para coordinar la entrega.`;
   } else {
-    msg += `\nAbono para confirmar (50%): ${formatoPrecio(Math.round(subtotal * 0.5))}\n\n`;
+    msg += `\nAbono para confirmar (50%): ${precioUSD(Math.round(subtotal * 0.5))}\n\n`;
     msg += "Quedo atento para confirmar disponibilidad y realizar el abono.";
   }
 
@@ -1430,6 +1597,18 @@ document.addEventListener("click", e => {
     return;
   }
 
+  // Copiar enlace (panel de compartir)
+  const copiar = e.target.closest("[data-copiar]");
+  if(copiar){
+    const url = copiar.dataset.copiar;
+    (async () => {
+      try{ await navigator.clipboard.writeText(url); mostrarAviso("Enlace copiado"); }
+      catch(err){ prompt("Copia el enlace:", url); }
+    })();
+    cerrarPanelCompartir();
+    return;
+  }
+
   // Enlaces informativos del footer
   const info = e.target.closest("[data-info]");
   if(info){
@@ -1530,6 +1709,88 @@ $("#btnVaciarCarrito").addEventListener("click", () => {
   mostrarAviso("Carrito vaciado");
 });
 
+// ============================================================
+// CONVERSOR DE MONEDA (USD ⇄ C$)
+// ============================================================
+function actualizarBotonesMoneda(){
+  $$("[data-moneda]").forEach(b => b.classList.toggle("activo", b.dataset.moneda === monedaActual));
+}
+
+// Vuelve a pintar todo lo que muestra precios, para que cambie la moneda.
+function repintarPrecios(){
+  renderInicio();
+  actualizarAccesosOfertas();
+  renderTendencias();
+  if(estadoVista === "coleccion") renderColeccion();
+
+  // Si hay un producto abierto, reabrirlo pero CONSERVANDO la selección.
+  if(productoActual){
+    const t = tallaSeleccionada, c = colorSeleccionado, cant = cantidadSeleccionada;
+    const codigo = productoActual.codigo, modo = modoInmediataActual;
+    abrirProducto(codigo, modo, true);
+    tallaSeleccionada = t; colorSeleccionado = c; cantidadSeleccionada = cant;
+    $("#cantidadValor").textContent = cant;
+    if(t) $$("#opcionesTallas .opcion").forEach(b => b.classList.toggle("activa", b.dataset.talla === t));
+    if(c) $$("#opcionesColores .opcion").forEach(b => b.classList.toggle("activa", b.dataset.color === c));
+  }
+
+  if($("#panelCarrito").classList.contains("activo")) renderCarrito();
+}
+
+function cambiarMoneda(m){
+  if(m !== "USD" && m !== "NIO") return;
+  monedaActual = m;
+  try{ localStorage.setItem("hausline_moneda", m); }catch(e){}
+  actualizarBotonesMoneda();
+  repintarPrecios();
+}
+
+$$("[data-moneda]").forEach(b => b.addEventListener("click", () => cambiarMoneda(b.dataset.moneda)));
+actualizarBotonesMoneda();
+
+// ============================================================
+// COMPARTIR (panel de escritorio) + COPIAR
+// ============================================================
+$("#compartirFondo")?.addEventListener("click", e => {
+  if(e.target.id === "compartirFondo" || e.target.closest("[data-cerrar-compartir]")) cerrarPanelCompartir();
+});
+
+// ============================================================
+// BOTÓN VOLVER ARRIBA
+// ============================================================
+(function volverArriba(){
+  const btn = $("#volverArriba");
+  if(!btn) return;
+  let visible = false;
+  window.addEventListener("scroll", () => {
+    const debe = window.scrollY > 600;
+    if(debe !== visible){
+      visible = debe;
+      btn.classList.toggle("visible", debe);
+    }
+  }, { passive:true });
+  btn.addEventListener("click", () => window.scrollTo({ top:0, behavior:"smooth" }));
+})();
+
+// ============================================================
+// SOLICITAR COTIZACIÓN (por WhatsApp)
+// ============================================================
+$("#btnCotizar")?.addEventListener("click", () => {
+  const prod = ($("#cotProducto")?.value || "").trim();
+  const marca = ($("#cotMarca")?.value || "").trim();
+  const talla = ($("#cotTalla")?.value || "").trim();
+  const cant = ($("#cotCantidad")?.value || "").trim();
+
+  let msg = "Hola Hausline 👋\n\nQuiero solicitar una cotización.\n\n";
+  msg += `Producto: ${prod}\n`;
+  msg += `Marca: ${marca}\n`;
+  msg += `Talla: ${talla}\n`;
+  msg += `Cantidad: ${cant}\n\n`;
+  msg += "Adjuntaré la fotografía o el enlace del producto en este chat.";
+
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+});
+
 // --- Búsqueda ---
 function manejarBusqueda(valor){
   textoBusqueda = valor;
@@ -1581,7 +1842,8 @@ $("#selectPrecio").addEventListener("change", e => {
 // --- Teclado ---
 document.addEventListener("keydown", e => {
   if(e.key === "Escape"){
-    if($("#guiaFondo").classList.contains("activo")) cerrarGuiaTallas();
+    if($("#compartirFondo").classList.contains("activo")) cerrarPanelCompartir();
+    else if($("#guiaFondo").classList.contains("activo")) cerrarGuiaTallas();
     else if($("#modal").classList.contains("activo")) cerrarModal();
     else if($$(".panel.activo").length) cerrarPaneles();
     else if($("#menuLateral").classList.contains("activo")) cerrarMenu();
@@ -1615,7 +1877,6 @@ function iniciar(){
 
   renderBanda();
   renderBanners();
-  renderMarcasMarquee();
   renderChips();
   renderCategoriasVisuales();
   renderInicio();
@@ -1624,11 +1885,34 @@ function iniciar(){
   actualizarContadorCarrito();
   actualizarContadorFavoritos();
 
-  // Enlace directo: si la URL trae ?p=CODIGO, abre ese producto al cargar.
-  const directo = new URLSearchParams(location.search).get("p");
+  // Enlace directo: si la URL trae ?producto=CODIGO, abre ese producto.
+  // PERO si es una RECARGA (F5), no lo reabre: limpia la URL y muestra el inicio.
+  // Así el link compartido sí abre el producto, pero recargar no molesta.
+  const directo = new URLSearchParams(location.search).get("producto");
   if(directo && buscarProducto(directo)){
-    abrirProducto(directo, false, true);
+    let esRecarga = false;
+    try{
+      const nav = performance.getEntriesByType("navigation")[0];
+      if(nav) esRecarga = nav.type === "reload";
+      else if(performance.navigation) esRecarga = performance.navigation.type === 1;
+    }catch(e){}
+
+    if(esRecarga){
+      try{ history.replaceState({}, "", location.pathname); }catch(e){}
+    } else {
+      abrirProducto(directo, false, true);
+    }
   }
+
+  // Secciones nuevas y contador real (cuando lleguen las vistas de Supabase).
+  renderInstagram();
+  renderTiktok();
+  document.addEventListener("vistas:listas", () => {
+    renderTendencias();
+    renderMasVendidos();
+  });
+  renderTendencias();
+  renderMasVendidos();
 
   console.log(`HAUSLINE · ${productos.length} productos · ${marcasCatalogo.length} marcas`);
 }
