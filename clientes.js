@@ -54,7 +54,7 @@ const banners = [
     textoBoton: "Ver disponibles",
     codigoProducto: "#009R",
     enlace: "#entrega-inmediata",
-    activo: true
+    activo:false
   },
   {
     imagen: "imgP/clientes/7.jpeg",
