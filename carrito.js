@@ -124,7 +124,8 @@ function mensajeCarritoWhatsApp(){
     .reduce((acc, i) => acc + subtotalItem(i), 0);
 
   if(totalEncargo > 0){
-    msg += `Abono para confirmar (50%): ${precioUSD(Math.round(totalEncargo * 0.5))}\n`;
+    const abono = Math.round(totalEncargo * 0.5);
+    msg += `Abono para confirmar (50%): ${precioUSD(abono)} (${precioNIO(abono)})\n`;
     if(totalEncargo !== total){
       msg += `(el abono aplica solo a los productos por encargo)\n`;
     }

@@ -1289,7 +1289,8 @@ function pedirProductoWhatsApp(){
   if(modoInmediataActual){
     msg += `\nQuedo atento para coordinar la entrega.`;
   } else {
-    msg += `\nAbono para confirmar (50%): ${precioUSD(Math.round(subtotal * 0.5))}\n\n`;
+    const abono = Math.round(subtotal * 0.5);
+    msg += `\nAbono para confirmar (50%): ${precioUSD(abono)} (${precioNIO(abono)})\n\n`;
     msg += "Quedo atento para confirmar disponibilidad y realizar el abono.";
   }
 
