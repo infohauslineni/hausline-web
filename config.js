@@ -27,14 +27,19 @@ function precioUSD(usd){
   return "$" + (Number(usd) || 0).toLocaleString("en-US");
 }
 
+// Precio SIEMPRE en córdobas (para el mensaje de WhatsApp del pedido).
+function precioNIO(usd){
+  return "C$" + Math.round((Number(usd) || 0) * HAUSLINE_EXCHANGE_RATE).toLocaleString("en-US");
+}
+
 // ============================================================
 //  SUPABASE  (para el contador REAL de visualizaciones)
 //  Pega aquí los datos de tu proyecto Supabase.
 //  Mientras estén vacíos, la web funciona igual pero sin contador.
 //  NUNCA pegues la clave service_role, SOLO la anon (pública).
 // ============================================================
-const SUPABASE_URL      = "";   // ej: https://xxxxxxxx.supabase.co
-const SUPABASE_ANON_KEY = "";   // ej: eyJhbGciOi...
+const SUPABASE_URL      = "https://epslwaxjemlysqtubbfu.supabase.co/rest/v1/";  
+const SUPABASE_ANON_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";  
 
 // ============================================================
 //  INSTAGRAM  —  @hausline.ni
@@ -46,8 +51,8 @@ const SUPABASE_ANON_KEY = "";   // ej: eyJhbGciOi...
 //  Para ocultar la sección, deja el arreglo vacío: [].
 // ============================================================
 const instagramPosts = [
-  // { imagen: "imgP/instagram/post1.jpg", url: "https://www.instagram.com/p/XXXXXXX/" },
-  // { imagen: "imgP/instagram/post2.jpg", url: "https://www.instagram.com/p/YYYYYYY/" },
+ { imagen: "imgP/clientes/10 (2).jpg", url: "https://www.instagram.com/p/DZbMkG_R7vk/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==" },
+ { imagen: "imgP/clientes/10 (9).jpg", url: "https://www.instagram.com/p/DZHhmO_RN6v/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==" },
 ];
 
 // ============================================================
@@ -59,7 +64,7 @@ const instagramPosts = [
 //  Para ocultar la sección, deja el arreglo vacío: [].
 // ============================================================
 const tiktokVideos = [
-  // { portada: "imgP/tiktok/video1.jpg", url: "https://www.tiktok.com/@hausline.niof/video/XXXX" },
+ { portada: "imgP/clientes/10 (13).jpg", url: "https://www.tiktok.com/@hausline.niof/photo/7653959052036164871?is_from_webapp=1&sender_device=pc" },
 ];
 
 // ---------- Redes (perfiles) ----------

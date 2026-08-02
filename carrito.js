@@ -115,7 +115,7 @@ function mensajeCarritoWhatsApp(){
   });
 
   const total = totalCarrito();
-  msg += `Total estimado: ${precioUSD(total)}\n`;
+  msg += `Total estimado: ${precioUSD(total)} (${precioNIO(total)})\n`;
 
   // El abono del 50% solo aplica a lo que va por encargo.
   // Los productos de entrega inmediata se pagan al recibir, sin abono.

@@ -48,13 +48,13 @@ const banners = [
     activo: true
   },
   {
-    imagen: "",
-    titulo: "",
-    subtitulo: "Productos disponibles ahora en Nicaragua",
-    textoBoton: "Ver disponibles",
+    imagen: "imgP/clientes/10 (3).jpg",
+    titulo: "CALIDAD GARANTIZADA",
+    subtitulo: "TRABAJAMOS DIRECTO CON LA FABRICA",
+    textoBoton: "COMPRAR AHORA",
     codigoProducto: "",
-    enlace: "#entrega-inmediata",
-    activo:false
+    enlace: "#ZAPATOS",
+    activo:true
   },
   {
     imagen: "imgP/clientes/7.jpeg",

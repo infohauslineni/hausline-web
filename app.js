@@ -1281,7 +1281,7 @@ function pedirProductoWhatsApp(){
   if(colorSeleccionado) msg += `Color: ${colorSeleccionado}\n`;
   msg += `Cantidad: ${cantidadSeleccionada}\n`;
   msg += `Precio unitario: ${precioUSD(precio)}\n`;
-  msg += `Subtotal: ${precioUSD(subtotal)}\n`;
+  msg += `Subtotal: ${precioUSD(subtotal)} (${precioNIO(subtotal)})\n`;
   msg += modoInmediataActual ? "Entrega inmediata: sí\n" : "Disponible por encargo\n";
   if(productoActual.envioRapido) msg += "Envío rápido: sí\n";
 
