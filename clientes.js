@@ -48,11 +48,11 @@ const banners = [
     activo: true
   },
   {
-    imagen: "imgP/ropa/009.4.jfif",
-    titulo: "Entrega inmediata",
+    imagen: "",
+    titulo: "",
     subtitulo: "Productos disponibles ahora en Nicaragua",
     textoBoton: "Ver disponibles",
-    codigoProducto: "#009R",
+    codigoProducto: "",
     enlace: "#entrega-inmediata",
     activo:false
   },
