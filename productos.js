@@ -3169,11 +3169,11 @@ colores:[
   // ---- EJEMPLO: solo tienes S en negro físicamente ----
   // En el apartado "Entrega inmediata" el cliente SOLO podrá elegir S y Black.
   // En el catálogo normal siguen disponibles las 4 tallas y los 6 colores por encargo.
-  entregaInmediata:true,
-  tallasEntregaInmediata:["S"],
-  coloresEntregaInmediata:["Black"],
-  cantidadDisponible:1,
-  precioEntregaInmediata:45,
+  entregaInmediata:false,
+  tallasEntregaInmediata:[""],
+  coloresEntregaInmediata:[""],
+  cantidadDisponible:0,
+  precioEntregaInmediata:0,
 },
 {
   codigo:"#010R",
