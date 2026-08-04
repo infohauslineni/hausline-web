@@ -1177,9 +1177,53 @@ cantidadDisponible:1,        // este número decide el texto                    
   tallas:["37","38","39","40","41","42","43","44"]
 },
 
+{
+  codigo:"BL008",
+  marca:"BALENCIAGA",
+  nombre:"BALENCIAGA SLIDES",
+  precio:90,
+  categoria:"Zapatos",
+  subcategoria:"Chinelas",
+  destacadoNuevo:true,
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL008/1.jpg",
+  imagenes:[
+    
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/1.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/2.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/3.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/4.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/5.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/6.jpg",
+   
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["35","36","37","38","39","40","41","42","43","44"]
+},
 
-
-
+{
+  codigo:"BL009",
+  marca:"BALENCIAGA",
+  nombre:"BALENCIAGA SLIDES",
+  precio:90,
+  categoria:"Zapatos",
+  subcategoria:"Chinelas",
+  destacadoNuevo:true,
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL009/1.jpg",
+  imagenes:[
+    
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/1.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/2.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/3.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/4.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/5.jpg",
+    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/6.jpg",
+   
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["35","36","37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -5217,6 +5261,13 @@ function normalizarProducto(producto, indice){
     descripcionReal: producto.descripcionReal || real.descripcion || "",
     // Marca detectada en la foto para los productos que no tenían.
     marca: canonizarMarca(producto.marca || real.marca),
+    // Subcategoría dentro de la categoría (para los filtros internos).
+    //   Zapatos  -> "Calzado" | "Casual" | "Chinelas"  (por defecto "Calzado")
+    //   Dama     -> "Zapatos" | "Ropa"
+    // Si no se define, los Zapatos entran como "Calzado" y el resto sin subcategoría.
+    subcategoria: producto.subcategoria || (producto.categoria === "Zapatos" ? "Calzado" : ""),
+    // Género opcional: "Dama" para marcar producto de mujer. Vacío = unisex/hombre.
+    genero: producto.genero || "",
     imagen: producto.imagen || imagenes[0] || "",
     imagenes,
     colores: producto.colores || [],
@@ -5396,16 +5447,53 @@ function etiquetasActivas(producto){
   return ETIQUETAS_OPCIONALES.filter(e => producto[e.propiedad]);
 }
 
-// Cuántos de los últimos productos agregados llevan la etiqueta "Nuevo".
+// Cuántos productos llevan la etiqueta "Nuevo" al mismo tiempo.
+// Cuando entra uno nuevo, el más viejo pierde la etiqueta solo.
 const CANTIDAD_NUEVOS = 20;
 
-// La etiqueta "Nuevo" es automática: la llevan los últimos productos
-// que agregaste al catálogo. Al agregar uno al final de la lista,
-// entra solo y el más antiguo deja de estar marcado.
-// Si prefieres forzarlo a mano, pon destacadoNuevo:true en el producto.
+// Fecha para decidir qué tan reciente es un producto. Si le pones
+//   fecha:"2026-08-03"   se ordena por esa fecha (aunque lo insertes
+// en medio de la lista). Sin fecha, se usa la posición en el catálogo.
+function fechaOrden(producto){
+  if(producto.fecha){
+    const t = Date.parse(producto.fecha);
+    if(!isNaN(t)) return t;
+  }
+  return 0;
+}
+
+// Ordena de más nuevo a más viejo: primero los fijados a mano
+// (destacadoNuevo), luego por fecha, y como último desempate por la
+// posición en el catálogo (lo último agregado al final).
+function ordenarNuevos(lista){
+  return [...lista].sort((a, b) => {
+    const pa = a.destacadoNuevo ? 1 : 0;
+    const pb = b.destacadoNuevo ? 1 : 0;
+    if(pa !== pb) return pb - pa;
+    const fa = fechaOrden(a), fb = fechaOrden(b);
+    if(fa !== fb) return fb - fa;
+    return b.orden - a.orden;
+  });
+}
+
+// Conjunto de los CANTIDAD_NUEVOS productos más nuevos (por código).
+// Se calcula una sola vez porque el catálogo no cambia en caliente.
+let _codigosNuevos = null;
+function conjuntoNuevos(){
+  if(!_codigosNuevos){
+    _codigosNuevos = new Set(
+      ordenarNuevos(productos).slice(0, CANTIDAD_NUEVOS).map(p => p.codigo)
+    );
+  }
+  return _codigosNuevos;
+}
+
+// La etiqueta "Nuevo" es automática: la llevan SOLO los más nuevos.
+// Para meter un producto a "Nuevo" aunque lo insertes en medio, pon
+// fecha:"AAAA-MM-DD" o destacadoNuevo:true. Para quitarlo no haces nada:
+// cuando entren 20 más nuevos, sale solo.
 function esNuevo(producto){
-  if(producto.destacadoNuevo) return true;
-  return producto.orden >= productos.length - CANTIDAD_NUEVOS;
+  return conjuntoNuevos().has(producto.codigo);
 }
 
 function porcentajeDescuento(producto){

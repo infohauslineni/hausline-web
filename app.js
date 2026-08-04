@@ -13,6 +13,20 @@ const CATEGORIAS = [
   { id: "Accesorios", etiqueta: "Accesorios" }
 ];
 
+// Subcategorías internas de cada categoría. Aparecen como filtros arriba
+// del listado SOLO cuando hay productos que las usan (las vacías se ocultan
+// solas). Para clasificar un producto agrega  subcategoria:"Chinelas"  etc.
+const SUBCATEGORIAS = {
+  "Zapatos": ["Calzado", "Casual", "Chinelas"],
+  "Dama":    ["Zapatos", "Ropa"]
+};
+
+// Subcategoría efectiva de un producto (los Zapatos sin marcar son "Calzado").
+function subcategoriaDe(producto){
+  if(producto.subcategoria) return producto.subcategoria;
+  return producto.categoria === "Zapatos" ? "Calzado" : "";
+}
+
 // Políticas de compra de HAUSLINE (se muestran en el modal del producto).
 const POLITICAS = {
   condiciones: [
@@ -39,6 +53,7 @@ let textoBusqueda = "";
 let ordenActual = "recomendados";
 let filtroMarca = "";
 let filtroPrecio = "";
+let filtroSub = "";                  // subcategoría activa ("" = todas)
 const filtrosActivos = new Set();    // "nuevo" | "oferta" | "inmediata" | "rapido"
 
 let productoActual = null;
@@ -196,9 +211,10 @@ function seleccionDestacados(lista, limite){
 }
 
 // "Nuevo en HAUSLINE": lo último que agregaste al catálogo, automático.
-// Al agregar un producto al final de productos.js aparece aquí solo.
+// Al agregar un producto al final de productos.js aparece aquí solo, y si le
+// pones destacadoNuevo:true entra aunque lo hayas insertado en cualquier parte.
 function productosNuevos(limite){
-  return tomar([...productos].sort((a, b) => b.orden - a.orden), limite || 12);
+  return tomar(ordenarNuevos(productos), limite || 12);
 }
 
 function productosTendencia(limite){
@@ -700,6 +716,7 @@ function abrirColeccion(tipo, valor, titulo){
   paginaActual = 1;
   filtroMarca = "";
   filtroPrecio = "";
+  filtroSub = "";
   filtrosActivos.clear();
 
   document.body.classList.add("en-coleccion");
@@ -709,6 +726,7 @@ function abrirColeccion(tipo, valor, titulo){
   $$("#filtrosBarra .chip").forEach(c => c.classList.remove("activo"));
 
   poblarSelectMarcas();
+  renderSubcategorias();
   renderColeccion();
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
 }
@@ -732,7 +750,7 @@ function baseColeccion(){
   switch(valor){
     case "tendencia":         return productos.filter(p => p.categoria === "Zapatos");
     case "populares":         return productos;
-    case "nuevos":            return [...productos].sort((a, b) => b.orden - a.orden).slice(0, CANTIDAD_NUEVOS);
+    case "nuevos":            return ordenarNuevos(productos).slice(0, CANTIDAD_NUEVOS);
     case "ofertas":           return productosOferta();
     case "entrega-inmediata": return productosInmediata();
     case "favoritos":         return productosFavoritos();
@@ -766,6 +784,8 @@ function aplicarFiltros(lista){
     });
   }
 
+  if(filtroSub) out = out.filter(p => subcategoriaDe(p) === filtroSub);
+
   if(filtrosActivos.has("nuevo"))     out = out.filter(esNuevo);
   if(filtrosActivos.has("oferta"))    out = out.filter(ofertaVigente);
   if(filtrosActivos.has("inmediata")) out = out.filter(p => p.entregaInmediata);
@@ -792,6 +812,41 @@ function poblarSelectMarcas(){
   sel.innerHTML = `<option value="">Todas las marcas</option>` +
     disponibles.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join("");
   sel.value = filtroMarca;
+}
+
+// Barra de subcategorías (Calzado/Casual/Chinelas en Zapatos, Zapatos/Ropa en
+// Dama). Solo muestra las que tienen productos; si queda una o ninguna, se
+// oculta la barra entera para no llenar de botones vacíos.
+function renderSubcategorias(){
+  const cont = $("#subcatsBarra");
+  if(!cont) return;
+
+  const esCategoria = coleccionActual && coleccionActual.tipo === "categoria";
+  const definidas = esCategoria ? SUBCATEGORIAS[coleccionActual.valor] : null;
+
+  if(!definidas){
+    cont.innerHTML = "";
+    cont.hidden = true;
+    return;
+  }
+
+  const base = baseColeccion();
+  const conProductos = definidas.filter(sub => base.some(p => subcategoriaDe(p) === sub));
+
+  if(conProductos.length < 2){
+    cont.innerHTML = "";
+    cont.hidden = true;
+    return;
+  }
+
+  const chip = (valor, texto, activo) =>
+    `<button class="subchip${activo ? " activo" : ""}" type="button" role="tab"
+       aria-selected="${activo}" data-subcat="${esc(valor)}">${esc(texto)}</button>`;
+
+  cont.innerHTML =
+    chip("", "Todo", filtroSub === "") +
+    conProductos.map(sub => chip(sub, sub, filtroSub === sub)).join("");
+  cont.hidden = false;
 }
 
 function renderColeccion(){
@@ -1507,6 +1562,20 @@ document.addEventListener("click", e => {
   const pag = e.target.closest("[data-pagina]");
   if(pag && !pag.disabled){
     cambiarPagina(Number(pag.dataset.pagina));
+    return;
+  }
+
+  // Subcategorías (Calzado/Casual/Chinelas, Zapatos/Ropa de Dama)
+  const sub = e.target.closest("[data-subcat]");
+  if(sub){
+    filtroSub = sub.dataset.subcat || "";
+    $$("#subcatsBarra .subchip").forEach(c => {
+      const activo = (c.dataset.subcat || "") === filtroSub;
+      c.classList.toggle("activo", activo);
+      c.setAttribute("aria-selected", activo);
+    });
+    paginaActual = 1;
+    renderColeccion();
     return;
   }
 

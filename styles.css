@@ -291,13 +291,74 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   white-space:nowrap;
   transition:all var(--t-rapida) var(--ease);
 }
-.chip:hover{ color:var(--texto); border-color:var(--borde-fuerte); }
+.chip:hover{ color:var(--texto); border-color:var(--borde-fuerte); transform:translateY(-1px); }
 .chip:active{ transform:scale(.96); }
 .chip.activo{
   background:var(--verde);
   border-color:var(--verde);
   color:#050505;
   font-weight:600;
+  box-shadow:0 6px 18px -6px rgba(183,255,0,.55);
+}
+
+/* ============================================================
+   SUBCATEGORÍAS (Calzado · Casual · Chinelas / Zapatos · Ropa)
+   Filtros grandes y llamativos para que el cliente sí los use.
+   ============================================================ */
+.subcats{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:4px 0 6px;
+  margin-bottom:4px;
+  scrollbar-width:none;
+  animation:subcats-in .45s var(--ease) both;
+}
+.subcats::-webkit-scrollbar{ display:none; }
+.subcats[hidden]{ display:none; }
+
+.subchip{
+  flex-shrink:0;
+  position:relative;
+  padding:11px 22px;
+  background:var(--card);
+  border:1.5px solid var(--borde);
+  border-radius:var(--radio-pill);
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.01em;
+  color:var(--texto-2);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:transform var(--t-rapida) var(--ease),
+             background var(--t-rapida) var(--ease),
+             color var(--t-rapida) var(--ease),
+             border-color var(--t-rapida) var(--ease),
+             box-shadow var(--t-rapida) var(--ease);
+}
+.subchip:hover{
+  color:var(--texto);
+  border-color:var(--verde);
+  transform:translateY(-2px);
+}
+.subchip:active{ transform:scale(.95); }
+.subchip.activo{
+  background:var(--verde);
+  border-color:var(--verde);
+  color:#050505;
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px -8px rgba(183,255,0,.7);
+  animation:subchip-pop .3s var(--ease);
+}
+
+@keyframes subcats-in{
+  from{ opacity:0; transform:translateY(-8px); }
+  to{   opacity:1; transform:translateY(0); }
+}
+@keyframes subchip-pop{
+  0%{ transform:scale(.9); }
+  60%{ transform:scale(1.06); }
+  100%{ transform:scale(1) translateY(-1px); }
 }
 
 /* ============================================================
@@ -372,8 +433,8 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 
 .banda{
   overflow:hidden;
-  background:var(--verde);
-  color:#050505;
+  background:linear-gradient(90deg,#e01e2b,#ff3b3b 45%,#e01e2b);
+  color:#fff;
   padding:9px 0;
   white-space:nowrap;
 }
@@ -396,9 +457,9 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 .banda-item::after{
   content:"";
   width:4px;height:4px;
-  background:#050505;
+  background:#fff;
   border-radius:50%;
-  opacity:.55;
+  opacity:.7;
 }
 
 @keyframes desliza{
