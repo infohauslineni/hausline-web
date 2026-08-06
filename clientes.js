@@ -69,6 +69,7 @@ const banners = [
 
 // Mensajes de la banda infinita. Edítalos libremente.
 const mensajesBanda = [
+  "HAUSLINE · King of Shoes",
   "Envíos a toda Nicaragua",
   "Pedidos bajo encargo",
   "Nuevos productos disponibles",

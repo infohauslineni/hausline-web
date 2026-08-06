@@ -1238,6 +1238,15 @@ footer{
 }
 .footer-logo span{ color:var(--verde); }
 
+.footer-lema{
+  color:var(--verde);
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-size:12px;
+  margin:-4px 0 10px;
+}
+
 .footer-social{
   display:flex;
   gap:9px;
