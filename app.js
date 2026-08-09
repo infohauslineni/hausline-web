@@ -1228,8 +1228,11 @@ window.addEventListener("popstate", () => {
 });
 
 // Enlace directo del producto actual.
+// Apunta a /p/<CODIGO>, una mini-página (generada por scripts/gen-og.mjs) que lleva
+// la foto del producto en sus etiquetas Open Graph para que WhatsApp/Facebook la
+// muestren en el preview. Esa página redirige al instante al catálogo normal.
 function urlProducto(codigo){
-  return location.origin + location.pathname + "?producto=" + encodeURIComponent(codigo);
+  return location.origin + "/p/" + encodeURIComponent(codigo);
 }
 
 // Abre el panel de compartir (WhatsApp, Facebook, Telegram, copiar, sistema).
