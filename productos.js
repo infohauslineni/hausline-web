@@ -2280,7 +2280,7 @@ envioRapido: true ,
   tallas:["37","38","39","40","41","42","43","44"],
   entregaInmediata:true,
 
-tallasEntregaInmediata:["42"],
+tallasEntregaInmediata:["41"],
 coloresEntregaInmediata:["BLANCO"],
 cantidadDisponible:1,
 precioEntregaInmediata:160,
