@@ -1383,12 +1383,12 @@ cantidadDisponible:1,        // este número decide el texto                    
   descripcion:" TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"],
 
-  entregaInmediata:true,
-tallasEntregaInmediata:["39"],
-coloresEntregaInmediata:["Negro"],
+  entregaInmediata:false,
+tallasEntregaInmediata:[""],
+coloresEntregaInmediata:[""],
 cantidadDisponible:1,
-precioEntregaInmediata:90,
-envioRapido: true ,
+precioEntregaInmediata:0,
+envioRapido: false ,
 },
 
 
