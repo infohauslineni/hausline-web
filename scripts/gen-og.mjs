@@ -45,10 +45,19 @@ const recortar = (texto, max = 160) => {
   return t.length <= max ? t : `${t.slice(0, max - 1).trimEnd()}…`
 }
 
-// WhatsApp solo previsualiza jpg/jpeg/png con fiabilidad. webp/avif/jfif suelen
-// fallar; para esos usamos el logo como respaldo para no mostrar un preview roto.
+// WhatsApp solo previsualiza jpg/jpeg/png con fiabilidad. Para webp/avif/jfif
+// buscamos una versión .jpg al lado (creada con scripts/convert-jpg.mjs). Si no
+// hay ninguna imagen usable, se usa el logo como respaldo.
 const FORMATOS_OK = new Set(['jpg', 'jpeg', 'png'])
 const formatoSoportado = (ruta) => FORMATOS_OK.has(String(ruta || '').split('.').pop().toLowerCase())
+
+// Devuelve la ruta relativa de imagen que sí sirve para el preview, o null.
+const imagenParaPreview = (relativa) => {
+  if (!relativa) return null
+  if (formatoSoportado(relativa)) return relativa
+  const jpg = relativa.replace(/\.[^.]+$/, '.jpg')
+  return fs.existsSync(path.join(raiz, jpg)) ? jpg : null
+}
 
 // --- Plantilla de la mini-página ---
 const paginaProducto = (producto) => {
@@ -57,7 +66,8 @@ const paginaProducto = (producto) => {
   const precio = precioVigente(producto, false)
   const marca = marcaProducto(producto)
   const descripcion = recortar(descripcionProducto(producto) || `${marca} · US$ ${precio} · Envíos a toda Nicaragua`)
-  const imagen = formatoSoportado(producto.imagen) ? urlImagen(producto.imagen) : HERO
+  const relPreview = imagenParaPreview(producto.imagen)
+  const imagen = relPreview ? urlImagen(relPreview) : HERO
   const destino = `/?producto=${encodeURIComponent(codigo)}`
   const canonica = `${SITIO}${destino}`
 
@@ -104,7 +114,7 @@ for (const producto of productos) {
   const carpeta = path.join(salida, String(producto.codigo))
   fs.mkdirSync(carpeta, { recursive: true })
   fs.writeFileSync(path.join(carpeta, 'index.html'), paginaProducto(producto), 'utf8')
-  if (!formatoSoportado(producto.imagen)) respaldoLogo++
+  if (!imagenParaPreview(producto.imagen)) respaldoLogo++
   generadas++
 }
 
