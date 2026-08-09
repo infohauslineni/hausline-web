@@ -3962,7 +3962,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#001W",
+    "codigo": "001W",
     "nombre": "Golden Goose Super-Star Glitter Morado",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -3989,7 +3989,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#002W",
+    "codigo": "002W",
     "nombre": "Golden Goose Super-Star Blanco Talón Negro",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4016,7 +4016,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#003W",
+    "codigo": "003W",
     "nombre": "Golden Goose Super-Star Lona Estrella Negra",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4043,7 +4043,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#004W",
+    "codigo": "004W",
     "nombre": "Golden Goose Super-Star USA Is For Lovers",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4070,7 +4070,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#005W",
+    "codigo": "005W",
     "nombre": "Golden Goose Stardan Azul Metalizado",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4097,7 +4097,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#006W",
+    "codigo": "006W",
     "nombre": "Golden Goose Super-Star Journey Grafiti",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4124,7 +4124,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#007W",
+    "codigo": "007W",
     "nombre": "Golden Goose Super-Star Estrella Glitter Rosa",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4151,7 +4151,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#008W",
+    "codigo": "008W",
     "nombre": "Golden Goose Super-Star Estrella Leopardo",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4178,7 +4178,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#009W",
+    "codigo": "009W",
     "nombre": "Golden Goose Super-Star Glitter Plata",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4205,7 +4205,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#010W",
+    "codigo": "010W",
     "nombre": "Golden Goose Old School Velcro Estrella Dorada",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Golden Goose",
@@ -4232,7 +4232,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#011W",
+    "codigo": "011W",
     "nombre": "Louboutin Sneaker Gamuza Rosa con Tachas",
     "nombreOriginal": "CHRISTIAN LOUBUTIN CL",
     "marca": "Christian Louboutin",
@@ -4259,7 +4259,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#012W",
+    "codigo": "012W",
     "nombre": "Dior Dway Slide Azul Marino Bordado",
     "nombreOriginal": "CHRISTIAN DIOR CH",
     "marca": "Christian Dior",
@@ -4346,7 +4346,7 @@
 
   
   {
-    "codigo": "#013W",
+    "codigo": "013W",
     "nombre": "AMIRI Stars Court Plataforma Blanco Rosa",
     "nombreOriginal": "AMIRI ",
     "marca": "Amiri",
@@ -4373,7 +4373,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#014W",
+    "codigo": "014W",
     "nombre": "Louis Vuitton Mule Denim Monogram Rosa",
     "nombreOriginal": "GOLDEN GOOSE GGDB",
     "marca": "Louis Vuitton",
@@ -4400,7 +4400,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#015W",
+    "codigo": "015W",
     "nombre": "Louboutin Stiletto Charol Negro Suela Roja",
     "nombreOriginal": "CHISTIAN LOUBUTIN CL",
     "marca": "Christian Louboutin",
@@ -4427,7 +4427,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#016W",
+    "codigo": "016W",
     "nombre": "Dior Slide Denim Azul Logo Bordado",
     "nombreOriginal": "DIOR",
     "marca": "Christian Dior",
@@ -4456,7 +4456,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#017W",
+    "codigo": "017W",
     "nombre": "Dior Dway Slide Dorado Mariposas",
     "nombreOriginal": "DIOR",
     "marca": "Christian Dior",
@@ -4483,7 +4483,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#ROW1",
+    "codigo": "ROW1",
     "nombre": "Reloj Colgante Octagonal Royal Pop Colores",
     "nombreOriginal": "SWATCH X AP",
     "marca": "Audemars Piguet",
@@ -4510,7 +4510,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#ROW2",
+    "codigo": "ROW2",
     "nombre": "Louis Vuitton S-Lock Messenger Monogram Eclipse",
     "nombreOriginal": "BOLSA LV",
     "marca": "Louis Vuitton",
@@ -4534,7 +4534,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#ROW3",
+    "codigo": "ROW3",
     "nombre": "Goyard Tarjetero Goyardine Varios Colores",
     "nombreOriginal": "TARJETERO GOYARD GYD",
     "marca": "Goyard",
@@ -4572,7 +4572,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#ROW4",
+    "codigo": "ROW4",
     "nombre": "Alo Mochila Neopreno Negra",
     "nombreOriginal": "BACKPACK alo",
     "marca": "Alo Yoga",
@@ -4701,7 +4701,7 @@
 
 
   {
-    "codigo": "#001R",
+    "codigo": "001R",
     "nombre": "Chaqueta Varsity Off-White AC Milan Gris",
     "nombreOriginal": "JACKET OFFWHITE OFFW",
     "marca": "Off-White",
@@ -4729,7 +4729,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#002R",
+    "codigo": "002R",
     "nombre": "Chaqueta Varsity Off-White Negra y Crema",
     "nombreOriginal": "JACKET OFFWHITE OFFW",
     "marca": "Off-White",
@@ -4757,7 +4757,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#003R",
+    "codigo": "003R",
     "nombre": "Chaqueta Varsity Off-White AC Milan Beige",
     "nombreOriginal": "JACKET OFFWHITE OFFW",
     "marca": "Off-White",
@@ -4785,7 +4785,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#004R",
+    "codigo": "004R",
     "nombre": "Sueter Off-White Logo Tejido",
     "nombreOriginal": "JACKET OFFWHITE OFFW",
     "marca": "Off-White",
@@ -4813,7 +4813,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#005R",
+    "codigo": "005R",
     "nombre": "Camiseta Gallery Dept. Hollywood",
     "nombreOriginal": "T-SHIRT GALERY DEPT GP",
     "marca": "Gallery Dept.",
@@ -4844,7 +4844,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#006R",
+    "codigo": "006R",
     "nombre": "Camiseta Amiri Arts and Crafts",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -4876,7 +4876,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#007R",
+    "codigo": "007R",
     "nombre": "Camiseta Essentials Fear of God",
     "nombreOriginal": "T-SHIRT ESSENSIALTS",
     "marca": "Fear of God Essentials",
@@ -4909,7 +4909,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#008R",
+    "codigo": "008R",
     "nombre": "Short Essentials Fear of God Beige",
     "nombreOriginal": "T-SHIRT ESSENSIALTS",
     "marca": "Fear of God Essentials",
@@ -4941,7 +4941,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#009R",
+    "codigo": "009R",
     "nombre": "Camiseta AMI Paris Corazon Rojo",
     "nombreOriginal": "T-SHIRT ESSENSIALTS",
     "marca": "AMI Paris",
@@ -4978,7 +4978,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#010R",
+    "codigo": "010R",
     "nombre": "Short Moncler Negro Parche Logo",
     "nombreOriginal": "SHORTS MONCLER",
     "marca": "Moncler",
@@ -5008,7 +5008,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#011R",
+    "codigo": "011R",
     "nombre": "Short Moncler Negro Parche Rojo",
     "nombreOriginal": "SHORTS MONCLER",
     "marca": "Moncler",
@@ -5038,7 +5038,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#012R",
+    "codigo": "012R",
     "nombre": "Short Moncler Negro Tejido Ligero",
     "nombreOriginal": "BAÑADOR MONCLER",
     "marca": "Moncler",
@@ -5067,7 +5067,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#013R",
+    "codigo": "013R",
     "nombre": "Camiseta Chrome Hearts Cruz Negra",
     "nombreOriginal": "T-SHIRT CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -5100,7 +5100,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#014R",
+    "codigo": "014R",
     "nombre": "Camiseta Chrome Hearts Bandera USA",
     "nombreOriginal": "T-SHIRT CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -5133,7 +5133,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#015R",
+    "codigo": "015R",
     "nombre": "Camiseta Chrome Hearts Letras Goticas",
     "nombreOriginal": "T-SHIRT CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -5166,7 +5166,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#016R",
+    "codigo": "016R",
     "nombre": "Camiseta Chrome Hearts Cruces Azules",
     "nombreOriginal": "T-SHIRT CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -5199,7 +5199,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#017R",
+    "codigo": "017R",
     "nombre": "Camiseta Chrome Hearts Herradura Lengua",
     "nombreOriginal": "T-SHIRT CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -5232,7 +5232,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#018R",
+    "codigo": "018R",
     "nombre": "Camiseta Negra Cruces Goticas Multicolor",
     "nombreOriginal": "T-SHIRT CHROME HEARTS",
     "marca": null,
@@ -5265,7 +5265,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#019R",
+    "codigo": "019R",
     "nombre": "Hoodie Alo Yoga Negro Logo Bordado",
     "nombreOriginal": "HOODIE alo",
     "marca": "Alo Yoga",
@@ -5295,7 +5295,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#020R",
+    "codigo": "020R",
     "nombre": "Polo Casablanca Cuello Contraste",
     "nombreOriginal": "T-SHIRT CASA BLANCA",
     "marca": "Casablanca",
@@ -5329,7 +5329,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#021R",
+    "codigo": "021R",
     "nombre": "Camiseta AllSaints Negra Underground",
     "nombreOriginal": "T-SHIRT ALL-SAINTS",
     "marca": "AllSaints",
@@ -5362,7 +5362,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#022R",
+    "codigo": "022R",
     "nombre": "Hoodie ASSC x CDG PLAY Negro",
     "nombreOriginal": "HOODIE ASSC",
     "marca": "Anti Social Social Club",
@@ -5390,7 +5390,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#023R",
+    "codigo": "023R",
     "nombre": "Camiseta Amiri Negra Logo Blanco",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -5419,7 +5419,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#024R",
+    "codigo": "024R",
     "nombre": "Camiseta Amiri Negra Lavada Logo Azul",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -5448,7 +5448,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#025R",
+    "codigo": "025R",
     "nombre": "Camisa Amiri Hollywood California",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -5477,7 +5477,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#026R",
+    "codigo": "026R",
     "nombre": "Camiseta Amiri Leopardo",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -5509,7 +5509,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#027R",
+    "codigo": "027R",
     "nombre": "Camisa Amiri Resort Club",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -5538,7 +5538,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#028R",
+    "codigo": "028R",
     "nombre": "Camisa Amiri Estampado California",
     "nombreOriginal": "T-SHIRT AMIRI",
     "marca": "Amiri",
@@ -5567,7 +5567,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#029R",
+    "codigo": "029R",
     "nombre": "Camiseta Off-White Blanca Bocinas",
     "nombreOriginal": "T-SHIRT OFFWHT",
     "marca": "Off-White",
@@ -5598,7 +5598,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#031R",
+    "codigo": "031R",
     "nombre": "Camiseta ASSC Negra Radiografia",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5629,7 +5629,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#032R",
+    "codigo": "032R",
     "nombre": "Camiseta ASSC Garras Naranja",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5662,7 +5662,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#034R",
+    "codigo": "034R",
     "nombre": "Camiseta ASSC Goodyear Zepelines",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5694,7 +5694,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#035R",
+    "codigo": "035R",
     "nombre": "Camiseta ASSC x VLONE Mariposas",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5726,7 +5726,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#036R",
+    "codigo": "036R",
     "nombre": "Camiseta ASSC Abejas Amarillas",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5759,7 +5759,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#037R",
+    "codigo": "037R",
     "nombre": "Camiseta ASSC Burn It Down",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5791,7 +5791,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#038R",
+    "codigo": "038R",
     "nombre": "Camiseta ASSC Logo Clasico",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5826,7 +5826,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#039R",
+    "codigo": "039R",
     "nombre": "Camiseta ASSC Serpiente Negra/Blanca",
     "nombreOriginal": "T-SHIRT ASSC",
     "marca": "Anti Social Social Club",
@@ -5858,7 +5858,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#040R",
+    "codigo": "040R",
     "nombre": "Short Balenciaga Logo Negro/Blanco",
     "nombreOriginal": "SHORTS BALENCIAGA",
     "marca": "Balenciaga",
@@ -5890,7 +5890,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#041R",
+    "codigo": "041R",
     "nombre": "Camiseta Balenciaga Logo Tape",
     "nombreOriginal": "T-SHIRTS BALENCIAGA",
     "marca": "Balenciaga",
@@ -5921,7 +5921,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#042R",
+    "codigo": "042R",
     "nombre": "Camiseta Balenciaga Negra Logo Espalda",
     "nombreOriginal": "T-SHIRTS BALENCIAGA",
     "marca": "Balenciaga",
@@ -5952,7 +5952,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#043R",
+    "codigo": "043R",
     "nombre": "Camiseta Balenciaga Logos Multiples",
     "nombreOriginal": "T-SHIRTS BALENCIAGA",
     "marca": "Balenciaga",
@@ -5984,7 +5984,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#044R",
+    "codigo": "044R",
     "nombre": "Camiseta BAPE Miami Camo Negra",
     "nombreOriginal": "T-SHIRTS B4PE",
     "marca": "BAPE",
@@ -6017,7 +6017,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#045R",
+    "codigo": "045R",
     "nombre": "Camiseta Casablanca Equipement Sportif",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6048,7 +6048,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#047R",
+    "codigo": "047R",
     "nombre": "Camiseta Casablanca Avion Blanca",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6079,7 +6079,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#048R",
+    "codigo": "048R",
     "nombre": "Camiseta Casablanca Flores Blanca",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6110,7 +6110,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#051R",
+    "codigo": "051R",
     "nombre": "Conjunto Casablanca Olas Turquesa",
     "nombreOriginal": "CONJUNTO CASA BLANCA",
     "marca": "Casablanca",
@@ -6141,7 +6141,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#052R",
+    "codigo": "052R",
     "nombre": "Conjunto Casablanca Corazones Degradado",
     "nombreOriginal": "CONJUNTO CASA BLANCA",
     "marca": "Casablanca",
@@ -6172,7 +6172,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#053R",
+    "codigo": "053R",
     "nombre": "Conjunto Casablanca Casa Way Crema",
     "nombreOriginal": "CONJUNTO CASA BLANCA",
     "marca": "Casablanca",
@@ -6203,7 +6203,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#054R",
+    "codigo": "054R",
     "nombre": "Conjunto Casablanca Olas Verde",
     "nombreOriginal": "CONJUNTO CASA BLANCA",
     "marca": "Casablanca",
@@ -6234,7 +6234,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#055R",
+    "codigo": "055R",
     "nombre": "Conjunto Casablanca Tennis Club Celeste",
     "nombreOriginal": "CONJUNTO CASA BLANCA",
     "marca": "Casablanca",
@@ -6265,7 +6265,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#056R",
+    "codigo": "056R",
     "nombre": "Conjunto Casablanca Conejo Blanco",
     "nombreOriginal": "CONJUNTO CASA BLANCA",
     "marca": "Casablanca",
@@ -6296,7 +6296,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#057R",
+    "codigo": "057R",
     "nombre": "Camisa Casablanca Afiche Blanca",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6327,7 +6327,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#058R",
+    "codigo": "058R",
     "nombre": "Camisa Casablanca Unity Is Power Verde",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6358,7 +6358,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#059R",
+    "codigo": "059R",
     "nombre": "Camiseta Casablanca Hongo Blanca",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6390,7 +6390,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#060R",
+    "codigo": "060R",
     "nombre": "Camiseta Casablanca Tennis Club",
     "nombreOriginal": "T-SHIRTS CASA BLANCA",
     "marca": "Casablanca",
@@ -6422,7 +6422,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#061R",
+    "codigo": "061R",
     "nombre": "Jeans Chrome Hearts Cruces Parches",
     "nombreOriginal": "Pantalon Chrome Hearts",
     "marca": "Chrome Hearts",
@@ -6453,7 +6453,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#062R",
+    "codigo": "062R",
     "nombre": "Hoodie Chrome Hearts Cruces de Colores",
     "nombreOriginal": "HOODIE CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -6485,7 +6485,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#063R",
+    "codigo": "063R",
     "nombre": "Camiseta Chrome Hearts Herradura Rosada",
     "nombreOriginal": "T-SHIRTS CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -6517,7 +6517,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#064R",
+    "codigo": "064R",
     "nombre": "Camiseta Chrome Hearts Tres Cruces",
     "nombreOriginal": "T-SHIRTS CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -6549,7 +6549,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#065R",
+    "codigo": "065R",
     "nombre": "Camiseta Chrome Hearts Herradura Spray",
     "nombreOriginal": "T-SHIRTS CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -6581,7 +6581,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#066R",
+    "codigo": "066R",
     "nombre": "Camiseta Chrome Hearts Cruces al Cuello",
     "nombreOriginal": "T-SHIRTS CHROME HEARTS",
     "marca": "Chrome Hearts",
@@ -6613,7 +6613,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#067R",
+    "codigo": "067R",
     "nombre": "Short Moncler Negro Logo",
     "nombreOriginal": "SHORT MONCLER",
     "marca": "Moncler",
@@ -6644,7 +6644,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#069R",
+    "codigo": "069R",
     "nombre": "Camiseta Off-White Flechas Rojas",
     "nombreOriginal": "T-SHIRT OFF WHITE",
     "marca": "Off-White",
@@ -6675,7 +6675,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#070R",
+    "codigo": "070R",
     "nombre": "Camiseta Off-White Caravaggio Negra",
     "nombreOriginal": "T-SHIRT OFF WHITE",
     "marca": "Off-White",
@@ -6707,7 +6707,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#071R",
+    "codigo": "071R",
     "nombre": "Camiseta Off-White Golden Ratio Verde",
     "nombreOriginal": "T-SHIRT OFF WHITE",
     "marca": "Off-White",
@@ -6739,7 +6739,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#072R",
+    "codigo": "072R",
     "nombre": "Short Off-White Flechas Grafiti",
     "nombreOriginal": "SHORT OFF WHITE",
     "marca": "Off-White",
@@ -6779,7 +6779,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#073R",
+    "codigo": "073R",
     "nombre": "Camiseta Off-White Pintura Lavada",
     "nombreOriginal": "T-SHIRT OFF WHITE",
     "marca": "Off-White",
@@ -6811,7 +6811,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#074R",
+    "codigo": "074R",
     "nombre": "Camiseta CDG Play Corazon Rojo",
     "nombreOriginal": "T-SHIRT AMI PLAY",
     "marca": "Comme des Garçons PLAY",
@@ -6842,7 +6842,7 @@
     "envioRapido": false
   },
   {
-    "codigo": "#075R",
+    "codigo": "075R",
     "nombre": "Camiseta Represent Horizons",
     "nombreOriginal": "T-SHIRT REPRESENT",
     "marca": "Represent",
@@ -6875,7 +6875,7 @@
   }
 
 ,{
-    "codigo": "#RR001",
+    "codigo": "RR001",
     "nombre": "Camiseta Burberry",
     "nombreOriginal": "T-SHIRT BURBERRY",
     "marca": "Burberry",
