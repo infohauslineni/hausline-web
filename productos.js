@@ -4551,7 +4551,6 @@ colores:[
 
 {
   codigo:"RR001",
-  destacadoNuevo:true,
   nombre:"T-SHIRT BURBERRY",
   precio:55,
   categoria:"Ropa",
@@ -4582,7 +4581,6 @@ colores:[
 
 {
   codigo:"AA001",
-  destacadoNuevo:true,
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4608,7 +4606,6 @@ colores:[
 
 {
   codigo:"AA002",
-  destacadoNuevo:true,
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4656,11 +4653,10 @@ colores:[
 
 {
   codigo:"BP001",
-  destacadoNuevo:true,
   nombre:"T-SHIRT B4PE",
   precio:50,
   categoria:"Ropa",
-  nuevo:true,
+  nuevo:false,
 
   imagen:"imgP/ropa/B4PE/BP001/1.jpg",
 
@@ -5527,21 +5523,22 @@ function ordenarNuevos(lista){
   });
 }
 
-// Conjunto de los productos marcados como "Nuevo" (por código).
+// Conjunto de los CANTIDAD_NUEVOS productos más nuevos (por código).
 // Se calcula una sola vez porque el catálogo no cambia en caliente.
 let _codigosNuevos = null;
 function conjuntoNuevos(){
   if(!_codigosNuevos){
     _codigosNuevos = new Set(
-      productos.filter(p => p.destacadoNuevo).map(p => p.codigo)
+      ordenarNuevos(productos).slice(0, CANTIDAD_NUEVOS).map(p => p.codigo)
     );
   }
   return _codigosNuevos;
 }
 
-// La etiqueta "Nuevo" es MANUAL: la llevan SOLO los productos que tengan
-// destacadoNuevo:true en el catálogo. Para agregar la etiqueta a un producto
-// pon destacadoNuevo:true; para quitarla, ponlo en false o bórralo.
+// La etiqueta "Nuevo" es automática: la llevan SOLO los más nuevos.
+// Para meter un producto a "Nuevo" aunque lo insertes en medio, pon
+// fecha:"AAAA-MM-DD" o destacadoNuevo:true. Para quitarlo no haces nada:
+// cuando entren 20 más nuevos, sale solo.
 function esNuevo(producto){
   return conjuntoNuevos().has(producto.codigo);
 }
