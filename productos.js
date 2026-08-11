@@ -4902,6 +4902,391 @@ colores:[
   tallas:[]
 },
 
+// ============================================================
+//  NUEVOS INGRESOS (agregados 2026-08-10, precios puestos 2026-08-11)
+//  Nombres y descripciones vendibles en el mapa nombresReales de abajo.
+// ============================================================
+
+// --- Christian Louboutin (Zapatos) ---
+{
+  codigo:"CL0044",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0044/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/1.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/2.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/3.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/4.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/5.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/6.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/7.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0045",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0045/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/1.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/2.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/3.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/4.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/5.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/6.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/7.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+{
+  codigo:"CL0046",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0046/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/1.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/2.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/3.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/4.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/5.jpg",
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/6.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+
+// --- ASAALI (Ropa) ---
+{
+  codigo:"AA001",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA001/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA001/1.jpg",
+    "imgP/ropa/ASAALI/AA001/2.jpg",
+    "imgP/ropa/ASAALI/AA001/3.jpg",
+    "imgP/ropa/ASAALI/AA001/4.jpg",
+    "imgP/ropa/ASAALI/AA001/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA002",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA002/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA002/1.jpg",
+    "imgP/ropa/ASAALI/AA002/2.jpg",
+    "imgP/ropa/ASAALI/AA002/3.jpg",
+    "imgP/ropa/ASAALI/AA002/4.jpg",
+    "imgP/ropa/ASAALI/AA002/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA003",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA003/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA003/1.jpg",
+    "imgP/ropa/ASAALI/AA003/2.jpg",
+    "imgP/ropa/ASAALI/AA003/3.jpg",
+    "imgP/ropa/ASAALI/AA003/4.jpg",
+    "imgP/ropa/ASAALI/AA003/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA004",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA004/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA004/1.jpg",
+    "imgP/ropa/ASAALI/AA004/2.jpg",
+    "imgP/ropa/ASAALI/AA004/3.jpg",
+    "imgP/ropa/ASAALI/AA004/4.jpg",
+    "imgP/ropa/ASAALI/AA004/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA005",
+  marca:"ASAALI",
+  nombre:"HOODIE ASAALI",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA005/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA005/1.jpg",
+    "imgP/ropa/ASAALI/AA005/2.jpg",
+    "imgP/ropa/ASAALI/AA005/3.jpg",
+    "imgP/ropa/ASAALI/AA005/4.jpg",
+    "imgP/ropa/ASAALI/AA005/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA006",
+  marca:"ASAALI",
+  nombre:"SHORT ASAALI",
+  precio:53,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA006/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA006/1.jpg",
+    "imgP/ropa/ASAALI/AA006/2.jpg",
+    "imgP/ropa/ASAALI/AA006/3.jpg",
+    "imgP/ropa/ASAALI/AA006/4.jpg",
+    "imgP/ropa/ASAALI/AA006/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA007",
+  marca:"ASAALI",
+  nombre:"SHORT ASAALI",
+  precio:53,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA007/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA007/1.jpg",
+    "imgP/ropa/ASAALI/AA007/2.jpg",
+    "imgP/ropa/ASAALI/AA007/3.jpg",
+    "imgP/ropa/ASAALI/AA007/4.jpg",
+    "imgP/ropa/ASAALI/AA007/5.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA008",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA008/1.jpeg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA008/1.jpeg",
+    "imgP/ropa/ASAALI/AA008/2.jpeg",
+    "imgP/ropa/ASAALI/AA008/3.jpeg",
+    "imgP/ropa/ASAALI/AA008/4.jpeg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA009",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA009/1.jpeg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA009/1.jpeg",
+    "imgP/ropa/ASAALI/AA009/2.jpeg",
+    "imgP/ropa/ASAALI/AA009/3.jpeg",
+    "imgP/ropa/ASAALI/AA009/4.jpeg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+
+{
+  codigo:"AA010",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA010/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA010/1.jpg",
+    "imgP/ropa/ASAALI/AA010/2.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA011",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA011/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA011/1.jpg",
+    "imgP/ropa/ASAALI/AA011/2.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA012",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA012/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA012/1.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"AA013",
+  marca:"ASAALI",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/ASAALI/AA013/1.jpg",
+  imagenes:[
+    "imgP/ropa/ASAALI/AA013/1.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+
+// --- B4PE (Ropa) ---
+{
+  codigo:"BP002",
+  marca:"B4PE",
+  nombre:"HOODIE B4PE SHARK",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/B4PE/BP002/3.jpeg",
+  imagenes:[
+    "imgP/ropa/B4PE/BP002/3.jpeg",
+    "imgP/ropa/B4PE/BP002/4.jpeg",
+    "imgP/ropa/B4PE/BP002/1.jpeg",
+    "imgP/ropa/B4PE/BP002/2.jpeg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"],
+  colores:["Black","White"]
+},
+
+// --- Chrome Hearts (Ropa) ---
+{
+  codigo:"CRH001",
+  marca:"Chrome Hearts",
+  nombre:"MANGA LARGA CHROME HEARTS",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/CHROME HEARTS/CRH001/1.jpeg",
+  imagenes:[
+    "imgP/ropa/CHROME HEARTS/CRH001/1.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/2.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/3.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/4.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/5.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/6.jpeg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"CRH002",
+  marca:"Chrome Hearts",
+  nombre:"MANGA LARGA CHROME HEARTS",
+  precio:52,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/CHROME HEARTS/CRH002/1.jpeg",
+  imagenes:[
+    "imgP/ropa/CHROME HEARTS/CRH002/1.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/1.1.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/2.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/3.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/4.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/5.jpeg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+
+// --- Gallery Dept. (Ropa) ---
+{
+  codigo:"GD001",
+  marca:"Gallery Dept.",
+  nombre:"T-SHIRT GALLERY DEPT",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/GALERY DEPT/GD001/1.jpg",
+  imagenes:[
+    "imgP/ropa/GALERY DEPT/GD001/1.jpg",
+    "imgP/ropa/GALERY DEPT/GD001/2.jpg",
+    "imgP/ropa/GALERY DEPT/GD001/3.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+{
+  codigo:"GD002",
+  marca:"Gallery Dept.",
+  nombre:"T-SHIRT GALLERY DEPT",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  imagen:"imgP/ropa/GALERY DEPT/GD002/1.jpg",
+  imagenes:[
+    "imgP/ropa/GALERY DEPT/GD002/1.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/2.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/3.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/4.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/5.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/6.jpg",
+  ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"],
+  colores:["Black","White"]
+},
+
 
 
 
@@ -5183,7 +5568,34 @@ const nombresReales = {
   "072R": { nombre:"Short Off-White Flechas Grafiti", descripcion:"Short deportivo de felpa con cintura elastica y bolsillo trasero, con las flechas Off-White estampadas en estilo grafiti en gris, rojo o azul. Disponible en negro y blanco.", marca:"Off-White" },
   "073R": { nombre:"Camiseta Off-White Pintura Lavada", descripcion:"Camiseta negra con lavado desgastado y estampado en la espalda de una pintura clasica a color con texto Off-White c/o Virgil Abloh Est. 2013.", marca:"Off-White" },
   "074R": { nombre:"Camiseta CDG Play Corazon Rojo", descripcion:"Camiseta blanca de manga corta con el corazon rojo de ojos de Comme des Garcons PLAY estampado en el costado inferior y etiqueta PLAY en el cuello.", marca:"Comme des Garcons PLAY" },
-  "075R": { nombre:"Camiseta Represent Horizons", descripcion:"Camiseta oversize con estampado frontal Horizons by Represent sobre una ilustracion tipo pintura y el logo Represent en la parte baja de la espalda. Se muestra en gris jaspeado y en negro lavado.", marca:"Represent" }
+  "075R": { nombre:"Camiseta Represent Horizons", descripcion:"Camiseta oversize con estampado frontal Horizons by Represent sobre una ilustracion tipo pintura y el logo Represent en la parte baja de la espalda. Se muestra en gris jaspeado y en negro lavado.", marca:"Represent" },
+
+  // --- Nuevos ingresos 2026-08-10 ---
+  "CL0044": { nombre:"Louboutin Louis Junior Total Black Tejido", descripcion:"Sneaker low top todo en negro que combina cuero, gamuza y un panel central de tejido tipo malla; puntera y talonera de charol negro con la firma CL, cordones de grosgrain e interior en cuero. Elegancia discreta con el sello Louboutin." },
+  "CL0045": { nombre:"Louboutin Louis High Top Monograma Negro Suela Roja", descripcion:"Bota sneaker high top negra con el monograma CL en relieve en toda la cana, ribetes de goma, interior en cuero natural y la inconfundible suela roja de Christian Louboutin. Un statement de lujo." },
+  "CL0046": { nombre:"Louboutin Louis Junior Gamuza Negra Estrellas Strass", descripcion:"Sneaker low top en gamuza negra decorado con estrellas y cristales strass plateados por todo el cuerpo y la puntera, con suela negra y firma roja Louboutin. Brillo sutil para destacar." },
+
+  "AA001": { nombre:"Camiseta ASAALI Adderall Negra", descripcion:"Camiseta oversize de algodon pesado en negro con estampado frontal de una capsula Adderall XR 25MG derramando polvo dorado que forma el logo ASAALI. Parche y etiqueta de la marca. Puro streetwear de Los Angeles.", marca:"ASAALI" },
+  "AA002": { nombre:"Camiseta ASAALI Paca Blanca", descripcion:"Camiseta oversize blanca con estampado hiperrealista de un paquete envuelto en cinta plateada y el logo 'ASAALICO' en rojo, con acabado desgastado. Corte holgado y algodon grueso.", marca:"ASAALI" },
+  "AA003": { nombre:"Camiseta ASAALI Chaleco Tactico Blanca", descripcion:"Camiseta oversize blanca con estampado a tamano real de un chaleco tactico con parche estilo agencia y eslogan grafico en rojo al pecho. Pieza statement de fuerte impacto visual.", marca:"ASAALI" },
+  "AA004": { nombre:"Camiseta ASAALI Pink Cardigan Negra", descripcion:"Camiseta oversize negra con estampado 'PINK CARDIGAN': un cardigan rosado y una mano empunando una pistola de juguete, firmado 'ASAALI · Jay Guapo'. Grafico grande y detallado al frente.", marca:"ASAALI" },
+  "AA005": { nombre:"Hoodie ASAALI Mugshot Full-Zip Gris", descripcion:"Sudadera con capucha y cierre completo en gris jaspeado con estampado all-over estilo mugshot 'ASAALI JEAN COMPANY · Los Angeles CA', cierre y cordones a tono. Felpa suave y corte holgado.", marca:"ASAALI" },
+  "AA006": { nombre:"Short ASAALI Mugshot Gris", descripcion:"Short deportivo de felpa en gris con bolsillos, cordon ajustable y estampado de dos retratos estilo mugshot con la firma 'Asaali' en plateado. Comodo y con actitud.", marca:"ASAALI" },
+  "AA007": { nombre:"Short ASAALI Mugshot Negro", descripcion:"Short deportivo de felpa en negro con bolsillos, cordon blanco ajustable y estampado en blanco de dos retratos estilo mugshot con la firma 'Asaali'. Combina con todo.", marca:"ASAALI" },
+  "AA008": { nombre:"Camiseta ASAALI Retrato Blanca", descripcion:"Camiseta oversize blanca con gran retrato estilo mugshot en negro y el sello 'ASAALI JEAN COMPANY · Los Angeles CA'. Algodon pesado y corte holgado.", marca:"ASAALI" },
+  "AA009": { nombre:"Camiseta ASAALI Retrato Negra", descripcion:"Camiseta oversize negra con retrato estilo mugshot en blanco al frente y una segunda figura a la espalda, con el sello 'ASAALI JEAN COMPANY'. Estampado de doble cara.", marca:"ASAALI" },
+  "AA010": { nombre:"Camiseta ASAALI Retrato Negra Statement", descripcion:"Camiseta oversize negra con retrato en blanco y negro y la firma ASAALI al frente, y estampado tipografico grande con efecto craquelado a la espalda. Corte holgado y algodon pesado.", marca:"ASAALI" },
+  "AA011": { nombre:"Camiseta ASAALI Free Chapo Negra", descripcion:"Camiseta oversize negra con estampado estilo mugshot con reglilla de altura, sello 'ASAALI JEANS' y grafiti en rojo al frente. Grafico de gran formato, algodon pesado.", marca:"ASAALI" },
+  "AA012": { nombre:"Camiseta ASAALI Scarface Negra", descripcion:"Camiseta oversize negra con estampado a color inspirado en el cine de accion de los 80 al frente y espalda limpia. Etiqueta de la marca al ruedo. Algodon pesado.", marca:"ASAALI" },
+  "AA013": { nombre:"Camiseta ASAALI In Loving Memory Negra", descripcion:"Camiseta oversize negra con estampado tipo memorial 'In Loving Memory' con retrato alado y letras cursivas al frente, espalda limpia. Acabado suave, corte holgado.", marca:"ASAALI" },
+
+  "BP002": { nombre:"Hoodie B4PE Shark Camo Glow in the Dark", descripcion:"Sudadera full-zip estilo Shark con capucha que cierra sobre el rostro de tiburon y parche WGM. Camuflaje que brilla en la oscuridad (glow in the dark) con manchas verdes fosforescentes. Disponible en negro y en blanco.", marca:"B4PE" },
+
+  "CRH001": { nombre:"Camiseta Manga Larga Chrome Hearts Cruces Rosadas", descripcion:"Camiseta raglan de manga larga en blanco con mangas negras, dos parches de cruz gotica en cuero rosado al pecho y gran emblema de herradura Chrome Hearts con cruz de cuero rosado y dije metalico a la espalda.", marca:"Chrome Hearts" },
+  "CRH002": { nombre:"Camiseta Manga Larga Chrome Hearts Floral Amarillo", descripcion:"Camiseta de manga larga en negro con logo de herradura Chrome Hearts bordado en amarillo sobre el bolsillo y estampado floral barroco amarillo a lo largo de ambas mangas. Algodon pesado.", marca:"Chrome Hearts" },
+
+  "GD001": { nombre:"Camiseta Gallery Dept Logo Turquesa", descripcion:"Camiseta blanca de algodon con el clasico logotipo 'GALLERY DEPT' estampado a la espalda en turquesa y acabado pintado a mano con salpicaduras azules. Estilo vintage desgastado, unica en cada pieza.", marca:"Gallery Dept." },
+  "GD002": { nombre:"Camiseta Gallery Dept Logo Pintada", descripcion:"Camiseta de algodon con el logotipo 'GALLERY DEPT.' al frente y a la espalda, acabado pintado a mano con salpicaduras y efecto desgastado unico. Disponible en negro (logo rojo) y en blanco (logo turquesa).", marca:"Gallery Dept." }
 };
 
 // Unifica marcas que aparecían escritas de varias formas o como colaboración,
@@ -5226,6 +5638,7 @@ const marcasEquivalentes = {
   "alo":                  "Alo Yoga",
   "alo yoga":             "Alo Yoga",
   "b4pe":                 "B4PE",
+  "asaali":               "ASAALI",
   "fear of god essentials": "Fear of God Essentials",
   "comme des garcons play": "Comme des Garçons PLAY",
   "comme des garçons play": "Comme des Garçons PLAY",
