@@ -210,11 +210,11 @@ function seleccionDestacados(lista, limite){
   return tomar(marcados.length ? marcados : lista, limite);
 }
 
-// "Nuevo en HAUSLINE": lo último que agregaste al catálogo, automático.
-// Al agregar un producto al final de productos.js aparece aquí solo, y si le
-// pones destacadoNuevo:true entra aunque lo hayas insertado en cualquier parte.
+// "Nuevo en HAUSLINE": los productos marcados con destacadoNuevo:true.
+// Para que un producto salga aquí (y lleve la etiqueta "Nuevo"), ponle
+// destacadoNuevo:true en productos.js.
 function productosNuevos(limite){
-  return tomar(ordenarNuevos(productos), limite || 12);
+  return tomar(ordenarNuevos(productos.filter(esNuevo)), limite || 12);
 }
 
 function productosTendencia(limite){
@@ -750,7 +750,7 @@ function baseColeccion(){
   switch(valor){
     case "tendencia":         return productos.filter(p => p.categoria === "Zapatos");
     case "populares":         return productos;
-    case "nuevos":            return ordenarNuevos(productos).slice(0, CANTIDAD_NUEVOS);
+    case "nuevos":            return ordenarNuevos(productos.filter(esNuevo)).slice(0, CANTIDAD_NUEVOS);
     case "ofertas":           return productosOferta();
     case "entrega-inmediata": return productosInmediata();
     case "favoritos":         return productosFavoritos();
