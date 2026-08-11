@@ -4611,14 +4611,14 @@ colores:[
   categoria:"Ropa",
   nuevo:true,
 
-  imagen:"imgP/ropa/ASAALI/AA001/1.jpg",
+  imagen:"imgP/ropa/ASAALI/AA002/1.jpg",
 
   imagenes:[
-    "imgP/ropa/ASAALI/AA001/1.jpg",
-    "imgP/ropa/ASAALI/AA001/2.jpg",
-    "imgP/ropa/ASAALI/AA001/3.jpg",
-    "imgP/ropa/ASAALI/AA001/4.jpg",
-    "imgP/ropa/ASAALI/AA001/5.jpg",
+    "imgP/ropa/ASAALI/AA002/1.jpg",
+    "imgP/ropa/ASAALI/AA002/2.jpg",
+    "imgP/ropa/ASAALI/AA002/3.jpg",
+    "imgP/ropa/ASAALI/AA002/4.jpg",
+    "imgP/ropa/ASAALI/AA002/5.jpg",
     
   ],
 
