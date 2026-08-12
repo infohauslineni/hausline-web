@@ -41,6 +41,13 @@ function subcategoriaDe(producto){
   return producto.categoria === "Zapatos" ? "Calzado" : "";
 }
 
+// Compara subcategorías sin importar mayúsculas ni espacios, para que en los
+// productos dé igual escribir "Slides", "SLIDES" o "slides ": todas coinciden
+// con la etiqueta definida en SUBCATEGORIAS.
+function mismaSubcat(a, b){
+  return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+}
+
 // Políticas de compra de HAUSLINE (se muestran en el modal del producto).
 const POLITICAS = {
   condiciones: [
@@ -847,7 +854,7 @@ function aplicarFiltros(lista){
     });
   }
 
-  if(filtroSub) out = out.filter(p => subcategoriaDe(p) === filtroSub);
+  if(filtroSub) out = out.filter(p => mismaSubcat(subcategoriaDe(p), filtroSub));
 
   if(filtrosActivos.has("nuevo"))     out = out.filter(esNuevo);
   if(filtrosActivos.has("oferta"))    out = out.filter(ofertaVigente);
@@ -894,7 +901,7 @@ function renderSubcategorias(){
   }
 
   const base = baseColeccion();
-  const conProductos = definidas.filter(sub => base.some(p => subcategoriaDe(p) === sub));
+  const conProductos = definidas.filter(sub => base.some(p => mismaSubcat(subcategoriaDe(p), sub)));
 
   if(conProductos.length < 2){
     cont.innerHTML = "";
