@@ -668,6 +668,8 @@ const productosBase = [
   precio:144,
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
   imagenes:[
@@ -686,6 +688,8 @@ const productosBase = [
   precio:144,
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
   imagenes:[
@@ -722,6 +726,8 @@ const productosBase = [
   precio:144,
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
   imagenes:[
@@ -740,6 +746,8 @@ const productosBase = [
   precio:144,
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
   imagenes:[
@@ -758,6 +766,8 @@ const productosBase = [
   precio:144,
   promocionHasta:"2026-07-10T23:59:59",
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
   imagenes:[
@@ -1219,6 +1229,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   marca:"BALENCIAGA",
   nombre:"BALENCIAGA",
   precio:90,
+   subcategoria:"SLIDES",
+
   categoria:"Zapatos",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
@@ -1287,6 +1299,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
@@ -1305,6 +1319,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
@@ -1323,6 +1339,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
@@ -1341,6 +1359,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
@@ -1359,7 +1379,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
-  nuevo:true,
+   subcategoria:"SLIDES",
+  
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
   imagenes:[
@@ -1377,6 +1398,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
@@ -1396,6 +1419,8 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"Birkenstock",
   precio:95,
   categoria:"Zapatos",
+   subcategoria:"SLIDES",
+
   nuevo:true,
   og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
@@ -1434,7 +1459,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"BURBERRY",
   precio:90,
   categoria:"Zapatos",
-  
+   subcategoria:"SLIDES",
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
   imagenes:[
