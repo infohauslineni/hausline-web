@@ -877,9 +877,62 @@ const productosBase = [
   descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"]
 },
+{
+  codigo:"CL0044",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0044/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
+{
+  codigo:"CL0045",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0045/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
-
+{
+  codigo:"CL0046",
+  marca:"Christian Louboutin",
+  nombre:"Christian Louboutin",
+  precio:160,
+  promocionHasta:"2026-07-10T23:59:59",
+  categoria:"Zapatos",
+  nuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0046/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/1.jpg",
+     "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/2.jpg",
+      "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/3.jpg",
+       "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/4.jpg",
+  ],
+  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
 
 
 
@@ -1183,7 +1236,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"BALENCIAGA SLIDES",
   precio:90,
   categoria:"Zapatos",
-  subcategoria:"Chinelas",
+  subcategoria:"SLIDES",
   destacadoNuevo:false,
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL008/1.jpg",
@@ -1207,7 +1260,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"BALENCIAGA SLIDES",
   precio:90,
   categoria:"Zapatos",
-  subcategoria:"Chinelas",
+  subcategoria:"SLIDES",
   destacadoNuevo:false,
    nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL009/1.jpg",
@@ -1235,6 +1288,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
@@ -1252,6 +1306,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
@@ -1269,6 +1324,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
@@ -1286,6 +1342,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
@@ -1303,6 +1360,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
@@ -1320,6 +1378,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
@@ -1338,6 +1397,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   precio:95,
   categoria:"Zapatos",
   nuevo:true,
+  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
@@ -1374,6 +1434,7 @@ cantidadDisponible:1,        // este número decide el texto                    
   nombre:"BURBERRY",
   precio:90,
   categoria:"Zapatos",
+  
   nuevo:true,
   imagen:"imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
   imagenes:[
@@ -4585,6 +4646,7 @@ colores:[
   precio:50,
   categoria:"Ropa",
   nuevo:true,
+  destacadoNuevo:true,
 
   imagen:"imgP/ropa/ASAALI/AA001/1.jpg",
 
@@ -4610,6 +4672,7 @@ colores:[
   precio:50,
   categoria:"Ropa",
   nuevo:true,
+  destacadoNuevo:true,
 
   imagen:"imgP/ropa/ASAALI/AA002/1.jpg",
 
@@ -4619,13 +4682,261 @@ colores:[
     "imgP/ropa/ASAALI/AA002/3.jpg",
     "imgP/ropa/ASAALI/AA002/4.jpg",
     "imgP/ropa/ASAALI/AA002/5.jpg",
-    
+
   ],
 
   descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"],
- 
+
+
+},
+
+{
+  codigo:"AA003",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA003/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA003/1.jpg",
+    "imgP/ropa/ASAALI/AA003/2.jpg",
+    "imgP/ropa/ASAALI/AA003/3.jpg",
+    "imgP/ropa/ASAALI/AA003/4.jpg",
+    "imgP/ropa/ASAALI/AA003/5.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA004",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA004/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA004/1.jpg",
+    "imgP/ropa/ASAALI/AA004/2.jpg",
+    "imgP/ropa/ASAALI/AA004/3.jpg",
+    "imgP/ropa/ASAALI/AA004/4.jpg",
+    "imgP/ropa/ASAALI/AA004/5.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA005",
+  nombre:"T-SHIRT ASAALI",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA005/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA005/1.jpg",
+    "imgP/ropa/ASAALI/AA005/2.jpg",
+    "imgP/ropa/ASAALI/AA005/3.jpg",
+    "imgP/ropa/ASAALI/AA005/4.jpg",
+    "imgP/ropa/ASAALI/AA005/5.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA006",
+  nombre:"T-SHIRT ASAALI",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA006/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA006/1.jpg",
+    "imgP/ropa/ASAALI/AA006/2.jpg",
+    "imgP/ropa/ASAALI/AA006/3.jpg",
+    "imgP/ropa/ASAALI/AA006/4.jpg",
+    "imgP/ropa/ASAALI/AA006/5.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA007",
+  nombre:"T-SHIRT ASAALI",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA007/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA007/1.jpg",
+    "imgP/ropa/ASAALI/AA007/2.jpg",
+    "imgP/ropa/ASAALI/AA007/3.jpg",
+    "imgP/ropa/ASAALI/AA007/4.jpg",
+    "imgP/ropa/ASAALI/AA007/5.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA008",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA008/1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA008/1.jpeg",
+    "imgP/ropa/ASAALI/AA008/2.jpeg",
+    "imgP/ropa/ASAALI/AA008/3.jpeg",
+    "imgP/ropa/ASAALI/AA008/4.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA009",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA009/1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA009/1.jpeg",
+    "imgP/ropa/ASAALI/AA009/2.jpeg",
+    "imgP/ropa/ASAALI/AA009/3.jpeg",
+    "imgP/ropa/ASAALI/AA009/4.jpeg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA010",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA010/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA010/1.jpg",
+    "imgP/ropa/ASAALI/AA010/2.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA011",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA011/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA011/1.jpg",
+    "imgP/ropa/ASAALI/AA011/2.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA012",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA012/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA012/1.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+
+},
+
+{
+  codigo:"AA013",
+  nombre:"T-SHIRT ASAALI",
+  precio:50,
+  categoria:"Ropa",
+  nuevo:true,
+  destacadoNuevo:true,
+
+  imagen:"imgP/ropa/ASAALI/AA013/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/ASAALI/AA013/1.jpg",
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
 
 },
 
@@ -4653,10 +4964,10 @@ colores:[
 
 {
   codigo:"BP001",
-  nombre:"T-SHIRT B4PE",
+  nombre:"T-SHIRT BAPE",
   precio:50,
   categoria:"Ropa",
-  nuevo:false,
+  nuevo:true,
 
   imagen:"imgP/ropa/B4PE/BP001/1.jpg",
 
@@ -4678,6 +4989,144 @@ colores:[
    "Black",
 ],
 },
+
+{
+  codigo:"BP002",
+  nombre:"T-SHIRT BAPE",
+  precio:75,
+  categoria:"Ropa",
+  nuevo:false,
+
+  imagen:"imgP/ropa/B4PE/BP002/1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/B4PE/BP002/1.jpeg",
+    "imgP/ropa/B4PE/BP002/2.jpeg",
+    "imgP/ropa/B4PE/BP002/3.jpeg",
+    "imgP/ropa/B4PE/BP002/4.jpeg",
+    "imgP/ropa/B4PE/BP002/5.jpeg",
+
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   "Black",
+],
+},
+   {
+  codigo:"CHR001",
+  nombre:"chrome hearts",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/CHROME HEARTS/CRH001/1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/CHROME HEARTS/CRH001/1.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/2.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/3.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/4.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH001/5.jpeg",
+
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "White",
+   
+],
+},
+   {
+  codigo:"CHR002",
+  nombre:"T-SHIRT CHROME HEARTS",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/CHROME HEARTS/CRH002/1.1.jpeg",
+
+  imagenes:[
+    "imgP/ropa/CHROME HEARTS/CRH002/1.1.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/1.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/2.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/3.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/4.jpeg",
+    "imgP/ropa/CHROME HEARTS/CRH002/5.jpeg"
+
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "BLACK",
+   
+],
+},
+
+
+{
+  codigo:"GD001",
+  nombre:"T-SHIRT GALERY DEPT",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/GALERY DEPT/GD001/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/GALERY DEPT/GD001/1.jpg",
+    "imgP/ropa/GALERY DEPT/GD001/2.jpg",
+    "imgP/ropa/GALERY DEPT/GD001/3.jpg",
+   
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "WHITE",
+   
+],
+},
+
+
+{
+  codigo:"GD002",
+  nombre:"T-SHIRT GALERY DEPT",
+  precio:55,
+  categoria:"Ropa",
+  nuevo:true,
+
+  imagen:"imgP/ropa/GALERY DEPT/GD002/1.jpg",
+
+  imagenes:[
+    "imgP/ropa/GALERY DEPT/GD002/1.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/2.jpg",
+    "imgP/ropa/GALERY DEPT/GD002/3.jpg",
+   
+  ],
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+  tallas:["S","M","L","XL"],
+ colores:[
+
+   "BLACK",
+   
+],
+},
+
 
 // ============================================================
 //  ACCESORIOS — Figuras Bearbrick, KAWS, lentes y manta
@@ -5486,7 +5935,8 @@ const ETIQUETAS_OPCIONALES = [
   { propiedad: "preventa",        texto: "Preventa",         color: "azul"   },
   { propiedad: "edicionLimitada", texto: "Edición limitada", color: "dorado" },
   { propiedad: "restock",         texto: "De vuelta",        color: "verde"  },
-  { propiedad: "recomendado",     texto: "Recomendado",      color: "blanco" }
+  { propiedad: "recomendado",     texto: "Recomendado",      color: "blanco" },
+  { propiedad: "og100",           texto: "100% OG",          color: "dorado" }
 ];
 
 // Devuelve las etiquetas opcionales activas de un producto.

@@ -15,10 +15,24 @@ const CATEGORIAS = [
 
 // Subcategorías internas de cada categoría. Aparecen como filtros arriba
 // del listado SOLO cuando hay productos que las usan (las vacías se ocultan
-// solas). Para clasificar un producto agrega  subcategoria:"Chinelas"  etc.
+// solas). Para clasificar un producto agrega  subcategoria:"Slides"  etc.
 const SUBCATEGORIAS = {
-  "Zapatos": ["Calzado", "Casual", "Chinelas"],
+  "Zapatos": ["Calzado", "Casual", "Slides"],
   "Dama":    ["Zapatos", "Ropa"]
+};
+
+// Títulos de las colecciones especiales. Se usan en el nav, en el enrutado por
+// URL (?coleccion=…) y en el título de cada sección. Antes vivía dentro del
+// manejador de clics; se subió aquí para reutilizarlo al leer la URL.
+const TITULOS_COLECCION = {
+  "tendencia":         "Sneakers en tendencia",
+  "populares":         "Más populares",
+  "nuevos":            "Nuevo en HAUSLINE",
+  "ofertas":           "Ofertas",
+  "entrega-inmediata": "Entrega inmediata",
+  "favoritos":         "Tus favoritos",
+  "vistos":            "Vistos recientemente",
+  "marcas":            "Marcas"
 };
 
 // Subcategoría efectiva de un producto (los Zapatos sin marcar son "Calzado").
@@ -710,7 +724,37 @@ function renderVistos(){
 // VISTA DE COLECCIÓN ("Ver todo")
 // ============================================================
 
-function abrirColeccion(tipo, valor, titulo){
+// Pinta en verde (clase "activo") el botón que corresponde a la vista abierta,
+// en los tres lugares donde aparece el nav: la barra de arriba (.menu-desktop),
+// las pastillas de categorías (#chipsCategorias) y el menú lateral (.menu-link).
+// Sin un destino válido no deja ninguno marcado.
+function marcarNav(tipo, valor){
+  document
+    .querySelectorAll(".menu-desktop button, #chipsCategorias .chip, .menu-link")
+    .forEach(b => b.classList.remove("activo"));
+
+  let attr = "";
+  if(tipo === "inicio")         attr = "[data-ir-inicio]";
+  else if(tipo === "categoria") attr = `[data-categoria="${valor}"]`;
+  else if(tipo === "coleccion") attr = `[data-coleccion="${valor}"]`;
+  if(!attr) return;
+
+  document
+    .querySelectorAll(`.menu-desktop ${attr}, #chipsCategorias ${attr}, .menu-link${attr}`)
+    .forEach(b => b.classList.add("activo"));
+}
+
+// Arma la URL que representa la vista abierta, para que sea un link compartible
+// (?categoria=Ropa, ?coleccion=ofertas, ?marca=Nike). Devuelve null si la vista
+// no tiene link propio (ej. búsqueda).
+function urlColeccion(tipo, valor){
+  if(tipo === "categoria") return "?categoria=" + encodeURIComponent(valor);
+  if(tipo === "seccion")   return "?coleccion=" + encodeURIComponent(valor);
+  if(tipo === "marca")     return "?marca="     + encodeURIComponent(valor);
+  return null;
+}
+
+function abrirColeccion(tipo, valor, titulo, sinHistorial){
   coleccionActual = { tipo, valor, titulo };
   estadoVista = "coleccion";
   paginaActual = 1;
@@ -728,13 +772,32 @@ function abrirColeccion(tipo, valor, titulo){
   poblarSelectMarcas();
   renderSubcategorias();
   renderColeccion();
+
+  // Marca el botón activo del nav según la vista.
+  if(tipo === "categoria")    marcarNav("categoria", valor);
+  else if(tipo === "seccion") marcarNav("coleccion", valor);
+  else                        marcarNav(null);
+
+  // Refleja la vista en la URL (link compartible + botón atrás del navegador).
+  // sinHistorial = true cuando el cambio VIENE de la URL (carga directa o popstate),
+  // para no duplicar entradas en el historial.
+  if(!sinHistorial){
+    const url = urlColeccion(tipo, valor);
+    if(url){ try{ history.pushState({ coleccion: { tipo, valor } }, "", url); }catch(e){} }
+  }
+
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
 }
 
-function irInicio(){
+function irInicio(sinHistorial){
   estadoVista = "inicio";
   coleccionActual = null;
   document.body.classList.remove("en-coleccion");
+  marcarNav("inicio");
+  // Vuelve la URL a la raíz (quita ?categoria= etc.).
+  if(!sinHistorial && location.search){
+    try{ history.pushState({}, "", location.pathname); }catch(e){}
+  }
   window.scrollTo({ top: 0 });
 }
 
@@ -814,7 +877,7 @@ function poblarSelectMarcas(){
   sel.value = filtroMarca;
 }
 
-// Barra de subcategorías (Calzado/Casual/Chinelas en Zapatos, Zapatos/Ropa en
+// Barra de subcategorías (Calzado/Casual/Slides en Zapatos, Zapatos/Ropa en
 // Dama). Solo muestra las que tienen productos; si queda una o ninguna, se
 // oculta la barra entera para no llenar de botones vacíos.
 function renderSubcategorias(){
@@ -1217,13 +1280,29 @@ function cerrarModal(sinHistorial){
   }
 }
 
-// Botón atrás del teléfono / navegador: abre o cierra el producto según la URL.
+// Botón atrás/adelante del teléfono o navegador: sincroniza la vista con la URL.
+// Prioridad: producto (modal) > categoría/colección/marca > inicio.
 window.addEventListener("popstate", () => {
-  const codigo = new URLSearchParams(location.search).get("producto");
-  if(codigo){
+  const p = new URLSearchParams(location.search);
+
+  const codigo = p.get("producto");
+  if(codigo && buscarProducto(codigo)){
     abrirProducto(codigo, false, true);
-  } else if($("#modal").classList.contains("activo")){
-    cerrarModal(true);
+    return;
+  }
+  if($("#modal").classList.contains("activo")) cerrarModal(true);
+
+  const categoria = p.get("categoria");
+  const coleccion = p.get("coleccion");
+  const marca     = p.get("marca");
+  if(categoria && CATEGORIAS.some(c => c.id === categoria)){
+    abrirColeccion("categoria", categoria, categoria, true);
+  } else if(coleccion){
+    abrirColeccion("seccion", coleccion, TITULOS_COLECCION[coleccion] || "Catálogo", true);
+  } else if(marca){
+    abrirColeccion("marca", marca, marca, true);
+  } else {
+    irInicio(true);
   }
 });
 
@@ -1538,24 +1617,15 @@ document.addEventListener("click", e => {
   if(col){
     e.preventDefault();
     const valor = col.dataset.coleccion;
-    const titulos = {
-      "tendencia": "Sneakers en tendencia",
-      "populares": "Más populares",
-      "nuevos": "Nuevo en HAUSLINE",
-      "ofertas": "Ofertas",
-      "entrega-inmediata": "Entrega inmediata",
-      "favoritos": "Tus favoritos",
-      "vistos": "Vistos recientemente",
-      "marcas": "Marcas"
-    };
     if(valor === "marcas"){
       irInicio();
       renderMarcas();
+      marcarNav("coleccion", "marcas");
       $("#filaMarcas").scrollIntoView({ behavior:"smooth", block:"center" });
       cerrarMenu();
       return;
     }
-    abrirColeccion("seccion", valor, titulos[valor] || "Catálogo");
+    abrirColeccion("seccion", valor, TITULOS_COLECCION[valor] || "Catálogo");
     cerrarMenu();
     cerrarPaneles();
     return;
@@ -1568,7 +1638,7 @@ document.addEventListener("click", e => {
     return;
   }
 
-  // Subcategorías (Calzado/Casual/Chinelas, Zapatos/Ropa de Dama)
+  // Subcategorías (Calzado/Casual/Slides, Zapatos/Ropa de Dama)
   const sub = e.target.closest("[data-subcat]");
   if(sub){
     filtroSub = sub.dataset.subcat || "";
@@ -1582,13 +1652,18 @@ document.addEventListener("click", e => {
     return;
   }
 
-  // Filtros rápidos
+  // Filtros rápidos: SOLO UNO a la vez. Tocar otro cambia la selección;
+  // tocar el que ya está activo lo apaga.
   const filtro = e.target.closest("[data-filtro]");
   if(filtro){
     const f = filtro.dataset.filtro;
-    if(filtrosActivos.has(f)) filtrosActivos.delete(f);
-    else filtrosActivos.add(f);
-    filtro.classList.toggle("activo", filtrosActivos.has(f));
+    const yaActivo = filtrosActivos.has(f);
+    filtrosActivos.clear();
+    if(!yaActivo) filtrosActivos.add(f);
+    // Refresca el verde de todos los chips de filtro según el estado real.
+    $$("[data-filtro]").forEach(c =>
+      c.classList.toggle("activo", filtrosActivos.has(c.dataset.filtro))
+    );
     paginaActual = 1;
     renderColeccion();
     return;
@@ -1975,6 +2050,22 @@ function iniciar(){
     } else {
       abrirProducto(directo, false, true);
     }
+  }
+
+  // Enlace directo a una categoría / colección / marca (?categoria=Ropa, etc.).
+  // A diferencia de ?producto=, aquí SÍ se respeta al recargar: entrar a "Ropa"
+  // y refrescar debe seguir mostrando Ropa. sinHistorial=true para no duplicar
+  // la entrada del historial que ya puso el navegador al cargar el link.
+  const params = new URLSearchParams(location.search);
+  const catURL = params.get("categoria");
+  const colURL = params.get("coleccion");
+  const marURL = params.get("marca");
+  if(catURL && CATEGORIAS.some(c => c.id === catURL)){
+    abrirColeccion("categoria", catURL, catURL, true);
+  } else if(colURL && colURL !== "marcas"){
+    abrirColeccion("seccion", colURL, TITULOS_COLECCION[colURL] || "Catálogo", true);
+  } else if(marURL){
+    abrirColeccion("marca", marURL, marURL, true);
   }
 
   // Secciones nuevas y contador real (cuando lleguen las vistas de Supabase).
