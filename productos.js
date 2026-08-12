@@ -1014,6 +1014,152 @@ const productosBase = [
   tallas:["37","38","39","40","41","42","43","44"]
 },
 
+{
+  codigo:"AM005",
+  marca:"ALEAXANDER MCQUEEN",
+  nombre:"Alexander SWAROSKI",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+destacadonuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM005/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/1.jpeg",
+     "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/2.jpeg",
+      "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/3.jpeg",
+       "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/4.jpeg",
+        "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/5.jpeg",
+    
+      
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+
+{
+  codigo:"AM006",
+  marca:"ALEAXANDER MCQUEEN",
+  nombre:"Alexander grey",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+destacadonuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM006/1.jpg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/1.jpg",
+     "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/2.jpg",
+      "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/3.jpg",
+       "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/4.jpg",
+        "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/5.jpeg",
+    
+      
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+
+
+
+{
+  codigo:"AM007",
+  marca:"ALEAXANDER MCQUEEN",
+  nombre:"Alexander SWAROSKI",
+  precio:160,
+  categoria:"Zapatos",
+  nuevo:true,
+destacadonuevo:true,
+  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM007/1.jpeg",
+  imagenes:[
+    "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/1.jpeg",
+     "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/2.jpeg",
+      "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/3.jpeg",
+       "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/4.jpeg",
+        "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/5.jpeg",
+    
+      
+  ],
+  descripcion:" TIEMPO de entrega 15-25 días",
+  tallas:["37","38","39","40","41","42","43","44"]
+},
+
+
+
+{
+  codigo:"STY001",
+  marca:"STUSSY",
+  nombre:"Short STUSSY",
+  precio:52,
+  categoria:"Ropa",
+  subcategoria:"Short",          // ← Short | Camisetas | Jackets
+  imagen:"imgP/ropa/SHORTS/STUSSY/STY001/1.jpeg",
+  
+
+  imagenes:[ "imgP/ropa/SHORTS/STUSSY/STY001/1.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/2.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/3.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/4.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/5.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/6.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/7.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/8.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY001/9.jpeg",
+    
+
+    
+    
+    ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+
+
+{
+  codigo:"STY002",
+  marca:"STUSSY",
+  nombre:"Short STUSSY",
+  precio:52,
+  categoria:"Ropa",
+  subcategoria:"Short",          // ← Short | Camisetas | Jackets
+  imagen:"imgP/ropa/SHORTS/STUSSY/STY002/1.jpeg",
+  
+
+  imagenes:[ "imgP/ropa/SHORTS/STUSSY/STY002/1.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY002/2.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY002/3.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY002/4.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY002/5.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY002/6.jpeg",
+"imgP/ropa/SHORTS/STUSSY/STY002/7.jpeg",
+
+
+    
+    
+    ],
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+  tallas:["S","M","L","XL"]
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3049,6 +3195,7 @@ colores:["Pink","Blue","Green","Black & White"],
   },
 {
   codigo:"ROW2",
+  subcategoria:"Bolsos",
   nombre:"BOLSA LV",
   precio:140,
   categoria:"Accesorios",
@@ -3059,6 +3206,7 @@ colores:["Pink","Blue","Green","Black & White"],
 },
 {
   codigo: "ROW3",
+  subcategoria:"Carteras",
   nombre: "TARJETERO GOYARD GYD",
   precio: 48,
   categoria: "Accesorios",
@@ -3085,6 +3233,7 @@ colores:[
   },
 {
   codigo:"ROW4",
+  subcategoria:"Mochila",
   nombre:"BACKPACK alo",
   precio:57,
   categoria:"Accesorios",
@@ -3107,6 +3256,7 @@ colores:[
 
 {
   codigo:"001R",
+  subcategoria:"Jackets",
   nombre:"JACKET OFFWHITE OFFW",
   precio:140,
   categoria:"Ropa",
@@ -3125,6 +3275,7 @@ colores:[
 },
 {
   codigo:"002R",
+  subcategoria:"Jackets",
   nombre:"JACKET OFFWHITE OFFW",
   precio:140,
   categoria:"Ropa",
@@ -3143,6 +3294,7 @@ colores:[
 },
 {
   codigo:"003R",
+  subcategoria:"Jackets",
   nombre:"JACKET OFFWHITE OFFW",
   precio:140,
   categoria:"Ropa",
@@ -3179,6 +3331,7 @@ colores:[
 },
 {
   codigo:"005R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT GALERY DEPT GP",
   precio:50,
   categoria:"Ropa",
@@ -3200,6 +3353,7 @@ colores:[
 },
 {
   codigo:"006R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT AMIRI",
   precio:50,
   categoria:"Ropa",
@@ -3224,6 +3378,7 @@ colores:[
 },
 {
   codigo:"007R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ESSENSIALTS",
   precio:52,
   categoria:"Ropa",
@@ -3249,6 +3404,7 @@ colores:[
 },
 {
   codigo:"008R",
+  subcategoria:"Short",
   nombre:"T-SHIRT ESSENSIALTS",
   precio:50,
   categoria:"Ropa",
@@ -3271,6 +3427,7 @@ colores:[
 },
 {
   codigo:"009R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ESSENSIALTS",
   precio:50,
   categoria:"Ropa",
@@ -3307,6 +3464,7 @@ colores:[
 },
 {
   codigo:"010R",
+  subcategoria:"Short",
   nombre:"SHORTS MONCLER",
   precio:50,
   categoria:"Ropa",
@@ -3326,6 +3484,7 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"011R",
+  subcategoria:"Short",
   nombre:"SHORTS MONCLER",
   precio:50,
   categoria:"Ropa",
@@ -3345,6 +3504,7 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"012R",
+  subcategoria:"Short",
   nombre:"BAÑADOR MONCLER",
   precio:50,
   categoria:"Ropa",
@@ -3364,6 +3524,7 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"013R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:50,
   categoria:"Ropa",
@@ -3387,6 +3548,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"014R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:50,
   categoria:"Ropa",
@@ -3409,6 +3571,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"015R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:50,
   categoria:"Ropa",
@@ -3431,6 +3594,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"016R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:50,
   categoria:"Ropa",
@@ -3453,6 +3617,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"017R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:50,
   categoria:"Ropa",
@@ -3475,6 +3640,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"018R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:50,
   categoria:"Ropa",
@@ -3540,6 +3706,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"021R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ALL-SAINTS",
   precio:48,
   categoria:"Ropa",
@@ -3580,6 +3747,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"023R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT AMIRI",
   precio:50,
   categoria:"Ropa",
@@ -3598,6 +3766,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"024R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT AMIRI",
   precio:50,
   categoria:"Ropa",
@@ -3634,6 +3803,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"026R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT AMIRI",
   precio:50,
   categoria:"Ropa",
@@ -3692,6 +3862,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"029R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT OFFWHT",
   precio:52,
   categoria:"Ropa",
@@ -3713,6 +3884,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"031R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3735,6 +3907,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"032R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3758,6 +3931,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"034R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3780,6 +3954,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"035R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3802,6 +3977,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"036R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3826,6 +4002,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"037R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3845,6 +4022,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 },
 {
   codigo:"038R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3870,6 +4048,7 @@ colores:[
 },
 {
   codigo:"039R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASSC",
   precio:52,
   categoria:"Ropa",
@@ -3890,6 +4069,7 @@ colores:[
 },
 {
   codigo:"040R",
+  subcategoria:"Short",
   nombre:"SHORTS BALENCIAGA",
   precio:52,
   categoria:"Ropa",
@@ -3910,6 +4090,7 @@ colores:[
 },
 {
   codigo:"041R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS BALENCIAGA",
   precio:55,
   categoria:"Ropa",
@@ -3932,6 +4113,7 @@ colores:[
 },
 {
   codigo:"042R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS BALENCIAGA",
   precio:55,
   categoria:"Ropa",
@@ -3954,6 +4136,7 @@ colores:[
 },
 {
   codigo:"043R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS BALENCIAGA",
   precio:55,
   categoria:"Ropa",
@@ -3977,6 +4160,7 @@ colores:[
 },
 {
   codigo:"044R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS B4PE",
   precio:48,
   categoria:"Ropa",
@@ -4001,6 +4185,7 @@ colores:[
 },
 {
   codigo:"045R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CASA BLANCA",
   precio:62,
   categoria:"Ropa",
@@ -4024,6 +4209,7 @@ colores:[
 },
 {
   codigo:"047R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CASA BLANCA",
   precio:62,
   categoria:"Ropa",
@@ -4047,6 +4233,7 @@ colores:[
 },
 {
   codigo:"048R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CASA BLANCA",
   precio:62,
   categoria:"Ropa",
@@ -4254,6 +4441,7 @@ colores:[
 },
 {
   codigo:"059R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CASA BLANCA",
   precio:65,
   categoria:"Ropa",
@@ -4277,6 +4465,7 @@ colores:[
 },
 {
   codigo:"060R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CASA BLANCA",
   precio:65,
   categoria:"Ropa",
@@ -4346,6 +4535,7 @@ colores:[
 },
 {
   codigo:"063R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CHROME HEARTS",
   precio:65,
   categoria:"Ropa",
@@ -4369,6 +4559,7 @@ colores:[
 },
 {
   codigo:"064R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CHROME HEARTS",
   precio:53,
   categoria:"Ropa",
@@ -4392,6 +4583,7 @@ colores:[
 },
 {
   codigo:"065R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CHROME HEARTS",
   precio:53,
   categoria:"Ropa",
@@ -4415,6 +4607,7 @@ colores:[
 },
 {
   codigo:"066R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRTS CHROME HEARTS",
   precio:53,
   categoria:"Ropa",
@@ -4438,6 +4631,7 @@ colores:[
 },
 {
   codigo:"067R",
+  subcategoria:"Short",
   nombre:"SHORT MONCLER",
   precio:48,
   categoria:"Ropa",
@@ -4461,6 +4655,7 @@ colores:[
 },
 {
   codigo:"069R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT OFF WHITE",
   precio:50,
   categoria:"Ropa",
@@ -4484,6 +4679,7 @@ colores:[
 },
 {
   codigo:"070R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT OFF WHITE",
   precio:50,
   categoria:"Ropa",
@@ -4508,10 +4704,11 @@ colores:[
 },
 {
   codigo:"071R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT OFF WHITE",
   precio:50,
   categoria:"Ropa",
-  nuevo:true,
+  nuevo:false,
 
   imagen:"imgP/ropa/071.1.jpeg",
 
@@ -4532,10 +4729,11 @@ colores:[
 },
 {
   codigo:"072R",
+  subcategoria:"Short",
   nombre:"SHORT OFF WHITE",
   precio:55,
   categoria:"Ropa",
-  nuevo:true,
+  nuevo:false,
 
   imagen:"imgP/ropa/072.1.jpeg",
 
@@ -4564,10 +4762,11 @@ colores:[
 },
 {
   codigo:"073R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT OFF WHITE",
   precio:50,
   categoria:"Ropa",
-  nuevo:true,
+  nuevo:false,
 
   imagen:"imgP/ropa/073.1.jpg",
 
@@ -4588,6 +4787,7 @@ colores:[
 },
 {
   codigo:"074R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT AMI PLAY",
   precio:50,
   categoria:"Ropa",
@@ -4612,6 +4812,7 @@ colores:[
 },
 {
   codigo:"075R",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT REPRESENT",
   precio:48,
   categoria:"Ropa",
@@ -4637,6 +4838,7 @@ colores:[
 
 {
   codigo:"RR001",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT BURBERRY",
   precio:55,
   categoria:"Ropa",
@@ -4667,6 +4869,7 @@ colores:[
 
 {
   codigo:"AA001",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4693,6 +4896,7 @@ colores:[
 
 {
   codigo:"AA002",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4719,6 +4923,7 @@ colores:[
 
 {
   codigo:"AA003",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4743,6 +4948,7 @@ colores:[
 
 {
   codigo:"AA004",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4767,6 +4973,7 @@ colores:[
 
 {
   codigo:"AA005",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:75,
   categoria:"Ropa",
@@ -4791,6 +4998,7 @@ colores:[
 
 {
   codigo:"AA006",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:55,
   categoria:"Ropa",
@@ -4815,6 +5023,7 @@ colores:[
 
 {
   codigo:"AA007",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:55,
   categoria:"Ropa",
@@ -4839,6 +5048,7 @@ colores:[
 
 {
   codigo:"AA008",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4862,6 +5072,7 @@ colores:[
 
 {
   codigo:"AA009",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4885,6 +5096,7 @@ colores:[
 
 {
   codigo:"AA010",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4906,6 +5118,7 @@ colores:[
 
 {
   codigo:"AA011",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4927,6 +5140,7 @@ colores:[
 
 {
   codigo:"AA012",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4947,6 +5161,7 @@ colores:[
 
 {
   codigo:"AA013",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT ASAALI",
   precio:50,
   categoria:"Ropa",
@@ -4989,6 +5204,7 @@ colores:[
 
 {
   codigo:"BP001",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT BAPE",
   precio:50,
   categoria:"Ropa",
@@ -5017,6 +5233,7 @@ colores:[
 
 {
   codigo:"BP002",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT BAPE",
   precio:75,
   categoria:"Ropa",
@@ -5071,6 +5288,7 @@ colores:[
 },
    {
   codigo:"CHR002",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT CHROME HEARTS",
   precio:55,
   categoria:"Ropa",
@@ -5101,6 +5319,7 @@ colores:[
 
 {
   codigo:"GD001",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT GALERY DEPT",
   precio:55,
   categoria:"Ropa",
@@ -5128,6 +5347,7 @@ colores:[
 
 {
   codigo:"GD002",
+  subcategoria:"Camisetas",
   nombre:"T-SHIRT GALERY DEPT",
   precio:55,
   categoria:"Ropa",
@@ -5162,6 +5382,9 @@ colores:[
   marca:"Bearbrick",
   nombre:"Bearbrick 400% Iron Spider",
   precio:190,
+  precioOferta:171,
+  descuento:10,
+  promocionHasta:"2026-08-30T23:59:59",
   categoria:"Accesorios",
   imagen:"imgP/accesorios/KAWA/Bearbricks/BEAR002/1.jpeg",
   imagenes:[
@@ -5429,6 +5652,30 @@ colores:[
 
 
 
+{
+  codigo:"FERRA001",
+  marca:"FERRAGAMO",
+  nombre:"BELT Ferragamo",
+  precio:80,
+    categoria:"Accesorios",
+  subcategoria:"Fajas",        // ← Mochila | Carteras | Bolsos | Maletas | Fajas          // ← Short | Camisetas | Jackets
+  imagen:"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/1.jpg",
+
+
+  imagenes:[ "imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/1.jpg" ,
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/2.jpg",
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/3.jpg",
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/4.jpg",
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/5.jpg",
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/6.jpg",
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/7.jpg",
+"imgP/accesorios/FAJAS/FERRAGAMO/FERRA001/8.jpg",
+  ],
+
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+},
 
 
 
@@ -5438,11 +5685,62 @@ colores:[
 
 
 
+{
+  codigo:"LVB001",
+  marca:"LOUIS VOUITTON",
+  nombre:"Maleta Louis Vouitton",
+  precio:350,
+    categoria:"Accesorios",
+  subcategoria:"Maletas",        // ← Mochila | Carteras | Bolsos | Maletas | Fajas          // ← Short | Camisetas | Jackets
+  imagen:"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/1.jpg",
+
+
+  imagenes:[ "imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/1.jpg" ,
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/2.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/3.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/4.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/5.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/6.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/7.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/8.jpg",
+"imgP/accesorios/MALETAS/LOUIS VOUITTON/LVB001/9.jpg",
+  ],
+
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+
+},
 
 
 
 
 
+{
+  codigo:"SUPR001",
+  marca:"SUPREME",
+  nombre:"Maleta Supreme",
+  precio:350,
+  destacarnuevo:true,
+  nuevo:true,
+    categoria:"Accesorios",
+  subcategoria:"Maletas",        // ← Mochila | Carteras | Bolsos | Maletas | Fajas          // ← Short | Camisetas | Jackets
+  imagen:"imgP/accesorios/MALETAS/SUPREME/SUPR001/1.jpg",
+
+
+  imagenes:[ "imgP/accesorios/MALETAS/SUPREME/SUPR001/1.jpg" ,
+"imgP/accesorios/MALETAS/SUPREME/SUPR001/2.jpg",
+"imgP/accesorios/MALETAS/SUPREME/SUPR001/3.jpg",
+"imgP/accesorios/MALETAS/SUPREME/SUPR001/4.jpg",
+"imgP/accesorios/MALETAS/SUPREME/SUPR001/5.jpg",
+"imgP/accesorios/MALETAS/SUPREME/SUPR001/6.jpg",
+"imgP/accesorios/MALETAS/SUPREME/SUPR001/7.jpg",
+
+  ],
+
+
+  descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
+colores:["ROJO", "NEGRO", "PLATA", "ROSA", "CAFÉ", "AZUL MARINO", "BLANCO"]
+},
 
 
 

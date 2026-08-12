@@ -51,8 +51,8 @@ const SUPABASE_ANON_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";
 //  Para ocultar la sección, deja el arreglo vacío: [].
 // ============================================================
 const instagramPosts = [
- { imagen: "imgP/clientes/10 (2).jpg", url: "https://www.instagram.com/p/DZbMkG_R7vk/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==" },
- { imagen: "imgP/clientes/10 (9).jpg", url: "https://www.instagram.com/p/DZHhmO_RN6v/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==" },
+ //{ imagen: "imgP/clientes/10 (2).jpg", url: "https://www.instagram.com/p/DZbMkG_R7vk/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==" },
+ //{ imagen: "imgP/clientes/10 (9).jpg", url: "https://www.instagram.com/p/DZHhmO_RN6v/?utm_source=ig_web_button_share_sheet&igsh=MzRlODBiNWFlZA==" },
 ];
 
 // ============================================================
@@ -64,7 +64,7 @@ const instagramPosts = [
 //  Para ocultar la sección, deja el arreglo vacío: [].
 // ============================================================
 const tiktokVideos = [
- { portada: "imgP/clientes/10 (13).jpg", url: "https://www.tiktok.com/@hausline.niof/photo/7653959052036164871?is_from_webapp=1&sender_device=pc" },
+ //{ portada: "imgP/clientes/10 (13).jpg", url: "https://www.tiktok.com/@hausline.niof/photo/7653959052036164871?is_from_webapp=1&sender_device=pc" },
 ];
 
 // ---------- Redes (perfiles) ----------

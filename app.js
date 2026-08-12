@@ -17,8 +17,10 @@ const CATEGORIAS = [
 // del listado SOLO cuando hay productos que las usan (las vacías se ocultan
 // solas). Para clasificar un producto agrega  subcategoria:"Slides"  etc.
 const SUBCATEGORIAS = {
-  "Zapatos": ["Calzado", "Casual", "Slides"],
-  "Dama":    ["Zapatos", "Ropa"]
+  "Zapatos":    ["Calzado", "Casual", "Slides"],
+  "Ropa":       ["Short", "Camisetas", "Jackets"],
+  "Accesorios": ["Mochila", "Carteras", "Bolsos", "Maletas", "Fajas"],
+  "Dama":       ["Zapatos", "Ropa"]
 };
 
 // Títulos de las colecciones especiales. Se usan en el nav, en el enrutado por
