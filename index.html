@@ -21,7 +21,7 @@
   <meta property="og:url" content="https://hauslineshopni.es/">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="stylesheet" href="styles.css?v=20260724">
+  <link rel="stylesheet" href="styles.css?v=20260813c">
 </head>
 
 <body>
@@ -504,17 +504,16 @@
   <div class="panel-cuerpo" id="favoritosCuerpo"></div>
 </aside>
 
-<!-- ========================= MODAL PRODUCTO ========================= -->
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalNombre">
+<!-- ========================= VISTA DE PRODUCTO ========================= -->
+<div class="modal" id="modal" role="region" aria-labelledby="modalNombre">
   <div class="modal-caja">
-    <div class="modal-cerrar-wrap">
-      <button class="modal-cerrar" id="modalCerrar" type="button" aria-label="Cerrar producto">&times;</button>
-    </div>
-
     <div class="modal-grid">
       <div class="galeria">
         <div class="galeria-principal" id="galeriaPrincipal">
           <img id="modalImg" src="" alt="">
+          <button class="prod-cerrar" id="prodCerrar" type="button" aria-label="Volver al catálogo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
           <button class="galeria-btn galeria-prev" id="galeriaPrev" type="button" aria-label="Imagen anterior">‹</button>
           <button class="galeria-btn galeria-next" id="galeriaNext" type="button" aria-label="Imagen siguiente">›</button>
           <span class="galeria-contador" id="galeriaContador"></span>
@@ -645,7 +644,7 @@
 <script src="favoritos.js?v=20260724"></script>
 <script src="carrito.js?v=20260724"></script>
 <script src="supabase-views.js?v=20260724"></script>
-<script src="app.js?v=20260724"></script>
+<script src="app.js?v=20260813b"></script>
 
 </body>
 </html>

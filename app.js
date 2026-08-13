@@ -764,6 +764,8 @@ function urlColeccion(tipo, valor){
 }
 
 function abrirColeccion(tipo, valor, titulo, sinHistorial){
+  // Si venimos de la vista de producto, la cerramos para mostrar el catálogo.
+  cerrarModal(true);
   coleccionActual = { tipo, valor, titulo };
   estadoVista = "coleccion";
   paginaActual = 1;
@@ -799,6 +801,8 @@ function abrirColeccion(tipo, valor, titulo, sinHistorial){
 }
 
 function irInicio(sinHistorial){
+  // Si venimos de la vista de producto, la cerramos para mostrar el inicio.
+  cerrarModal(true);
   estadoVista = "inicio";
   coleccionActual = null;
   document.body.classList.remove("en-coleccion");
@@ -1082,8 +1086,8 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   pintarFila("#filaRelacionados", relacionados(producto));
 
   $("#modal").classList.add("activo");
-  document.body.classList.add("sin-scroll");
-  $("#modalCerrar").focus();
+  document.body.classList.add("en-producto");
+  window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
 
   // Cambia la URL a este producto para poder compartir el enlace directo.
   // Ej: hauslineshopni.es/?producto=KAW002
@@ -1281,7 +1285,7 @@ $("#guiaFondo").addEventListener("click", e => {
 
 function cerrarModal(sinHistorial){
   $("#modal").classList.remove("activo");
-  document.body.classList.remove("sin-scroll");
+  document.body.classList.remove("en-producto");
   productoActual = null;
   // Quita el ?producto= de la URL al cerrar.
   if(!sinHistorial && location.search.includes("producto=")){
@@ -1804,9 +1808,14 @@ $("#navCarrito").addEventListener("click", () => { renderCarrito(); abrirPanel("
 $("#navFavoritos").addEventListener("click", () => { renderFavoritos(); abrirPanel("#panelFavoritos"); });
 $("#navCategorias").addEventListener("click", abrirMenu);
 
-// --- Modal ---
-$("#modalCerrar").addEventListener("click", cerrarModal);
-$("#modal").addEventListener("click", e => { if(e.target.id === "modal") cerrarModal(); });
+// --- Vista de producto ---
+// "X" flotante para volver: si llegamos navegando (la URL trae ?producto=),
+// usamos el historial real para regresar a donde estaba el catálogo; si se
+// abrió por enlace directo, simplemente cerramos la vista.
+$("#prodCerrar").addEventListener("click", () => {
+  if(location.search.includes("producto=")) history.back();
+  else cerrarModal();
+});
 $("#galeriaPrev").addEventListener("click", () => cambiarImagen(-1));
 $("#galeriaNext").addEventListener("click", () => cambiarImagen(1));
 
