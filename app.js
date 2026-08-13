@@ -1140,31 +1140,36 @@ function relacionados(producto){
   return unicos.slice(0, 12);
 }
 
-// inmediata = true al ABRIR un producto: la foto se pone de una vez (sin fundir
-// desde la del producto anterior). El fundido solo se usa al cambiar entre las
-// fotos del MISMO producto (flechas/miniaturas). Se compara con dataset.src
-// (ruta relativa) porque img.src es absoluta+codificada y no coincidía nunca,
-// lo que provocaba parpadeos con un hueco en blanco.
+// Regla clave para que la foto SIEMPRE aparezca y no parpadee:
+// - Al ABRIR (inmediata) se pone la primera foto de una vez.
+// - Al CAMBIAR de foto NO se borra la actual: se precarga la nueva y solo se
+//   cambia cuando ya está lista. Así nunca queda un hueco en blanco.
+// Se compara con dataset.src (ruta relativa) porque img.src es absoluta y
+// codificada y no coincidía nunca.
 function renderGaleria(inmediata){
   const img = $("#modalImg");
   const claseBase = productoActual.imagenFit === "contain" ? "ajuste-contain" : "";
   const nuevaSrc = imagenesActuales[indiceImagen];
-  const reduceMov = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if(img.dataset.src !== nuevaSrc){
-    const mostrar = () => { img.style.opacity = "1"; };
+    img.dataset.src = nuevaSrc;
     const aplicar = () => {
-      img.onload = mostrar;
-      img.onerror = mostrar;
+      if(img.dataset.src !== nuevaSrc) return;   // el usuario ya cambió otra vez
       img.src = nuevaSrc;
-      img.dataset.src = nuevaSrc;
       img.className = claseBase;
-      // Si ya está en caché, se muestra sin esperar (evita el parpadeo).
-      if(img.complete && img.naturalWidth) mostrar();
+      img.style.opacity = "1";
     };
-    img.style.opacity = "0";
-    if(!inmediata && !reduceMov) setTimeout(aplicar, 110);
-    else aplicar();
+    if(inmediata || !img.getAttribute("src")){
+      // Abrir producto: mostrar la primera foto directamente.
+      aplicar();
+    } else {
+      // Cambiar de foto: mantener la actual hasta que la nueva cargue.
+      const pre = new Image();
+      pre.onload = aplicar;
+      pre.onerror = aplicar;
+      pre.src = nuevaSrc;
+      if(pre.complete && pre.naturalWidth) aplicar();
+    }
   } else {
     img.className = claseBase;
     img.style.opacity = "1";
@@ -1177,23 +1182,15 @@ function renderGaleria(inmediata){
   $("#galeriaContador").textContent = varias
     ? `${indiceImagen + 1} / ${imagenesActuales.length}` : "";
 
+  // Miniaturas SIN loading="lazy": se cargan de una vez para que siempre se vean
+  // y, de paso, dejan todas las fotos del producto en caché → cambiar es instantáneo.
   $("#miniaturas").innerHTML = varias
     ? imagenesActuales.map((src, i) => `
         <button class="miniatura ${i === indiceImagen ? "activa" : ""}" type="button"
                 data-miniatura="${i}" aria-label="Ver imagen ${i + 1}">
-          <img src="${esc(src)}" alt="" loading="lazy">
+          <img src="${esc(src)}" alt="" decoding="async">
         </button>`).join("")
     : "";
-
-  // Precarga las fotos vecinas para que cambiar con las flechas sea instantáneo.
-  if(varias){
-    [indiceImagen + 1, indiceImagen - 1].forEach(k => {
-      const idx = (k + imagenesActuales.length) % imagenesActuales.length;
-      const pre = new Image();
-      pre.decoding = "async";
-      pre.src = imagenesActuales[idx];
-    });
-  }
 }
 
 function cambiarImagen(delta){
