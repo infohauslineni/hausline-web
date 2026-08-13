@@ -69,6 +69,7 @@ const POLITICAS = {
 };
 
 // ---------- Estado ----------
+let scrollCatalogo = 0;              // posición del catálogo al abrir un producto, para volver ahí al cerrar
 let estadoVista = "inicio";          // "inicio" | "coleccion"
 let coleccionActual = null;          // { tipo, valor, titulo }
 let paginaActual = 1;
@@ -1085,6 +1086,13 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
 
   pintarFila("#filaRelacionados", relacionados(producto));
 
+  // Guarda dónde estaba el catálogo (solo al abrir desde el catálogo, no al
+  // reabrir por enlace/atrás ni al saltar entre relacionados) para regresar a
+  // esa posición al cerrar, en vez de al tope.
+  if(!sinHistorial && !document.body.classList.contains("en-producto")){
+    scrollCatalogo = window.scrollY;
+  }
+
   $("#modal").classList.add("activo");
   document.body.classList.add("en-producto");
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
@@ -1303,7 +1311,10 @@ window.addEventListener("popstate", () => {
     abrirProducto(codigo, false, true);
     return;
   }
-  if($("#modal").classList.contains("activo")) cerrarModal(true);
+  // ¿Venimos de cerrar un producto? Entonces al reconstruir el catálogo
+  // hay que devolver al usuario a donde estaba, no al tope.
+  const cerrandoProducto = $("#modal").classList.contains("activo");
+  if(cerrandoProducto) cerrarModal(true);
 
   const categoria = p.get("categoria");
   const coleccion = p.get("coleccion");
@@ -1316,6 +1327,12 @@ window.addEventListener("popstate", () => {
     abrirColeccion("marca", marca, marca, true);
   } else {
     irInicio(true);
+  }
+
+  // abrirColeccion/irInicio suben al tope; si estábamos cerrando un producto,
+  // restauramos la posición guardada del catálogo.
+  if(cerrandoProducto){
+    window.scrollTo({ top: scrollCatalogo, behavior: "instant" in window ? "instant" : "auto" });
   }
 });
 
@@ -2010,7 +2027,9 @@ document.addEventListener("keydown", e => {
   if(e.key === "Escape"){
     if($("#compartirFondo").classList.contains("activo")) cerrarPanelCompartir();
     else if($("#guiaFondo").classList.contains("activo")) cerrarGuiaTallas();
-    else if($("#modal").classList.contains("activo")) cerrarModal();
+    else if($("#modal").classList.contains("activo")){
+      if(location.search.includes("producto=")) history.back(); else cerrarModal();
+    }
     else if($$(".panel.activo").length) cerrarPaneles();
     else if($("#menuLateral").classList.contains("activo")) cerrarMenu();
   }
