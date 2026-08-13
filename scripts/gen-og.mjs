@@ -91,12 +91,17 @@ const paginaProducto = (producto) => {
 <meta name="twitter:description" content="${escaparHtml(descripcion)}">
 <meta name="twitter:image" content="${escaparHtml(imagen)}">
 <link rel="icon" href="/logo.png" type="image/png">
-<!-- Redirección para personas (los scrapers leen las etiquetas de arriba). -->
-<meta http-equiv="refresh" content="0; url=${escaparHtml(destino)}">
+<!-- Sin meta-refresh en el <head>: los crawlers (WhatsApp/Facebook) leen las
+     etiquetas de arriba con la FOTO. La redirección de personas se hace con
+     JavaScript (los crawlers no lo ejecutan) y, para navegadores sin JS, con
+     un meta-refresh dentro de <noscript>. Así el preview nunca cae en la
+     imagen genérica del sitio. -->
 </head>
 <body style="background:#050505;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;padding:40px">
 <p>Abriendo ${escaparHtml(nombreProducto(producto))}…</p>
 <p><a href="${escaparHtml(destino)}" style="color:#b7ff00">Toca aquí si no cargó automáticamente</a></p>
+<noscript><meta http-equiv="refresh" content="0; url=${escaparHtml(destino)}"></noscript>
+<script>location.replace(${JSON.stringify(destino)});</script>
 </body>
 </html>
 `

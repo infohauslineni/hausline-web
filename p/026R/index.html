@@ -18,11 +18,16 @@
 <meta name="twitter:description" content="Camiseta con estampado cuadrado de un leopardo entre hojas y el logo &#39;AMIRI&#39; en dorado debajo; pequeno al frente y grande en la espalda. En blanco y en negro.">
 <meta name="twitter:image" content="https://hauslineshopni.es/imgP/ropa/026.1.jpeg">
 <link rel="icon" href="/logo.png" type="image/png">
-<!-- Redirección para personas (los scrapers leen las etiquetas de arriba). -->
-<meta http-equiv="refresh" content="0; url=/?producto=026R">
+<!-- Sin meta-refresh en el <head>: los crawlers (WhatsApp/Facebook) leen las
+     etiquetas de arriba con la FOTO. La redirección de personas se hace con
+     JavaScript (los crawlers no lo ejecutan) y, para navegadores sin JS, con
+     un meta-refresh dentro de <noscript>. Así el preview nunca cae en la
+     imagen genérica del sitio. -->
 </head>
 <body style="background:#050505;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;padding:40px">
 <p>Abriendo Camiseta Amiri Leopardo…</p>
 <p><a href="/?producto=026R" style="color:#b7ff00">Toca aquí si no cargó automáticamente</a></p>
+<noscript><meta http-equiv="refresh" content="0; url=/?producto=026R"></noscript>
+<script>location.replace("/?producto=026R");</script>
 </body>
 </html>

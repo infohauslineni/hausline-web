@@ -18,11 +18,16 @@
 <meta name="twitter:description" content="Camiseta con el logo &#39;ANTI SOCIAL SOCIAL CLUB&#39; en amarillo tipo panal rodeado de abejas, pequeno al frente y grande en la espalda. Se muestra en negro, blanco…">
 <meta name="twitter:image" content="https://hauslineshopni.es/imgP/ropa/036.1.jpeg">
 <link rel="icon" href="/logo.png" type="image/png">
-<!-- Redirección para personas (los scrapers leen las etiquetas de arriba). -->
-<meta http-equiv="refresh" content="0; url=/?producto=036R">
+<!-- Sin meta-refresh en el <head>: los crawlers (WhatsApp/Facebook) leen las
+     etiquetas de arriba con la FOTO. La redirección de personas se hace con
+     JavaScript (los crawlers no lo ejecutan) y, para navegadores sin JS, con
+     un meta-refresh dentro de <noscript>. Así el preview nunca cae en la
+     imagen genérica del sitio. -->
 </head>
 <body style="background:#050505;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;padding:40px">
 <p>Abriendo Camiseta ASSC Abejas Amarillas…</p>
 <p><a href="/?producto=036R" style="color:#b7ff00">Toca aquí si no cargó automáticamente</a></p>
+<noscript><meta http-equiv="refresh" content="0; url=/?producto=036R"></noscript>
+<script>location.replace("/?producto=036R");</script>
 </body>
 </html>

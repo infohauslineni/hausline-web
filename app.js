@@ -1078,7 +1078,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
          </button>`
       : "";
 
-  renderGaleria();
+  renderGaleria(true);
   renderSelectores(producto);
   renderAcordeon(producto);
   actualizarFavModal();
@@ -1140,23 +1140,34 @@ function relacionados(producto){
   return unicos.slice(0, 12);
 }
 
-function renderGaleria(){
+// inmediata = true al ABRIR un producto: la foto se pone de una vez (sin fundir
+// desde la del producto anterior). El fundido solo se usa al cambiar entre las
+// fotos del MISMO producto (flechas/miniaturas). Se compara con dataset.src
+// (ruta relativa) porque img.src es absoluta+codificada y no coincidía nunca,
+// lo que provocaba parpadeos con un hueco en blanco.
+function renderGaleria(inmediata){
   const img = $("#modalImg");
   const claseBase = productoActual.imagenFit === "contain" ? "ajuste-contain" : "";
   const nuevaSrc = imagenesActuales[indiceImagen];
+  const reduceMov = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Transición suave entre fotos: se desvanece, cambia y vuelve a aparecer.
-  if(img.src && !img.src.endsWith(nuevaSrc) && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    img.style.opacity = "0";
-    setTimeout(() => {
+  if(img.dataset.src !== nuevaSrc){
+    const mostrar = () => { img.style.opacity = "1"; };
+    const aplicar = () => {
+      img.onload = mostrar;
+      img.onerror = mostrar;
       img.src = nuevaSrc;
+      img.dataset.src = nuevaSrc;
       img.className = claseBase;
-      img.onload = () => { img.style.opacity = "1"; };
-    }, 130);
+      // Si ya está en caché, se muestra sin esperar (evita el parpadeo).
+      if(img.complete && img.naturalWidth) mostrar();
+    };
+    img.style.opacity = "0";
+    if(!inmediata && !reduceMov) setTimeout(aplicar, 110);
+    else aplicar();
   } else {
-    img.src = nuevaSrc;
-    img.style.opacity = "1";
     img.className = claseBase;
+    img.style.opacity = "1";
   }
   img.alt = nombreProducto(productoActual);
 
@@ -1173,6 +1184,16 @@ function renderGaleria(){
           <img src="${esc(src)}" alt="" loading="lazy">
         </button>`).join("")
     : "";
+
+  // Precarga las fotos vecinas para que cambiar con las flechas sea instantáneo.
+  if(varias){
+    [indiceImagen + 1, indiceImagen - 1].forEach(k => {
+      const idx = (k + imagenesActuales.length) % imagenesActuales.length;
+      const pre = new Image();
+      pre.decoding = "async";
+      pre.src = imagenesActuales[idx];
+    });
+  }
 }
 
 function cambiarImagen(delta){
@@ -1326,26 +1347,43 @@ window.addEventListener("popstate", () => {
     abrirProducto(codigo, false, true);
     return;
   }
-  // ¿Venimos de cerrar un producto? Entonces al reconstruir el catálogo
-  // hay que devolver al usuario a donde estaba, no al tope.
   const cerrandoProducto = $("#modal").classList.contains("activo");
-  if(cerrandoProducto) cerrarModal(true);
 
   const categoria = p.get("categoria");
   const coleccion = p.get("coleccion");
   const marca     = p.get("marca");
-  if(categoria && CATEGORIAS.some(c => c.id === categoria)){
-    abrirColeccion("categoria", categoria, categoria, true);
-  } else if(coleccion){
-    abrirColeccion("seccion", coleccion, TITULOS_COLECCION[coleccion] || "Catálogo", true);
-  } else if(marca){
-    abrirColeccion("marca", marca, marca, true);
-  } else {
-    irInicio(true);
+
+  // Descriptor del destino según la URL.
+  let destino;
+  if(categoria && CATEGORIAS.some(c => c.id === categoria)) destino = { tipo:"categoria", valor:categoria, titulo:categoria };
+  else if(coleccion) destino = { tipo:"seccion", valor:coleccion, titulo:TITULOS_COLECCION[coleccion] || "Catálogo" };
+  else if(marca)     destino = { tipo:"marca", valor:marca, titulo:marca };
+  else               destino = { tipo:"inicio" };
+
+  // ¿El destino es la MISMA vista que ya está montada debajo del producto?
+  // Si sí, al cerrar el producto NO re-renderizamos: solo lo ocultamos y
+  // restauramos la posición. Así se conserva la página, los filtros y la
+  // subcategoría exactamente donde estabas (antes te devolvía a la página 1).
+  const mismaVista =
+    (destino.tipo === "inicio" && estadoVista === "inicio") ||
+    (destino.tipo !== "inicio" && coleccionActual &&
+     coleccionActual.tipo === destino.tipo && coleccionActual.valor === destino.valor);
+
+  if(cerrandoProducto && mismaVista){
+    cerrarModal(true);
+    window.scrollTo({ top: scrollCatalogo, behavior: "instant" in window ? "instant" : "auto" });
+    return;
   }
 
-  // abrirColeccion/irInicio suben al tope; si estábamos cerrando un producto,
-  // restauramos la posición guardada del catálogo.
+  if(cerrandoProducto) cerrarModal(true);
+
+  if(destino.tipo === "categoria")   abrirColeccion("categoria", destino.valor, destino.titulo, true);
+  else if(destino.tipo === "seccion") abrirColeccion("seccion", destino.valor, destino.titulo, true);
+  else if(destino.tipo === "marca")   abrirColeccion("marca", destino.valor, destino.titulo, true);
+  else                                irInicio(true);
+
+  // Si estábamos cerrando un producto (destino distinto), al menos restauramos
+  // la posición guardada del catálogo.
   if(cerrandoProducto){
     window.scrollTo({ top: scrollCatalogo, behavior: "instant" in window ? "instant" : "auto" });
   }

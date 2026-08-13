@@ -18,11 +18,16 @@
 <meta name="twitter:description" content="Camiseta basica de cuello redondo con logo &#39;ESSENTIALS FEAR OF GOD&#39; en relieve tono sobre tono en el pecho. Se muestra en beige, verde salvia, coral, gris topo…">
 <meta name="twitter:image" content="https://hauslineshopni.es/imgP/ropa/007.1.jpeg">
 <link rel="icon" href="/logo.png" type="image/png">
-<!-- Redirección para personas (los scrapers leen las etiquetas de arriba). -->
-<meta http-equiv="refresh" content="0; url=/?producto=007R">
+<!-- Sin meta-refresh en el <head>: los crawlers (WhatsApp/Facebook) leen las
+     etiquetas de arriba con la FOTO. La redirección de personas se hace con
+     JavaScript (los crawlers no lo ejecutan) y, para navegadores sin JS, con
+     un meta-refresh dentro de <noscript>. Así el preview nunca cae en la
+     imagen genérica del sitio. -->
 </head>
 <body style="background:#050505;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;padding:40px">
 <p>Abriendo Camiseta Essentials Fear of God…</p>
 <p><a href="/?producto=007R" style="color:#b7ff00">Toca aquí si no cargó automáticamente</a></p>
+<noscript><meta http-equiv="refresh" content="0; url=/?producto=007R"></noscript>
+<script>location.replace("/?producto=007R");</script>
 </body>
 </html>
