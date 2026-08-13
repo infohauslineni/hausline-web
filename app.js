@@ -1097,10 +1097,13 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   document.body.classList.add("en-producto");
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
 
-  // Cambia la URL a este producto para poder compartir el enlace directo.
-  // Ej: hauslineshopni.es/?producto=KAW002
+  // Cambia la URL a la RUTA del producto (/p/CODIGO), la misma mini-página que
+  // WhatsApp/Facebook leen con la foto en Open Graph. Así, si el usuario copia
+  // la barra de direcciones, el enlace ya muestra la foto del producto (antes
+  // quedaba en ?producto= y salía la imagen genérica del sitio).
+  // Ej: hauslineshopni.es/p/KAW002
   if(!sinHistorial){
-    try{ history.pushState({ producto: producto.codigo }, "", "?producto=" + encodeURIComponent(producto.codigo)); }catch(e){}
+    try{ history.pushState({ producto: producto.codigo }, "", "/p/" + encodeURIComponent(producto.codigo)); }catch(e){}
   }
 
   registrarVisto(producto.codigo);
@@ -1291,13 +1294,19 @@ $("#guiaFondo").addEventListener("click", e => {
   if(e.target.id === "guiaFondo") cerrarGuiaTallas();
 });
 
+// ¿La URL actual corresponde a un producto? (ruta /p/CODIGO o ?producto=CODIGO).
+// Si es así hubo navegación real, así que al volver usamos history.back().
+function urlEsProducto(){
+  return /^\/p\//.test(location.pathname) || location.search.includes("producto=");
+}
+
 function cerrarModal(sinHistorial){
   $("#modal").classList.remove("activo");
   document.body.classList.remove("en-producto");
   productoActual = null;
-  // Quita el ?producto= de la URL al cerrar.
-  if(!sinHistorial && location.search.includes("producto=")){
-    try{ history.pushState({}, "", location.pathname); }catch(e){}
+  // Quita el producto de la URL al cerrar (ruta /p/CODIGO o ?producto=CODIGO).
+  if(!sinHistorial && (/^\/p\//.test(location.pathname) || location.search.includes("producto="))){
+    try{ history.pushState({}, "", "/"); }catch(e){}
   }
 }
 
@@ -1306,7 +1315,13 @@ function cerrarModal(sinHistorial){
 window.addEventListener("popstate", () => {
   const p = new URLSearchParams(location.search);
 
-  const codigo = p.get("producto");
+  // El producto puede venir por ruta (/p/CODIGO) o, por compatibilidad, por
+  // query (?producto=CODIGO).
+  let codigo = p.get("producto");
+  if(!codigo){
+    const m = location.pathname.match(/^\/p\/([^\/]+)\/?$/);
+    if(m) codigo = decodeURIComponent(m[1]);
+  }
   if(codigo && buscarProducto(codigo)){
     abrirProducto(codigo, false, true);
     return;
@@ -1830,7 +1845,7 @@ $("#navCategorias").addEventListener("click", abrirMenu);
 // usamos el historial real para regresar a donde estaba el catálogo; si se
 // abrió por enlace directo, simplemente cerramos la vista.
 $("#prodCerrar").addEventListener("click", () => {
-  if(location.search.includes("producto=")) history.back();
+  if(urlEsProducto()) history.back();
   else cerrarModal();
 });
 $("#galeriaPrev").addEventListener("click", () => cambiarImagen(-1));
@@ -2028,7 +2043,7 @@ document.addEventListener("keydown", e => {
     if($("#compartirFondo").classList.contains("activo")) cerrarPanelCompartir();
     else if($("#guiaFondo").classList.contains("activo")) cerrarGuiaTallas();
     else if($("#modal").classList.contains("activo")){
-      if(location.search.includes("producto=")) history.back(); else cerrarModal();
+      if(urlEsProducto()) history.back(); else cerrarModal();
     }
     else if($$(".panel.activo").length) cerrarPaneles();
     else if($("#menuLateral").classList.contains("activo")) cerrarMenu();

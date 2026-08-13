@@ -1606,11 +1606,18 @@ body.en-producto .chips{ display:none; }
 
 .galeria-principal{
   position:relative;
-  width:100%;
+  width:auto;
   aspect-ratio:1/1;
   overflow:hidden;
   background:var(--foto-bg);
   touch-action:pan-y;
+  /* Esquinas redondeadas y un pequeño margen para separar la foto del
+     encabezado (antes se veía un borde recto pegado y quedaba feo). */
+  border-radius:16px;
+  margin:10px 14px 0;
+}
+@media(min-width:900px){
+  .galeria-principal{ margin:0; }
 }
 /* La foto llena el marco. Se recorta por los bordes para que el producto
    quede grande y centrado, igual que en las tarjetas. */
@@ -1986,6 +1993,11 @@ body.en-producto .chips{ display:none; }
 .vista-coleccion{ display:none; }
 body.en-coleccion .vista-coleccion{ display:block; }
 body.en-coleccion .vista-inicio{ display:none; }
+/* En la vista de producto hay que ocultar la colección aunque el body siga
+   con la clase en-coleccion. Va DESPUÉS que la regla de arriba (misma
+   especificidad) para ganar por orden y que el producto no aparezca junto
+   a la colección. Sin esto, en Ropa/Dama/Accesorios el producto no "abría". */
+body.en-producto .vista-coleccion{ display:none; }
 
 .coleccion-cabecera{ padding:20px 0 16px; }
 
