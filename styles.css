@@ -473,51 +473,126 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 
 .banners{
   position:relative;
-  margin:16px 0 4px;
-  border-radius:var(--radio);
+  /* Ocupa todo el ancho de la pantalla para que no queden bordes negros vacios. */
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-top:14px;
+  margin-bottom:6px;
+  padding:24px 0 26px;
   overflow:hidden;
-  background:var(--card);
-  border:1px solid var(--borde);
+  text-align:center;
+}
+/* Fondo a pantalla completa: la misma foto activa, difuminada (look cinematografico). */
+.banners-fondo{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background-size:cover;
+  background-position:center;
+  filter:blur(48px) brightness(.4) saturate(1.25);
+  transform:scale(1.2);
+}
+/* El contenido va por encima del fondo. */
+.banners-marca,
+.banners-viewport,
+.banner-puntos{
+  position:relative;
+  z-index:1;
+}
+
+/* Encabezado de marca sobre el carrusel (estilo campaña) */
+.banners-marca{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  margin:8px 0 16px;
+}
+.banners-marca-logo{
+  display:inline-flex;
+  align-items:center;
+  gap:11px;
+  font-size:clamp(22px,5.5vw,34px);
+  font-weight:800;
+  letter-spacing:.16em;
+  color:var(--texto);
+}
+.banners-marca-dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:var(--verde);
+  box-shadow:0 0 12px rgba(183,255,0,.6);
+}
+.banners-marca-sub{
+  font-size:clamp(10px,2.3vw,12px);
+  letter-spacing:.5em;
+  text-indent:.5em;
+  color:var(--texto-3);
+  font-weight:600;
+}
+
+/* Viewport que recorta el vistazo (peek) de las tarjetas vecinas.
+   El ancho se adapta a telefono / tablet / PC conservando la proporcion. */
+.banners-viewport{
+  overflow:hidden;
+  max-width:520px;          /* telefono: usa el ancho disponible hasta este tope */
+  margin-inline:auto;
+}
+@media(min-width:700px){    /* tablet */
+  .banners-viewport{ max-width:600px; }
+}
+@media(min-width:1100px){   /* PC */
+  .banners-viewport{ max-width:680px; }
 }
 
 .banners-track{
   display:flex;
+  gap:14px;
   transition:transform var(--t-media) var(--ease);
+  will-change:transform;
 }
 
 .banner{
+  flex:0 0 auto;              /* el ancho lo fija el JS segun el viewport */
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.banner-marco{
   position:relative;
-  flex:0 0 100%;
-  min-height:190px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:26px 22px;
-  background:linear-gradient(115deg,#161616 0%,#0b0b0b 100%);
+  aspect-ratio:1 / 1;
+  border-radius:var(--radio);
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--borde);
+  transform:scale(.9);
+  opacity:.55;
+  transition:transform var(--t-media) var(--ease),
+             opacity var(--t-media) var(--ease),
+             box-shadow var(--t-media) var(--ease);
 }
-@media(min-width:700px){
-  .banner{ min-height:280px; padding:44px 48px; }
+.banner.activo .banner-marco{
+  transform:scale(1);
+  opacity:1;
+  box-shadow:0 16px 44px rgba(0,0,0,.55);
 }
-
+/* Foto principal: rellena la tarjeta (zoom 1:1). */
 .banner-img{
-  position:absolute;
-  inset:0;
   width:100%;height:100%;
   object-fit:cover;
   object-position:center;
-  opacity:.55;
+  display:block;
 }
-.banner-contenido{ position:relative; z-index:2; max-width:520px; }
-
-.banner h2{
-  font-size:clamp(22px,5vw,40px);
-  line-height:1.1;
-  margin-bottom:6px;
-}
-.banner p{
-  margin:0 0 16px;
-  color:var(--texto-2);
-  font-size:clamp(13px,2.4vw,16px);
+/* Viñeta sutil: sólo un toque de profundidad en los bordes; la foto queda clara. */
+.banner-marco::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    radial-gradient(135% 105% at 50% 42%, transparent 64%, rgba(0,0,0,.32) 100%),
+    linear-gradient(to top, rgba(0,0,0,.2) 0%, transparent 20%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
 }
 
 .btn-verde{
@@ -540,12 +615,10 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 .btn-verde:active{ transform:scale(.97); }
 
 .banner-puntos{
-  position:absolute;
-  bottom:14px;left:0;right:0;
   display:flex;
   justify-content:center;
   gap:7px;
-  z-index:3;
+  margin-top:16px;
 }
 .banner-punto{
   width:7px;height:7px;
@@ -766,8 +839,16 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   font-variant-numeric:tabular-nums;
 }
 
+/* Fila con precio (izquierda, protagonista) y código (derecha, discreto). */
+.card-meta{
+  margin-top:6px;
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:8px;
+}
+.card-meta .card-codigo{ margin-left:auto; flex:none; }
 .card-precio{
-  margin-top:5px;
   display:flex;
   align-items:baseline;
   gap:7px;
@@ -789,6 +870,87 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   font-size:10.5px;
   font-weight:700;
   color:var(--verde);
+}
+
+/* ---- Marca de agua HAUSLINE sobre cada foto ---- */
+.foto-marca{
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  transform:translateX(-50%);
+  z-index:2;
+  padding:3px 11px;
+  border-radius:var(--radio-pill);
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  color:rgba(255,255,255,.92);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.24em;
+  text-indent:.24em;
+  text-transform:uppercase;
+  pointer-events:none;
+  white-space:nowrap;
+}
+@media(min-width:640px){ .foto-marca{ font-size:10px; bottom:10px; } }
+
+/* ---- Botones de la tarjeta: Encargar (WhatsApp) y Agregar (carrito) ---- */
+.card-acciones{
+  display:flex;
+  gap:8px;
+  margin-top:11px;
+}
+.card-btn{
+  flex:1;
+  min-width:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:36px;
+  padding:0 6px;
+  border:1px solid transparent;
+  border-radius:var(--radio-pill);
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition:transform var(--t-rapida) var(--ease),
+             background var(--t-rapida) var(--ease),
+             border-color var(--t-rapida) var(--ease);
+}
+.card-btn:active{ transform:scale(.96); }
+/* "Encargar" = pastilla blanca (como "Order" de la referencia). */
+.card-btn-order{ background:#fff; color:#0a0a0a; }
+.card-btn-order:hover{ background:#e9e9e9; }
+/* "Añadir" = pastilla oscura con borde (como "Add to cart"). */
+.card-btn-cart{ background:transparent; color:var(--texto); border-color:rgba(255,255,255,.3); }
+.card-btn-cart:hover{ background:rgba(255,255,255,.06); }
+.card-btn.ok{ background:var(--verde); color:#04210f; border-color:var(--verde); }
+@media(min-width:900px){ .card-btn{ height:40px; font-size:13px; } }
+
+/* ---- Aparición escalonada de los productos al hacer scroll ---- */
+.vista-inicio .seccion.por-revelar .card{
+  opacity:0;
+  transform:translateY(16px);
+}
+.vista-inicio .seccion.revelado .card{
+  opacity:1;
+  transform:none;
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+}
+.seccion.revelado .fila > .card:nth-child(1){ transition-delay:.03s; }
+.seccion.revelado .fila > .card:nth-child(2){ transition-delay:.08s; }
+.seccion.revelado .fila > .card:nth-child(3){ transition-delay:.13s; }
+.seccion.revelado .fila > .card:nth-child(4){ transition-delay:.18s; }
+.seccion.revelado .fila > .card:nth-child(5){ transition-delay:.23s; }
+.seccion.revelado .fila > .card:nth-child(6){ transition-delay:.28s; }
+.seccion.revelado .fila > .card:nth-child(7){ transition-delay:.33s; }
+.seccion.revelado .fila > .card:nth-child(n+8){ transition-delay:.38s; }
+@media(prefers-reduced-motion:reduce){
+  .vista-inicio .seccion.por-revelar .card{ opacity:1; transform:none; }
 }
 
 .btn-fav{

@@ -21,13 +21,15 @@
   <meta property="og:site_name" content="HAUSLINE">
   <meta property="og:title" content="HAUSLINE — King of Shoes">
   <meta property="og:description" content="Sneakers • Ropa • Accesorios. Envíos a toda Nicaragua.">
-  <meta property="og:image" content="https://hauslineshopni.es/hausline-og-image.jpg">
+  <meta property="og:image" content="https://hauslineshopni.es/logo.png">
   <meta property="og:url" content="https://hauslineshopni.es/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="HAUSLINE — King of Shoes">
-  <meta name="twitter:image" content="https://hauslineshopni.es/hausline-og-image.jpg">
+  <meta name="twitter:image" content="https://hauslineshopni.es/logo.png">
 
   <link rel="stylesheet" href="styles.css?v=20260813e">
+  <!-- Precarga la primera foto del carrusel para que aparezca de inmediato -->
+  <link rel="preload" as="image" href="imgP/banners/1.jpg" fetchpriority="high">
 </head>
 
 <body>
@@ -96,12 +98,6 @@
 <main class="vista-inicio" id="vistaInicio">
   <div class="contenedor">
 
-    <!-- Banners -->
-    <section class="banners" aria-label="Destacados" id="banners">
-      <div class="banners-track" id="bannersTrack"></div>
-      <div class="banner-puntos" id="bannerPuntos"></div>
-    </section>
-
     <!-- Categorías visuales -->
     <section class="seccion" aria-labelledby="tit-categorias">
       <div class="seccion-cabecera">
@@ -160,6 +156,19 @@
         <h2 id="tit-vendidos">Más vendidos esta semana</h2>
       </div>
       <div class="fila" id="filaVendidos"></div>
+    </section>
+
+    <!-- Banner destacado (entre Más populares y Ropa popular) -->
+    <section class="banners" aria-label="Destacados" id="banners">
+      <div class="banners-fondo" id="bannersFondo" aria-hidden="true"></div>
+      <div class="banners-marca">
+        <span class="banners-marca-logo"><span class="banners-marca-dot"></span>HAUSLINE</span>
+        <span class="banners-marca-sub">KING OF SHOES</span>
+      </div>
+      <div class="banners-viewport" id="bannersViewport">
+        <div class="banners-track" id="bannersTrack"></div>
+      </div>
+      <div class="banner-puntos" id="bannerPuntos"></div>
     </section>
 
     <!-- Ropa popular -->

@@ -181,9 +181,10 @@ function crearCard(producto, modoInmediata){
   return `
     <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : ""}>
       <div class="card-img">
-        <img class="${claseAjuste}" src="${esc(producto.imagen)}" alt="${esc(nombreProducto(producto))}" loading="lazy"${estiloEscala}
+        <img class="${claseAjuste}" src="${esc(producto.imagen)}" alt="${esc(nombreProducto(producto))}" loading="lazy" decoding="async"${estiloEscala}
              onerror="this.closest('.card-img').classList.add('sin-imagen')">
         <div class="etiquetas">${etiquetas}</div>
+        <span class="foto-marca" aria-hidden="true">HAUSLINE</span>
         <button class="btn-fav ${fav ? "activo" : ""}" type="button"
                 data-fav="${esc(producto.codigo)}"
                 aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}">
@@ -193,9 +194,15 @@ function crearCard(producto, modoInmediata){
       <div class="card-info">
         <div class="card-marca">${esc(marcaProducto(producto))}</div>
         <h3 class="card-nombre">${esc(nombreProducto(producto))}</h3>
-        <div class="card-codigo">${esc(producto.codigo)}</div>
-        <div class="card-precio">${precioHtml}</div>
+        <div class="card-meta">
+          <div class="card-precio">${precioHtml}</div>
+          <div class="card-codigo">${esc(producto.codigo)}</div>
+        </div>
         ${tallasHtml}
+        <div class="card-acciones">
+          <button class="card-btn card-btn-order" type="button" data-encargar="${esc(producto.codigo)}" aria-label="Encargar por WhatsApp">Encargar</button>
+          <button class="card-btn card-btn-cart" type="button" data-agregar="${esc(producto.codigo)}" aria-label="Añadir al carrito">Añadir</button>
+        </div>
       </div>
     </article>
   `;
@@ -205,6 +212,35 @@ function pintarFila(idSelector, lista, modoInmediata){
   const cont = $(idSelector);
   if(!cont) return;
   cont.innerHTML = lista.map(p => crearCard(p, modoInmediata)).join("");
+}
+
+// Construye la línea de carrito a partir de un producto (sin talla; se elige luego).
+function itemCarritoDesde(producto){
+  return {
+    codigo: producto.codigo,
+    nombre: nombreProducto(producto),
+    marca: marcaProducto(producto),
+    categoria: producto.categoria || "",
+    imagen: producto.imagen || "",
+    precioUnitario: precioVigente(producto, false),
+    envioRapido: false,
+    entregaInmediata: !!producto.entregaInmediata
+  };
+}
+
+// Abre WhatsApp con el pedido de un solo producto (botón "Encargar" de la tarjeta).
+function encargarProductoWhatsApp(producto){
+  const precio = precioVigente(producto, false);
+  const fmt = typeof precioUSD === "function" ? precioUSD(precio) : formatoPrecio(precio);
+  let msg = "Hola, quiero encargar este producto de HAUSLINE:\n\n";
+  msg += `CÓDIGO: ${producto.codigo}\n`;
+  msg += `Producto: ${nombreProducto(producto)}\n`;
+  const marca = marcaProducto(producto);
+  if(marca) msg += `Marca: ${marca}\n`;
+  msg += `Precio: ${fmt}\n\n`;
+  msg += "¿Me confirmas disponibilidad, por favor?";
+  const numero = typeof WHATSAPP_NUMERO !== "undefined" ? WHATSAPP_NUMERO : "50578995116";
+  window.open("https://wa.me/" + numero + "?text=" + encodeURIComponent(msg), "_blank");
 }
 
 // ============================================================
@@ -298,22 +334,20 @@ function renderBanners(){
   const activos = banners.filter(b => b.activo);
   if(!activos.length){ $("#banners").hidden = true; return; }
 
-  track.innerHTML = activos.map(b => {
+  track.innerHTML = activos.map((b, i) => {
+    // La primera foto carga con prioridad (evita que el banner aparezca vacio);
+    // las demas cargan al vuelo. decoding async = no bloquea el render.
+    const carga = i === 0 ? 'fetchpriority="high"' : 'loading="lazy"';
     const img = b.imagen
-      ? `<img class="banner-img" src="${esc(b.imagen)}" alt="" loading="lazy">`
+      ? `<img class="banner-img" src="${esc(b.imagen)}" alt="${esc(b.titulo || "")}" ${carga} decoding="async">`
       : "";
+    // La foto se muestra completa (estilo campaña). Toda la tarjeta es clicable.
     return `
-      <div class="banner">
-        ${img}
-        <div class="banner-contenido">
-          <h2>${esc(b.titulo)}</h2>
-          <p>${esc(b.subtitulo)}</p>
-          <button class="btn-verde" type="button"
-                  data-banner-codigo="${esc(b.codigoProducto || "")}"
-                  data-banner-enlace="${esc(b.enlace || "")}">
-            ${esc(b.textoBoton)}
-          </button>
-        </div>
+      <div class="banner" role="button" tabindex="0"
+           data-banner-codigo="${esc(b.codigoProducto || "")}"
+           data-banner-enlace="${esc(b.enlace || "")}"
+           aria-label="${esc(b.titulo || "Ver")}">
+        <div class="banner-marco">${img}</div>
       </div>`;
   }).join("");
 
@@ -323,17 +357,43 @@ function renderBanners(){
   ).join("");
 
   bannerIndice = 0;
-  moverBanner(0);
+  ajustarBanners();
   iniciarBannerAuto(activos.length);
 }
 
+// Ajusta el ancho de cada tarjeta segun el viewport (deja asomar las vecinas)
+// y vuelve a centrar la activa.
+function ajustarBanners(){
+  const vp = $("#bannersViewport");
+  const track = $("#bannersTrack");
+  if(!vp || !track || !track.children.length) return;
+  // La tarjeta ocupa el 80% del viewport; el 20% restante deja asomar las vecinas.
+  const w = Math.round(vp.clientWidth * 0.8);
+  Array.from(track.children).forEach(s => { s.style.width = w + "px"; });
+  moverBanner(bannerIndice);
+}
+window.addEventListener("resize", ajustarBanners);
+
 function moverBanner(indice){
   const track = $("#bannersTrack");
-  if(!track) return;
+  const vp = $("#bannersViewport");
+  if(!track || !vp) return;
   const total = track.children.length;
   if(!total) return;
   bannerIndice = (indice + total) % total;
-  track.style.transform = `translateX(-${bannerIndice * 100}%)`;
+  // Peek carousel: centra la tarjeta activa y deja asomar las vecinas.
+  const slide = track.children[bannerIndice];
+  const offset = slide.offsetLeft - (vp.clientWidth - slide.offsetWidth) / 2;
+  track.style.transform = `translateX(${-offset}px)`;
+  Array.from(track.children).forEach((s, i) =>
+    s.classList.toggle("activo", i === bannerIndice)
+  );
+  // Fondo a pantalla completa con la foto activa difuminada.
+  const fondo = $("#bannersFondo");
+  const imgActiva = slide.querySelector(".banner-img");
+  if(fondo && imgActiva){
+    fondo.style.backgroundImage = `url("${imgActiva.currentSrc || imgActiva.src}")`;
+  }
   $$("[data-banner-punto]").forEach((p, i) =>
     p.classList.toggle("activo", i === bannerIndice)
   );
@@ -341,9 +401,19 @@ function moverBanner(indice){
 
 function iniciarBannerAuto(total){
   clearInterval(bannerTimer);
+  if(typeof total !== "number"){
+    const track = $("#bannersTrack");
+    total = track ? track.children.length : 0;
+  }
   if(total <= 1) return;
   if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  bannerTimer = setInterval(() => moverBanner(bannerIndice + 1), 5500);
+  bannerTimer = setInterval(() => moverBanner(bannerIndice + 1), 4000);
+}
+
+// Cambia de banner por interacción manual (punto o swipe) y reinicia el autoplay.
+function moverBannerManual(indice){
+  moverBanner(indice);
+  iniciarBannerAuto();
 }
 
 // Deslizamiento táctil de los banners
@@ -355,7 +425,7 @@ function iniciarBannerAuto(total){
   cont.addEventListener("touchend", e => {
     if(x0 === null) return;
     const dx = e.changedTouches[0].clientX - x0;
-    if(Math.abs(dx) > 45) moverBanner(bannerIndice + (dx < 0 ? 1 : -1));
+    if(Math.abs(dx) > 45) moverBannerManual(bannerIndice + (dx < 0 ? 1 : -1));
     x0 = null;
   }, { passive:true });
 })();
@@ -1628,6 +1698,30 @@ function renderFavoritos(){
 // --- Delegación general de clics ---
 document.addEventListener("click", e => {
 
+  // Añadir al carrito desde la tarjeta (no abre el producto).
+  const btnAgregar = e.target.closest("[data-agregar]");
+  if(btnAgregar){
+    e.stopPropagation();
+    const p = buscarProducto(btnAgregar.dataset.agregar);
+    if(p){
+      agregarAlCarrito(itemCarritoDesde(p), 1);
+      mostrarAviso("Agregado al carrito");
+      animarContador("[data-contador-carrito]");
+      btnAgregar.classList.add("ok");
+      setTimeout(() => btnAgregar.classList.remove("ok"), 900);
+    }
+    return;
+  }
+
+  // Encargar por WhatsApp desde la tarjeta (no abre el producto).
+  const btnEncargar = e.target.closest("[data-encargar]");
+  if(btnEncargar){
+    e.stopPropagation();
+    const p = buscarProducto(btnEncargar.dataset.encargar);
+    if(p) encargarProductoWhatsApp(p);
+    return;
+  }
+
   // Abrir producto desde una tarjeta.
   // Si la tarjeta viene del apartado de entrega inmediata se abre en ese modo.
   const card = e.target.closest(".card");
@@ -1751,7 +1845,7 @@ document.addEventListener("click", e => {
 
   // Banners
   const punto = e.target.closest("[data-banner-punto]");
-  if(punto){ moverBanner(Number(punto.dataset.bannerPunto)); return; }
+  if(punto){ moverBannerManual(Number(punto.dataset.bannerPunto)); return; }
 
   const btnBanner = e.target.closest("[data-banner-codigo]");
   if(btnBanner){

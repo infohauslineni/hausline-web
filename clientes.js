@@ -39,7 +39,7 @@ const banners = [
   {
     // IMAGEN DE PRUEBA: reemplázala por tu foto publicitaria.
     // Al poner un codigoProducto, el botón abre ese producto directamente.
-    imagen: "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
+    imagen: "imgP/banners/1.jpg",
     titulo: "Nueva colección",
     subtitulo: "Estilo que te define",
     textoBoton: "Ver producto",
@@ -48,7 +48,7 @@ const banners = [
     activo: true
   },
   {
-    imagen: "imgP/clientes/10 (3).jpg",
+    imagen: "imgP/banners/2.jpg",
     titulo: "CALIDAD GARANTIZADA",
     subtitulo: "TRABAJAMOS DIRECTO CON LA FABRICA",
     textoBoton: "COMPRAR AHORA",
@@ -57,7 +57,7 @@ const banners = [
     activo:true
   },
   {
-    imagen: "imgP/clientes/7.jpeg",
+    imagen: "imgP/banners/3.jpg",
     titulo: "Pedidos bajo encargo",
     subtitulo: "Abono del 50% para confirmar tu pedido",
     textoBoton: "Ver catálogo",
