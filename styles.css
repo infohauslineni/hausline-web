@@ -752,6 +752,9 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 .card-img{
   position:relative;
   width:100%;
+  /* Foto cuadrada (1:1): las fotos de origen son verticales (3:4), así que
+     el cuadrado es el recorte que menos corta y deja el producto centrado.
+     La tarjeta se acorta compactando el bloque de info, no la foto. */
   aspect-ratio:1/1;
   background:var(--foto-bg);
   overflow:hidden;
@@ -791,14 +794,14 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 }
 
 .card-info{
-  padding:9px 10px 11px;
+  padding:8px 10px 9px;
   display:flex;
   flex-direction:column;
   gap:2px;
   flex:1;
 }
 @media(min-width:640px){
-  .card-info{ padding:11px 13px 13px; }
+  .card-info{ padding:10px 13px 11px; }
 }
 
 .card-marca{
@@ -818,10 +821,10 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   line-height:1.32;
   color:var(--texto);
   display:-webkit-box;
-  -webkit-line-clamp:2;
+  -webkit-line-clamp:1;
   -webkit-box-orient:vertical;
   overflow:hidden;
-  min-height:2.64em;
+  min-height:1.32em;
 }
 @media(min-width:640px){
   .card-nombre{ font-size:13.5px; }
@@ -899,7 +902,7 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 .card-acciones{
   display:flex;
   gap:8px;
-  margin-top:11px;
+  margin-top:8px;
 }
 .card-btn{
   flex:1;
@@ -921,6 +924,7 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
              background var(--t-rapida) var(--ease),
              border-color var(--t-rapida) var(--ease);
 }
+.card-btn{ height:33px; }
 .card-btn:active{ transform:scale(.96); }
 /* "Encargar" = pastilla blanca (como "Order" de la referencia). */
 .card-btn-order{ background:#fff; color:#0a0a0a; }

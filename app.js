@@ -175,8 +175,19 @@ function crearCard(producto, modoInmediata){
   // Por defecto la foto se recorta para que el producto llene la tarjeta.
   // Si el producto trae imagenFit:"contain" se muestra completa.
   const claseAjuste = producto.imagenFit === "contain" ? "ajuste-contain" : "";
-  const estiloEscala = producto.escalaImagen
-    ? ` style="transform:scale(${Number(producto.escalaImagen)})"` : "";
+  // Ajustes de encuadre por producto (opcionales, ver productos.js):
+  //   escalaImagen:1.15        -> acerca un poco más el producto
+  //   posicionImagen:"center 80%" -> baja el recorte (útil si el producto
+  //                                  está en la parte baja de la foto)
+  // Las fotos de catálogo de Golden Goose (GGDB) traen el tenis en la parte
+  // baja con espacio en blanco arriba; bajamos el recorte para que el zapato
+  // quede centrado en la tarjeta. Se puede sobrescribir con posicionImagen.
+  let posicionImg = producto.posicionImagen;
+  if(!posicionImg && /GGDB/i.test(producto.nombre || "")) posicionImg = "center 68%";
+  const partesEstilo = [];
+  if(producto.escalaImagen) partesEstilo.push(`transform:scale(${Number(producto.escalaImagen)})`);
+  if(posicionImg) partesEstilo.push(`object-position:${String(posicionImg).replace(/"/g,"")}`);
+  const estiloEscala = partesEstilo.length ? ` style="${partesEstilo.join(";")}"` : "";
 
   return `
     <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : ""}>

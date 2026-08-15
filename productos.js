@@ -3277,7 +3277,7 @@ colores:[
   codigo:"002R",
   subcategoria:"Jackets",
   nombre:"JACKET OFFWHITE OFFW",
-  precio:140,
+  precio:70,
   categoria:"Ropa",
   nuevo:true,
 
@@ -3664,6 +3664,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 {
   codigo:"019R",
   nombre:"HOODIE alo",
+  subcategoria:"Jackets",
   precio:60,
   categoria:"Ropa",
   nuevo:true,
@@ -3730,7 +3731,8 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 {
   codigo:"022R",
   nombre:"HOODIE ASSC",
-  precio:45,
+  subcategoria:"Jackets",
+  precio:52,
   categoria:"Ropa",
   nuevo:true,
 
@@ -4513,6 +4515,7 @@ colores:[
 {
   codigo:"062R",
   nombre:"HOODIE CHROME HEARTS",
+  subcategoria:"Jackets",
   precio:70,
   categoria:"Ropa",
   nuevo:true,
@@ -4973,8 +4976,8 @@ colores:[
 
 {
   codigo:"AA005",
-  subcategoria:"Camisetas",
-  nombre:"T-SHIRT ASAALI",
+  subcategoria:"Jackets",
+  nombre:"Hoodie ASAALI",
   precio:75,
   categoria:"Ropa",
   nuevo:true,
@@ -4998,8 +5001,8 @@ colores:[
 
 {
   codigo:"AA006",
-  subcategoria:"Camisetas",
-  nombre:"T-SHIRT ASAALI",
+  subcategoria:"Short",
+  nombre:"Short ASAALI",
   precio:55,
   categoria:"Ropa",
   nuevo:true,
@@ -5023,12 +5026,12 @@ colores:[
 
 {
   codigo:"AA007",
-  subcategoria:"Camisetas",
-  nombre:"T-SHIRT ASAALI",
+  subcategoria:"Short",
+  nombre:"Short ASAALI",
   precio:55,
   categoria:"Ropa",
   nuevo:true,
-  destacadoNuevo:true,
+  destacadoNuevo:false,
 
   imagen:"imgP/ropa/ASAALI/AA007/1.jpg",
 
