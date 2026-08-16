@@ -49,6 +49,8 @@ body{
   overflow-x:hidden;
   padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));
   animation:aparecer .5s var(--ease) both;
+  /* Evita el zoom por doble-toque; el scroll y los swipes siguen funcionando. */
+  touch-action:manipulation;
 }
 
 @keyframes aparecer{
@@ -1797,19 +1799,21 @@ body.en-producto .chips{ display:none; }
 @media(min-width:900px){
   .galeria-principal{ margin:0; }
 }
-/* La foto llena el marco. Se recorta por los bordes para que el producto
-   quede grande y centrado, igual que en las tarjetas. */
+/* La foto se muestra COMPLETA dentro del marco (sin recortar), para que no
+   corte el producto cuando las fotos vienen con distintos anchos/altos.
+   El marco 1:1 con fondo neutro mantiene todas las fichas del mismo tamaño. */
 .galeria-principal img{
   width:100%;height:100%;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center;
+  padding:10px;
   transition:opacity .22s var(--ease);
 }
 
-/* Con imagenFit:"contain" se ve la foto completa sin recortar */
-.galeria-principal img.ajuste-contain{
-  object-fit:contain;
-  padding:10px;
+/* imagenFit:"cover" (opcional por producto) vuelve al recorte que llena el marco */
+.galeria-principal img.ajuste-cover{
+  object-fit:cover;
+  padding:0;
 }
 
 /* Fondo oscuro semitransparente para que las flechas se vean sobre

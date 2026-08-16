@@ -2330,3 +2330,13 @@ function iniciar(){
 }
 
 iniciar();
+
+// ============================================================
+// BLOQUEO DE ZOOM (pellizco / doble-toque)
+// El viewport ya pone user-scalable=no y el CSS touch-action:manipulation
+// quita el doble-toque; iOS Safari ignora esos, así que además cancelamos
+// los gestos de pellizco. El scroll y los swipes de la galería no se afectan.
+// ============================================================
+["gesturestart", "gesturechange", "gestureend"].forEach(ev =>
+  document.addEventListener(ev, e => e.preventDefault(), { passive: false })
+);
