@@ -8,7 +8,8 @@
 <style>
   :root{
     --bg:#0b0b0c; --panel:#151517; --panel2:#1d1d20; --linea:#2a2a2e;
-    --texto:#f4f4f5; --texto2:#a1a1aa; --verde:#22c55e; --rojo:#ef4444; --azul:#3b82f6; --amarillo:#eab308;
+    --texto:#f4f4f5; --texto2:#a1a1aa; --texto3:#71717a;
+    --verde:#b7ff00; --verde-txt:#0a1400; --rojo:#ef4444; --azul:#3b82f6; --amarillo:#eab308;
     --radio:14px;
   }
   *{ box-sizing:border-box; }
@@ -18,30 +19,22 @@
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     -webkit-text-size-adjust:100%; touch-action:manipulation;
   }
-  .wrap{ max-width:680px; margin:0 auto; padding:14px 14px 70px; }
+  .wrap{ max-width:720px; margin:0 auto; padding:14px 14px 70px; }
+  @media(min-width:900px){ .wrap{ max-width:1040px; } }
   header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
   .logo{ font-weight:800; letter-spacing:.2em; font-size:15px; }
   .logo small{ display:block; letter-spacing:0; font-weight:500; color:var(--texto2); font-size:11px; }
   button{ font:inherit; cursor:pointer; }
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    border:none; border-radius:var(--radio); padding:13px 16px; font-weight:700;
-    background:var(--verde); color:#04210f; width:100%;
-  }
-  .btn:active{ transform:scale(.99); }
-  .btn:disabled{ opacity:.6; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:var(--radio); padding:13px 16px; font-weight:700; background:var(--verde); color:var(--verde-txt); width:100%; }
+  .btn:active{ transform:scale(.99); } .btn:disabled{ opacity:.6; }
   .btn-sec{ background:var(--panel2); color:var(--texto); border:1px solid var(--linea); }
   .btn-mini{ width:auto; padding:8px 12px; font-size:13px; border-radius:10px; }
   label{ display:block; font-size:12.5px; color:var(--texto2); margin:12px 2px 5px; font-weight:600; }
-  input, select, textarea{
-    width:100%; background:var(--panel2); border:1px solid var(--linea); color:var(--texto);
-    border-radius:11px; padding:12px; font:inherit; outline:none;
-  }
+  input, select, textarea{ width:100%; background:var(--panel2); border:1px solid var(--linea); color:var(--texto); border-radius:11px; padding:12px; font:inherit; outline:none; }
   input:focus, select:focus, textarea:focus{ border-color:var(--verde); }
   textarea{ min-height:74px; resize:vertical; }
   .card{ background:var(--panel); border:1px solid var(--linea); border-radius:var(--radio); padding:16px; margin-bottom:14px; }
-  .fila{ display:flex; gap:10px; }
-  .fila > *{ flex:1; }
+  .fila{ display:flex; gap:10px; } .fila > *{ flex:1; }
   .check{ display:flex; align-items:center; gap:9px; margin-top:12px; }
   .check input{ width:20px; height:20px; flex:none; accent-color:var(--verde); }
   .check label{ margin:0; color:var(--texto); font-weight:500; font-size:14px; }
@@ -49,50 +42,88 @@
   .fotos-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:8px; margin-top:10px; }
   .foto-item{ position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; border:1px solid var(--linea); background:var(--panel2); }
   .foto-item img{ width:100%; height:100%; object-fit:cover; }
-  .foto-item .quitar{
-    position:absolute; top:3px; right:3px; width:22px; height:22px; border-radius:50%;
-    background:rgba(0,0,0,.65); color:#fff; border:none; font-size:14px; line-height:1;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .foto-add{
-    aspect-ratio:1; border:1.5px dashed var(--linea); border-radius:10px; background:var(--panel2);
-    color:var(--texto2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px;
-  }
+  .foto-item .quitar{ position:absolute; top:3px; right:3px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.65); color:#fff; border:none; font-size:14px; display:flex; align-items:center; justify-content:center; }
+  .foto-add{ aspect-ratio:1; border:1.5px dashed var(--linea); border-radius:10px; background:var(--panel2); color:var(--texto2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px; }
   .foto-add svg{ width:22px; height:22px; }
   .aviso{ padding:11px 13px; border-radius:11px; font-size:13.5px; margin:12px 0; display:none; }
   .aviso.ok{ display:block; background:rgba(34,197,94,.14); color:#86efac; border:1px solid rgba(34,197,94,.35); }
   .aviso.err{ display:block; background:rgba(239,68,68,.14); color:#fca5a5; border:1px solid rgba(239,68,68,.35); }
-  .aviso.info{ display:block; background:rgba(59,130,246,.14); color:#93c5fd; border:1px solid rgba(59,130,246,.35); }
   .hidden{ display:none !important; }
   h2{ font-size:16px; margin:6px 2px 12px; }
 
-  /* Pestañas */
+  /* ---------- Login estilo tracking ---------- */
+  .login-screen{ min-height:80vh; display:flex; align-items:center; justify-content:center; }
+  .login-box{ width:100%; max-width:400px; }
+  .login-eyebrow{ color:var(--verde); font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; margin-bottom:8px; }
+  .login-title{ font-size:30px; font-weight:800; margin:0 0 6px; letter-spacing:-.02em; }
+  .login-sub{ color:var(--texto2); font-size:14px; margin:0 0 20px; }
+  .input-icon{ position:relative; }
+  .input-icon > svg{ position:absolute; left:13px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--texto3); pointer-events:none; }
+  .input-icon input{ padding-left:40px; height:50px; }
+  .input-icon .ojo{ position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--texto2); padding:8px; font-size:16px; }
+  .btn-login{ height:52px; font-size:15px; margin-top:6px; box-shadow:0 6px 20px rgba(183,255,0,.18); }
+  .login-link{ color:var(--verde); font-weight:700; text-decoration:none; }
+  .login-foot{ display:block; text-align:center; margin-top:18px; color:var(--texto2); font-size:13px; }
+
   .tabs{ display:flex; gap:8px; margin-bottom:14px; }
-  .tab{ flex:1; padding:11px; border-radius:11px; border:1px solid var(--linea); background:var(--panel2); color:var(--texto2); font-weight:700; font-size:13.5px; }
-  .tab.activa{ background:var(--verde); color:#04210f; border-color:var(--verde); }
+  .tab{ flex:1; padding:11px 6px; border-radius:11px; border:1px solid var(--linea); background:var(--panel2); color:var(--texto2); font-weight:700; font-size:13px; }
+  .tab.activa{ background:var(--verde); color:var(--verde-txt); border-color:var(--verde); }
 
-  /* Buscador y stats */
-  .stats{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; font-size:12px; color:var(--texto2); }
-  .stats b{ color:var(--texto); }
+  /* ---------- Dashboard de inicio ---------- */
+  .stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  @media(min-width:640px){ .stats-grid{ grid-template-columns:repeat(4,1fr); } }
+  .stat-card{ text-align:left; background:var(--panel); border:1px solid var(--linea); border-radius:var(--radio); padding:15px 16px; color:var(--texto); }
+  .stat-card .num{ display:block; font-size:26px; font-weight:800; line-height:1; }
+  .stat-card .lbl{ display:block; margin-top:6px; font-size:12px; color:var(--texto2); font-weight:600; }
+  .stat-card.acc-verde .num{ color:var(--verde); }
+  .stat-card.acc-azul .num{ color:var(--azul); }
+  .stat-card.acc-rojo .num{ color:#fca5a5; }
 
-  /* Lista */
-  .lista-item{ display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--linea); }
-  .lista-item:first-child{ border-top:none; }
-  .lista-item img{ width:50px; height:50px; border-radius:9px; object-fit:cover; background:var(--panel2); flex:none; }
-  .lista-item .info{ flex:1; min-width:0; }
-  .lista-item .info b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .lista-item .info span{ font-size:12px; color:var(--texto2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
-  .pill{ font-size:10px; padding:2px 7px; border-radius:20px; font-weight:700; flex:none; }
-  .pill.nuevo{ background:rgba(34,197,94,.18); color:#86efac; }
-  .pill.editado{ background:rgba(59,130,246,.18); color:#93c5fd; }
-  .pill.original{ background:rgba(161,161,170,.16); color:var(--texto2); }
-  .pill.oculto{ background:rgba(234,179,8,.18); color:#fde047; }
-  .acc{ display:flex; gap:6px; flex:none; }
+  /* ---------- Buscador + chips ---------- */
+  .chips{ display:flex; gap:7px; flex-wrap:wrap; margin-bottom:10px; }
+  .chip{ padding:7px 12px; border-radius:20px; border:1px solid var(--linea); background:var(--panel2); color:var(--texto2); font-size:12.5px; font-weight:600; white-space:nowrap; }
+  .chip.activa{ background:var(--verde); color:var(--verde-txt); border-color:var(--verde); }
+
+  /* ---------- Tabla estilo tracking ---------- */
+  .tabla{ background:var(--panel); border:1px solid var(--linea); border-radius:var(--radio); overflow:hidden; }
+  .thead{ display:none; }
+  @media(min-width:820px){
+    .thead{ display:grid; grid-template-columns:minmax(0,1fr) 120px 130px 120px 96px; gap:12px; padding:12px 16px; border-bottom:1px solid var(--linea); }
+    .thead span{ font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--texto3); font-weight:700; }
+    .thead .r{ text-align:right; }
+  }
+  .tr{ display:grid; grid-template-columns:1fr auto; gap:10px 12px; align-items:center; padding:11px 14px; border-top:1px solid var(--linea); }
+  .tr:first-child{ border-top:none; }
+  @media(min-width:820px){ .tr{ grid-template-columns:minmax(0,1fr) 120px 130px 120px 96px; padding:12px 16px; } }
+  .c-prod{ display:flex; align-items:center; gap:11px; min-width:0; }
+  .c-prod img{ width:46px; height:46px; border-radius:9px; object-fit:cover; background:var(--panel2); flex:none; }
+  .c-prod .info{ min-width:0; }
+  .c-prod .info b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .c-prod .info span{ font-size:12px; color:var(--texto2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  .c-cat, .c-precio{ font-size:13px; color:var(--texto2); }
+  .c-precio b{ color:var(--texto); }
+  .precio-tachado{ text-decoration:line-through; opacity:.55; font-size:12px; margin-right:4px; }
+  .c-acc{ display:flex; gap:6px; justify-content:flex-end; }
   .icon-btn{ background:var(--panel2); border:1px solid var(--linea); color:var(--texto); border-radius:9px; padding:7px 9px; font-size:13px; }
-  .spin{ display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.35); border-top-color:#04210f; border-radius:50%; animation:g .7s linear infinite; }
+  /* En celular: categoría y precio van en el subtítulo, se ocultan las columnas */
+  .c-cat, .c-precio, .c-estado{ display:none; }
+  @media(min-width:820px){ .c-cat, .c-precio, .c-estado{ display:block; } .c-estado{ display:flex; } .movil-meta{ display:none; } }
+  .c-estado{ align-items:center; }
+  .pill{ font-size:10.5px; padding:3px 9px; border-radius:20px; font-weight:700; display:inline-block; }
+  .pill.nuevo{ background:rgba(34,197,94,.16); color:#86efac; }
+  .pill.editado{ background:rgba(59,130,246,.16); color:#93c5fd; }
+  .pill.original{ background:rgba(161,161,170,.14); color:var(--texto2); }
+  .pill.oculto{ background:rgba(234,179,8,.16); color:#fde047; }
+  .pill.oferta{ background:rgba(239,68,68,.16); color:#fca5a5; }
+  .badges-movil{ display:flex; gap:4px; }
+  @media(min-width:820px){ .badges-movil{ display:none; } }
+
+  .paginacion{ display:flex; align-items:center; justify-content:center; gap:12px; margin-top:14px; color:var(--texto2); font-size:13px; }
+  .paginacion button{ background:var(--panel2); border:1px solid var(--linea); color:var(--texto); border-radius:10px; padding:9px 14px; font-weight:700; }
+  .paginacion button:disabled{ opacity:.4; }
+  .spin{ display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.35); border-top-color:var(--verde-txt); border-radius:50%; animation:g .7s linear infinite; }
   @keyframes g{ to{ transform:rotate(360deg); } }
-  .center{ text-align:center; }
-  .cargando{ text-align:center; color:var(--texto2); padding:20px; font-size:13px; }
+  .center{ text-align:center; } .cargando{ text-align:center; color:var(--texto2); padding:22px; font-size:13px; }
 </style>
 </head>
 <body>
@@ -103,90 +134,96 @@
   </header>
 
   <!-- ===================== LOGIN ===================== -->
-  <div id="vistaLogin" class="card">
-    <h2>Iniciar sesión</h2>
-    <p class="hint" style="margin-bottom:6px;">Entrá con el correo y la contraseña que creaste en Supabase.</p>
-    <label>Correo</label>
-    <input id="loginEmail" type="email" autocomplete="username" inputmode="email" placeholder="tu@correo.com">
-    <label>Contraseña</label>
-    <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••">
-    <div id="avisoLogin" class="aviso"></div>
-    <div style="margin-top:14px;"><button id="btnEntrar" class="btn">Entrar</button></div>
+  <div id="vistaLogin" class="login-screen">
+    <div class="login-box">
+      <div class="login-eyebrow">Bienvenido de vuelta</div>
+      <h1 class="login-title">Inicia sesión</h1>
+      <p class="login-sub">Ingresá tus credenciales de administrador.</p>
+      <label>Correo electrónico</label>
+      <div class="input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        <input id="loginEmail" type="email" autocomplete="username" inputmode="email" placeholder="tu@correo.com">
+      </div>
+      <label>Contraseña</label>
+      <div class="input-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••">
+        <button class="ojo" id="verPass" type="button" aria-label="Ver contraseña">👁</button>
+      </div>
+      <div id="avisoLogin" class="aviso"></div>
+      <button id="btnEntrar" class="btn btn-login">Iniciar sesión →</button>
+      <a class="login-foot" href="index.html">← Volver a la tienda</a>
+    </div>
   </div>
 
   <!-- ===================== PANEL ===================== -->
   <div id="vistaPanel" class="hidden">
     <div class="tabs">
-      <button class="tab activa" id="tabLista">📋 Productos</button>
+      <button class="tab activa" id="tabInicio">🏠 Inicio</button>
+      <button class="tab" id="tabLista">📦 Productos</button>
       <button class="tab" id="tabForm">➕ Nuevo</button>
     </div>
 
-    <!-- ---------- LISTA / DASHBOARD ---------- -->
-    <div id="viewLista">
-      <div class="card">
-        <div class="stats" id="stats"></div>
-        <input id="buscador" placeholder="🔍 Buscar por código, nombre o marca…" style="margin-bottom:6px;">
-        <div id="lista"><div class="cargando" id="cargandoLista">Cargando productos…</div></div>
+    <!-- ---------- INICIO (dashboard) ---------- -->
+    <div id="viewInicio">
+      <div class="stats-grid" id="statsGrid"></div>
+      <button class="btn" id="btnNuevoInicio">＋ Cargar producto nuevo</button>
+      <div class="card" style="margin-top:14px;">
+        <h2>Últimos agregados por el panel</h2>
+        <div class="tabla" id="recientes"><div class="cargando">Cargando…</div></div>
       </div>
+    </div>
+
+    <!-- ---------- PRODUCTOS (tabla) ---------- -->
+    <div id="viewLista" class="hidden">
+      <input id="buscador" placeholder="🔍 Buscar por código, nombre o marca…" style="margin-bottom:10px;">
+      <div class="chips" id="chipsEstado"></div>
+      <div class="chips" id="chipsCategoria"></div>
+      <div class="tabla">
+        <div class="thead">
+          <span>Producto</span><span>Categoría</span><span>Precio</span><span>Estado</span><span class="r">Acciones</span>
+        </div>
+        <div id="filas"><div class="cargando" id="cargandoLista">Cargando productos…</div></div>
+      </div>
+      <div class="paginacion" id="paginacion"></div>
     </div>
 
     <!-- ---------- FORMULARIO ---------- -->
     <div id="viewForm" class="hidden">
       <div class="card">
         <h2 id="tituloForm">Nuevo producto</h2>
-
         <label>Código *</label>
         <input id="fCodigo" placeholder="Ej: BP010" autocapitalize="characters">
         <p class="hint">Código único. Si ya existe, se actualiza ese producto.</p>
-
         <label>Nombre *</label>
         <input id="fNombre" placeholder="Ej: T-SHIRT BAPE">
-
         <div class="fila">
-          <div>
-            <label>Marca</label>
-            <input id="fMarca" placeholder="Ej: BAPE">
-          </div>
-          <div>
-            <label>Categoría *</label>
-            <select id="fCategoria"></select>
-          </div>
+          <div><label>Marca</label><input id="fMarca" placeholder="Ej: BAPE"></div>
+          <div><label>Categoría *</label><select id="fCategoria"></select></div>
         </div>
-
         <label>Subcategoría</label>
         <select id="fSubcategoria"></select>
-
         <label>Precio (USD)</label>
         <input id="fPrecio" type="number" inputmode="decimal" min="0" step="1" placeholder="Ej: 75">
-        <div class="check">
-          <input id="fCotizar" type="checkbox">
-          <label for="fCotizar">Precio a consultar (botón “Cotizar” en vez de precio)</label>
+        <div class="check"><input id="fCotizar" type="checkbox"><label for="fCotizar">Precio a consultar (botón “Cotizar”)</label></div>
+        <div class="fila" style="margin-top:4px;">
+          <div><label>Precio de oferta (USD)</label><input id="fOferta" type="number" inputmode="decimal" min="0" step="1" placeholder="opcional"></div>
+          <div><label>Oferta hasta</label><input id="fOfertaHasta" type="date"></div>
         </div>
-
+        <p class="hint">Poné precio de oferta + fecha: sale en “Ofertas” con el precio tachado. Al vencer, vuelve al precio normal.</p>
         <label>Tallas <span style="font-weight:400;">(separadas por coma)</span></label>
         <input id="fTallas" placeholder="Ej: S, M, L, XL   ·   o   39, 40, 41">
-
         <label>Descripción</label>
         <textarea id="fDescripcion" placeholder="Detalle del producto (opcional)"></textarea>
-
         <label>Fotos</label>
         <div id="fotosGrid" class="fotos-grid"></div>
         <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
         <p class="hint">Se comprimen solas antes de subir. La primera es la principal.</p>
-
         <div class="fila" style="margin-top:14px;">
-          <div class="check" style="margin:0;">
-            <input id="fNuevo" type="checkbox" checked>
-            <label for="fNuevo">Nuevo</label>
-          </div>
-          <div class="check" style="margin:0;">
-            <input id="fActivo" type="checkbox" checked>
-            <label for="fActivo">Visible</label>
-          </div>
+          <div class="check" style="margin:0;"><input id="fNuevo" type="checkbox" checked><label for="fNuevo">Nuevo</label></div>
+          <div class="check" style="margin:0;"><input id="fActivo" type="checkbox" checked><label for="fActivo">Visible</label></div>
         </div>
-
         <div id="avisoForm" class="aviso"></div>
-
         <div style="margin-top:16px; display:flex; gap:10px;">
           <button id="btnGuardar" class="btn">Guardar producto</button>
           <button id="btnLimpiar" class="btn btn-sec btn-mini" style="width:auto;">Limpiar</button>
@@ -200,361 +237,265 @@
 <script>
 (function(){
   "use strict";
-
   const SUPA_URL = "https://xgdijumnmaqfirmckugw.supabase.co";
   const SUPA_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
-  const BUCKET = "catalogo";
-  const MAX_LADO = 1600, CALIDAD = 0.8;
-
+  const BUCKET = "catalogo", MAX_LADO = 1600, CALIDAD = 0.8, PORPAG = 25;
   const CATEGORIAS = ["Zapatos", "Ropa", "Dama", "Accesorios"];
-  const SUBCATEGORIAS = {
-    "Zapatos":    ["Calzado", "Casual", "Slides"],
-    "Ropa":       ["Short", "Camisetas", "Jackets"],
-    "Accesorios": ["Mochila", "Carteras", "Bolsos", "Maletas", "Fajas"],
-    "Dama":       ["Zapatos", "Ropa"]
-  };
+  const SUBCATEGORIAS = { "Zapatos":["Calzado","Casual","Slides"], "Ropa":["Short","Camisetas","Jackets"], "Accesorios":["Mochila","Carteras","Bolsos","Maletas","Fajas"], "Dama":["Zapatos","Ropa"] };
 
   const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
   const $ = id => document.getElementById(id);
-
-  let fotos = [];             // { blob, url } ó { remota, url }
-  let baseProductos = [];     // los de productos.js (originales)
-  let remotos = [];           // filas de catalogo_web
-  let itemsMerged = [];       // lista combinada para mostrar
-
-  // ================= UI helpers =================
-  function aviso(el, texto, tipo){
-    el.textContent = texto; el.className = "aviso " + (tipo || "");
-    if(texto) el.scrollIntoView({ behavior:"smooth", block:"nearest" });
-  }
-  function llenarSelect(sel, valores, incluirVacio){
-    sel.innerHTML = (incluirVacio ? '<option value="">—</option>' : "") +
-      valores.map(v => `<option value="${v}">${v}</option>`).join("");
-  }
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 
-  // ================= Leer productos.js (originales) =================
-  // Quita comentarios respetando textos, para poder evaluar el arreglo.
+  let fotos = [], baseProductos = [], remotos = [], itemsMerged = [];
+  let filtroEstado = "todos", filtroCategoria = "todas", pagina = 1;
+
+  function aviso(el, texto, tipo){ el.textContent = texto; el.className = "aviso " + (tipo || ""); if(texto) el.scrollIntoView({ behavior:"smooth", block:"nearest" }); }
+  function llenarSelect(sel, valores, vac){ sel.innerHTML = (vac ? '<option value="">—</option>' : "") + valores.map(v => `<option value="${v}">${v}</option>`).join(""); }
+  function enOferta(d){ return d && Number(d.precioOferta) > 0 && d.promocionHasta && new Date(d.promocionHasta) > new Date(); }
+  function precioTxt(d){
+    if(d.cotizar || !(Number(d.precio) > 0)) return "A consultar";
+    if(enOferta(d)) return `<span class="precio-tachado">$${d.precio}</span><b>$${d.precioOferta}</b>`;
+    return `<b>$${d.precio || 0}</b>`;
+  }
+
+  // ============ Parser productos.js ============
   function limpiarComentarios(s){
-    let out = "", i = 0, n = s.length, inStr = false, ch = "";
-    while(i < n){
-      const c = s[i];
-      if(inStr){
-        out += c;
-        if(c === "\\"){ out += (s[i+1] || ""); i += 2; continue; }
-        if(c === ch) inStr = false;
-        i++; continue;
-      }
-      if(c === '"' || c === "'" || c === "`"){ inStr = true; ch = c; out += c; i++; continue; }
-      if(c === "/" && s[i+1] === "/"){ i += 2; while(i < n && s[i] !== "\n") i++; continue; }
-      if(c === "/" && s[i+1] === "*"){ i += 2; while(i < n && !(s[i] === "*" && s[i+1] === "/")) i++; i += 2; continue; }
-      out += c; i++;
-    }
-    return out;
+    let out="",i=0,n=s.length,inStr=false,ch="";
+    while(i<n){ const c=s[i];
+      if(inStr){ out+=c; if(c==="\\"){ out+=(s[i+1]||""); i+=2; continue; } if(c===ch) inStr=false; i++; continue; }
+      if(c==='"'||c==="'"||c==="`"){ inStr=true; ch=c; out+=c; i++; continue; }
+      if(c==="/"&&s[i+1]==="/"){ i+=2; while(i<n&&s[i]!=="\n")i++; continue; }
+      if(c==="/"&&s[i+1]==="*"){ i+=2; while(i<n&&!(s[i]==="*"&&s[i+1]==="/"))i++; i+=2; continue; }
+      out+=c; i++;
+    } return out;
   }
   function extraerArreglo(src, nombre){
-    const limpio = limpiarComentarios(src);
-    const k = limpio.indexOf("const " + nombre);
-    if(k < 0) return [];
-    const start = limpio.indexOf("[", k);
-    if(start < 0) return [];
-    let depth = 0, inStr = false, ch = "", end = -1;
-    for(let i = start; i < limpio.length; i++){
-      const c = limpio[i];
-      if(inStr){ if(c === "\\"){ i++; } else if(c === ch){ inStr = false; } continue; }
-      if(c === '"' || c === "'" || c === "`"){ inStr = true; ch = c; continue; }
-      if(c === "[") depth++;
-      else if(c === "]"){ depth--; if(depth === 0){ end = i; break; } }
+    const l = limpiarComentarios(src); const k = l.indexOf("const " + nombre); if(k<0) return [];
+    const start = l.indexOf("[", k); if(start<0) return [];
+    let depth=0,inStr=false,ch="",end=-1;
+    for(let i=start;i<l.length;i++){ const c=l[i];
+      if(inStr){ if(c==="\\"){i++;} else if(c===ch){inStr=false;} continue; }
+      if(c==='"'||c==="'"||c==="`"){ inStr=true; ch=c; continue; }
+      if(c==="[")depth++; else if(c==="]"){ depth--; if(depth===0){ end=i; break; } }
     }
-    if(end < 0) return [];
-    try{ const arr = Function('"use strict";return (' + limpio.slice(start, end + 1) + ")")(); return Array.isArray(arr) ? arr : []; }
-    catch(e){ console.warn("No se pudo leer productos.js:", e); return []; }
+    if(end<0) return [];
+    try{ const a=Function('"use strict";return ('+l.slice(start,end+1)+")")(); return Array.isArray(a)?a:[]; }catch(e){ console.warn(e); return []; }
   }
-  async function cargarBase(){
-    try{
-      const r = await fetch("productos.js?_=" + Date.now(), { cache:"no-store" });
-      if(!r.ok) return [];
-      return extraerArreglo(await r.text(), "productosBase");
-    }catch(e){ return []; }
-  }
-  // Convierte un producto de productos.js al formato del formulario.
+  async function cargarBase(){ try{ const r=await fetch("productos.js?_="+Date.now(),{cache:"no-store"}); if(!r.ok) return []; return extraerArreglo(await r.text(),"productosBase"); }catch(e){ return []; } }
   function datosDeBase(p){
-    const imagenes = (p.imagenes && p.imagenes.length) ? p.imagenes.filter(Boolean) : (p.imagen ? [p.imagen] : []);
-    return {
-      codigo: p.codigo,
-      nombre: p.nombreReal || p.nombre || p.codigo,
-      marca: p.marca || "",
-      categoria: p.categoria || "",
-      subcategoria: p.subcategoria || "",
-      precio: Number(p.precio || 0),
-      cotizar: p.cotizar === true,
-      descripcion: p.descripcionReal || p.descripcion || "",
-      tallas: p.tallas || [],
-      imagen: p.imagen || imagenes[0] || "",
-      imagenes,
-      destacadoNuevo: p.destacadoNuevo === true
-    };
+    const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
+    return { codigo:p.codigo, nombre:p.nombreReal||p.nombre||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
+      precio:Number(p.precio||0), cotizar:p.cotizar===true, precioOferta:Number(p.precioOferta||0), promocionHasta:p.promocionHasta||"",
+      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], imagen:p.imagen||imagenes[0]||"", imagenes, destacadoNuevo:p.destacadoNuevo===true };
   }
 
-  // ================= Compresión de fotos =================
-  function comprimir(file){
-    return new Promise((resolve, reject) => {
-      const img = new Image(), lector = new FileReader();
-      lector.onload = () => { img.src = lector.result; };
-      lector.onerror = reject;
-      img.onload = () => {
-        let { width:w, height:h } = img;
-        if(Math.max(w, h) > MAX_LADO){ const f = MAX_LADO / Math.max(w, h); w = Math.round(w*f); h = Math.round(h*f); }
-        const c = document.createElement("canvas"); c.width = w; c.height = h;
-        c.getContext("2d").drawImage(img, 0, 0, w, h);
-        c.toBlob(b => b ? resolve(b) : reject(new Error("No se pudo procesar")), "image/jpeg", CALIDAD);
-      };
-      img.onerror = reject;
-      lector.readAsDataURL(file);
-    });
-  }
+  // ============ Fotos ============
+  function comprimir(file){ return new Promise((res,rej)=>{ const img=new Image(),l=new FileReader();
+    l.onload=()=>{img.src=l.result;}; l.onerror=rej;
+    img.onload=()=>{ let{width:w,height:h}=img; if(Math.max(w,h)>MAX_LADO){const f=MAX_LADO/Math.max(w,h);w=Math.round(w*f);h=Math.round(h*f);}
+      const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
+      c.toBlob(b=>b?res(b):rej(new Error("no")), "image/jpeg", CALIDAD); }; img.onerror=rej; l.readAsDataURL(file); }); }
   function pintarFotos(){
-    const grid = $("fotosGrid");
-    grid.innerHTML = fotos.map((f, i) => `
-      <div class="foto-item"><img src="${esc(f.url)}" alt=""><button type="button" class="quitar" data-quitar="${i}">×</button></div>`).join("") + `
-      <button type="button" class="foto-add" id="btnAddFoto">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
-    $("btnAddFoto").addEventListener("click", () => $("fFotos").click());
-    grid.querySelectorAll("[data-quitar]").forEach(b => b.addEventListener("click", () => {
-      const i = Number(b.dataset.quitar);
-      if(fotos[i] && !fotos[i].remota) URL.revokeObjectURL(fotos[i].url);
-      fotos.splice(i, 1); pintarFotos();
-    }));
+    const g=$("fotosGrid");
+    g.innerHTML=fotos.map((f,i)=>`<div class="foto-item"><img src="${esc(f.url)}" alt=""><button type="button" class="quitar" data-quitar="${i}">×</button></div>`).join("")+
+      `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
+    $("btnAddFoto").addEventListener("click",()=>$("fFotos").click());
+    g.querySelectorAll("[data-quitar]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.quitar; if(fotos[i]&&!fotos[i].remota)URL.revokeObjectURL(fotos[i].url); fotos.splice(i,1); pintarFotos(); }));
   }
-  $("fFotos").addEventListener("change", async (e) => {
-    const files = Array.from(e.target.files || []); e.target.value = "";
-    for(const file of files){
-      try{ const blob = await comprimir(file); fotos.push({ blob, url: URL.createObjectURL(blob) }); }
-      catch(err){ console.warn("Foto omitida:", err); }
-    }
-    pintarFotos();
+  $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
+    for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
+  $("fCategoria").addEventListener("change",()=>llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true));
+
+  // ============ Guardar ============
+  async function subirFotos(codigo){ const urls=[];
+    for(let i=0;i<fotos.length;i++){ const f=fotos[i]; if(f.remota){ urls.push(f.remota); continue; }
+      const ruta=`${codigo}/${Date.now()}-${i}.jpg`;
+      const {error}=await supa.storage.from(BUCKET).upload(ruta,f.blob,{contentType:"image/jpeg",upsert:true}); if(error) throw error;
+      urls.push(supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl); } return urls; }
+  $("btnGuardar").addEventListener("click",async()=>{
+    const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
+    if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
+    const btn=$("btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
+    try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
+      const ofertaHasta=$("fOfertaHasta").value?($("fOfertaHasta").value+"T23:59:59"):"";
+      const datos={ codigo, nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
+        precio:cotizar?0:Number($("fPrecio").value||0), cotizar, precioOferta:oferta>0?oferta:0, promocionHasta:oferta>0?ofertaHasta:"",
+        descripcion:$("fDescripcion").value.trim(), tallas:$("fTallas").value.split(",").map(s=>s.trim()).filter(Boolean),
+        imagen:urls[0]||"", imagenes:urls, destacadoNuevo:$("fNuevo").checked, fecha:new Date().toISOString().slice(0,10) };
+      const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
+
+      // Sincroniza al TRACKING (misma base): crea/actualiza el producto en su
+      // inventario. Solo campos de catálogo; NO toca costo/proveedor/stock.
+      let notaSync = " También quedó en el tracking.";
+      try{
+        const { error:e2 } = await supa.from("productos").upsert({
+          codigo, nombre, marca: datos.marca || null, categoria,
+          descripcion: datos.descripcion || "", precio_venta: datos.precio || 0,
+          imagen: datos.imagen || null, tallas: (datos.tallas || []).join(","),
+          estado: "Activo", modelo_negocio: "Bajo pedido"
+        }, { onConflict:"codigo" });
+        if(e2) notaSync = " (ojo: no se pudo sincronizar al tracking: " + e2.message + ")";
+      }catch(err){ notaSync = " (ojo: no se pudo sincronizar al tracking)"; }
+
+      aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web." + notaSync, "ok");
+      limpiarForm(); await cargarRemotos(); irA("lista");
+    }catch(err){ aviso($("avisoForm"),"Error al guardar: "+(err.message||err),"err"); }
+    finally{ btn.disabled=false; btn.innerHTML=t; }
   });
+  function limpiarForm(){ $("tituloForm").textContent="Nuevo producto";
+    ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
+    $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
+    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true;
+    fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos(); }
+  $("btnLimpiar").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); });
+  function cargarEnForm(datos,opts){ opts=opts||{};
+    $("tituloForm").textContent="Editar: "+(datos.nombre||datos.codigo);
+    $("fCodigo").value=datos.codigo||""; $("fNombre").value=datos.nombre||""; $("fMarca").value=datos.marca||"";
+    $("fCategoria").value=datos.categoria||CATEGORIAS[0]; $("fCategoria").dispatchEvent(new Event("change"));
+    $("fSubcategoria").value=datos.subcategoria||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;
+    $("fOferta").value=datos.precioOferta||""; $("fOfertaHasta").value=(datos.promocionHasta||"").slice(0,10);
+    $("fTallas").value=(datos.tallas||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
+    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false;
+    fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
-  $("fCategoria").addEventListener("change", () => {
-    llenarSelect($("fSubcategoria"), SUBCATEGORIAS[$("fCategoria").value] || [], true);
-  });
-
-  // ================= Guardar =================
-  async function subirFotos(codigo){
-    const urls = [];
-    for(let i = 0; i < fotos.length; i++){
-      const f = fotos[i];
-      if(f.remota){ urls.push(f.remota); continue; }
-      const ruta = `${codigo}/${Date.now()}-${i}.jpg`;
-      const { error } = await supa.storage.from(BUCKET).upload(ruta, f.blob, { contentType:"image/jpeg", upsert:true });
-      if(error) throw error;
-      urls.push(supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl);
-    }
-    return urls;
-  }
-  $("btnGuardar").addEventListener("click", async () => {
-    const codigo = $("fCodigo").value.trim().toUpperCase();
-    const nombre = $("fNombre").value.trim();
-    const categoria = $("fCategoria").value;
-    if(!codigo || !nombre || !categoria){ aviso($("avisoForm"), "Completá código, nombre y categoría.", "err"); return; }
-
-    const btn = $("btnGuardar"); btn.disabled = true; const t = btn.innerHTML;
-    btn.innerHTML = '<span class="spin"></span> Guardando…'; aviso($("avisoForm"), "", "");
-    try{
-      const urls = await subirFotos(codigo);
-      const cotizar = $("fCotizar").checked;
-      const datos = {
-        codigo, nombre,
-        marca: $("fMarca").value.trim(),
-        categoria, subcategoria: $("fSubcategoria").value,
-        precio: cotizar ? 0 : Number($("fPrecio").value || 0),
-        cotizar, descripcion: $("fDescripcion").value.trim(),
-        tallas: $("fTallas").value.split(",").map(s => s.trim()).filter(Boolean),
-        imagen: urls[0] || "", imagenes: urls,
-        destacadoNuevo: $("fNuevo").checked,
-        fecha: new Date().toISOString().slice(0, 10)
-      };
-      const { error } = await supa.from("catalogo_web").upsert({ codigo, activo: $("fActivo").checked, datos }, { onConflict:"codigo" });
-      if(error) throw error;
-      aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web.", "ok");
-      limpiarForm();
-      await cargarRemotos();
-      irA("lista");
-    }catch(err){ aviso($("avisoForm"), "Error al guardar: " + (err.message || err), "err"); }
-    finally{ btn.disabled = false; btn.innerHTML = t; }
-  });
-
-  function limpiarForm(){
-    $("tituloForm").textContent = "Nuevo producto";
-    ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fDescripcion"].forEach(id => $(id).value = "");
-    $("fCategoria").selectedIndex = 0; $("fCategoria").dispatchEvent(new Event("change"));
-    $("fCotizar").checked = false; $("fNuevo").checked = true; $("fActivo").checked = true;
-    fotos.forEach(f => { if(!f.remota) URL.revokeObjectURL(f.url); }); fotos = []; pintarFotos();
-  }
-  $("btnLimpiar").addEventListener("click", () => { limpiarForm(); aviso($("avisoForm"), "", ""); });
-
-  // Carga un producto (base o remoto) en el formulario para editar.
-  function cargarEnForm(datos, opts){
-    opts = opts || {};
-    $("tituloForm").textContent = "Editar: " + (datos.nombre || datos.codigo);
-    $("fCodigo").value = datos.codigo || "";
-    $("fNombre").value = datos.nombre || "";
-    $("fMarca").value = datos.marca || "";
-    $("fCategoria").value = datos.categoria || CATEGORIAS[0];
-    $("fCategoria").dispatchEvent(new Event("change"));
-    $("fSubcategoria").value = datos.subcategoria || "";
-    $("fPrecio").value = datos.precio || "";
-    $("fCotizar").checked = !!datos.cotizar;
-    $("fTallas").value = (datos.tallas || []).join(", ");
-    $("fDescripcion").value = datos.descripcion || "";
-    $("fNuevo").checked = datos.destacadoNuevo !== false;
-    $("fActivo").checked = opts.activo !== false;
-    fotos = (datos.imagenes || []).filter(Boolean).map(u => ({ remota:u, url:u }));
-    pintarFotos();
-    irA("form");
-    window.scrollTo({ top:0, behavior:"smooth" });
-  }
-
-  // ================= Datos: base + remotos =================
+  // ============ Datos ============
   async function cargarRemotos(){
-    const { data, error } = await supa.from("catalogo_web")
-      .select("id, codigo, activo, datos, created_at").order("created_at", { ascending:false });
-    remotos = error ? [] : (data || []);
-    construirLista();
+    const {data,error}=await supa.from("catalogo_web").select("id, codigo, activo, datos, created_at").order("created_at",{ascending:false});
+    remotos=error?[]:(data||[]); construirLista();
   }
   function construirLista(){
-    const remotoPorCodigo = new Map();
-    remotos.forEach(r => remotoPorCodigo.set(String(r.codigo).toUpperCase(), r));
-
-    const items = [];
-    const usados = new Set();
-    // Originales (productos.js), pisados por su edición si existe
-    baseProductos.forEach(p => {
-      const cod = String(p.codigo || "").toUpperCase();
-      if(!cod) return;
-      usados.add(cod);
-      const r = remotoPorCodigo.get(cod);
-      if(r){ items.push({ codigo:p.codigo, datos:r.datos || datosDeBase(p), origen:"editado", remoteId:r.id, activo:r.activo }); }
-      else { items.push({ codigo:p.codigo, datos:datosDeBase(p), origen:"original", remoteId:null, activo:true }); }
-    });
-    // Nuevos (solo en el panel)
-    remotos.forEach(r => {
-      const cod = String(r.codigo || "").toUpperCase();
-      if(usados.has(cod)) return;
-      items.push({ codigo:r.codigo, datos:r.datos || {}, origen:"nuevo", remoteId:r.id, activo:r.activo });
-    });
-    itemsMerged = items;
-    renderLista();
+    const map=new Map(); remotos.forEach(r=>map.set(String(r.codigo).toUpperCase(),r));
+    const items=[],usados=new Set();
+    baseProductos.forEach(p=>{ const c=String(p.codigo||"").toUpperCase(); if(!c) return; usados.add(c); const r=map.get(c);
+      if(r) items.push({codigo:p.codigo,datos:r.datos||datosDeBase(p),origen:"editado",remoteId:r.id,activo:r.activo});
+      else items.push({codigo:p.codigo,datos:datosDeBase(p),origen:"original",remoteId:null,activo:true}); });
+    remotos.forEach(r=>{ const c=String(r.codigo||"").toUpperCase(); if(usados.has(c)) return;
+      items.push({codigo:r.codigo,datos:r.datos||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
+    itemsMerged=items; renderInicio(); renderChips(); renderTabla();
   }
-  function renderLista(){
-    const q = ($("buscador").value || "").trim().toLowerCase();
-    const nuevos = itemsMerged.filter(i => i.origen === "nuevo").length;
-    const editados = itemsMerged.filter(i => i.origen === "editado").length;
-    $("stats").innerHTML =
-      `<span><b>${itemsMerged.length}</b> productos</span>` +
-      `<span>· <b>${nuevos}</b> nuevos</span>` +
-      `<span>· <b>${editados}</b> editados</span>`;
-
-    let lista = itemsMerged;
-    if(q){
-      lista = lista.filter(i => {
-        const d = i.datos || {};
-        return [i.codigo, d.nombre, d.marca, d.categoria].some(v => String(v || "").toLowerCase().includes(q));
-      });
-    }
-    // Nuevos y editados primero, luego originales
-    const peso = { nuevo:0, editado:1, original:2 };
-    lista = lista.slice().sort((a, b) => peso[a.origen] - peso[b.origen]);
-    const tope = q ? lista.length : Math.min(lista.length, 80);
-
-    const cont = $("lista");
-    cont.innerHTML = lista.slice(0, tope).map((i, idx) => {
-      const d = i.datos || {};
-      const precio = d.cotizar || !(Number(d.precio) > 0) ? "A consultar" : ("$" + (d.precio || 0));
-      const pill = i.origen === "nuevo" ? '<span class="pill nuevo">Nuevo</span>'
-        : i.origen === "editado" ? '<span class="pill editado">Editado</span>'
-        : '<span class="pill original">Original</span>';
-      const oculto = i.remoteId && !i.activo ? '<span class="pill oculto">Oculto</span>' : "";
-      const accRemoto = i.remoteId ? `
-        <button class="icon-btn" data-pausa="${idx}">${i.activo ? "⏸" : "▶"}</button>
-        <button class="icon-btn" data-borrar="${idx}">🗑</button>` : "";
-      return `<div class="lista-item">
-        <img src="${esc(d.imagen || "")}" alt="" onerror="this.style.visibility='hidden'">
-        <div class="info"><b>${esc(d.nombre || i.codigo)}</b><span>${esc(i.codigo)} · ${precio} · ${esc(d.categoria || "")}</span></div>
-        ${oculto}${pill}
-        <div class="acc"><button class="icon-btn" data-editar="${idx}">✎</button>${accRemoto}</div>
-      </div>`;
-    }).join("");
-    if(!q && lista.length > tope){
-      cont.innerHTML += `<p class="hint center" style="padding:12px 0;">Mostrando ${tope} de ${lista.length}. Usá el buscador para encontrar el resto.</p>`;
-    }
-    if(!lista.length) cont.innerHTML = `<p class="hint center" style="padding:16px 0;">Sin resultados.</p>`;
-
-    // Como el orden cambia con el filtro, referencio por índice de la lista visible.
-    const visibles = lista.slice(0, tope);
-    cont.querySelectorAll("[data-editar]").forEach(b => b.addEventListener("click", () => {
-      const it = visibles[Number(b.dataset.editar)];
-      cargarEnForm(it.datos, { activo: it.activo });
-    }));
-    cont.querySelectorAll("[data-pausa]").forEach(b => b.addEventListener("click", async () => {
-      const it = visibles[Number(b.dataset.pausa)];
-      await supa.from("catalogo_web").update({ activo: !it.activo }).eq("id", it.remoteId);
-      cargarRemotos();
-    }));
-    cont.querySelectorAll("[data-borrar]").forEach(b => b.addEventListener("click", async () => {
-      const it = visibles[Number(b.dataset.borrar)];
-      const msg = it.origen === "editado" ? `¿Deshacer la edición de ${it.codigo}? Vuelve al original.` : `¿Borrar ${it.codigo}?`;
-      if(!confirm(msg)) return;
-      await supa.from("catalogo_web").delete().eq("id", it.remoteId);
-      cargarRemotos();
-    }));
+  function filtrar(){
+    const q=($("buscador").value||"").trim().toLowerCase();
+    const peso={nuevo:0,editado:1,original:2};
+    return itemsMerged.filter(i=>{ const d=i.datos||{};
+      if(filtroCategoria!=="todas"&&d.categoria!==filtroCategoria) return false;
+      if(filtroEstado==="nuevos"&&i.origen!=="nuevo") return false;
+      if(filtroEstado==="editados"&&i.origen!=="editado") return false;
+      if(filtroEstado==="oferta"&&!enOferta(d)) return false;
+      if(q&&![i.codigo,d.nombre,d.marca,d.categoria].some(v=>String(v||"").toLowerCase().includes(q))) return false;
+      return true;
+    }).sort((a,b)=>peso[a.origen]-peso[b.origen]);
   }
-  $("buscador").addEventListener("input", renderLista);
 
-  // ================= Pestañas =================
+  // ============ Dashboard de inicio ============
+  function renderInicio(){
+    const total=itemsMerged.length;
+    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo").length;
+    const editados=itemsMerged.filter(i=>i.origen==="editado").length;
+    const ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length;
+    const cards=[
+      ["todos", total, "Productos", ""],
+      ["nuevos", nuevos, "Nuevos", "acc-verde"],
+      ["editados", editados, "Editados", "acc-azul"],
+      ["oferta", ofertas, "En oferta", "acc-rojo"]
+    ];
+    $("statsGrid").innerHTML=cards.map(([f,n,l,cl])=>`<button class="stat-card ${cl}" data-goto="${f}"><span class="num">${n}</span><span class="lbl">${l}</span></button>`).join("");
+    $("statsGrid").querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>{ filtroEstado=b.dataset.goto; filtroCategoria="todas"; pagina=1; renderChips(); renderTabla(); irA("lista"); }));
+    // Últimos agregados por el panel (los nuevos, hasta 5)
+    const recientes=itemsMerged.filter(i=>i.origen==="nuevo").slice(0,5);
+    $("recientes").innerHTML = recientes.length ? recientes.map(filaHTML).join("") : '<div class="cargando">Todavía no cargaste productos por el panel.</div>';
+    activarAcciones($("recientes"), recientes);
+  }
+
+  // ============ Chips + Tabla ============
+  function renderChips(){
+    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo").length, editados=itemsMerged.filter(i=>i.origen==="editado").length, ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length;
+    const estados=[["todos","Todos"],["nuevos","Nuevos ("+nuevos+")"],["editados","Editados ("+editados+")"],["oferta","En oferta ("+ofertas+")"]];
+    $("chipsEstado").innerHTML=estados.map(([v,t])=>`<button class="chip ${filtroEstado===v?"activa":""}" data-estado="${v}">${t}</button>`).join("");
+    const cats=[["todas","Todas"]].concat(CATEGORIAS.map(c=>[c,c]));
+    $("chipsCategoria").innerHTML=cats.map(([v,t])=>`<button class="chip ${filtroCategoria===v?"activa":""}" data-cat="${v}">${t}</button>`).join("");
+    $("chipsEstado").querySelectorAll("[data-estado]").forEach(b=>b.addEventListener("click",()=>{ filtroEstado=b.dataset.estado; pagina=1; renderChips(); renderTabla(); }));
+    $("chipsCategoria").querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{ filtroCategoria=b.dataset.cat; pagina=1; renderChips(); renderTabla(); }));
+  }
+  function filaHTML(i){
+    const d=i.datos||{}; const oferta=enOferta(d);
+    const pill=i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
+    const bOf=oferta?'<span class="pill oferta">Oferta</span>':"";
+    const bOc=i.remoteId&&!i.activo?'<span class="pill oculto">Oculto</span>':"";
+    const acc=i.remoteId?`<button class="icon-btn" data-pausa>${i.activo?"⏸":"▶"}</button><button class="icon-btn" data-borrar>🗑</button>`:"";
+    return `<div class="tr" data-cod="${esc(i.codigo)}">
+      <div class="c-prod">
+        <img src="${esc(d.imagen||"")}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+        <div class="info"><b>${esc(d.nombre||i.codigo)}</b>
+          <span>${esc(i.codigo)}<span class="movil-meta"> · ${precioTxt(d).replace(/<[^>]+>/g,"")} · ${esc(d.categoria||"")}</span></span></div>
+      </div>
+      <div class="c-cat">${esc(d.categoria||"")}</div>
+      <div class="c-precio">${precioTxt(d)}</div>
+      <div class="c-estado">${bOc}${bOf}${pill}</div>
+      <div class="c-acc"><span class="badges-movil">${bOc}${bOf}${pill}</span><button class="icon-btn" data-editar>✎</button>${acc}</div>
+    </div>`;
+  }
+  function activarAcciones(cont, lista){
+    cont.querySelectorAll(".tr").forEach((row,idx)=>{
+      const it=lista[idx]; if(!it) return;
+      const e=row.querySelector("[data-editar]"); if(e) e.addEventListener("click",()=>cargarEnForm(it.datos,{activo:it.activo}));
+      const p=row.querySelector("[data-pausa]"); if(p) p.addEventListener("click",async()=>{ await supa.from("catalogo_web").update({activo:!it.activo}).eq("id",it.remoteId); cargarRemotos(); });
+      const b=row.querySelector("[data-borrar]"); if(b) b.addEventListener("click",async()=>{ const m=it.origen==="editado"?`¿Deshacer la edición de ${it.codigo}? Vuelve al original.`:`¿Borrar ${it.codigo}?`; if(!confirm(m)) return; await supa.from("catalogo_web").delete().eq("id",it.remoteId); cargarRemotos(); });
+    });
+  }
+  function renderTabla(){
+    const lista=filtrar(); const paginas=Math.max(1,Math.ceil(lista.length/PORPAG));
+    if(pagina>paginas) pagina=paginas;
+    const desde=(pagina-1)*PORPAG; const pageItems=lista.slice(desde,desde+PORPAG);
+    const cont=$("filas");
+    cont.innerHTML = pageItems.length ? pageItems.map(filaHTML).join("") : '<div class="cargando">Sin resultados.</div>';
+    activarAcciones(cont, pageItems);
+    $("paginacion").innerHTML = lista.length ?
+      `<button id="pgPrev" ${pagina<=1?"disabled":""}>‹ Anterior</button>
+       <span>Página ${pagina} de ${paginas} · ${lista.length} productos</span>
+       <button id="pgNext" ${pagina>=paginas?"disabled":""}>Siguiente ›</button>` : "";
+    const prev=$("pgPrev"), next=$("pgNext");
+    if(prev) prev.addEventListener("click",()=>{ if(pagina>1){ pagina--; renderTabla(); window.scrollTo({top:0}); } });
+    if(next) next.addEventListener("click",()=>{ if(pagina<paginas){ pagina++; renderTabla(); window.scrollTo({top:0}); } });
+  }
+  let bt=null; $("buscador").addEventListener("input",()=>{ clearTimeout(bt); bt=setTimeout(()=>{ pagina=1; renderTabla(); },180); });
+
+  // ============ Pestañas ============
   function irA(tab){
-    const enLista = tab === "lista";
-    $("viewLista").classList.toggle("hidden", !enLista);
-    $("viewForm").classList.toggle("hidden", enLista);
-    $("tabLista").classList.toggle("activa", enLista);
-    $("tabForm").classList.toggle("activa", !enLista);
-    if(enLista) window.scrollTo({ top:0, behavior:"instant" in window ? "instant" : "auto" });
+    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm" };
+    Object.values(vis).forEach(v=>$(v).classList.add("hidden"));
+    $(vis[tab]).classList.remove("hidden");
+    $("tabInicio").classList.toggle("activa",tab==="inicio");
+    $("tabLista").classList.toggle("activa",tab==="lista");
+    $("tabForm").classList.toggle("activa",tab==="form");
+    window.scrollTo({top:0,behavior:"instant" in window?"instant":"auto"});
   }
-  $("tabLista").addEventListener("click", () => irA("lista"));
-  $("tabForm").addEventListener("click", () => { limpiarForm(); aviso($("avisoForm"), "", ""); irA("form"); });
+  $("tabInicio").addEventListener("click",()=>irA("inicio"));
+  $("tabLista").addEventListener("click",()=>irA("lista"));
+  $("tabForm").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
+  $("btnNuevoInicio").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
 
-  // ================= Sesión =================
-  async function mostrarPanel(mostrar){
-    $("vistaLogin").classList.toggle("hidden", mostrar);
-    $("vistaPanel").classList.toggle("hidden", !mostrar);
-    $("btnSalir").classList.toggle("hidden", !mostrar);
-    if(mostrar){
-      $("cargandoLista").textContent = "Cargando productos…";
-      baseProductos = await cargarBase();
-      await cargarRemotos();
-    }
+  // ============ Sesión ============
+  async function mostrarPanel(m){
+    $("vistaLogin").classList.toggle("hidden",m); $("vistaPanel").classList.toggle("hidden",!m); $("btnSalir").classList.toggle("hidden",!m);
+    if(m){ baseProductos=await cargarBase(); await cargarRemotos(); irA("inicio"); }
   }
-  $("btnEntrar").addEventListener("click", async () => {
-    const email = $("loginEmail").value.trim(), password = $("loginPass").value;
-    if(!email || !password){ aviso($("avisoLogin"), "Poné correo y contraseña.", "err"); return; }
-    const btn = $("btnEntrar"); btn.disabled = true; const t = btn.textContent; btn.textContent = "Entrando…";
-    const { error } = await supa.auth.signInWithPassword({ email, password });
-    btn.disabled = false; btn.textContent = t;
-    if(error){ aviso($("avisoLogin"), "No se pudo entrar: " + error.message, "err"); return; }
-    aviso($("avisoLogin"), "", ""); mostrarPanel(true);
+  $("btnEntrar").addEventListener("click",async()=>{
+    const email=$("loginEmail").value.trim(),password=$("loginPass").value;
+    if(!email||!password){ aviso($("avisoLogin"),"Poné correo y contraseña.","err"); return; }
+    const btn=$("btnEntrar"); btn.disabled=true; const t=btn.textContent; btn.textContent="Entrando…";
+    const {error}=await supa.auth.signInWithPassword({email,password}); btn.disabled=false; btn.textContent=t;
+    if(error){ aviso($("avisoLogin"),"No se pudo entrar: "+error.message,"err"); return; }
+    aviso($("avisoLogin"),"",""); mostrarPanel(true);
   });
-  $("loginPass").addEventListener("keydown", e => { if(e.key === "Enter") $("btnEntrar").click(); });
-  $("btnSalir").addEventListener("click", async () => { await supa.auth.signOut(); limpiarForm(); mostrarPanel(false); });
+  $("loginPass").addEventListener("keydown",e=>{ if(e.key==="Enter") $("btnEntrar").click(); });
+  $("verPass").addEventListener("click",()=>{ const p=$("loginPass"); p.type=p.type==="password"?"text":"password"; });
+  $("btnSalir").addEventListener("click",async()=>{ await supa.auth.signOut(); limpiarForm(); mostrarPanel(false); });
+  ["gesturestart","gesturechange","gestureend"].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
 
-  // Sin zoom por pellizco (iOS ignora user-scalable)
-  ["gesturestart", "gesturechange", "gestureend"].forEach(ev =>
-    document.addEventListener(ev, e => e.preventDefault(), { passive:false }));
-
-  // ================= Arranque =================
-  llenarSelect($("fCategoria"), CATEGORIAS, false);
-  $("fCategoria").dispatchEvent(new Event("change"));
-  pintarFotos();
-  supa.auth.getSession().then(({ data }) => mostrarPanel(!!(data && data.session)));
+  // ============ Arranque ============
+  llenarSelect($("fCategoria"),CATEGORIAS,false); $("fCategoria").dispatchEvent(new Event("change")); pintarFotos();
+  supa.auth.getSession().then(({data})=>mostrarPanel(!!(data&&data.session)));
 })();
 </script>
 </body>
