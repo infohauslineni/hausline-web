@@ -43,6 +43,9 @@
   .foto-item{ position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; border:1px solid var(--linea); background:var(--panel2); }
   .foto-item img{ width:100%; height:100%; object-fit:cover; }
   .foto-item .quitar{ position:absolute; top:3px; right:3px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.65); color:#fff; border:none; font-size:14px; display:flex; align-items:center; justify-content:center; }
+  .foto-item .estrella{ position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.6); color:#fde047; border:none; font-size:13px; line-height:1; display:flex; align-items:center; justify-content:center; }
+  .foto-item.principal{ border-color:var(--verde); }
+  .foto-item .etq-principal{ position:absolute; bottom:0; left:0; right:0; background:var(--verde); color:var(--verde-txt); font-size:9.5px; font-weight:800; text-align:center; padding:2px; letter-spacing:.04em; }
   .foto-add{ aspect-ratio:1; border:1.5px dashed var(--linea); border-radius:10px; background:var(--panel2); color:var(--texto2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px; }
   .foto-add svg{ width:22px; height:22px; }
   .aviso{ padding:11px 13px; border-radius:11px; font-size:13.5px; margin:12px 0; display:none; }
@@ -168,6 +171,8 @@
     <div id="viewInicio">
       <div class="stats-grid" id="statsGrid"></div>
       <button class="btn" id="btnNuevoInicio">＋ Cargar producto nuevo</button>
+      <button class="btn btn-sec" id="btnSyncTracking" style="margin-top:10px;">🔄 Sincronizar todos al tracking</button>
+      <div id="avisoSync" class="aviso"></div>
       <div class="card" style="margin-top:14px;">
         <h2>Últimos agregados por el panel</h2>
         <div class="tabla" id="recientes"><div class="cargando">Cargando…</div></div>
@@ -298,10 +303,17 @@
       c.toBlob(b=>b?res(b):rej(new Error("no")), "image/jpeg", CALIDAD); }; img.onerror=rej; l.readAsDataURL(file); }); }
   function pintarFotos(){
     const g=$("fotosGrid");
-    g.innerHTML=fotos.map((f,i)=>`<div class="foto-item"><img src="${esc(f.url)}" alt=""><button type="button" class="quitar" data-quitar="${i}">×</button></div>`).join("")+
+    g.innerHTML=fotos.map((f,i)=>`
+      <div class="foto-item ${i===0?"principal":""}">
+        <img src="${esc(f.url)}" alt="">
+        ${i===0 ? '<span class="etq-principal">Principal</span>' : `<button type="button" class="estrella" data-principal="${i}" title="Hacer principal">★</button>`}
+        <button type="button" class="quitar" data-quitar="${i}">×</button>
+      </div>`).join("")+
       `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
     $("btnAddFoto").addEventListener("click",()=>$("fFotos").click());
     g.querySelectorAll("[data-quitar]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.quitar; if(fotos[i]&&!fotos[i].remota)URL.revokeObjectURL(fotos[i].url); fotos.splice(i,1); pintarFotos(); }));
+    // ★ = poner esa foto como principal (la mueve al primer lugar = vista previa)
+    g.querySelectorAll("[data-principal]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.principal; const m=fotos.splice(i,1)[0]; fotos.unshift(m); pintarFotos(); }));
   }
   $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
     for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
@@ -474,6 +486,22 @@
   $("tabLista").addEventListener("click",()=>irA("lista"));
   $("tabForm").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
   $("btnNuevoInicio").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
+
+  // Empuja TODOS los productos del panel al inventario del tracking (backfill).
+  $("btnSyncTracking").addEventListener("click", async () => {
+    const btn=$("btnSyncTracking"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Sincronizando…';
+    try{
+      if(!remotos.length){ aviso($("avisoSync"),"No hay productos del panel para sincronizar todavía.","ok"); return; }
+      const filas = remotos.map(r=>{ const d=r.datos||{}; return {
+        codigo:r.codigo, nombre:d.nombre||r.codigo, marca:d.marca||null, categoria:d.categoria||"",
+        descripcion:d.descripcion||"", precio_venta:Number(d.precio)||0, imagen:d.imagen||null,
+        tallas:(d.tallas||[]).join(","), estado:r.activo?"Activo":"Inactivo", modelo_negocio:"Bajo pedido" }; });
+      const { error } = await supa.from("productos").upsert(filas, { onConflict:"codigo" });
+      if(error) throw error;
+      aviso($("avisoSync"), "✓ "+filas.length+" productos enviados al tracking. Refrescá la app de tracking para verlos.", "ok");
+    }catch(err){ aviso($("avisoSync"), "No se pudo sincronizar: "+(err.message||err), "err"); }
+    finally{ btn.disabled=false; btn.innerHTML=t; }
+  });
 
   // ============ Sesión ============
   async function mostrarPanel(m){
