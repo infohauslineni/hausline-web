@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>HAUSLINE · Cargar productos</title>
+<style>
+  :root{
+    --bg:#0b0b0c; --panel:#151517; --panel2:#1d1d20; --linea:#2a2a2e;
+    --texto:#f4f4f5; --texto2:#a1a1aa; --verde:#22c55e; --rojo:#ef4444;
+    --radio:14px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--texto);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{ max-width:640px; margin:0 auto; padding:16px 14px 60px; }
+  header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .logo{ font-weight:800; letter-spacing:.2em; font-size:15px; }
+  .logo small{ display:block; letter-spacing:normal; font-weight:500; color:var(--texto2); font-size:11px; letter-spacing:0; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border:none; border-radius:var(--radio); padding:13px 16px; font-weight:700;
+    background:var(--verde); color:#04210f; width:100%;
+  }
+  .btn:active{ transform:scale(.99); }
+  .btn:disabled{ opacity:.6; }
+  .btn-sec{ background:var(--panel2); color:var(--texto); border:1px solid var(--linea); }
+  .btn-mini{ width:auto; padding:8px 12px; font-size:13px; border-radius:10px; }
+  .btn-rojo{ background:transparent; color:var(--rojo); border:1px solid var(--rojo); }
+  label{ display:block; font-size:12.5px; color:var(--texto2); margin:12px 2px 5px; font-weight:600; }
+  input, select, textarea{
+    width:100%; background:var(--panel2); border:1px solid var(--linea); color:var(--texto);
+    border-radius:11px; padding:12px; font:inherit; outline:none;
+  }
+  input:focus, select:focus, textarea:focus{ border-color:var(--verde); }
+  textarea{ min-height:74px; resize:vertical; }
+  .card{ background:var(--panel); border:1px solid var(--linea); border-radius:var(--radio); padding:16px; margin-bottom:14px; }
+  .fila{ display:flex; gap:10px; }
+  .fila > *{ flex:1; }
+  .check{ display:flex; align-items:center; gap:9px; margin-top:12px; }
+  .check input{ width:20px; height:20px; flex:none; accent-color:var(--verde); }
+  .check label{ margin:0; color:var(--texto); font-weight:500; font-size:14px; }
+  .hint{ font-size:11.5px; color:var(--texto2); margin:5px 2px 0; }
+  .fotos-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:8px; margin-top:10px; }
+  .foto-item{ position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; border:1px solid var(--linea); background:var(--panel2); }
+  .foto-item img{ width:100%; height:100%; object-fit:cover; }
+  .foto-item .quitar{
+    position:absolute; top:3px; right:3px; width:22px; height:22px; border-radius:50%;
+    background:rgba(0,0,0,.65); color:#fff; border:none; font-size:14px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .foto-add{
+    aspect-ratio:1; border:1.5px dashed var(--linea); border-radius:10px; background:var(--panel2);
+    color:var(--texto2); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:4px; font-size:12px;
+  }
+  .foto-add svg{ width:22px; height:22px; }
+  .aviso{ padding:11px 13px; border-radius:11px; font-size:13.5px; margin:12px 0; display:none; }
+  .aviso.ok{ display:block; background:rgba(34,197,94,.14); color:#86efac; border:1px solid rgba(34,197,94,.35); }
+  .aviso.err{ display:block; background:rgba(239,68,68,.14); color:#fca5a5; border:1px solid rgba(239,68,68,.35); }
+  .hidden{ display:none !important; }
+  h2{ font-size:16px; margin:6px 2px 12px; }
+  .lista-item{ display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--linea); }
+  .lista-item:first-child{ border-top:none; }
+  .lista-item img{ width:48px; height:48px; border-radius:9px; object-fit:cover; background:var(--panel2); flex:none; }
+  .lista-item .info{ flex:1; min-width:0; }
+  .lista-item .info b{ font-size:14px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lista-item .info span{ font-size:12px; color:var(--texto2); }
+  .pill{ font-size:10.5px; padding:2px 7px; border-radius:20px; font-weight:700; }
+  .pill.on{ background:rgba(34,197,94,.18); color:#86efac; }
+  .pill.off{ background:rgba(161,161,170,.18); color:var(--texto2); }
+  .acc{ display:flex; gap:7px; }
+  .icon-btn{ background:var(--panel2); border:1px solid var(--linea); color:var(--texto); border-radius:9px; padding:7px 9px; font-size:13px; }
+  .spin{ display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.35); border-top-color:#04210f; border-radius:50%; animation:g .7s linear infinite; }
+  @keyframes g{ to{ transform:rotate(360deg); } }
+  .center{ text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">HAUSLINE<small>Cargar productos</small></div>
+    <button id="btnSalir" class="btn btn-sec btn-mini hidden">Salir</button>
+  </header>
+
+  <!-- ===================== LOGIN ===================== -->
+  <div id="vistaLogin" class="card">
+    <h2>Iniciar sesión</h2>
+    <p class="hint" style="margin-bottom:6px;">Entrá con el correo y la contraseña que creaste en Supabase.</p>
+    <label>Correo</label>
+    <input id="loginEmail" type="email" autocomplete="username" inputmode="email" placeholder="tu@correo.com">
+    <label>Contraseña</label>
+    <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••">
+    <div id="avisoLogin" class="aviso"></div>
+    <div style="margin-top:14px;"><button id="btnEntrar" class="btn">Entrar</button></div>
+  </div>
+
+  <!-- ===================== PANEL ===================== -->
+  <div id="vistaPanel" class="hidden">
+
+    <div class="card">
+      <h2 id="tituloForm">Nuevo producto</h2>
+
+      <label>Código *</label>
+      <input id="fCodigo" placeholder="Ej: BP010" autocapitalize="characters">
+      <p class="hint">El código único del producto (como lo usás hoy). Con un código que ya existe, se actualiza.</p>
+
+      <label>Nombre *</label>
+      <input id="fNombre" placeholder="Ej: T-SHIRT BAPE">
+
+      <div class="fila">
+        <div>
+          <label>Marca</label>
+          <input id="fMarca" placeholder="Ej: BAPE">
+        </div>
+        <div>
+          <label>Categoría *</label>
+          <select id="fCategoria"></select>
+        </div>
+      </div>
+
+      <label>Subcategoría</label>
+      <select id="fSubcategoria"></select>
+
+      <label>Precio (USD)</label>
+      <input id="fPrecio" type="number" inputmode="decimal" min="0" step="1" placeholder="Ej: 75">
+      <div class="check">
+        <input id="fCotizar" type="checkbox">
+        <label for="fCotizar">Precio a consultar (muestra botón “Cotizar” en vez de precio)</label>
+      </div>
+
+      <label>Tallas <span style="font-weight:400;">(separadas por coma)</span></label>
+      <input id="fTallas" placeholder="Ej: S, M, L, XL   ·   o   39, 40, 41">
+
+      <label>Descripción</label>
+      <textarea id="fDescripcion" placeholder="Detalle del producto (opcional)"></textarea>
+
+      <label>Fotos</label>
+      <div id="fotosGrid" class="fotos-grid"></div>
+      <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
+      <p class="hint">Se comprimen solas antes de subir. La primera es la principal.</p>
+
+      <div class="fila" style="margin-top:14px;">
+        <div class="check" style="margin:0;">
+          <input id="fNuevo" type="checkbox" checked>
+          <label for="fNuevo">Nuevo</label>
+        </div>
+        <div class="check" style="margin:0;">
+          <input id="fActivo" type="checkbox" checked>
+          <label for="fActivo">Visible</label>
+        </div>
+      </div>
+
+      <div id="avisoForm" class="aviso"></div>
+
+      <div style="margin-top:16px; display:flex; gap:10px;">
+        <button id="btnGuardar" class="btn">Guardar producto</button>
+        <button id="btnLimpiar" class="btn btn-sec btn-mini" style="width:auto;">Limpiar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Productos cargados <span id="contadorLista" class="hint" style="font-weight:400;"></span></h2>
+      <div id="lista"></div>
+      <p id="listaVacia" class="hint center hidden" style="padding:14px 0;">Todavía no cargaste ningún producto por acá.</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  const SUPA_URL = "https://xgdijumnmaqfirmckugw.supabase.co";
+  const SUPA_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
+  const BUCKET = "catalogo";
+  const MAX_LADO = 1600;   // px máximo del lado más largo de cada foto
+  const CALIDAD = 0.8;     // calidad JPEG
+
+  const CATEGORIAS = ["Zapatos", "Ropa", "Dama", "Accesorios"];
+  const SUBCATEGORIAS = {
+    "Zapatos":    ["Calzado", "Casual", "Slides"],
+    "Ropa":       ["Short", "Camisetas", "Jackets"],
+    "Accesorios": ["Mochila", "Carteras", "Bolsos", "Maletas", "Fajas"],
+    "Dama":       ["Zapatos", "Ropa"]
+  };
+
+  const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  const $ = id => document.getElementById(id);
+
+  // Fotos elegidas: { blob, url(previa) }
+  let fotos = [];
+  let editandoId = null;   // id de la fila que se está editando (null = nuevo)
+
+  // ---------- Utilidades de UI ----------
+  function aviso(el, texto, tipo){
+    el.textContent = texto;
+    el.className = "aviso " + (tipo || "");
+    if(texto) el.scrollIntoView({ behavior:"smooth", block:"nearest" });
+  }
+  function llenarSelect(sel, valores, incluirVacio){
+    sel.innerHTML = (incluirVacio ? '<option value="">—</option>' : "") +
+      valores.map(v => `<option value="${v}">${v}</option>`).join("");
+  }
+
+  // ---------- Compresión de fotos (canvas) ----------
+  function comprimir(file){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const lector = new FileReader();
+      lector.onload = () => { img.src = lector.result; };
+      lector.onerror = reject;
+      img.onload = () => {
+        let { width:w, height:h } = img;
+        if(Math.max(w, h) > MAX_LADO){
+          const f = MAX_LADO / Math.max(w, h);
+          w = Math.round(w * f); h = Math.round(h * f);
+        }
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        c.toBlob(b => b ? resolve(b) : reject(new Error("No se pudo procesar la imagen")), "image/jpeg", CALIDAD);
+      };
+      img.onerror = reject;
+      lector.readAsDataURL(file);
+    });
+  }
+
+  function pintarFotos(){
+    const grid = $("fotosGrid");
+    grid.innerHTML = fotos.map((f, i) => `
+      <div class="foto-item">
+        <img src="${f.url}" alt="foto ${i+1}">
+        <button type="button" class="quitar" data-quitar="${i}">×</button>
+      </div>`).join("") + `
+      <button type="button" class="foto-add" id="btnAddFoto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Agregar
+      </button>`;
+    $("btnAddFoto").addEventListener("click", () => $("fFotos").click());
+    grid.querySelectorAll("[data-quitar]").forEach(b => b.addEventListener("click", () => {
+      const i = Number(b.dataset.quitar);
+      URL.revokeObjectURL(fotos[i].url);
+      fotos.splice(i, 1);
+      pintarFotos();
+    }));
+  }
+
+  $("fFotos").addEventListener("change", async (e) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    for(const file of files){
+      try{
+        const blob = await comprimir(file);
+        fotos.push({ blob, url: URL.createObjectURL(blob) });
+      }catch(err){ console.warn("Foto omitida:", err); }
+    }
+    pintarFotos();
+  });
+
+  // ---------- Categoría → subcategoría ----------
+  $("fCategoria").addEventListener("change", () => {
+    const cat = $("fCategoria").value;
+    llenarSelect($("fSubcategoria"), SUBCATEGORIAS[cat] || [], true);
+  });
+
+  // ---------- Guardar ----------
+  async function subirFotos(codigo){
+    const urls = [];
+    for(let i = 0; i < fotos.length; i++){
+      const f = fotos[i];
+      if(f.remota){ urls.push(f.remota); continue; }   // ya estaba subida (edición)
+      const ruta = `${codigo}/${Date.now()}-${i}.jpg`;
+      const { error } = await supa.storage.from(BUCKET).upload(ruta, f.blob, {
+        contentType: "image/jpeg", upsert: true
+      });
+      if(error) throw error;
+      const { data } = supa.storage.from(BUCKET).getPublicUrl(ruta);
+      urls.push(data.publicUrl);
+    }
+    return urls;
+  }
+
+  $("btnGuardar").addEventListener("click", async () => {
+    const codigo = $("fCodigo").value.trim().toUpperCase();
+    const nombre = $("fNombre").value.trim();
+    const categoria = $("fCategoria").value;
+    if(!codigo || !nombre || !categoria){
+      aviso($("avisoForm"), "Completá al menos código, nombre y categoría.", "err"); return;
+    }
+
+    const btn = $("btnGuardar");
+    btn.disabled = true;
+    const textoOrig = btn.innerHTML;
+    btn.innerHTML = '<span class="spin"></span> Guardando…';
+    aviso($("avisoForm"), "", "");
+
+    try{
+      const urls = await subirFotos(codigo);
+      const cotizar = $("fCotizar").checked;
+      const tallas = $("fTallas").value.split(",").map(t => t.trim()).filter(Boolean);
+
+      const datos = {
+        codigo,
+        nombre,
+        marca: $("fMarca").value.trim(),
+        categoria,
+        subcategoria: $("fSubcategoria").value,
+        precio: cotizar ? 0 : Number($("fPrecio").value || 0),
+        cotizar,
+        descripcion: $("fDescripcion").value.trim(),
+        tallas,
+        imagen: urls[0] || "",
+        imagenes: urls,
+        destacadoNuevo: $("fNuevo").checked,
+        fecha: new Date().toISOString().slice(0, 10)
+      };
+
+      const { error } = await supa.from("catalogo_web").upsert(
+        { codigo, activo: $("fActivo").checked, datos },
+        { onConflict: "codigo" }
+      );
+      if(error) throw error;
+
+      aviso($("avisoForm"), "✓ Producto guardado. Ya aparece en la web.", "ok");
+      limpiarForm();
+      cargarLista();
+    }catch(err){
+      aviso($("avisoForm"), "Error al guardar: " + (err.message || err), "err");
+    }finally{
+      btn.disabled = false;
+      btn.innerHTML = textoOrig;
+    }
+  });
+
+  function limpiarForm(){
+    editandoId = null;
+    $("tituloForm").textContent = "Nuevo producto";
+    ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fDescripcion"].forEach(id => $(id).value = "");
+    $("fCategoria").selectedIndex = 0;
+    $("fCategoria").dispatchEvent(new Event("change"));
+    $("fCotizar").checked = false;
+    $("fNuevo").checked = true;
+    $("fActivo").checked = true;
+    fotos.forEach(f => f.url && URL.revokeObjectURL(f.url));
+    fotos = [];
+    pintarFotos();
+  }
+  $("btnLimpiar").addEventListener("click", () => { limpiarForm(); aviso($("avisoForm"), "", ""); });
+
+  // ---------- Lista de productos ----------
+  async function cargarLista(){
+    const { data, error } = await supa
+      .from("catalogo_web")
+      .select("id, codigo, activo, datos, created_at")
+      .order("created_at", { ascending: false });
+    const cont = $("lista");
+    if(error){ cont.innerHTML = ""; $("listaVacia").textContent = "No se pudo cargar la lista."; $("listaVacia").classList.remove("hidden"); return; }
+    $("contadorLista").textContent = data.length ? `(${data.length})` : "";
+    $("listaVacia").classList.toggle("hidden", data.length > 0);
+    cont.innerHTML = data.map(row => {
+      const d = row.datos || {};
+      const precio = d.cotizar ? "A consultar" : ("$" + (d.precio || 0));
+      return `
+        <div class="lista-item">
+          <img src="${d.imagen || ""}" alt="" onerror="this.style.visibility='hidden'">
+          <div class="info">
+            <b>${(d.nombre || row.codigo)}</b>
+            <span>${row.codigo} · ${precio} · ${d.categoria || ""}</span>
+          </div>
+          <span class="pill ${row.activo ? "on" : "off"}">${row.activo ? "Visible" : "Oculto"}</span>
+          <div class="acc">
+            <button class="icon-btn" data-editar="${row.id}">✎</button>
+            <button class="icon-btn" data-pausa="${row.id}" data-activo="${row.activo}">${row.activo ? "⏸" : "▶"}</button>
+            <button class="icon-btn" data-borrar="${row.id}" data-codigo="${row.codigo}">🗑</button>
+          </div>
+        </div>`;
+    }).join("");
+
+    cont.querySelectorAll("[data-editar]").forEach(b => b.addEventListener("click", () => editar(b.dataset.editar, data)));
+    cont.querySelectorAll("[data-pausa]").forEach(b => b.addEventListener("click", () => togglePausa(b.dataset.pausa, b.dataset.activo === "true")));
+    cont.querySelectorAll("[data-borrar]").forEach(b => b.addEventListener("click", () => borrar(b.dataset.borrar, b.dataset.codigo)));
+  }
+
+  function editar(id, data){
+    const row = data.find(r => String(r.id) === String(id));
+    if(!row) return;
+    const d = row.datos || {};
+    editandoId = id;
+    $("tituloForm").textContent = "Editar producto";
+    $("fCodigo").value = row.codigo;
+    $("fNombre").value = d.nombre || "";
+    $("fMarca").value = d.marca || "";
+    $("fCategoria").value = d.categoria || CATEGORIAS[0];
+    $("fCategoria").dispatchEvent(new Event("change"));
+    $("fSubcategoria").value = d.subcategoria || "";
+    $("fPrecio").value = d.precio || "";
+    $("fCotizar").checked = !!d.cotizar;
+    $("fTallas").value = (d.tallas || []).join(", ");
+    $("fDescripcion").value = d.descripcion || "";
+    $("fNuevo").checked = d.destacadoNuevo !== false;
+    $("fActivo").checked = row.activo !== false;
+    // Fotos ya subidas: se muestran como remotas (no se re-suben salvo que las quites).
+    fotos = (d.imagenes || []).filter(Boolean).map(u => ({ remota: u, url: u }));
+    pintarFotos();
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  async function togglePausa(id, activo){
+    await supa.from("catalogo_web").update({ activo: !activo }).eq("id", id);
+    cargarLista();
+  }
+
+  async function borrar(id, codigo){
+    if(!confirm(`¿Borrar el producto ${codigo}? Desaparece de la web.`)) return;
+    await supa.from("catalogo_web").delete().eq("id", id);
+    cargarLista();
+  }
+
+  // ---------- Sesión / login ----------
+  function mostrarPanel(mostrar){
+    $("vistaLogin").classList.toggle("hidden", mostrar);
+    $("vistaPanel").classList.toggle("hidden", !mostrar);
+    $("btnSalir").classList.toggle("hidden", !mostrar);
+    if(mostrar) cargarLista();
+  }
+
+  $("btnEntrar").addEventListener("click", async () => {
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPass").value;
+    if(!email || !password){ aviso($("avisoLogin"), "Poné correo y contraseña.", "err"); return; }
+    const btn = $("btnEntrar");
+    btn.disabled = true; const t = btn.textContent; btn.textContent = "Entrando…";
+    const { error } = await supa.auth.signInWithPassword({ email, password });
+    btn.disabled = false; btn.textContent = t;
+    if(error){ aviso($("avisoLogin"), "No se pudo entrar: " + error.message, "err"); return; }
+    aviso($("avisoLogin"), "", "");
+    mostrarPanel(true);
+  });
+  $("loginPass").addEventListener("keydown", e => { if(e.key === "Enter") $("btnEntrar").click(); });
+
+  $("btnSalir").addEventListener("click", async () => {
+    await supa.auth.signOut();
+    limpiarForm();
+    mostrarPanel(false);
+  });
+
+  // ---------- Arranque ----------
+  llenarSelect($("fCategoria"), CATEGORIAS, false);
+  $("fCategoria").dispatchEvent(new Event("change"));
+  pintarFotos();
+
+  supa.auth.getSession().then(({ data }) => {
+    mostrarPanel(!!(data && data.session));
+  });
+})();
+</script>
+</body>
+</html>
