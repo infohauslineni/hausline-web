@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HAUSLINE</title>
+<link rel="icon" href="/logo.png" type="image/png">
+<!-- Fallback de GitHub Pages para rutas sin archivo (ej: /p/CODIGO de productos
+     cargados desde el PANEL, que no tienen página estática generada).
+     Extrae el código de la ruta y abre el producto en la app (que lo carga
+     desde Supabase). Para cualquier otra ruta desconocida, va al inicio. -->
+<script>
+(function(){
+  var m = location.pathname.match(/\/p\/([^\/?#]+)/);
+  var code = m ? m[1] : "";
+  location.replace("/" + (code ? "?producto=" + code : ""));
+})();
+</script>
+</head>
+<body style="background:#050505;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;padding:44px">
+<p>Cargando…</p>
+<p><a href="/" style="color:#b7ff00">Ir a HAUSLINE</a></p>
+<noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
+</body>
+</html>

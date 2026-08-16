@@ -63,6 +63,18 @@ async function cargarProductosDelPanel(){
     }
   }catch(e){}
 
+  // Si se entró por link directo a un producto del panel (/?producto=CODIGO,
+  // vía el 404.html que atrapa /p/CODIGO), abrirlo ahora que ya cargó.
+  // iniciar() corrió antes que esta carga async, así que ahí no lo encontró.
+  try{
+    const directo = new URLSearchParams(location.search).get("producto");
+    if(directo && typeof abrirProducto === "function"
+       && typeof buscarProducto === "function" && buscarProducto(directo)
+       && !document.body.classList.contains("en-producto")){
+      abrirProducto(directo, false, true);
+    }
+  }catch(e){}
+
   console.log(`HAUSLINE · +${agregados} productos del panel · ${productos.length} en total`);
 }
 
