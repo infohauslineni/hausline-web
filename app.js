@@ -158,7 +158,7 @@ function crearCard(producto, modoInmediata){
 
   const cotizar = necesitaCotizar(producto);
   const precioHtml = cotizar
-    ? `<span class="precio-consultar">Precio a consultar</span>`
+    ? `<span class="precio-consultar">Cotiza el precio</span>`
     : oferta
     ? `<span class="precio-actual">${formatoPrecio(precio)}</span>
        <span class="precio-antes">${formatoPrecio(producto.precio)}</span>`
@@ -1118,7 +1118,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // Al vencer la fecha vuelve solo al precio normal.
   const enOferta = oferta && !modoInmediataActual;
   $("#modalPrecio").innerHTML = cotizar
-    ? `<span class="precio-consultar">Precio a consultar</span>`
+    ? `<span class="precio-consultar">Cotiza el precio</span>`
     : enOferta
     ? `<span class="actual">${formatoPrecio(precio)}</span>
        <span class="antes">${formatoPrecio(producto.precio)}</span>

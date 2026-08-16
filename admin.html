@@ -45,7 +45,9 @@
   .foto-item .quitar{ position:absolute; top:3px; right:3px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.65); color:#fff; border:none; font-size:14px; display:flex; align-items:center; justify-content:center; }
   .foto-item .estrella{ position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.6); color:#fde047; border:none; font-size:13px; line-height:1; display:flex; align-items:center; justify-content:center; }
   .foto-item.principal{ border-color:var(--verde); }
-  .foto-item .etq-principal{ position:absolute; bottom:0; left:0; right:0; background:var(--verde); color:var(--verde-txt); font-size:9.5px; font-weight:800; text-align:center; padding:2px; letter-spacing:.04em; }
+  .foto-item .etq-principal{ position:absolute; top:3px; left:3px; background:var(--verde); color:var(--verde-txt); font-size:8.5px; font-weight:800; padding:2px 6px; border-radius:20px; letter-spacing:.02em; }
+  .foto-item .cortar{ position:absolute; bottom:3px; left:3px; right:3px; background:rgba(0,0,0,.68); color:#fff; border:none; border-radius:8px; font-size:10.5px; font-weight:700; padding:3px 4px; display:flex; align-items:center; justify-content:center; gap:3px; }
+  .foto-item .cortar:disabled{ opacity:.8; }
 
   /* ---------- Vista previa interactiva ---------- */
   .preview-frame{ position:relative; width:100%; max-width:270px; aspect-ratio:1; margin:8px auto 0; border-radius:14px; overflow:hidden; background:#f4f4f4; border:1px solid var(--linea); touch-action:none; cursor:grab; }
@@ -266,7 +268,8 @@
         <label>Fotos</label>
         <div id="fotosGrid" class="fotos-grid"></div>
         <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
-        <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal (vista previa).</p>
+        <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre blanco (opcional).</p>
+        <p class="hint" id="fondoEstado" style="color:var(--verde);"></p>
 
         <label>Ajuste de la foto en la web</label>
         <select id="fAjuste">
@@ -373,13 +376,51 @@
         <img src="${esc(f.url)}" alt="">
         ${i===0 ? '<span class="etq-principal">Principal</span>' : `<button type="button" class="estrella" data-principal="${i}" title="Hacer principal">★</button>`}
         <button type="button" class="quitar" data-quitar="${i}">×</button>
+        ${f.sinFondo ? "" : `<button type="button" class="cortar" data-fondo="${i}" title="Quitar fondo (dejar sobre blanco)">✂️ Fondo</button>`}
       </div>`).join("")+
       `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
     $("btnAddFoto").addEventListener("click",()=>$("fFotos").click());
     g.querySelectorAll("[data-quitar]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.quitar; if(fotos[i]&&!fotos[i].remota)URL.revokeObjectURL(fotos[i].url); fotos.splice(i,1); pintarFotos(); }));
     // ★ = poner esa foto como principal (la mueve al primer lugar = vista previa)
     g.querySelectorAll("[data-principal]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.principal; const m=fotos.splice(i,1)[0]; fotos.unshift(m); pintarFotos(); }));
+    // ✂️ = quitar fondo (opcional, gratis, en el teléfono)
+    g.querySelectorAll("[data-fondo]").forEach(b=>b.addEventListener("click",()=>quitarFondo(+b.dataset.fondo)));
     updatePreview();
+  }
+
+  // ---------- Quitar fondo (gratis, en el navegador) ----------
+  let _removedor = null;
+  async function cargarRemovedor(){
+    if(_removedor) return _removedor;
+    const mod = await import("https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm");
+    _removedor = mod.removeBackground || (mod.default && mod.default.removeBackground);
+    if(!_removedor) throw new Error("librería no disponible");
+    return _removedor;
+  }
+  async function quitarFondo(i){
+    const foto = fotos[i]; if(!foto) return;
+    $("fondoEstado").textContent = "Quitando fondo… la 1ª vez descarga el modelo y puede tardar hasta 1 min (más en celular). No cierres la página.";
+    const btn = document.querySelector('[data-fondo="'+i+'"]'); if(btn){ btn.disabled=true; btn.textContent="⏳…"; }
+    try{
+      const quitar = await cargarRemovedor();
+      const entrada = foto.remota ? foto.url : foto.blob;
+      // Modelo liviano (quint8): descarga menos y corre más rápido en celular.
+      const recorte = await quitar(entrada, { model:"isnet_quint8" });
+      // Componer el recorte (transparente) sobre fondo BLANCO.
+      const img = await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=()=>rej(new Error("imagen")); im.src=URL.createObjectURL(recorte); });
+      const c=document.createElement("canvas"); c.width=img.naturalWidth; c.height=img.naturalHeight;
+      const ctx=c.getContext("2d"); ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(img,0,0);
+      URL.revokeObjectURL(img.src);
+      const blob = await new Promise(r=>c.toBlob(r,"image/jpeg",0.92));
+      if(!foto.remota) URL.revokeObjectURL(foto.url);
+      fotos[i] = { blob, url:URL.createObjectURL(blob), sinFondo:true };
+      $("fondoEstado").textContent = "✓ Fondo quitado. Si no quedó bien, borrá la foto y volvé a subir la original.";
+      pintarFotos();
+    }catch(err){
+      $("fondoEstado").textContent = "";
+      alert("No se pudo quitar el fondo (" + (err.message||err) + "). La foto queda como estaba.");
+      if(btn){ btn.disabled=false; btn.textContent="✂️ Fondo"; }
+    }
   }
 
   // ---------- Vista previa interactiva (encuadre con el dedo) ----------
