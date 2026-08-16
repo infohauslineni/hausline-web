@@ -19,7 +19,8 @@ function claveVariante(codigo, talla, color){
   return [codigo, talla || "", color || ""].join("|");
 }
 
-// item: { codigo, nombre, marca, categoria, imagen, talla, color, precioUnitario, envioRapido, entregaInmediata }
+// item: { codigo, nombre, marca, categoria, imagen, talla, color, precioUnitario, envio, envioRapido, entregaInmediata }
+// envio: "estandar" | "rapido" (tipo de envío que eligió el cliente para el encargo).
 function agregarAlCarrito(item, cantidad){
   cantidad = cantidad || 1;
   const items = leerCarrito();
@@ -28,6 +29,8 @@ function agregarAlCarrito(item, cantidad){
 
   if(existente){
     existente.cantidad += cantidad;
+    // Si vuelve a agregar la misma variante con otro tipo de envío, vale el último elegido.
+    if(item.envio) existente.envio = item.envio;
   } else {
     items.push({
       codigo: item.codigo,
@@ -38,6 +41,7 @@ function agregarAlCarrito(item, cantidad){
       talla: item.talla || "",
       color: item.color || "",
       precioUnitario: Number(item.precioUnitario) || 0,
+      envio: item.envio || "estandar",
       envioRapido: !!item.envioRapido,
       entregaInmediata: !!item.entregaInmediata,
       cantidad: cantidad
@@ -66,8 +70,16 @@ function vaciarCarrito(){
   guardarCarrito([]);
 }
 
+// Cargo del envío rápido (solo aplica a pedidos por encargo, una vez por producto).
+function recargoEnvioItem(item){
+  if(!item || item.entregaInmediata) return 0;
+  if(item.envio !== "rapido") return 0;
+  return (typeof HAUSLINE_ENVIO !== "undefined" && HAUSLINE_ENVIO.rapido)
+    ? HAUSLINE_ENVIO.rapido.recargo : 15;
+}
+
 function subtotalItem(item){
-  return item.precioUnitario * item.cantidad;
+  return item.precioUnitario * item.cantidad + recargoEnvioItem(item);
 }
 
 function totalCarrito(){
@@ -108,8 +120,15 @@ function mensajeCarritoWhatsApp(){
     if(it.color) msg += `Color: ${it.color}\n`;
     msg += `Cantidad: ${it.cantidad}\n`;
     msg += `Precio unitario: ${precioUSD(it.precioUnitario)}\n`;
+    if(!it.entregaInmediata){
+      const m = (typeof HAUSLINE_ENVIO !== "undefined") ? HAUSLINE_ENVIO[it.envio || "estandar"] : null;
+      if(m){
+        msg += `Tipo de envío: ${m.etiqueta} (${m.dias})\n`;
+        const rec = recargoEnvioItem(it);
+        if(rec > 0) msg += `Cargo de envío rápido: ${precioUSD(rec)}\n`;
+      }
+    }
     msg += `Subtotal: ${precioUSD(subtotalItem(it))}\n`;
-    if(it.envioRapido) msg += `Envío rápido: sí\n`;
     if(it.entregaInmediata) msg += `Entrega inmediata: sí\n`;
     msg += `\n`;
   });

@@ -32,6 +32,18 @@ function precioNIO(usd){
   return "C$" + Math.round((Number(usd) || 0) * HAUSLINE_EXCHANGE_RATE).toLocaleString("en-US");
 }
 
+// ---------- ENVÍO (pedidos por encargo) ----------
+// El cliente elige cómo quiere que llegue su pedido por encargo:
+//   • Estándar → el tiempo normal, sin costo extra.
+//   • Rápido   → llega antes por un cargo adicional (se cobra por producto).
+// Aplica a TODOS los productos por encargo (los de ahora y los futuros).
+// Para cambiar los días o el cargo, edita solo estos números.
+const HAUSLINE_ENVIO = {
+  estandar: { id:"estandar", etiqueta:"Envío estándar", dias:"20 a 25 días", diasMin:20, diasMax:25, recargo:0 },
+  rapido:   { id:"rapido",   etiqueta:"Envío rápido",   dias:"14 a 17 días", diasMin:14, diasMax:17, recargo:15 }
+};
+const HAUSLINE_ENVIO_DEFECTO = "estandar";
+
 // ============================================================
 //  SUPABASE  (para el contador REAL de visualizaciones)
 //  Pega aquí los datos de tu proyecto Supabase.

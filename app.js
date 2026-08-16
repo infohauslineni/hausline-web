@@ -58,7 +58,8 @@ const POLITICAS = {
     "No se permiten cancelaciones una vez confirmado el pedido."
   ],
   entrega: [
-    "Tiempo estimado de 15 a 25 días hábiles.",
+    "Envío estándar: 20 a 25 días, sin costo adicional.",
+    "Envío rápido: 14 a 17 días por $15 adicionales.",
     "El tiempo puede variar por logística internacional.",
     "Los productos de entrega inmediata se entregan sin espera."
   ],
@@ -87,6 +88,7 @@ let indiceImagen = 0;
 let tallaSeleccionada = "";
 let colorSeleccionado = "";
 let cantidadSeleccionada = 1;
+let envioSeleccionado = (typeof HAUSLINE_ENVIO_DEFECTO !== "undefined") ? HAUSLINE_ENVIO_DEFECTO : "estandar";  // tipo de envío elegido para el encargo
 
 // ---------- Utilidades ----------
 
@@ -239,6 +241,7 @@ function itemCarritoDesde(producto){
     categoria: producto.categoria || "",
     imagen: producto.imagen || "",
     precioUnitario: precioVigente(producto, false),
+    envio: "estandar",
     envioRapido: false,
     entregaInmediata: !!producto.entregaInmediata
   };
@@ -720,27 +723,85 @@ async function renderMasVendidos(){
 }
 
 // ============================================================
-// FECHA ESTIMADA DE ENTREGA (15–25 días hábiles, automática)
+// FECHA ESTIMADA DE ENTREGA (según el tipo de envío elegido, automática)
 // ============================================================
-function sumarDiasHabiles(desde, dias){
-  const d = new Date(desde);
-  let restantes = dias;
-  while(restantes > 0){
-    d.setDate(d.getDate() + 1);
-    const dow = d.getDay();          // 0=domingo, 6=sábado
-    if(dow !== 0 && dow !== 6) restantes--;
-  }
-  return d;
-}
-
-function textoEntregaEstimada(){
+function textoEntregaEstimada(metodo){
+  metodo = metodo || (typeof HAUSLINE_ENVIO !== "undefined"
+    ? HAUSLINE_ENVIO[envioSeleccionado] || HAUSLINE_ENVIO.estandar
+    : { etiqueta:"Envío estándar", dias:"20 a 25 días", diasMin:20, diasMax:25 });
   const meses = ["enero","febrero","marzo","abril","mayo","junio",
                  "julio","agosto","septiembre","octubre","noviembre","diciembre"];
   const hoy = new Date();
-  const desde = sumarDiasHabiles(hoy, 15);
-  const hasta = sumarDiasHabiles(hoy, 25);
+  const desde = new Date(hoy); desde.setDate(desde.getDate() + metodo.diasMin);
+  const hasta = new Date(hoy); hasta.setDate(hasta.getDate() + metodo.diasMax);
   const fmt = f => `${f.getDate()} de ${meses[f.getMonth()]}`;
-  return `Encargando hoy, recibirías aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
+  return `Con ${metodo.etiqueta.toLowerCase()} (${metodo.dias}), encargando hoy recibirías aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
+}
+
+// Pinta el selector de tipo de envío (solo para pedidos por encargo con precio).
+function renderSelectorEnvio(producto){
+  const sel = $("#selectorEnvio");
+  if(!sel) return;
+  const cont = $("#opcionesEnvio");
+  if(modoInmediataActual || necesitaCotizar(producto) || typeof HAUSLINE_ENVIO === "undefined"){
+    sel.hidden = true;
+    if(cont) cont.innerHTML = "";
+    return;
+  }
+  sel.hidden = false;
+  if(cont){
+    const iconos = {
+      estandar: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="14" height="12" rx="1.5"/><path d="M15 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18" cy="18.5" r="2"/></svg>`,
+      rapido:   `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-13h-8l1-7z"/></svg>`
+    };
+    cont.innerHTML = ["estandar","rapido"].map(id => {
+      const m = HAUSLINE_ENVIO[id];
+      if(!m) return "";
+      const precio = m.recargo > 0
+        ? `<span class="envio-precio recargo">+${formatoPrecio(m.recargo)}</span>`
+        : `<span class="envio-precio">Incluido</span>`;
+      const badge = m.recargo > 0 ? `<span class="envio-badge">Más rápido</span>` : "";
+      return `<button class="opcion opcion-envio ${id === envioSeleccionado ? "activa" : ""}" type="button" data-envio="${esc(id)}" aria-pressed="${id === envioSeleccionado}">
+        <span class="envio-icono">${iconos[id] || ""}</span>
+        <span class="envio-txt">
+          <span class="envio-nombre">${esc(m.etiqueta)}${badge}</span>
+          <span class="envio-detalle">${esc(m.dias)}</span>
+        </span>
+        <span class="envio-derecha">${precio}<span class="envio-radio"></span></span>
+      </button>`;
+    }).join("");
+  }
+}
+
+// Refresca el estimado de entrega y el abono según el envío elegido.
+function actualizarEnvioUI(){
+  const entrega = $("#modalEntrega");
+  if(modoInmediataActual){
+    if(entrega) entrega.innerHTML = "";
+    return;
+  }
+  const metodo = (typeof HAUSLINE_ENVIO !== "undefined")
+    ? (HAUSLINE_ENVIO[envioSeleccionado] || HAUSLINE_ENVIO.estandar) : null;
+  $$("#opcionesEnvio .opcion").forEach(b => {
+    const on = metodo && b.dataset.envio === metodo.id;
+    b.classList.toggle("activa", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+
+  if(entrega){
+    entrega.innerHTML = `<div class="entrega-estim">
+         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+         <span>${textoEntregaEstimada(metodo)}</span>
+       </div>`;
+  }
+
+  // El abono (50%) incluye el cargo del envío rápido si se eligió.
+  if(productoActual && !necesitaCotizar(productoActual)){
+    const precio = precioVigente(productoActual, false);
+    const base = precio + (metodo ? (metodo.recargo || 0) : 0);
+    const abono = $("#modalAbono");
+    if(abono) abono.innerHTML = `Abono para confirmar: <strong>${formatoPrecio(Math.round(base * 0.5))}</strong> (50%)`;
+  }
 }
 
 // ============================================================
@@ -1105,6 +1166,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   tallaSeleccionada = "";
   colorSeleccionado = "";
   cantidadSeleccionada = 1;
+  envioSeleccionado = (typeof HAUSLINE_ENVIO_DEFECTO !== "undefined") ? HAUSLINE_ENVIO_DEFECTO : "estandar";
 
   const oferta = ofertaVigente(producto);
   const precio = precioVigente(producto, modoInmediataActual);
@@ -1156,13 +1218,9 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     ? `<div class="disponibilidad inmediata">Entrega inmediata</div>`
     : `<div class="disponibilidad encargo">Disponible por encargo</div>`;
 
-  // Fecha estimada de entrega (solo para pedidos por encargo).
-  $("#modalEntrega").innerHTML = modoInmediataActual
-    ? ""
-    : `<div class="entrega-estim">
-         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
-         <span>${textoEntregaEstimada()}</span>
-       </div>`;
+  // Selector de tipo de envío + fecha estimada (solo pedidos por encargo).
+  renderSelectorEnvio(producto);
+  actualizarEnvioUI();
 
   // Vistas (se llena cuando Supabase responde)
   $("#modalVistas").textContent = "";
@@ -1328,7 +1386,7 @@ function renderSelectores(producto){
       .map(t => `<button class="opcion" type="button" data-talla="${esc(t)}">${esc(t)}</button>`).join("");
     $("#tallasNota").textContent = modoInmediataActual
       ? "Disponibles ahora, listas para entrega"
-      : "Bajo encargo · 15 a 25 días hábiles";
+      : "Bajo encargo · elige el tipo de envío abajo";
   } else {
     selTallas.hidden = true;
     $("#opcionesTallas").innerHTML = "";
@@ -1591,6 +1649,8 @@ function itemDesdeProducto(){
     talla: tallaSeleccionada,
     color: colorSeleccionado,
     precioUnitario: precioVigente(productoActual, modoInmediataActual),
+    // Tipo de envío elegido (solo aplica a encargo; en inmediata se ignora).
+    envio: modoInmediataActual ? "estandar" : envioSeleccionado,
     envioRapido: productoActual.envioRapido,
     // Solo cuenta como entrega inmediata si se pidió desde ese apartado.
     entregaInmediata: modoInmediataActual
@@ -1616,8 +1676,13 @@ function pedirProductoWhatsApp(){
 
   if(!validarSeleccion()) return;
 
+  const metodo = modoInmediataActual
+    ? null
+    : (typeof HAUSLINE_ENVIO !== "undefined"
+        ? (HAUSLINE_ENVIO[envioSeleccionado] || HAUSLINE_ENVIO.estandar) : null);
+  const recargo = metodo ? (metodo.recargo || 0) : 0;
   const precio = precioVigente(productoActual, modoInmediataActual);
-  const subtotal = precio * cantidadSeleccionada;
+  const subtotal = precio * cantidadSeleccionada + recargo;
 
   // El encabezado y el cierre cambian según sea entrega inmediata o encargo.
   let msg = modoInmediataActual
@@ -1630,9 +1695,12 @@ function pedirProductoWhatsApp(){
   if(colorSeleccionado) msg += `Color: ${colorSeleccionado}\n`;
   msg += `Cantidad: ${cantidadSeleccionada}\n`;
   msg += `Precio unitario: ${precioUSD(precio)}\n`;
+  if(metodo){
+    msg += `Tipo de envío: ${metodo.etiqueta} (${metodo.dias})\n`;
+    if(recargo > 0) msg += `Cargo de envío rápido: ${precioUSD(recargo)}\n`;
+  }
   msg += `Subtotal: ${precioUSD(subtotal)} (${precioNIO(subtotal)})\n`;
   msg += modoInmediataActual ? "Entrega inmediata: sí\n" : "Disponible por encargo\n";
-  if(productoActual.envioRapido) msg += "Envío rápido: sí\n";
 
   // El abono del 50% solo se pide en los pedidos por encargo.
   if(modoInmediataActual){
@@ -1686,7 +1754,9 @@ function renderCarrito(){
 
   cuerpo.innerHTML = items.map(it => {
     const clave = claveVariante(it.codigo, it.talla, it.color);
-    const meta = [it.codigo, it.talla && `Talla ${it.talla}`, it.color]
+    const envioTxt = (!it.entregaInmediata && it.envio === "rapido")
+      ? "Envío rápido +" + formatoPrecio(recargoEnvioItem(it)) : "";
+    const meta = [it.codigo, it.talla && `Talla ${it.talla}`, it.color, envioTxt]
       .filter(Boolean).join(" · ");
     return `
       <div class="linea">
@@ -1960,6 +2030,14 @@ document.addEventListener("click", e => {
     return;
   }
 
+  // Tipo de envío (solo pedidos por encargo)
+  const envio = e.target.closest("[data-envio]");
+  if(envio){
+    envioSeleccionado = envio.dataset.envio;
+    actualizarEnvioUI();
+    return;
+  }
+
   // Acordeón
   const acordeon = e.target.closest(".acordeon-btn");
   if(acordeon){
@@ -2123,13 +2201,14 @@ function repintarPrecios(){
 
   // Si hay un producto abierto, reabrirlo pero CONSERVANDO la selección.
   if(productoActual){
-    const t = tallaSeleccionada, c = colorSeleccionado, cant = cantidadSeleccionada;
+    const t = tallaSeleccionada, c = colorSeleccionado, cant = cantidadSeleccionada, env = envioSeleccionado;
     const codigo = productoActual.codigo, modo = modoInmediataActual;
     abrirProducto(codigo, modo, true);
-    tallaSeleccionada = t; colorSeleccionado = c; cantidadSeleccionada = cant;
+    tallaSeleccionada = t; colorSeleccionado = c; cantidadSeleccionada = cant; envioSeleccionado = env;
     $("#cantidadValor").textContent = cant;
     if(t) $$("#opcionesTallas .opcion").forEach(b => b.classList.toggle("activa", b.dataset.talla === t));
     if(c) $$("#opcionesColores .opcion").forEach(b => b.classList.toggle("activa", b.dataset.color === c));
+    actualizarEnvioUI();
   }
 
   if($("#panelCarrito").classList.contains("activo")) renderCarrito();
