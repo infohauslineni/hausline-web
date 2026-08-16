@@ -1289,6 +1289,10 @@ function renderGaleria(inmediata){
   }
   img.alt = nombreProducto(productoActual);
 
+  // Encuadre por producto (elegido en el panel): posición y zoom de la foto.
+  img.style.objectPosition = productoActual.posicionImagen || "";
+  img.style.transform = productoActual.escalaImagen ? `scale(${Number(productoActual.escalaImagen)})` : "";
+
   const varias = imagenesActuales.length > 1;
   $("#galeriaPrev").style.display = varias ? "flex" : "none";
   $("#galeriaNext").style.display = varias ? "flex" : "none";

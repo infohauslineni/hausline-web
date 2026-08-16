@@ -46,6 +46,20 @@
   .foto-item .estrella{ position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:rgba(0,0,0,.6); color:#fde047; border:none; font-size:13px; line-height:1; display:flex; align-items:center; justify-content:center; }
   .foto-item.principal{ border-color:var(--verde); }
   .foto-item .etq-principal{ position:absolute; bottom:0; left:0; right:0; background:var(--verde); color:var(--verde-txt); font-size:9.5px; font-weight:800; text-align:center; padding:2px; letter-spacing:.04em; }
+
+  /* ---------- Vista previa interactiva ---------- */
+  .preview-frame{ position:relative; width:100%; max-width:270px; aspect-ratio:1; margin:8px auto 0; border-radius:14px; overflow:hidden; background:#f4f4f4; border:1px solid var(--linea); touch-action:none; cursor:grab; }
+  .preview-frame.arrastrando{ cursor:grabbing; }
+  .preview-frame img{ width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+  .preview-frame img.contain{ object-fit:contain; }
+  .preview-vacio{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#888; font-size:12px; text-align:center; padding:16px; }
+  .preview-marca-agua{ position:absolute; left:50%; bottom:8px; transform:translateX(-50%); background:rgba(0,0,0,.4); color:#fff; font-size:8px; font-weight:800; letter-spacing:.2em; padding:2px 9px; border-radius:20px; pointer-events:none; }
+  .preview-info{ text-align:center; margin-top:9px; }
+  .preview-info b{ display:block; font-size:14px; }
+  .preview-info span{ color:var(--verde); font-weight:800; font-size:15px; }
+  .preview-ctrls{ display:flex; align-items:center; gap:10px; margin-top:10px; max-width:270px; margin-left:auto; margin-right:auto; }
+  .preview-ctrls input[type=range]{ flex:1; accent-color:var(--verde); }
+  .preview-ctrls .btn-mini{ flex:none; }
   .foto-add{ aspect-ratio:1; border:1.5px dashed var(--linea); border-radius:10px; background:var(--panel2); color:var(--texto2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px; }
   .foto-add svg{ width:22px; height:22px; }
   .aviso{ padding:11px 13px; border-radius:11px; font-size:13.5px; margin:12px 0; display:none; }
@@ -71,6 +85,24 @@
   .tabs{ display:flex; gap:8px; margin-bottom:14px; }
   .tab{ flex:1; padding:11px 6px; border-radius:11px; border:1px solid var(--linea); background:var(--panel2); color:var(--texto2); font-weight:700; font-size:13px; }
   .tab.activa{ background:var(--verde); color:var(--verde-txt); border-color:var(--verde); }
+  .panel-main{ min-width:0; }
+
+  /* Barra lateral + ancho completo en PC (estilo dashboard) */
+  @media(min-width:1000px){
+    .wrap{ max-width:1440px; }
+    .panel-grid{ display:grid; grid-template-columns:210px 1fr; gap:24px; align-items:start; }
+    .tabs{ flex-direction:column; position:sticky; top:14px; margin:0; gap:8px; }
+    .tabs .tab{ flex:none; text-align:left; padding:12px 14px; font-size:14px; }
+  }
+
+  /* Gráfico de barras (productos por categoría) */
+  .chart{ display:flex; flex-direction:column; gap:11px; }
+  .chart-row{ display:grid; grid-template-columns:96px 1fr 40px; align-items:center; gap:10px; font-size:13px; }
+  .chart-bar{ height:12px; background:var(--panel2); border-radius:20px; overflow:hidden; }
+  .chart-bar > i{ display:block; height:100%; background:var(--verde); border-radius:20px; transition:width .5s ease; }
+  .chart-row .val{ text-align:right; color:var(--texto2); font-weight:800; }
+  .inicio-2col{ display:grid; grid-template-columns:1fr; gap:14px; }
+  @media(min-width:900px){ .inicio-2col{ grid-template-columns:1fr 1fr; } }
 
   /* ---------- Dashboard de inicio ---------- */
   .stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
@@ -161,18 +193,29 @@
 
   <!-- ===================== PANEL ===================== -->
   <div id="vistaPanel" class="hidden">
-    <div class="tabs">
+    <div class="panel-grid">
+    <nav class="tabs">
       <button class="tab activa" id="tabInicio">🏠 Inicio</button>
       <button class="tab" id="tabLista">📦 Productos</button>
       <button class="tab" id="tabForm">➕ Nuevo</button>
-    </div>
+    </nav>
+    <div class="panel-main">
 
     <!-- ---------- INICIO (dashboard) ---------- -->
     <div id="viewInicio">
       <div class="stats-grid" id="statsGrid"></div>
-      <button class="btn" id="btnNuevoInicio">＋ Cargar producto nuevo</button>
-      <button class="btn btn-sec" id="btnSyncTracking" style="margin-top:10px;">🔄 Sincronizar todos al tracking</button>
-      <div id="avisoSync" class="aviso"></div>
+      <div class="inicio-2col">
+        <div class="card">
+          <h2>Productos por categoría</h2>
+          <div class="chart" id="chartCategorias"></div>
+        </div>
+        <div class="card">
+          <h2>Acciones rápidas</h2>
+          <button class="btn" id="btnNuevoInicio">＋ Cargar producto nuevo</button>
+          <button class="btn btn-sec" id="btnSyncTracking" style="margin-top:10px;">🔄 Sincronizar todos al tracking</button>
+          <div id="avisoSync" class="aviso"></div>
+        </div>
+      </div>
       <div class="card" style="margin-top:14px;">
         <h2>Últimos agregados por el panel</h2>
         <div class="tabla" id="recientes"><div class="cargando">Cargando…</div></div>
@@ -231,6 +274,19 @@
           <option value="contain">Mostrar completa (sin recortar)</option>
         </select>
         <p class="hint">“Llenar el marco” recorta un poco para que no quede fondo blanco. “Mostrar completa” si la foto se corta feo.</p>
+
+        <label>Vista previa <span style="font-weight:400;">— arrastrá con el dedo para encuadrar</span></label>
+        <div class="preview-frame" id="preFrame">
+          <img id="preImg" alt="">
+          <span class="preview-marca-agua" id="preAgua">HAUSLINE</span>
+          <div class="preview-vacio" id="preVacio">Agregá una foto para ver la vista previa</div>
+        </div>
+        <div class="preview-ctrls">
+          <span style="font-size:12px;color:var(--texto2);">Zoom</span>
+          <input type="range" id="preZoom" min="1" max="2.5" step="0.05" value="1">
+          <button type="button" class="btn btn-sec btn-mini" id="preReset">Centrar</button>
+        </div>
+        <div class="preview-info"><b id="preNombre">Nombre del producto</b><span id="prePrecio">$0</span></div>
         <div class="fila" style="margin-top:14px;">
           <div class="check" style="margin:0;"><input id="fNuevo" type="checkbox" checked><label for="fNuevo">Nuevo</label></div>
           <div class="check" style="margin:0;"><input id="fActivo" type="checkbox" checked><label for="fActivo">Visible</label></div>
@@ -242,6 +298,8 @@
         </div>
       </div>
     </div>
+    </div><!-- panel-main -->
+    </div><!-- panel-grid -->
   </div>
 </div>
 
@@ -299,7 +357,7 @@
     const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
     return { codigo:p.codigo, nombre:p.nombreReal||p.nombre||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
       precio:Number(p.precio||0), cotizar:p.cotizar===true, precioOferta:Number(p.precioOferta||0), promocionHasta:p.promocionHasta||"",
-      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", destacadoNuevo:p.destacadoNuevo===true };
+      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true };
   }
 
   // ============ Fotos ============
@@ -321,7 +379,40 @@
     g.querySelectorAll("[data-quitar]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.quitar; if(fotos[i]&&!fotos[i].remota)URL.revokeObjectURL(fotos[i].url); fotos.splice(i,1); pintarFotos(); }));
     // ★ = poner esa foto como principal (la mueve al primer lugar = vista previa)
     g.querySelectorAll("[data-principal]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.principal; const m=fotos.splice(i,1)[0]; fotos.unshift(m); pintarFotos(); }));
+    updatePreview();
   }
+
+  // ---------- Vista previa interactiva (encuadre con el dedo) ----------
+  let prePos = { x:50, y:50 }, preScale = 1;
+  function parsePos(str){
+    const m = String(str||"").match(/([\d.]+)%\s+([\d.]+)%/);
+    return m ? { x:Math.max(0,Math.min(100,+m[1])), y:Math.max(0,Math.min(100,+m[2])) } : { x:50, y:50 };
+  }
+  function updatePreview(){
+    const img=$("preImg"), vacio=$("preVacio"), agua=$("preAgua");
+    const url = fotos[0] ? fotos[0].url : "";
+    if(url){ img.src=url; img.style.display="block"; vacio.style.display="none"; agua.style.display="block"; }
+    else{ img.removeAttribute("src"); img.style.display="none"; vacio.style.display="flex"; agua.style.display="none"; }
+    img.classList.toggle("contain", $("fAjuste").value==="contain");
+    img.style.objectPosition = prePos.x+"% "+prePos.y+"%";
+    img.style.transform = "scale("+preScale+")";
+    $("preNombre").textContent = $("fNombre").value.trim() || "Nombre del producto";
+    const cot=$("fCotizar").checked, precio=Number($("fPrecio").value||0);
+    $("prePrecio").textContent = (cot || !(precio>0)) ? "Precio a consultar" : ("$"+precio);
+  }
+  (function(){
+    const frame=$("preFrame"); let drag=false, lx=0, ly=0;
+    frame.addEventListener("pointerdown", e=>{ if(!fotos[0]) return; drag=true; lx=e.clientX; ly=e.clientY; frame.classList.add("arrastrando"); try{ frame.setPointerCapture(e.pointerId); }catch(_){} });
+    frame.addEventListener("pointermove", e=>{ if(!drag) return; const r=frame.getBoundingClientRect(); const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY;
+      prePos.x=Math.max(0,Math.min(100, prePos.x - dx/r.width*100)); prePos.y=Math.max(0,Math.min(100, prePos.y - dy/r.height*100)); updatePreview(); });
+    const fin=()=>{ drag=false; frame.classList.remove("arrastrando"); };
+    frame.addEventListener("pointerup", fin); frame.addEventListener("pointercancel", fin); frame.addEventListener("pointerleave", fin);
+  })();
+  $("preZoom").addEventListener("input", ()=>{ preScale=Number($("preZoom").value); updatePreview(); });
+  $("preReset").addEventListener("click", ()=>{ prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; updatePreview(); });
+  ["fNombre","fPrecio"].forEach(id=>$(id).addEventListener("input", updatePreview));
+  $("fCotizar").addEventListener("change", updatePreview);
+  $("fAjuste").addEventListener("change", updatePreview);
   $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
     for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
   $("fCategoria").addEventListener("change",()=>llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true));
@@ -342,6 +433,8 @@
         precio:cotizar?0:Number($("fPrecio").value||0), cotizar, precioOferta:oferta>0?oferta:0, promocionHasta:oferta>0?ofertaHasta:"",
         descripcion:$("fDescripcion").value.trim(), tallas:$("fTallas").value.split(",").map(s=>s.trim()).filter(Boolean),
         imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
+        posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
+        escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
         destacadoNuevo:$("fNuevo").checked, fecha:new Date().toISOString().slice(0,10) };
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
 
@@ -367,6 +460,7 @@
     ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fAjuste").value="cover";
+    prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos(); }
   $("btnLimpiar").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); });
   function cargarEnForm(datos,opts){ opts=opts||{};
@@ -377,6 +471,7 @@
     $("fOferta").value=datos.precioOferta||""; $("fOfertaHasta").value=(datos.promocionHasta||"").slice(0,10);
     $("fTallas").value=(datos.tallas||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
+    prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false;
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
@@ -422,6 +517,12 @@
     ];
     $("statsGrid").innerHTML=cards.map(([f,n,l,cl])=>`<button class="stat-card ${cl}" data-goto="${f}"><span class="num">${n}</span><span class="lbl">${l}</span></button>`).join("");
     $("statsGrid").querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>{ filtroEstado=b.dataset.goto; filtroCategoria="todas"; pagina=1; renderChips(); renderTabla(); irA("lista"); }));
+    // Gráfico: productos por categoría
+    const counts=CATEGORIAS.map(c=>({c, n:itemsMerged.filter(i=>((i.datos||{}).categoria||"")===c).length}));
+    const max=Math.max(1, ...counts.map(x=>x.n));
+    const chart=$("chartCategorias");
+    if(chart){ chart.innerHTML=counts.map(x=>`<div class="chart-row"><span>${x.c}</span><div class="chart-bar"><i style="width:${Math.round(x.n/max*100)}%"></i></div><span class="val">${x.n}</span></div>`).join("");
+      chart.querySelectorAll(".chart-row span:first-child").forEach((s,idx)=>{ s.style.cursor="pointer"; s.addEventListener("click",()=>{ filtroCategoria=counts[idx].c; filtroEstado="todos"; pagina=1; renderChips(); renderTabla(); irA("lista"); }); }); }
     // Últimos agregados por el panel (los nuevos, hasta 5)
     const recientes=itemsMerged.filter(i=>i.origen==="nuevo").slice(0,5);
     $("recientes").innerHTML = recientes.length ? recientes.map(filaHTML).join("") : '<div class="cargando">Todavía no cargaste productos por el panel.</div>';
