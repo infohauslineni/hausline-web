@@ -874,6 +874,15 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
   font-weight:700;
   color:var(--verde);
 }
+/* "Precio a consultar" (productos sin precio definido / cotización). */
+.precio-consultar{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  color:var(--verde);
+}
+@media(min-width:640px){ .precio-consultar{ font-size:14px; } }
+.modal-precio .precio-consultar{ font-size:22px; }
 
 /* ---- Marca de agua HAUSLINE sobre cada foto ---- */
 .foto-marca{
@@ -933,6 +942,9 @@ h1,h2,h3{ margin:0; font-weight:600; letter-spacing:-.02em; }
 .card-btn-cart{ background:transparent; color:var(--texto); border-color:rgba(255,255,255,.3); }
 .card-btn-cart:hover{ background:rgba(255,255,255,.06); }
 .card-btn.ok{ background:var(--verde); color:#04210f; border-color:var(--verde); }
+/* "Cotizar" = pastilla verde WhatsApp (ocupa toda la fila, sin "Añadir"). */
+.card-btn-cotizar{ background:var(--verde); color:#04210f; font-weight:700; }
+.card-btn-cotizar:hover{ filter:brightness(1.06); }
 @media(min-width:900px){ .card-btn{ height:40px; font-size:13px; } }
 
 /* ---- Aparición escalonada de los productos al hacer scroll ---- */

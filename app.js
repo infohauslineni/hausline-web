@@ -156,7 +156,10 @@ function crearCard(producto, modoInmediata){
     etiquetas += `<span class="etiqueta ${e.color}">${esc(e.texto)}</span>`;
   });
 
-  const precioHtml = oferta
+  const cotizar = necesitaCotizar(producto);
+  const precioHtml = cotizar
+    ? `<span class="precio-consultar">Precio a consultar</span>`
+    : oferta
     ? `<span class="precio-actual">${formatoPrecio(precio)}</span>
        <span class="precio-antes">${formatoPrecio(producto.precio)}</span>`
     : `<span class="precio-actual">${formatoPrecio(precio)}</span>`;
@@ -211,8 +214,10 @@ function crearCard(producto, modoInmediata){
         </div>
         ${tallasHtml}
         <div class="card-acciones">
-          <button class="card-btn card-btn-order" type="button" data-encargar="${esc(producto.codigo)}" aria-label="Encargar por WhatsApp">Encargar</button>
-          <button class="card-btn card-btn-cart" type="button" data-agregar="${esc(producto.codigo)}" aria-label="Añadir al carrito">Añadir</button>
+          ${cotizar
+            ? `<button class="card-btn card-btn-cotizar" type="button" data-cotizar="${esc(producto.codigo)}" aria-label="Cotizar por WhatsApp">Cotizar por WhatsApp</button>`
+            : `<button class="card-btn card-btn-order" type="button" data-encargar="${esc(producto.codigo)}" aria-label="Encargar por WhatsApp">Encargar</button>
+          <button class="card-btn card-btn-cart" type="button" data-agregar="${esc(producto.codigo)}" aria-label="Añadir al carrito">Añadir</button>`}
         </div>
       </div>
     </article>
@@ -250,6 +255,18 @@ function encargarProductoWhatsApp(producto){
   if(marca) msg += `Marca: ${marca}\n`;
   msg += `Precio: ${fmt}\n\n`;
   msg += "¿Me confirmas disponibilidad, por favor?";
+  const numero = typeof WHATSAPP_NUMERO !== "undefined" ? WHATSAPP_NUMERO : "50578995116";
+  window.open("https://wa.me/" + numero + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+// Abre WhatsApp pidiendo el precio de un producto "a consultar" (botón "Cotizar").
+function cotizarProductoWhatsApp(producto){
+  let msg = "Hola HAUSLINE 👋, me interesa este producto y quisiera saber el precio:\n\n";
+  msg += `CÓDIGO: ${producto.codigo}\n`;
+  msg += `Producto: ${nombreProducto(producto)}\n`;
+  const marca = marcaProducto(producto);
+  if(marca && marca !== "HAUSLINE") msg += `Marca: ${marca}\n`;
+  msg += `\n¿Me pasas el precio y la disponibilidad, por favor?`;
   const numero = typeof WHATSAPP_NUMERO !== "undefined" ? WHATSAPP_NUMERO : "50578995116";
   window.open("https://wa.me/" + numero + "?text=" + encodeURIComponent(msg), "_blank");
 }
@@ -1091,6 +1108,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
 
   const oferta = ofertaVigente(producto);
   const precio = precioVigente(producto, modoInmediataActual);
+  const cotizar = necesitaCotizar(producto);
 
   $("#modalMarca").textContent = marcaProducto(producto);
   $("#modalNombre").textContent = nombreProducto(producto);
@@ -1099,7 +1117,9 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // Si hay promoción se muestra el precio anterior tachado y el descuento.
   // Al vencer la fecha vuelve solo al precio normal.
   const enOferta = oferta && !modoInmediataActual;
-  $("#modalPrecio").innerHTML = enOferta
+  $("#modalPrecio").innerHTML = cotizar
+    ? `<span class="precio-consultar">Precio a consultar</span>`
+    : enOferta
     ? `<span class="actual">${formatoPrecio(precio)}</span>
        <span class="antes">${formatoPrecio(producto.precio)}</span>
        <span class="desc">-${porcentajeDescuento(producto)}%</span>`
@@ -1115,9 +1135,21 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
 
   // El abono del 50% solo aplica a pedidos por encargo.
   // En entrega inmediata se paga completo al recibir, sin abono previo.
-  $("#modalAbono").innerHTML = modoInmediataActual
+  // Si el producto está "a consultar" no hay abono todavía: primero el precio.
+  $("#modalAbono").innerHTML = cotizar
+    ? `Escríbenos por WhatsApp y te pasamos el precio.`
+    : modoInmediataActual
     ? `Disponible ahora, sin abono previo.`
     : `Abono para confirmar: <strong>${formatoPrecio(Math.round(precio * 0.5))}</strong> (50%)`;
+
+  // Botón principal y "Agregar al carrito" cambian en modo cotización:
+  // no tiene sentido pagar/agregar algo sin precio, así que solo se cotiza.
+  const btnWa = $("#btnWhatsappProducto");
+  if(btnWa && btnWa.lastChild){
+    btnWa.lastChild.textContent = cotizar ? " Cotizar por WhatsApp" : " Encargar por WhatsApp";
+  }
+  const btnCart = $("#btnAgregarCarrito");
+  if(btnCart) btnCart.hidden = cotizar;
 
   // Disponibilidad según el contexto
   $("#modalDisponibilidad").innerHTML = modoInmediataActual
@@ -1563,7 +1595,22 @@ function itemDesdeProducto(){
 
 // Mensaje de WhatsApp para un solo producto (botón individual).
 function pedirProductoWhatsApp(){
-  if(!productoActual || !validarSeleccion()) return;
+  if(!productoActual) return;
+
+  // Producto "a consultar": se pide el precio, sin exigir talla ni abono.
+  if(necesitaCotizar(productoActual)){
+    let msg = "Hola HAUSLINE 👋, me interesa este producto y quisiera saber el precio:\n\n";
+    msg += `CÓDIGO: ${productoActual.codigo}\n`;
+    msg += `Producto: ${nombreProducto(productoActual)}\n`;
+    if(productoActual.marca) msg += `Marca: ${productoActual.marca}\n`;
+    if(tallaSeleccionada) msg += `Talla: ${tallaSeleccionada}\n`;
+    if(colorSeleccionado) msg += `Color: ${colorSeleccionado}\n`;
+    msg += `\n¿Me pasas el precio y la disponibilidad, por favor?`;
+    window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+    return;
+  }
+
+  if(!validarSeleccion()) return;
 
   const precio = precioVigente(productoActual, modoInmediataActual);
   const subtotal = precio * cantidadSeleccionada;
@@ -1730,6 +1777,15 @@ document.addEventListener("click", e => {
     e.stopPropagation();
     const p = buscarProducto(btnEncargar.dataset.encargar);
     if(p) encargarProductoWhatsApp(p);
+    return;
+  }
+
+  // Cotizar por WhatsApp desde la tarjeta (producto sin precio definido).
+  const btnCotizarCard = e.target.closest("[data-cotizar]");
+  if(btnCotizarCard){
+    e.stopPropagation();
+    const p = buscarProducto(btnCotizarCard.dataset.cotizar);
+    if(p) cotizarProductoWhatsApp(p);
     return;
   }
 

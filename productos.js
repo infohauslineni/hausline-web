@@ -6217,6 +6217,18 @@ function precioVigente(producto, modoInmediata){
   return Number(producto.precio);
 }
 
+// "Precio a consultar" (cotización).
+// Un producto entra en modo cotización cuando:
+//   - le pones   cotizar:true   en el catálogo, o
+//   - todavía no tiene precio (precio:0 o sin precio).
+// En ese caso NO se muestra "$0": se muestra "Precio a consultar" y el
+// botón pasa a ser "Cotizar" (abre WhatsApp preguntando el precio).
+// Cuando ya sepas el costo real, pon el precio y quita cotizar:true.
+function necesitaCotizar(producto){
+  if(producto && producto.cotizar === true) return true;
+  return !(Number(producto && producto.precio) > 0);
+}
+
 function buscarProducto(codigo){
   const c = String(codigo || "").trim().toUpperCase();
   return productos.find(p => String(p.codigo).trim().toUpperCase() === c) || null;
