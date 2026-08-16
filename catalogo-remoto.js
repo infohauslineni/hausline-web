@@ -33,10 +33,16 @@ async function cargarProductosDelPanel(){
   filas.forEach(fila => {
     const datos = fila && fila.datos ? fila.datos : null;
     if(!datos || !datos.codigo) return;
-    // Si ese código ya está en productos.js, no lo duplicamos.
-    if(typeof buscarProducto === "function" && buscarProducto(datos.codigo)) return;
-    const prod = normalizarProducto(datos, productos.length);
-    productos.push(prod);
+    const existente = typeof buscarProducto === "function" ? buscarProducto(datos.codigo) : null;
+    if(existente){
+      // Ya existe en productos.js: es una EDICIÓN hecha desde el panel.
+      // Se reemplaza conservando su posición original (orden) en el catálogo.
+      const i = productos.indexOf(existente);
+      if(i >= 0) productos[i] = normalizarProducto(datos, existente.orden);
+    } else {
+      // Producto NUEVO (solo existe en el panel): se agrega al final.
+      productos.push(normalizarProducto(datos, productos.length));
+    }
     agregados++;
   });
   if(!agregados) return;
