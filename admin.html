@@ -223,7 +223,14 @@
         <label>Fotos</label>
         <div id="fotosGrid" class="fotos-grid"></div>
         <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
-        <p class="hint">Se comprimen solas antes de subir. La primera es la principal.</p>
+        <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal (vista previa).</p>
+
+        <label>Ajuste de la foto en la web</label>
+        <select id="fAjuste">
+          <option value="cover">Llenar el marco (sin bordes blancos)</option>
+          <option value="contain">Mostrar completa (sin recortar)</option>
+        </select>
+        <p class="hint">“Llenar el marco” recorta un poco para que no quede fondo blanco. “Mostrar completa” si la foto se corta feo.</p>
         <div class="fila" style="margin-top:14px;">
           <div class="check" style="margin:0;"><input id="fNuevo" type="checkbox" checked><label for="fNuevo">Nuevo</label></div>
           <div class="check" style="margin:0;"><input id="fActivo" type="checkbox" checked><label for="fActivo">Visible</label></div>
@@ -292,7 +299,7 @@
     const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
     return { codigo:p.codigo, nombre:p.nombreReal||p.nombre||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
       precio:Number(p.precio||0), cotizar:p.cotizar===true, precioOferta:Number(p.precioOferta||0), promocionHasta:p.promocionHasta||"",
-      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], imagen:p.imagen||imagenes[0]||"", imagenes, destacadoNuevo:p.destacadoNuevo===true };
+      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", destacadoNuevo:p.destacadoNuevo===true };
   }
 
   // ============ Fotos ============
@@ -334,7 +341,8 @@
       const datos={ codigo, nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
         precio:cotizar?0:Number($("fPrecio").value||0), cotizar, precioOferta:oferta>0?oferta:0, promocionHasta:oferta>0?ofertaHasta:"",
         descripcion:$("fDescripcion").value.trim(), tallas:$("fTallas").value.split(",").map(s=>s.trim()).filter(Boolean),
-        imagen:urls[0]||"", imagenes:urls, destacadoNuevo:$("fNuevo").checked, fecha:new Date().toISOString().slice(0,10) };
+        imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
+        destacadoNuevo:$("fNuevo").checked, fecha:new Date().toISOString().slice(0,10) };
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
 
       // Sincroniza al TRACKING (misma base): crea/actualiza el producto en su
@@ -358,7 +366,7 @@
   function limpiarForm(){ $("tituloForm").textContent="Nuevo producto";
     ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
-    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true;
+    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fAjuste").value="cover";
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos(); }
   $("btnLimpiar").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); });
   function cargarEnForm(datos,opts){ opts=opts||{};
@@ -368,6 +376,7 @@
     $("fSubcategoria").value=datos.subcategoria||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;
     $("fOferta").value=datos.precioOferta||""; $("fOfertaHasta").value=(datos.promocionHasta||"").slice(0,10);
     $("fTallas").value=(datos.tallas||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
+    $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false;
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 

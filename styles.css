@@ -1799,21 +1799,20 @@ body.en-producto .chips{ display:none; }
 @media(min-width:900px){
   .galeria-principal{ margin:0; }
 }
-/* La foto se muestra COMPLETA dentro del marco (sin recortar), para que no
-   corte el producto cuando las fotos vienen con distintos anchos/altos.
-   El marco 1:1 con fondo neutro mantiene todas las fichas del mismo tamaño. */
+/* Por defecto la foto LLENA el marco (sin bordes blancos). Se recorta lo justo
+   para que el producto quede grande y centrado. Si una foto puntual se corta
+   feo, en el panel se elige "Mostrar completa" (imagenFit:"contain"). */
 .galeria-principal img{
   width:100%;height:100%;
-  object-fit:contain;
+  object-fit:cover;
   object-position:center;
-  padding:10px;
   transition:opacity .22s var(--ease);
 }
 
-/* imagenFit:"cover" (opcional por producto) vuelve al recorte que llena el marco */
-.galeria-principal img.ajuste-cover{
-  object-fit:cover;
-  padding:0;
+/* imagenFit:"contain" (elegido por producto) muestra la foto completa sin recortar */
+.galeria-principal img.ajuste-contain{
+  object-fit:contain;
+  padding:10px;
 }
 
 /* Fondo oscuro semitransparente para que las flechas se vean sobre
