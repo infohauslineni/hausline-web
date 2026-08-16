@@ -268,7 +268,7 @@
         <label>Fotos</label>
         <div id="fotosGrid" class="fotos-grid"></div>
         <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
-        <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre blanco (opcional).</p>
+        <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre el fondo del catálogo (opcional).</p>
         <p class="hint" id="fondoEstado" style="color:var(--verde);"></p>
 
         <label>Ajuste de la foto en la web</label>
@@ -376,7 +376,7 @@
         <img src="${esc(f.url)}" alt="">
         ${i===0 ? '<span class="etq-principal">Principal</span>' : `<button type="button" class="estrella" data-principal="${i}" title="Hacer principal">★</button>`}
         <button type="button" class="quitar" data-quitar="${i}">×</button>
-        ${f.sinFondo ? "" : `<button type="button" class="cortar" data-fondo="${i}" title="Quitar fondo (dejar sobre blanco)">✂️ Fondo</button>`}
+        ${f.sinFondo ? "" : `<button type="button" class="cortar" data-fondo="${i}" title="Quitar fondo (dejar sobre el fondo del catálogo)">✂️ Fondo</button>`}
       </div>`).join("")+
       `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
     $("btnAddFoto").addEventListener("click",()=>$("fFotos").click());
@@ -409,7 +409,9 @@
       // Componer el recorte (transparente) sobre fondo BLANCO.
       const img = await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=()=>rej(new Error("imagen")); im.src=URL.createObjectURL(recorte); });
       const c=document.createElement("canvas"); c.width=img.naturalWidth; c.height=img.naturalHeight;
-      const ctx=c.getContext("2d"); ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(img,0,0);
+      // Fondo = el mismo gris clarito del catálogo (--foto-bg #f4f4f4), para que
+      // el recorte calce sin que se note el borde contra el marco del producto.
+      const ctx=c.getContext("2d"); ctx.fillStyle="#f4f4f4"; ctx.fillRect(0,0,c.width,c.height); ctx.drawImage(img,0,0);
       URL.revokeObjectURL(img.src);
       const blob = await new Promise(r=>c.toBlob(r,"image/jpeg",0.92));
       if(!foto.remota) URL.revokeObjectURL(foto.url);
