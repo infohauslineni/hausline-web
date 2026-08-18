@@ -470,6 +470,7 @@
     const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
     if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
     const btn=$("btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
+    if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
     try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
       const ofertaHasta=$("fOfertaHasta").value?($("fOfertaHasta").value+"T23:59:59"):"";
       const datos={ codigo, nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
@@ -660,6 +661,19 @@
   async function mostrarPanel(m){
     $("vistaLogin").classList.toggle("hidden",m); $("vistaPanel").classList.toggle("hidden",!m); $("btnSalir").classList.toggle("hidden",!m);
     if(m){ baseProductos=await cargarBase(); await cargarRemotos(); irA("inicio"); }
+  }
+  // Antes de guardar, fuerza renovar el token de sesion. Evita el error
+  // '"exp" claim timestamp check failed', que sale cuando el token guardado
+  // vencio y supabase-js no lo renovo solo (tipico si el panel estuvo abierto un
+  // rato, o si el reloj de la PC esta atrasado). Si el refresh falla, la sesion
+  // ya no sirve: limpia y pide iniciar sesion otra vez.
+  async function asegurarSesion(){
+    try{ const { data, error } = await supa.auth.refreshSession(); if(!error && data && data.session) return true; }
+    catch(e){}
+    try{ await supa.auth.signOut(); }catch(e){}
+    mostrarPanel(false);
+    aviso($("avisoLogin"), "Tu sesion expiro. Volve a iniciar sesion para guardar.", "err");
+    return false;
   }
   $("btnEntrar").addEventListener("click",async()=>{
     const email=$("loginEmail").value.trim(),password=$("loginPass").value;
