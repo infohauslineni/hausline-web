@@ -4,24 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
 <title>HAUSLINE · Panel de productos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    color-scheme:light;
-    --bg:#f4f3f0; --panel:#ffffff; --panel2:#faf9f6; --linea:#e6e3dc; --linea2:#d7d3ca;
-    --texto:#141414; --texto2:#585349; --texto3:#8a857b;
-    --verde:#141414; --verde-txt:#ffffff; --rojo:#a11f16; --azul:#2b4bff; --amarillo:#7a5f0e;
+    color-scheme:dark;
+    --bg:#0e0e0f; --panel:#161618; --panel2:#1d1d20; --linea:#2b2b2f; --linea2:#3a3a3f;
+    --texto:#f2f0ea; --texto2:#a7a29a; --texto3:#726e67;
+    --verde:#ece8df; --verde-txt:#141414; --rojo:#f0a9a2; --azul:#9db4ff; --amarillo:#e6c766;
     --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
     --radio:3px;
   }
-  /* Blinda el diseno claro contra el "modo oscuro automatico" del navegador,
-     que invertia las letras y dejaba todo con bajo contraste. */
-  html{ color-scheme:light; }
-  @media (prefers-color-scheme: dark){ :root{ color-scheme:light; } }
+  /* Esquema oscuro declarado: el diseno es oscuro de verdad, asi el navegador
+     no lo invierte y los controles nativos (selects, fecha) salen oscuros. */
+  html{ color-scheme:dark; }
   *{ box-sizing:border-box; }
   html{ -webkit-text-size-adjust:100%; }
   body{
@@ -37,13 +36,13 @@
   .logo small{ display:block; letter-spacing:.2em; font-weight:500; color:var(--texto2); font-size:9.5px; text-transform:uppercase; margin-top:6px; }
   button{ font:inherit; cursor:pointer; }
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid var(--verde); border-radius:var(--radio); padding:15px 20px; font-weight:500; font-size:12px; letter-spacing:.14em; text-transform:uppercase; background:var(--verde); color:var(--verde-txt); width:100%; transition:background .2s,color .2s,border-color .2s; }
-  .btn:hover{ background:#2e2e2e; border-color:#2e2e2e; }
+  .btn:hover{ background:#ffffff; border-color:#ffffff; }
   .btn:active{ transform:translateY(1px); } .btn:disabled{ opacity:.5; }
   .btn-sec{ background:transparent; color:var(--texto); border:1px solid var(--linea2); }
   .btn-sec:hover{ background:transparent; border-color:var(--texto); color:var(--texto); }
   .btn-mini{ width:auto; padding:11px 15px; font-size:10.5px; border-radius:var(--radio); }
   label{ display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--texto2); margin:18px 1px 7px; font-weight:600; }
-  input, select, textarea{ width:100%; background:#fff; border:1px solid var(--linea2); color:var(--texto); border-radius:var(--radio); padding:13px 14px; font:inherit; font-size:14px; outline:none; transition:border-color .2s; }
+  input, select, textarea{ width:100%; background:var(--panel2); border:1px solid var(--linea2); color:var(--texto); border-radius:var(--radio); padding:13px 14px; font:inherit; font-size:14px; outline:none; transition:border-color .2s; }
   input::placeholder, textarea::placeholder{ color:var(--texto3); }
   input:focus, select:focus, textarea:focus{ border-color:var(--texto); }
   textarea{ min-height:84px; resize:vertical; }
@@ -80,8 +79,8 @@
   .foto-add{ aspect-ratio:1; border:1.5px dashed var(--linea); border-radius:10px; background:var(--panel2); color:var(--texto2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px; }
   .foto-add svg{ width:22px; height:22px; }
   .aviso{ padding:12px 14px; border-radius:var(--radio); font-size:13px; margin:14px 0; display:none; letter-spacing:.01em; }
-  .aviso.ok{ display:block; background:#f0f4ee; color:#33623f; border:1px solid #d7e4d2; }
-  .aviso.err{ display:block; background:#f9efed; color:#a11f16; border:1px solid #ecd5d1; }
+  .aviso.ok{ display:block; background:rgba(120,190,140,.12); color:#a7e0b8; border:1px solid rgba(120,190,140,.3); }
+  .aviso.err{ display:block; background:rgba(240,120,110,.12); color:#f2b3ac; border:1px solid rgba(240,120,110,.3); }
   .hidden{ display:none !important; }
   h2{ font-family:var(--serif); font-size:26px; font-weight:500; margin:2px 1px 18px; letter-spacing:.01em; }
 
@@ -158,18 +157,18 @@
   .c-precio b{ color:var(--texto); }
   .precio-tachado{ text-decoration:line-through; opacity:.55; font-size:12px; margin-right:4px; }
   .c-acc{ display:flex; gap:6px; justify-content:flex-end; }
-  .icon-btn{ background:#fff; border:1px solid var(--linea2); color:var(--texto); border-radius:var(--radio); padding:8px 10px; font-size:13px; transition:border-color .2s; }
+  .icon-btn{ background:var(--panel2); border:1px solid var(--linea2); color:var(--texto); border-radius:var(--radio); padding:8px 10px; font-size:13px; transition:border-color .2s; }
   .icon-btn:hover{ border-color:var(--texto); }
   /* En celular: categoría y precio van en el subtítulo, se ocultan las columnas */
   .c-cat, .c-precio, .c-estado{ display:none; }
   @media(min-width:820px){ .c-cat, .c-precio, .c-estado{ display:block; } .c-estado{ display:flex; } .movil-meta{ display:none; } }
   .c-estado{ align-items:center; }
   .pill{ font-size:9px; padding:4px 10px; border-radius:20px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; display:inline-block; border:1px solid transparent; }
-  .pill.nuevo{ background:#eef4ec; color:#33623f; border-color:#d7e4d2; }
-  .pill.editado{ background:#eef1fb; color:#2b4bff; border-color:#d6ddf7; }
-  .pill.original{ background:#f2f1ed; color:var(--texto2); border-color:var(--linea); }
-  .pill.oculto{ background:#f6f1e6; color:#8a6d10; border-color:#e8dcc2; }
-  .pill.oferta{ background:#f9efed; color:#a11f16; border-color:#ecd5d1; }
+  .pill.nuevo{ background:rgba(120,190,140,.14); color:#a7e0b8; border-color:rgba(120,190,140,.28); }
+  .pill.editado{ background:rgba(120,150,240,.14); color:#aebfff; border-color:rgba(120,150,240,.28); }
+  .pill.original{ background:rgba(180,175,165,.1); color:var(--texto2); border-color:var(--linea2); }
+  .pill.oculto{ background:rgba(230,190,90,.14); color:#e6c766; border-color:rgba(230,190,90,.28); }
+  .pill.oferta{ background:rgba(240,120,110,.14); color:#f0a9a2; border-color:rgba(240,120,110,.28); }
   .badges-movil{ display:flex; gap:4px; }
   @media(min-width:820px){ .badges-movil{ display:none; } }
 
