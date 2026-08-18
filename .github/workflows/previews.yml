@@ -1,13 +1,19 @@
 name: Generar previews /p
 
-# Regenera las mini-páginas para compartir (/p/<CODIGO>/index.html) cada vez
-# que cambie el catálogo. Así los productos NUEVOS obtienen su enlace con
-# vista previa (foto en WhatsApp/Facebook) sin correr nada a mano.
+# Regenera las mini-páginas para compartir (/p/<CODIGO>/index.html) para TODO
+# el catálogo: los productos de productos.js Y los agregados desde el panel
+# (Supabase · catalogo_web). Así cada producto obtiene su enlace con vista
+# previa (foto en WhatsApp/Facebook) sin correr nada a mano.
+#
+# Se dispara de 3 formas:
+#   1. push que cambie productos.js o el generador (cambios en el código).
+#   2. schedule: cada 2 horas, para recoger los productos que se agregan desde
+#      el panel (esos guardan en Supabase, NO hacen push, así que sin horario
+#      nunca tendrían preview). El commit del bot solo se hace si hay cambios.
+#   3. workflow_dispatch: botón "Run workflow" para forzarlo al instante.
 #
 # El commit del bot solo toca /p/**, que NO está en "paths", por lo que no se
-# vuelve a disparar a sí mismo (sin bucles). También se puede correr a mano
-# desde la pestaña Actions con "Run workflow" (por ejemplo, para rellenar los
-# productos que hoy no tienen preview).
+# vuelve a disparar a sí mismo (sin bucles).
 
 on:
   push:
@@ -15,6 +21,8 @@ on:
     paths:
       - 'productos.js'
       - 'scripts/gen-og.mjs'
+  schedule:
+    - cron: '0 */2 * * *'   # cada 2 horas (UTC)
   workflow_dispatch:
 
 permissions:

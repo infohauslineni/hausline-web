@@ -25,8 +25,48 @@ const HERO = `${SITIO}/hero-hausline.png` // respaldo si el producto no tiene fo
 const codigoFuente = fs.readFileSync(path.join(raiz, 'productos.js'), 'utf8')
 const sandbox = { window: {}, document: { createElement: () => ({}) }, console, Date, Set, Number, String, Math, Array, Object, JSON }
 vm.createContext(sandbox)
-vm.runInContext(`${codigoFuente}\nthis.__data = { productos, nombreProducto, descripcionProducto, precioVigente, marcaProducto }`, sandbox)
-const { productos, nombreProducto, descripcionProducto, precioVigente, marcaProducto } = sandbox.__data
+vm.runInContext(`${codigoFuente}\nthis.__data = { productos, nombreProducto, descripcionProducto, precioVigente, marcaProducto, normalizarProducto, buscarProducto }`, sandbox)
+const { productos, nombreProducto, descripcionProducto, precioVigente, marcaProducto, normalizarProducto, buscarProducto } = sandbox.__data
+
+// --- Sumar los productos AGREGADOS DESDE EL PANEL (Supabase · catalogo_web) ---
+// El panel guarda en Supabase, no en productos.js, así que esos productos nuevos
+// no tenían preview. Aquí los traemos y los mezclamos igual que catalogo-remoto.js
+// hace en el sitio, para que TODOS (los del código y los del panel) tengan su /p.
+const CATALOGO_PANEL = {
+  url: 'https://xgdijumnmaqfirmckugw.supabase.co',
+  key: 'sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw'
+}
+try {
+  const r = await fetch(
+    `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos&activo=eq.true&order=created_at.asc`,
+    { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } }
+  )
+  if (r.ok) {
+    const filas = await r.json()
+    let agregados = 0
+    if (Array.isArray(filas)) {
+      for (const fila of filas) {
+        const datos = fila && fila.datos ? fila.datos : null
+        if (!datos || !datos.codigo) continue
+        const existente = buscarProducto(datos.codigo)
+        if (existente) {
+          // Edición desde el panel: reemplaza conservando su posición.
+          const i = productos.indexOf(existente)
+          if (i >= 0) productos[i] = normalizarProducto(datos, existente.orden)
+        } else {
+          // Producto nuevo (solo en el panel): se agrega al final.
+          productos.push(normalizarProducto(datos, productos.length))
+        }
+        agregados++
+      }
+    }
+    console.log(`✓ Panel (Supabase): ${agregados} producto(s) leídos`)
+  } else {
+    console.log(`⚠ Panel (Supabase) respondió ${r.status}; se generan solo los de productos.js`)
+  }
+} catch (e) {
+  console.log(`⚠ Panel (Supabase) no disponible (${e.message}); se generan solo los de productos.js`)
+}
 
 // --- Utilidades ---
 const escaparHtml = (texto) => String(texto ?? '')
@@ -34,8 +74,11 @@ const escaparHtml = (texto) => String(texto ?? '')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 
 // Convierte "imgP/ZAPATOS MEN/.../1.jpeg" en URL absoluta y bien codificada.
+// Si ya es una URL absoluta (productos del panel, alojados en Supabase Storage),
+// se devuelve tal cual: ya viene lista y no lleva el dominio del sitio delante.
 const urlImagen = (relativa) => {
   if (!relativa) return HERO
+  if (/^https?:\/\//i.test(relativa)) return relativa
   const limpia = String(relativa).replace(/^\.?\//, '')
   return `${SITIO}/${limpia.split('/').map(encodeURIComponent).join('/')}`
 }
@@ -51,9 +94,12 @@ const recortar = (texto, max = 160) => {
 const FORMATOS_OK = new Set(['jpg', 'jpeg', 'png'])
 const formatoSoportado = (ruta) => FORMATOS_OK.has(String(ruta || '').split('.').pop().toLowerCase())
 
-// Devuelve la ruta relativa de imagen que sí sirve para el preview, o null.
+// Devuelve la ruta de imagen que sí sirve para el preview, o null.
 const imagenParaPreview = (relativa) => {
   if (!relativa) return null
+  // URL absoluta (panel/Supabase): sirve si es jpg/jpeg/png; no hay archivo local
+  // que revisar, se confía en la extensión (el panel sube en .jpg).
+  if (/^https?:\/\//i.test(relativa)) return formatoSoportado(relativa) ? relativa : null
   if (formatoSoportado(relativa)) return relativa
   const jpg = relativa.replace(/\.[^.]+$/, '.jpg')
   return fs.existsSync(path.join(raiz, jpg)) ? jpg : null
