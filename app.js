@@ -773,6 +773,27 @@ function renderSelectorEnvio(producto){
   }
 }
 
+// Pinta el precio grande del modal sumando el recargo del envío elegido
+// (envío rápido suma su cargo al total; el estándar no cambia nada).
+function pintarPrecioModal(producto, enOferta){
+  const el = $("#modalPrecio");
+  if(!el) return;
+  if(necesitaCotizar(producto)){
+    el.innerHTML = `<span class="precio-consultar">Cotiza el precio</span>`;
+    return;
+  }
+  const precio = precioVigente(producto, modoInmediataActual);
+  const metodo = (!modoInmediataActual && typeof HAUSLINE_ENVIO !== "undefined")
+    ? (HAUSLINE_ENVIO[envioSeleccionado] || HAUSLINE_ENVIO.estandar) : null;
+  const recargo = metodo ? (metodo.recargo || 0) : 0;
+  const total = precio + recargo;
+  el.innerHTML = enOferta
+    ? `<span class="actual">${formatoPrecio(total)}</span>
+       <span class="antes">${formatoPrecio(producto.precio + recargo)}</span>
+       <span class="desc">-${porcentajeDescuento(producto)}%</span>`
+    : `<span class="actual">${formatoPrecio(total)}</span>`;
+}
+
 // Refresca el estimado de entrega y el abono según el envío elegido.
 function actualizarEnvioUI(){
   const entrega = $("#modalEntrega");
@@ -795,10 +816,11 @@ function actualizarEnvioUI(){
        </div>`;
   }
 
-  // El abono (50%) incluye el cargo del envío rápido si se eligió.
+  // El precio grande y el abono (50%) incluyen el cargo del envío rápido.
   if(productoActual && !necesitaCotizar(productoActual)){
     const precio = precioVigente(productoActual, false);
     const base = precio + (metodo ? (metodo.recargo || 0) : 0);
+    pintarPrecioModal(productoActual, !!ofertaVigente(productoActual) && !modoInmediataActual);
     const abono = $("#modalAbono");
     if(abono) abono.innerHTML = `Abono para confirmar: <strong>${formatoPrecio(Math.round(base * 0.5))}</strong> (50%)`;
   }
@@ -1179,13 +1201,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // Si hay promoción se muestra el precio anterior tachado y el descuento.
   // Al vencer la fecha vuelve solo al precio normal.
   const enOferta = oferta && !modoInmediataActual;
-  $("#modalPrecio").innerHTML = cotizar
-    ? `<span class="precio-consultar">Cotiza el precio</span>`
-    : enOferta
-    ? `<span class="actual">${formatoPrecio(precio)}</span>
-       <span class="antes">${formatoPrecio(producto.precio)}</span>
-       <span class="desc">-${porcentajeDescuento(producto)}%</span>`
-    : `<span class="actual">${formatoPrecio(precio)}</span>`;
+  pintarPrecioModal(producto, enOferta);
 
   const promo = enOferta ? nombrePromocion(producto) : "";
   $("#modalPromocion").innerHTML = promo
