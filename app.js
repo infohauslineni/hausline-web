@@ -7,20 +7,20 @@
 const WHATSAPP = "50578995116";
 
 const CATEGORIAS = [
-  { id: "Zapatos",    etiqueta: "Zapatos" },
-  { id: "Ropa",       etiqueta: "Ropa" },
+  { id: "Hombre",     etiqueta: "Hombre" },
   { id: "Dama",       etiqueta: "Dama" },
-  { id: "Accesorios", etiqueta: "Accesorios" }
+  { id: "Accesorios", etiqueta: "Accesorios" },
+  { id: "Decoración", etiqueta: "Decoración" }
 ];
 
 // Subcategorías internas de cada categoría. Aparecen como filtros arriba
 // del listado SOLO cuando hay productos que las usan (las vacías se ocultan
-// solas). Para clasificar un producto agrega  subcategoria:"Slides"  etc.
+// solas). Para clasificar un producto agrega  subcategoria:"Calzado"  etc.
 const SUBCATEGORIAS = {
-  "Zapatos":    ["Calzado", "Casual", "Slides"],
-  "Ropa":       ["Short", "Camisetas", "Jackets"],
-  "Accesorios": ["Mochila", "Carteras", "Bolsos", "Maletas", "Fajas"],
-  "Dama":       ["Zapatos", "Ropa"]
+  "Hombre":     ["Calzado", "Ropa"],
+  "Dama":       ["Calzado", "Ropa"],
+  "Accesorios": ["Hombre", "Dama"],
+  "Decoración": []
 };
 
 // Títulos de las colecciones especiales. Se usan en el nav, en el enrutado por
@@ -37,10 +37,10 @@ const TITULOS_COLECCION = {
   "marcas":            "Marcas"
 };
 
-// Subcategoría efectiva de un producto (los Zapatos sin marcar son "Calzado").
+// Subcategoría efectiva de un producto (Hombre/Dama sin marcar son "Calzado").
 function subcategoriaDe(producto){
   if(producto.subcategoria) return producto.subcategoria;
-  return producto.categoria === "Zapatos" ? "Calzado" : "";
+  return (producto.categoria === "Hombre" || producto.categoria === "Dama") ? "Calzado" : "";
 }
 
 // Compara subcategorías sin importar mayúsculas ni espacios, para que en los
@@ -309,7 +309,7 @@ function productosNuevos(limite){
 }
 
 function productosTendencia(limite){
-  return seleccionDestacados(productos.filter(p => p.categoria === "Zapatos"), limite || 12);
+  return seleccionDestacados(productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Calzado"), limite || 12);
 }
 
 function productosPopulares(limite){
@@ -860,7 +860,7 @@ function renderInicio(){
 
   pintarFila("#filaTendencia", productosTendencia(12));
   pintarFila("#filaPopulares", productosPopulares(12));
-  pintarFila("#filaRopa", seleccionDestacados(productos.filter(p => p.categoria === "Ropa"), 12));
+  pintarFila("#filaRopa", seleccionDestacados(productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Ropa"), 12));
   pintarFila("#filaAccesorios", seleccionDestacados(productos.filter(p => p.categoria === "Accesorios"), 12));
   pintarFila("#filaNuevos", productosNuevos(12));
 
@@ -1006,7 +1006,7 @@ function baseColeccion(){
   if(tipo === "busqueda")  return productos;
 
   switch(valor){
-    case "tendencia":         return productos.filter(p => p.categoria === "Zapatos");
+    case "tendencia":         return productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Calzado");
     case "populares":         return productos;
     case "nuevos":            return ordenarNuevos(productos.filter(esNuevo)).slice(0, CANTIDAD_NUEVOS);
     case "ofertas":           return productosOferta();
@@ -2013,7 +2013,7 @@ document.addEventListener("click", e => {
     if(enlace === "#entrega-inmediata"){
       abrirColeccion("seccion", "entrega-inmediata", "Entrega inmediata");
     } else {
-      abrirColeccion("categoria", "Zapatos", "Zapatos");
+      abrirColeccion("categoria", "Hombre", "Hombre");
     }
     return;
   }

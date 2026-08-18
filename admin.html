@@ -313,8 +313,8 @@
   const SUPA_URL = "https://xgdijumnmaqfirmckugw.supabase.co";
   const SUPA_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
   const BUCKET = "catalogo", MAX_LADO = 1600, CALIDAD = 0.8, PORPAG = 25;
-  const CATEGORIAS = ["Zapatos", "Ropa", "Dama", "Accesorios"];
-  const SUBCATEGORIAS = { "Zapatos":["Calzado","Casual","Slides"], "Ropa":["Short","Camisetas","Jackets"], "Accesorios":["Mochila","Carteras","Bolsos","Maletas","Fajas"], "Dama":["Zapatos","Ropa"] };
+  const CATEGORIAS = ["Hombre", "Dama", "Accesorios", "Decoración"];
+  const SUBCATEGORIAS = { "Hombre":["Calzado","Ropa"], "Dama":["Calzado","Ropa"], "Accesorios":["Hombre","Dama"], "Decoración":[] };
 
   const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
   const $ = id => document.getElementById(id);
