@@ -605,10 +605,11 @@
     const pill=i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
     const bOf=oferta?'<span class="pill oferta">Oferta</span>':"";
     const bOc=i.remoteId&&!i.activo?'<span class="pill oculto">Oculto</span>':"";
-    const acc=i.remoteId?`<button class="icon-btn" data-pausa>${i.activo?"⏸":"▶"}</button><button class="icon-btn" data-borrar>🗑</button>`:"";
+    const pausaBtn=i.remoteId?`<button class="icon-btn" data-pausa title="${i.activo?"Ocultar":"Mostrar"}">${i.activo?"⏸":"▶"}</button>`:"";
+    const acc=`${pausaBtn}<button class="icon-btn" data-borrar title="Eliminar del catalogo">🗑</button>`;
     return `<div class="tr" data-cod="${esc(i.codigo)}">
       <div class="c-prod">
-        <img src="${esc(d.imagen||"")}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+        <img ${d.imagen?`src="${esc(d.imagen)}"`:""} alt="" loading="lazy" onerror="this.removeAttribute('src')">
         <div class="info"><b>${esc(d.nombre||i.codigo)}</b>
           <span>${esc(i.codigo)}<span class="movil-meta"> · ${precioTxt(d).replace(/<[^>]+>/g,"")} · ${esc(d.categoria||"")}</span></span></div>
       </div>
@@ -623,7 +624,21 @@
       const it=lista[idx]; if(!it) return;
       const e=row.querySelector("[data-editar]"); if(e) e.addEventListener("click",()=>cargarEnForm(it.datos,{activo:it.activo}));
       const p=row.querySelector("[data-pausa]"); if(p) p.addEventListener("click",async()=>{ await supa.from("catalogo_web").update({activo:!it.activo}).eq("id",it.remoteId); cargarRemotos(); });
-      const b=row.querySelector("[data-borrar]"); if(b) b.addEventListener("click",async()=>{ const m=it.origen==="editado"?`¿Deshacer la edición de ${it.codigo}? Vuelve al original.`:`¿Borrar ${it.codigo}?`; if(!confirm(m)) return; await supa.from("catalogo_web").delete().eq("id",it.remoteId); cargarRemotos(); });
+      const b=row.querySelector("[data-borrar]"); if(b) b.addEventListener("click",async()=>{
+        if(!(await asegurarSesion())) return;
+        if(it.origen==="nuevo"){
+          if(!confirm(`¿Borrar ${it.codigo}? Se quita del catálogo definitivamente.`)) return;
+          const {error}=await supa.from("catalogo_web").delete().eq("id",it.remoteId);
+          if(error){ alert("No se pudo borrar: "+error.message); return; }
+        } else {
+          // Original o editado: existe en el catálogo base, no se puede borrar el
+          // archivo estático; se OCULTA con un override inactivo. Se vuelve a mostrar con ▶.
+          if(!confirm(`¿Quitar ${it.codigo} del catálogo? Dejará de mostrarse en la tienda (podés volver a mostrarlo).`)) return;
+          const {error}=await supa.from("catalogo_web").upsert({codigo:it.codigo,activo:false,datos:it.datos},{onConflict:"codigo"});
+          if(error){ alert("No se pudo ocultar: "+error.message); return; }
+        }
+        cargarRemotos();
+      });
     });
   }
   function renderTabla(){

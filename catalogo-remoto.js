@@ -18,7 +18,7 @@ async function cargarProductosDelPanel(){
   let filas;
   try{
     const r = await fetch(
-      `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos&activo=eq.true&order=created_at.asc`,
+      `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos,activo&order=created_at.asc`,
       { headers: { apikey: CATALOGO_PANEL.key, Authorization: "Bearer " + CATALOGO_PANEL.key } }
     );
     if(!r.ok) return;
@@ -32,8 +32,16 @@ async function cargarProductosDelPanel(){
   let agregados = 0;
   filas.forEach(fila => {
     const datos = fila && fila.datos ? fila.datos : null;
+    const codigo = (datos && datos.codigo) || (fila && fila.codigo);
+    if(!codigo) return;
+    const existente = typeof buscarProducto === "function" ? buscarProducto(codigo) : null;
+    // Oculto desde el panel (activo=false): si el producto viene del catálogo base,
+    // se QUITA para que deje de mostrarse. Si era solo del panel, no se agrega.
+    if(fila && fila.activo === false){
+      if(existente){ const i = productos.indexOf(existente); if(i >= 0){ productos.splice(i, 1); agregados++; } }
+      return;
+    }
     if(!datos || !datos.codigo) return;
-    const existente = typeof buscarProducto === "function" ? buscarProducto(datos.codigo) : null;
     if(existente){
       // Ya existe en productos.js: es una EDICIÓN hecha desde el panel.
       // Se reemplaza conservando su posición original (orden) en el catálogo.
