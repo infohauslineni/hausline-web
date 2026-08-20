@@ -40,6 +40,12 @@
       .enc-opt b{font-size:13px;display:block;}
       .enc-opt.sel b{color:#b7ff00;}
       .enc-opt small{font-size:11px;color:#8a938d;display:block;margin-top:2px;}
+      .enc-cart{margin-top:14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;}
+      .enc-cart-it{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.06);font-size:12.5px;}
+      .enc-cart-it:last-child{border-bottom:0;}
+      .enc-cart-it b{font-weight:700;}
+      .enc-cart-it small{display:block;color:#8a938d;font-size:11px;margin-top:2px;}
+      .enc-cart-it .mono{font-family:ui-monospace,Menlo,monospace;font-weight:700;white-space:nowrap;}
       .enc-total{margin-top:16px;padding:14px 16px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.06);border-radius:12px;}
       .enc-total .line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
       .enc-total .line + .line{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);}
@@ -102,7 +108,7 @@
     const img = (producto.imagenes && producto.imagenes[0]) || producto.imagen || producto.foto || "";
     const cfg = envioCfg();
     let cant = Math.max(1, parseInt(opts.cantidad,10) || 1);
-    let envio = "estandar";          // 'estandar' | 'rapido'
+    const envio = (opts.envio === 'rapido') ? 'rapido' : 'estandar'; // viene del producto (obligatorio)
     let pago = "total";              // 'total' | '50'
 
     abrir();
@@ -132,12 +138,6 @@
             <div class="enc-f" style="max-width:110px"><label>Cantidad</label><input name="cantidad" type="number" min="1" max="20" value="${cant}"></div>
           </div>
 
-          <p class="enc-sub">Tipo de envío</p>
-          <div class="enc-opts" data-envio>
-            <button type="button" class="enc-opt ${envio==='estandar'?'sel':''}" data-e="estandar"><b>Estándar</b><small>${esc(cfg.estandar.dias)} · gratis</small></button>
-            <button type="button" class="enc-opt ${envio==='rapido'?'sel':''}" data-e="rapido"><b>Rápido</b><small>${esc(cfg.rapido.dias)} · +$${esc(cfg.rapido.recargo)} c/u</small></button>
-          </div>
-
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
           <div class="enc-opts" data-pago>
             <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
@@ -147,12 +147,11 @@
           <div class="enc-total" data-total>${totalHTML(t)}</div>
           <div class="enc-err" data-err></div>
           <button class="enc-btn" type="submit">Crear encargo →</button>
-          <div class="enc-hint">Al crear el encargo verás nuestras cuentas para transferir. No se cobra nada en línea. Si no pagas en 24 h, el encargo se cancela solo.</div>
+          <div class="enc-hint">Al crear el encargo te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
       form.cantidad.addEventListener("input", ()=>{ cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1)); refrescar(); });
-      card.querySelectorAll("[data-envio] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ envio = b.dataset.e; marcar("[data-envio]", b); refrescar(); }));
       card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; marcar("[data-pago]", b); refrescar(); }));
       form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
       card.__talla = opts.talla || "";
@@ -207,34 +206,32 @@
 
     function renderOk(sol, talla){
       const t = calc();
+      const parcial = pago === "50";
       const cuentas = (typeof HAUSLINE_CUENTAS!=="undefined" ? HAUSLINE_CUENTAS : []);
       const filas = cuentas.map(c=>`
         <div class="r"><div class="b">${esc(c.banco)}${c.moneda?" · "+esc(c.moneda):""}<small>${esc(c.titular)}</small></div>
         <button class="num" type="button" data-copiar="${esc(c.numero)}" title="Tocar para copiar">${esc(c.numero)}</button></div>`).join("");
-      const parcial = pago === "50";
       const waMsg = `Hola HAUSLINE 👋, hice mi encargo ${sol}\n`+
         `Producto: ${nombre} (Código ${producto.codigo})\n`+
         (talla?`Talla: ${talla}\n`:"")+
         `Cantidad: ${cant}\n`+
         `Envío: ${envio === "rapido" ? "Rápido" : "Estándar"}\n`+
-        `Total: ${fmtUSD(t.total)} / ${fmtNIO(cordobas(t.total))}\n`+
-        (parcial?`Pago ahora (50%): ${fmtUSD(t.ahora)} / ${fmtNIO(cordobas(t.ahora))}\n`:"")+
+        `A pagar: ${fmtUSD(t.ahora)}\n`+
         `\nAquí va mi comprobante de la transferencia:`;
       const ayudaMsg = `Hola HAUSLINE 👋, necesito ayuda con mi encargo ${sol} (${nombre}). Mi consulta es: `;
       card.innerHTML = `
-        <div class="enc-top"><h3>¡Encargo creado!</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
+        <div class="enc-top"><h3>¡Encargo recibido! ✅</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
         <div class="enc-ok-ic">✓</div>
         <div class="enc-sol">${esc(sol)}</div>
-        <p style="text-align:center;color:#8a938d;font-size:13px;margin-top:8px;line-height:1.5">Guardamos tu encargo. Para confirmarlo, transferí el monto y envianos el comprobante por WhatsApp.</p>
+        <p style="text-align:center;color:#e6e9e6;font-size:14px;margin-top:12px;line-height:1.6"><b>En unos momentos te contactamos por WhatsApp</b> para coordinar tu pedido. Si querés adelantar, transferí este monto y mandanos el comprobante 👇</p>
         <div class="enc-total" style="margin-top:16px">
-          <div class="line"><div class="k">Total del pedido</div><div class="v"><span class="usd">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
-          <div class="line"><div class="k hl">A pagar ahora</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
+          <div class="line"><div class="k hl">${parcial?'A pagar ahora (abono 50%)':'A pagar'}</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
         </div>
         <div class="enc-cta-title">Transferí a cualquiera de estas cuentas</div>
         <div class="enc-acc">${filas || '<div class="r"><div class="b">Escríbenos por WhatsApp para los datos de pago</div></div>'}</div>
         <a class="enc-btn wa" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>
         <a class="enc-btn ghost" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(ayudaMsg)}" target="_blank" rel="noopener noreferrer">¿Necesitás ayuda?</a>
-        <div class="enc-hint">Si no confirmás el pago en 24 h, el encargo se cancela solo. ¡Gracias por tu compra!</div>`;
+        <div class="enc-hint">Guardá tu código <b style="color:#b7ff00">${esc(sol)}</b>. Si no coordinás el pago en 24 h, el encargo se cancela solo.</div>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       card.querySelectorAll("[data-copiar]").forEach(b=>{
         b.addEventListener("click", ()=>{
@@ -243,6 +240,95 @@
           const orig = b.textContent; b.textContent = "¡Copiado!"; setTimeout(()=>{ b.textContent = orig; }, 1200);
         });
       });
+    }
+  };
+
+  // Encargo desde el CARRITO: crea un encargo (SOL) por cada ítem por encargo, con los
+  // mismos datos del cliente. Cada ítem ya trae su tipo de envío elegido.
+  window.abrirEncargoCarrito = function(items){
+    items = (items||[]).filter(it => it && !it.entregaInmediata);
+    if(!items.length){ if(typeof enviarPedidoWhatsApp==="function") enviarPedidoWhatsApp(); return; }
+    let pago = "total";
+    abrir();
+    renderForm();
+
+    function recargoItem(it){ return (it.envio === 'rapido' && typeof HAUSLINE_ENVIO!=='undefined') ? (Number(HAUSLINE_ENVIO.rapido.recargo)||0) * (Number(it.cantidad)||1) : 0; }
+    function calc(){
+      let total = 0;
+      for(const it of items) total += (Number(it.precioUnitario)||0) * (Number(it.cantidad)||1) + recargoItem(it);
+      total = Math.round(total*100)/100;
+      return { total, ahora: pago==='50' ? Math.round(total*50)/100 : total };
+    }
+    function totalHTML(t){
+      const parcial = pago==='50';
+      return `<div class="line"><div class="k">Total del pedido</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
+        ${parcial?`<div class="line"><div class="k hl">A pagar ahora (50%)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>`:``}`;
+    }
+    function renderForm(){
+      const lista = items.map(it => `<div class="enc-cart-it"><div><b>${esc(it.nombre)}</b><small>${[esc(it.marca), it.talla?('Talla '+esc(it.talla)):'', '×'+(it.cantidad||1)].filter(Boolean).join(' · ')}${it.envio==='rapido'?' · Rápido':''}</small></div><span class="mono">${fmtUSD((Number(it.precioUnitario)||0)*(it.cantidad||1)+recargoItem(it))}</span></div>`).join("");
+      card.innerHTML = `
+        <div class="enc-top"><h3>Encargar tu carrito</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
+        <div class="enc-cart">${lista}</div>
+        <form class="enc-form" novalidate>
+          <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
+          <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
+          <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
+          <p class="enc-sub">¿Cuánto pagas ahora?</p>
+          <div class="enc-opts" data-pago>
+            <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
+            <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
+          </div>
+          <div class="enc-total" data-total>${totalHTML(calc())}</div>
+          <div class="enc-err" data-err></div>
+          <button class="enc-btn" type="submit">Crear encargo →</button>
+          <div class="enc-hint">Al crear el encargo te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
+        </form>`;
+      card.querySelector(".enc-x").addEventListener("click", cerrar);
+      const form = card.querySelector(".enc-form");
+      card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; card.querySelectorAll("[data-pago] .enc-opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); const box=card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }));
+      form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
+    }
+    async function enviar(form){
+      const err = card.querySelector("[data-err]"); err.style.display="none";
+      function showErr(m){ err.textContent=m; err.style.display="block"; }
+      const nombre = form.nombre.value.trim(), wa = form.whatsapp.value.trim(), correo = form.correo.value.trim();
+      if(nombre.length<2) return showErr("Escribe tu nombre completo.");
+      if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return showErr("Escribe un WhatsApp válido (solo números).");
+      if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido.");
+      const btn = form.querySelector(".enc-btn"); btn.disabled=true; btn.textContent="Creando…";
+      const url = (typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"") + "rpc/crear_solicitud_publica";
+      const sols = [];
+      try{
+        for(const it of items){
+          const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
+            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:null, p_direccion:null,
+              p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
+              p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago }) });
+          if(!res.ok) throw new Error("HTTP "+res.status);
+          sols.push(String(await res.json()));
+        }
+        if(typeof vaciarCarrito==="function") vaciarCarrito();
+        renderOk(sols);
+      }catch(ex){ btn.disabled=false; btn.innerHTML="Crear encargo →"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
+    }
+    function renderOk(sols){
+      const t = calc();
+      const cuentas = (typeof HAUSLINE_CUENTAS!=="undefined"?HAUSLINE_CUENTAS:[]);
+      const filas = cuentas.map(c=>`<div class="r"><div class="b">${esc(c.banco)}${c.moneda?" · "+esc(c.moneda):""}<small>${esc(c.titular)}</small></div><button class="num" type="button" data-copiar="${esc(c.numero)}" title="Tocar para copiar">${esc(c.numero)}</button></div>`).join("");
+      const codes = sols.join(", ");
+      const waMsg = `Hola HAUSLINE 👋, hice mi pedido del carrito (${codes}).\nA pagar: ${fmtUSD(t.ahora)}\n\nAquí va mi comprobante de la transferencia:`;
+      card.innerHTML = `
+        <div class="enc-top"><h3>¡Pedido recibido! ✅</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
+        <div class="enc-ok-ic">✓</div>
+        <div class="enc-sol" style="font-size:15px">${esc(codes)}</div>
+        <p style="text-align:center;color:#e6e9e6;font-size:14px;margin-top:12px;line-height:1.6"><b>En unos momentos te contactamos por WhatsApp</b> para coordinar tu pedido. Si querés adelantar, transferí este monto y mandanos el comprobante 👇</p>
+        <div class="enc-total" style="margin-top:16px"><div class="line"><div class="k hl">${pago==='50'?'A pagar ahora (abono 50%)':'A pagar'}</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div></div>
+        <div class="enc-cta-title">Transferí a cualquiera de estas cuentas</div>
+        <div class="enc-acc">${filas || '<div class="r"><div class="b">Escríbenos por WhatsApp para los datos de pago</div></div>'}</div>
+        <a class="enc-btn wa" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>
+        <div class="enc-hint">Guardá tus códigos. Si no coordinás el pago en 24 h, el encargo se cancela solo.</div>`;
+      card.querySelector(".enc-x").addEventListener("click", cerrar);
+      card.querySelectorAll("[data-copiar]").forEach(b=> b.addEventListener("click", ()=>{ const n=b.getAttribute("data-copiar"); if(navigator.clipboard) navigator.clipboard.writeText(n).catch(()=>{}); const o=b.textContent; b.textContent="¡Copiado!"; setTimeout(()=>{b.textContent=o;},1200); }));
     }
   };
 })();

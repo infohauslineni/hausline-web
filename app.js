@@ -88,7 +88,7 @@ let indiceImagen = 0;
 let tallaSeleccionada = "";
 let colorSeleccionado = "";
 let cantidadSeleccionada = 1;
-let envioSeleccionado = (typeof HAUSLINE_ENVIO_DEFECTO !== "undefined") ? HAUSLINE_ENVIO_DEFECTO : "estandar";  // tipo de envío elegido para el encargo
+let envioSeleccionado = "";  // tipo de envío elegido para el encargo (OBLIGATORIO, sin preselección)
 
 // ---------- Utilidades ----------
 
@@ -1188,7 +1188,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   tallaSeleccionada = "";
   colorSeleccionado = "";
   cantidadSeleccionada = 1;
-  envioSeleccionado = (typeof HAUSLINE_ENVIO_DEFECTO !== "undefined") ? HAUSLINE_ENVIO_DEFECTO : "estandar";
+  envioSeleccionado = "";
 
   const oferta = ofertaVigente(producto);
   const precio = precioVigente(producto, modoInmediataActual);
@@ -1651,7 +1651,14 @@ function validarSeleccion(){
     ok = false;
   }
 
-  if(!ok) mostrarAviso("Falta seleccionar una opción");
+  // El tipo de envío es OBLIGATORIO en encargo (igual que la talla).
+  const selEnvio = $("#selectorEnvio");
+  if(selEnvio && !selEnvio.hidden && !envioSeleccionado){
+    selEnvio.classList.add("error");
+    ok = false;
+  }
+
+  if(!ok) mostrarAviso("Falta seleccionar una opción (talla o tipo de envío)");
   return ok;
 }
 
@@ -1695,7 +1702,7 @@ function pedirProductoWhatsApp(){
   // Pedido por ENCARGO: abre el formulario que crea la solicitud en el tracking
   // (con datos del cliente + cuentas de pago). La entrega inmediata sigue por WhatsApp.
   if(!modoInmediataActual && typeof abrirEncargo==="function"){
-    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada });
+    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada, envio: envioSeleccionado });
     return;
   }
 
@@ -1872,8 +1879,9 @@ document.addEventListener("click", e => {
   const btnEncargar = e.target.closest("[data-encargar]");
   if(btnEncargar){
     e.stopPropagation();
-    const p = buscarProducto(btnEncargar.dataset.encargar);
-    if(p){ if(typeof abrirEncargo==="function") abrirEncargo(p); else encargarProductoWhatsApp(p); }
+    // Abre el producto para que elija talla y tipo de envío (ambos obligatorios)
+    // antes de llenar el formulario de encargo.
+    abrirProducto(btnEncargar.dataset.encargar);
     return;
   }
 
@@ -2057,6 +2065,7 @@ document.addEventListener("click", e => {
   const envio = e.target.closest("[data-envio]");
   if(envio){
     envioSeleccionado = envio.dataset.envio;
+    $("#selectorEnvio").classList.remove("error");
     actualizarEnvioUI();
     return;
   }
@@ -2201,7 +2210,11 @@ $("#btnFavModal").addEventListener("click", () => {
 $("#btnCompartir").addEventListener("click", compartirProducto);
 
 // --- Carrito: acciones del pie ---
-$("#btnEnviarPedido").addEventListener("click", enviarPedidoWhatsApp);
+$("#btnEnviarPedido").addEventListener("click", () => {
+  // Crea un encargo (SOL) por cada ítem del carrito. Si algo falla, cae al WhatsApp normal.
+  if(typeof abrirEncargoCarrito === "function") abrirEncargoCarrito(leerCarrito());
+  else enviarPedidoWhatsApp();
+});
 $("#btnVaciarCarrito").addEventListener("click", () => {
   vaciarCarrito();
   renderCarrito();
