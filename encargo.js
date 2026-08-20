@@ -1,15 +1,14 @@
 // ============================================================
 //  ENCARGO DESDE LA WEB  →  crea una SOLICITUD en el tracking
-//  El cliente llena sus datos, se crea un SOL-#### en Supabase
-//  (proyecto del tracking) y se le muestran las cuentas para
-//  transferir + botón de WhatsApp para el comprobante.
-//  No cobra en línea: todo es por transferencia. No gasta código
-//  HS: eso pasa cuando el admin confirma el pago en su panel.
+//  El cliente elige envío (estándar/rápido) y forma de pago
+//  (total o abono 50%), ve el total y el monto a pagar ahora,
+//  se crea un SOL-#### en Supabase y se muestran las cuentas
+//  para transferir + botón de WhatsApp para el comprobante.
+//  No cobra en línea: todo es por transferencia.
 // ============================================================
 (function(){
   "use strict";
 
-  // ---- estilos (se inyectan una sola vez) ----
   function inyectarEstilos(){
     if(document.getElementById("enc-css")) return;
     const s = document.createElement("style");
@@ -34,13 +33,27 @@
       .enc-f input:focus{border-color:rgba(183,255,0,.5);}
       .enc-row{display:flex;gap:10px;}
       .enc-row .enc-f{flex:1;}
-      .enc-total{margin-top:16px;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.06);border-radius:12px;}
-      .enc-total .k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a938d;}
-      .enc-total .usd{font-size:24px;font-weight:800;letter-spacing:-.02em;}
-      .enc-total .nio{font-size:13px;color:#8ec5ff;font-weight:700;text-align:right;}
+      .enc-sub{font-size:12px;font-weight:600;color:#c3c9c5;margin:16px 0 0;}
+      .enc-opts{display:flex;gap:8px;margin-top:7px;}
+      .enc-opt{flex:1;border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:10px 11px;cursor:pointer;background:rgba(255,255,255,.02);text-align:left;transition:.15s;}
+      .enc-opt.sel{border-color:#b7ff00;background:rgba(183,255,0,.08);}
+      .enc-opt b{font-size:13px;display:block;}
+      .enc-opt.sel b{color:#b7ff00;}
+      .enc-opt small{font-size:11px;color:#8a938d;display:block;margin-top:2px;}
+      .enc-total{margin-top:16px;padding:14px 16px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.06);border-radius:12px;}
+      .enc-total .line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+      .enc-total .line + .line{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);}
+      .enc-total .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a938d;}
+      .enc-total .k.hl{color:#b7ff00;}
+      .enc-total .v{text-align:right;}
+      .enc-total .usd{font-size:16px;font-weight:800;}
+      .enc-total .usd.big{font-size:24px;letter-spacing:-.02em;}
+      .enc-total .nio{font-size:12px;color:#8ec5ff;font-weight:700;}
       .enc-btn{width:100%;margin-top:16px;border:0;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;background:#b7ff00;color:#050705;display:flex;align-items:center;justify-content:center;gap:8px;}
       .enc-btn:disabled{opacity:.55;cursor:default;}
       .enc-btn.wa{background:#25d366;color:#052012;}
+      .enc-btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:#f3f6f3;margin-top:9px;font-weight:700;font-size:14px;}
+      .enc-btn.ghost:hover{background:rgba(255,255,255,.04);}
       .enc-err{margin-top:12px;color:#ff9a9a;font-size:13px;display:none;}
       .enc-hint{margin-top:12px;font-size:11px;color:#5f6863;line-height:1.5;text-align:center;}
       .enc-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(183,255,0,.14);color:#b7ff00;display:grid;place-items:center;margin:6px auto 0;font-size:28px;}
@@ -72,12 +85,14 @@
   function abrir(){ ensure(); fondo.classList.add("activo"); document.body.style.overflow = "hidden"; }
   function cerrar(){ if(fondo){ fondo.classList.remove("activo"); document.body.style.overflow = ""; } }
 
-  function fmtUSD(n){ return "$" + (Number(n)||0).toLocaleString("en-US"); }
+  function fmtUSD(n){ return "$" + (Math.round((Number(n)||0)*100)/100).toLocaleString("en-US"); }
   function fmtNIO(n){ return "C$" + (Number(n)||0).toLocaleString("en-US"); }
+  function cordobas(usd){ return (typeof cordobasCerrados==="function") ? cordobasCerrados(usd) : Math.ceil((Number(usd)||0)*(typeof HAUSLINE_EXCHANGE_RATE!=="undefined"?HAUSLINE_EXCHANGE_RATE:37)/10)*10; }
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
   function waNumero(){ return (typeof WHATSAPP_NUMERO!=="undefined"&&WHATSAPP_NUMERO) || (typeof WHATSAPP!=="undefined"&&WHATSAPP) || "50578995116"; }
+  function envioCfg(){ return (typeof HAUSLINE_ENVIO!=="undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} }; }
 
-  // producto: el objeto del catálogo. opts: { talla, color, cantidad } (opcional, del detalle).
+  // producto: objeto del catálogo. opts: { talla, color, cantidad, precio } (opcional).
   window.abrirEncargo = function(producto, opts){
     if(!producto) return;
     opts = opts || {};
@@ -85,18 +100,23 @@
     const marca = producto.marca || (typeof marcaProducto==="function" ? marcaProducto(producto) : "");
     const precioU = Number(opts.precio != null ? opts.precio : (typeof precioVigente==="function" ? precioVigente(producto, false) : (producto.precio||0)));
     const img = (producto.imagenes && producto.imagenes[0]) || producto.imagen || producto.foto || "";
+    const cfg = envioCfg();
     let cant = Math.max(1, parseInt(opts.cantidad,10) || 1);
+    let envio = "estandar";          // 'estandar' | 'rapido'
+    let pago = "total";              // 'total' | '50'
 
     abrir();
     renderForm();
 
-    function totales(){
-      const usd = precioU * cant;
-      return { usd, nio: (typeof cordobasCerrados==="function") ? cordobasCerrados(usd) : Math.ceil(usd*(typeof HAUSLINE_EXCHANGE_RATE!=="undefined"?HAUSLINE_EXCHANGE_RATE:37)/10)*10 };
+    function recargo(){ return envio === "rapido" ? (Number(cfg.rapido.recargo)||0) * cant : 0; }
+    function calc(){
+      const total = precioU * cant + recargo();
+      const ahora = pago === "50" ? Math.round(total * 50) / 100 : total;
+      return { total, ahora };
     }
 
     function renderForm(){
-      const t = totales();
+      const t = calc();
       card.innerHTML = `
         <div class="enc-top"><h3>Encargar producto</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
         <div class="enc-prod">
@@ -111,24 +131,42 @@
             <div class="enc-f"><label>Talla / detalle</label><input name="talla" placeholder="Talla o N/A" value="${esc(opts.talla||"")}"></div>
             <div class="enc-f" style="max-width:110px"><label>Cantidad</label><input name="cantidad" type="number" min="1" max="20" value="${cant}"></div>
           </div>
-          <div class="enc-total">
-            <div><div class="k">Total a pagar</div><div class="usd" data-usd>${fmtUSD(t.usd)}</div></div>
-            <div class="nio" data-nio>≈ ${fmtNIO(t.nio)}<br><span style="color:#5f6863;font-weight:400">C$${typeof HAUSLINE_EXCHANGE_RATE!=="undefined"?HAUSLINE_EXCHANGE_RATE:37} × US$</span></div>
+
+          <p class="enc-sub">Tipo de envío</p>
+          <div class="enc-opts" data-envio>
+            <button type="button" class="enc-opt ${envio==='estandar'?'sel':''}" data-e="estandar"><b>Estándar</b><small>${esc(cfg.estandar.dias)} · gratis</small></button>
+            <button type="button" class="enc-opt ${envio==='rapido'?'sel':''}" data-e="rapido"><b>Rápido</b><small>${esc(cfg.rapido.dias)} · +$${esc(cfg.rapido.recargo)} c/u</small></button>
           </div>
+
+          <p class="enc-sub">¿Cuánto pagas ahora?</p>
+          <div class="enc-opts" data-pago>
+            <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
+            <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
+          </div>
+
+          <div class="enc-total" data-total>${totalHTML(t)}</div>
           <div class="enc-err" data-err></div>
           <button class="enc-btn" type="submit">Crear encargo →</button>
           <div class="enc-hint">Al crear el encargo verás nuestras cuentas para transferir. No se cobra nada en línea. Si no pagas en 24 h, el encargo se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
-      const inpCant = form.cantidad;
-      inpCant.addEventListener("input", ()=>{
-        cant = Math.min(20, Math.max(1, parseInt(inpCant.value,10)||1));
-        const t2 = totales();
-        card.querySelector("[data-usd]").textContent = fmtUSD(t2.usd);
-        card.querySelector("[data-nio]").innerHTML = "≈ "+fmtNIO(t2.nio)+'<br><span style="color:#5f6863;font-weight:400">C$'+(typeof HAUSLINE_EXCHANGE_RATE!=="undefined"?HAUSLINE_EXCHANGE_RATE:37)+' × US$</span>';
-      });
+      form.cantidad.addEventListener("input", ()=>{ cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1)); refrescar(); });
+      card.querySelectorAll("[data-envio] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ envio = b.dataset.e; marcar("[data-envio]", b); refrescar(); }));
+      card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; marcar("[data-pago]", b); refrescar(); }));
       form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
+      card.__talla = opts.talla || "";
+      form.talla.addEventListener("input", ()=>{ card.__talla = form.talla.value; });
+    }
+    function marcar(sel, activo){ card.querySelectorAll(sel+" .enc-opt").forEach(x=>x.classList.remove("sel")); activo.classList.add("sel"); }
+    function refrescar(){ const box = card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }
+
+    function totalHTML(t){
+      const parcial = pago === "50";
+      const envioTxt = envio === "rapido" ? " (incluye envío rápido)" : "";
+      return `
+        <div class="line"><div class="k">Total del pedido${esc(envioTxt)}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
+        ${parcial ? `<div class="line"><div class="k hl">A pagar ahora (50%)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>` : ``}`;
     }
 
     async function enviar(form){
@@ -153,12 +191,13 @@
           body: JSON.stringify({
             p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: null, p_direccion: null,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
-            p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU
+            p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
+            p_envio: envio, p_recargo: recargo(), p_pago: pago
           })
         });
         if(!res.ok){ throw new Error("HTTP "+res.status); }
         const sol = await res.json();
-        renderOk(String(sol));
+        renderOk(String(sol), talla);
       }catch(ex){
         btn.disabled = false; btn.innerHTML = "Crear encargo →";
         mostrarErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo.");
@@ -166,27 +205,35 @@
       function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }
     }
 
-    function renderOk(sol){
-      const t = totales();
+    function renderOk(sol, talla){
+      const t = calc();
       const cuentas = (typeof HAUSLINE_CUENTAS!=="undefined" ? HAUSLINE_CUENTAS : []);
       const filas = cuentas.map(c=>`
         <div class="r"><div class="b">${esc(c.banco)}${c.moneda?" · "+esc(c.moneda):""}<small>${esc(c.titular)}</small></div>
         <button class="num" type="button" data-copiar="${esc(c.numero)}" title="Tocar para copiar">${esc(c.numero)}</button></div>`).join("");
+      const parcial = pago === "50";
       const waMsg = `Hola HAUSLINE 👋, hice mi encargo ${sol}\n`+
         `Producto: ${nombre} (Código ${producto.codigo})\n`+
-        (tallaSel()?`Talla: ${tallaSel()}\n`:"")+
+        (talla?`Talla: ${talla}\n`:"")+
         `Cantidad: ${cant}\n`+
-        `Total: ${fmtUSD(t.usd)} / ${fmtNIO(t.nio)}\n\n`+
-        `Aquí va mi comprobante de la transferencia:`;
+        `Envío: ${envio === "rapido" ? "Rápido" : "Estándar"}\n`+
+        `Total: ${fmtUSD(t.total)} / ${fmtNIO(cordobas(t.total))}\n`+
+        (parcial?`Pago ahora (50%): ${fmtUSD(t.ahora)} / ${fmtNIO(cordobas(t.ahora))}\n`:"")+
+        `\nAquí va mi comprobante de la transferencia:`;
+      const ayudaMsg = `Hola HAUSLINE 👋, necesito ayuda con mi encargo ${sol} (${nombre}). Mi consulta es: `;
       card.innerHTML = `
         <div class="enc-top"><h3>¡Encargo creado!</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
         <div class="enc-ok-ic">✓</div>
         <div class="enc-sol">${esc(sol)}</div>
-        <p style="text-align:center;color:#8a938d;font-size:13px;margin-top:8px;line-height:1.5">Guardamos tu encargo. Para confirmarlo, transferí el total y envianos el comprobante por WhatsApp.</p>
-        <div class="enc-total" style="margin-top:16px"><div><div class="k">Total a pagar</div><div class="usd">${fmtUSD(t.usd)}</div></div><div class="nio">≈ ${fmtNIO(t.nio)}</div></div>
+        <p style="text-align:center;color:#8a938d;font-size:13px;margin-top:8px;line-height:1.5">Guardamos tu encargo. Para confirmarlo, transferí el monto y envianos el comprobante por WhatsApp.</p>
+        <div class="enc-total" style="margin-top:16px">
+          <div class="line"><div class="k">Total del pedido</div><div class="v"><span class="usd">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
+          <div class="line"><div class="k hl">A pagar ahora</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
+        </div>
         <div class="enc-cta-title">Transferí a cualquiera de estas cuentas</div>
         <div class="enc-acc">${filas || '<div class="r"><div class="b">Escríbenos por WhatsApp para los datos de pago</div></div>'}</div>
         <a class="enc-btn wa" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>
+        <a class="enc-btn ghost" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(ayudaMsg)}" target="_blank" rel="noopener noreferrer">¿Necesitás ayuda?</a>
         <div class="enc-hint">Si no confirmás el pago en 24 h, el encargo se cancela solo. ¡Gracias por tu compra!</div>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       card.querySelectorAll("[data-copiar]").forEach(b=>{
@@ -196,11 +243,6 @@
           const orig = b.textContent; b.textContent = "¡Copiado!"; setTimeout(()=>{ b.textContent = orig; }, 1200);
         });
       });
-      function tallaSel(){ return (card.__talla||"").trim(); }
     }
-    // recordamos la talla escrita para el mensaje de WhatsApp del éxito
-    card.__talla = opts.talla || "";
-    const obs = ()=>{ const i = card.querySelector('input[name="talla"]'); if(i) card.__talla = i.value; };
-    card.addEventListener("input", obs);
   };
 })();
