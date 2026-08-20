@@ -12,8 +12,8 @@ name: Generar previews /p
 #      nunca tendrían preview). El commit del bot solo se hace si hay cambios.
 #   3. workflow_dispatch: botón "Run workflow" para forzarlo al instante.
 #
-# El commit del bot solo toca /p/**, que NO está en "paths", por lo que no se
-# vuelve a disparar a sí mismo (sin bucles).
+# El commit del bot solo toca /p/** y sitemap.xml, que NO están en "paths", por
+# lo que no se vuelve a disparar a sí mismo (sin bucles).
 
 on:
   push:
@@ -49,10 +49,10 @@ jobs:
         run: |
           git config user.name "hausline-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add p
+          git add p sitemap.xml
           if git diff --cached --quiet; then
-            echo "Sin cambios en /p — nada que subir."
+            echo "Sin cambios en /p ni sitemap — nada que subir."
           else
-            git commit -m "Auto: regenera páginas de preview /p [skip ci]"
+            git commit -m "Auto: regenera páginas /p y sitemap [skip ci]"
             git push
           fi
