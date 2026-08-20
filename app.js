@@ -803,8 +803,9 @@ function actualizarEnvioUI(){
   }
   const metodo = (typeof HAUSLINE_ENVIO !== "undefined")
     ? (HAUSLINE_ENVIO[envioSeleccionado] || HAUSLINE_ENVIO.estandar) : null;
+  // El marco verde (.activa) solo cuando el cliente ya eligió; sin preselección visual.
   $$("#opcionesEnvio .opcion").forEach(b => {
-    const on = metodo && b.dataset.envio === metodo.id;
+    const on = !!envioSeleccionado && b.dataset.envio === envioSeleccionado;
     b.classList.toggle("activa", on);
     b.setAttribute("aria-pressed", on ? "true" : "false");
   });

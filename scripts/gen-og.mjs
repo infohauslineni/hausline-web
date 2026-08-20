@@ -117,6 +117,33 @@ const paginaProducto = (producto) => {
   const destino = `/?producto=${encodeURIComponent(codigo)}`
   const canonica = `${SITIO}${destino}`
 
+  // --- Datos estructurados (Schema.org Product) para Google ---
+  // Hace que el producto sea elegible para "resultados enriquecidos": foto,
+  // precio, disponibilidad y marca directo en la búsqueda de Google.
+  const productoLd = {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: nombreProducto(producto),
+    image: [imagen],
+    description: descripcion,
+    sku: codigo,
+    brand: { '@type': 'Brand', name: marca || 'HAUSLINE' },
+    url: canonica,
+  }
+  // Solo declaramos precio si el producto lo tiene (los de "cotizar" no).
+  if (precio > 0) {
+    productoLd.offers = {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: String(precio),
+      availability: 'https://schema.org/InStock',
+      url: canonica,
+      seller: { '@type': 'Organization', name: 'HAUSLINE' },
+    }
+  }
+  // < evita que un "</script>" dentro del texto rompa la etiqueta.
+  const jsonLd = JSON.stringify(productoLd).replace(/</g, '\\u003c')
+
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -136,6 +163,7 @@ const paginaProducto = (producto) => {
 <meta name="twitter:title" content="${escaparHtml(nombre)}">
 <meta name="twitter:description" content="${escaparHtml(descripcion)}">
 <meta name="twitter:image" content="${escaparHtml(imagen)}">
+<script type="application/ld+json">${jsonLd}</script>
 <link rel="icon" href="/logo.png" type="image/png">
 <!-- Sin meta-refresh en el <head>: los crawlers (WhatsApp/Facebook) leen las
      etiquetas de arriba con la FOTO. La redirección de personas se hace con
