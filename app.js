@@ -2401,32 +2401,40 @@ function iniciar(){
   actualizarContadorCarrito();
   actualizarContadorFavoritos();
 
-  // Enlace directo: si la URL trae ?producto=CODIGO, abre ese producto.
-  // PERO si es una RECARGA (F5), no lo reabre: limpia la URL y muestra el inicio.
-  // Así el link compartido sí abre el producto, pero recargar no molesta.
-  const directo = new URLSearchParams(location.search).get("producto");
-  if(directo && buscarProducto(directo)){
-    let esRecarga = false;
+  // Ruta real del producto (/p/CODIGO): es una página indexable propia, así que
+  // se abre SIEMPRE (también al recargar) manteniendo la URL /p/CODIGO. Dejamos
+  // "/" (inicio) como base en el historial para que la "X" vuelva al catálogo y
+  // no se salga del sitio ni del navegador de WhatsApp.
+  const rutaProd = location.pathname.match(/^\/p\/([^\/]+)\/?$/);
+  const codRuta = rutaProd ? decodeURIComponent(rutaProd[1]) : null;
+  if(codRuta && buscarProducto(codRuta)){
     try{
-      const nav = performance.getEntriesByType("navigation")[0];
-      if(nav) esRecarga = nav.type === "reload";
-      else if(performance.navigation) esRecarga = performance.navigation.type === 1;
+      history.replaceState({}, "", "/");
+      history.pushState({ producto: codRuta }, "", "/p/" + encodeURIComponent(codRuta));
     }catch(e){}
-
-    if(esRecarga){
-      try{ history.replaceState({}, "", location.pathname); }catch(e){}
-    } else {
-      // Llegamos por enlace compartido: el stub /p/CODIGO hizo location.replace
-      // hacia /?producto=CODIGO, así que NO hay una entrada de catálogo detrás en
-      // el historial. Creamos una: dejamos "/" (inicio) como base y encima el
-      // producto. Así la "X" (history.back) vuelve al catálogo en vez de salirse
-      // del sitio o del navegador de WhatsApp.
-      const productoURL = location.pathname + location.search;
+    abrirProducto(codRuta, false, true);
+  } else {
+    // Compatibilidad: enlace directo con ?producto=CODIGO (links viejos).
+    // PERO si es una RECARGA (F5), no lo reabre: limpia la URL y muestra el inicio.
+    const directo = new URLSearchParams(location.search).get("producto");
+    if(directo && buscarProducto(directo)){
+      let esRecarga = false;
       try{
-        history.replaceState({}, "", "/");
-        history.pushState({}, "", productoURL);
+        const nav = performance.getEntriesByType("navigation")[0];
+        if(nav) esRecarga = nav.type === "reload";
+        else if(performance.navigation) esRecarga = performance.navigation.type === 1;
       }catch(e){}
-      abrirProducto(directo, false, true);
+
+      if(esRecarga){
+        try{ history.replaceState({}, "", location.pathname); }catch(e){}
+      } else {
+        const productoURL = location.pathname + location.search;
+        try{
+          history.replaceState({}, "", "/");
+          history.pushState({}, "", productoURL);
+        }catch(e){}
+        abrirProducto(directo, false, true);
+      }
     }
   }
 
