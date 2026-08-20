@@ -44,6 +44,26 @@ const HAUSLINE_ENVIO = {
 };
 const HAUSLINE_ENVIO_DEFECTO = "estandar";
 
+// ---------- CÓRDOBAS "CERRADOS" ----------
+// Convierte USD a córdobas y REDONDEA HACIA ARRIBA al múltiplo de 10
+// (ej. 2964 → 2970). Se usa en el encargo para que el total quede redondo.
+function cordobasCerrados(usd){
+  return Math.ceil((Number(usd) || 0) * HAUSLINE_EXCHANGE_RATE / 10) * 10;
+}
+
+// ---------- CUENTAS DE PAGO (encargos por transferencia) ----------
+// El cliente ve estas cuentas al encargar para hacer la transferencia.
+// Para cambiar una cuenta, edita solo esta lista.
+// NOTA: la LAFISE de Alejandro está bloqueada; por ahora va la de Xiomara.
+// Cuando se desbloquee, reemplaza los dos números LAFISE por:
+//   Dólares 133254039 / Córdobas 138038710 — Alejandro Uzziel Linares Flores
+const HAUSLINE_CUENTAS = [
+  { banco: "LAFISE",         moneda: "Dólares",  numero: "133210618", titular: "Xiomara Rivas López" },
+  { banco: "LAFISE",         moneda: "Córdobas", numero: "137034030", titular: "Xiomara Rivas López" },
+  { banco: "BAC",            moneda: "Córdobas", numero: "360322192", titular: "Tania Vanessa Flores Rivas" },
+  { banco: "Billetera Móvil", moneda: "",        numero: "8487-6610", titular: "Alejandro Uzziel Linares Flores" },
+];
+
 // ============================================================
 //  SUPABASE  (para el contador REAL de visualizaciones)
 //  Pega aquí los datos de tu proyecto Supabase.

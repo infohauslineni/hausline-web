@@ -1692,6 +1692,13 @@ function pedirProductoWhatsApp(){
 
   if(!validarSeleccion()) return;
 
+  // Pedido por ENCARGO: abre el formulario que crea la solicitud en el tracking
+  // (con datos del cliente + cuentas de pago). La entrega inmediata sigue por WhatsApp.
+  if(!modoInmediataActual && typeof abrirEncargo==="function"){
+    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada });
+    return;
+  }
+
   const metodo = modoInmediataActual
     ? null
     : (typeof HAUSLINE_ENVIO !== "undefined"
@@ -1861,12 +1868,12 @@ document.addEventListener("click", e => {
     return;
   }
 
-  // Encargar por WhatsApp desde la tarjeta (no abre el producto).
+  // Encargar desde la tarjeta: abre el formulario de encargo (crea la solicitud en el tracking).
   const btnEncargar = e.target.closest("[data-encargar]");
   if(btnEncargar){
     e.stopPropagation();
     const p = buscarProducto(btnEncargar.dataset.encargar);
-    if(p) encargarProductoWhatsApp(p);
+    if(p){ if(typeof abrirEncargo==="function") abrirEncargo(p); else encargarProductoWhatsApp(p); }
     return;
   }
 
@@ -2395,6 +2402,16 @@ function iniciar(){
     if(esRecarga){
       try{ history.replaceState({}, "", location.pathname); }catch(e){}
     } else {
+      // Llegamos por enlace compartido: el stub /p/CODIGO hizo location.replace
+      // hacia /?producto=CODIGO, así que NO hay una entrada de catálogo detrás en
+      // el historial. Creamos una: dejamos "/" (inicio) como base y encima el
+      // producto. Así la "X" (history.back) vuelve al catálogo en vez de salirse
+      // del sitio o del navegador de WhatsApp.
+      const productoURL = location.pathname + location.search;
+      try{
+        history.replaceState({}, "", "/");
+        history.pushState({}, "", productoURL);
+      }catch(e){}
       abrirProducto(directo, false, true);
     }
   }
