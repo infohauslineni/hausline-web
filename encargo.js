@@ -122,6 +122,8 @@
       .pz-help b{font-size:13px;display:flex;align-items:center;gap:7px;}
       .pz-help small{font-size:11.5px;color:#8a938d;display:block;margin-top:2px;}
       .pz-help a{flex:none;border:1px solid rgba(255,255,255,.18);color:#f3f6f3;border-radius:11px;padding:10px 15px;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;}
+      .pz-again{width:100%;margin-top:14px;border:1px solid rgba(183,255,0,.4);background:rgba(183,255,0,.07);color:#b7ff00;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;}
+      .pz-again:hover{background:rgba(183,255,0,.12);}
     `;
     document.head.appendChild(s);
   }
@@ -196,10 +198,13 @@
       <div class="pz-accs">${accs}</div>
       <div class="pz-wa"><div class="tx"><b>💬 Enviá tu comprobante por WhatsApp</b><small>Subí tu comprobante para confirmar tu pago</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.waMsg)}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a></div>
       <div class="pz-help"><div class="tx"><b>🎧 ¿Necesitás ayuda?</b><small>Escribinos por WhatsApp y te ayudamos.</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.ayudaMsg)}" target="_blank" rel="noopener noreferrer">Contactar soporte</a></div>
+      <button class="pz-again" type="button">🛍️ Encargar otro producto</button>
       <div class="enc-hint">Guardá tu código <b style="color:#b7ff00">${esc(o.codigo)}</b> para dar seguimiento a tu pedido. Si no coordinás el pago en 24 h, se cancela solo.</div>`;
   }
   function bindPasarela(){
     const x=card.querySelector(".enc-x"); if(x) x.addEventListener("click", cerrar);
+    // "Encargar otro producto": cierra el comprobante y vuelve al catálogo (misma pestaña).
+    const again=card.querySelector(".pz-again"); if(again) again.addEventListener("click", ()=>{ cerrar(); window.location.href = "/"; });
     card.querySelectorAll("[data-copiar]").forEach(b=>b.addEventListener("click", ()=>{
       const n=b.getAttribute("data-copiar"); if(navigator.clipboard) navigator.clipboard.writeText(n).catch(()=>{});
       const o=b.innerHTML; b.innerHTML="✓ ¡Copiado!"; setTimeout(()=>{ b.innerHTML=o; }, 1200);
