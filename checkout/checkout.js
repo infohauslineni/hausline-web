@@ -179,14 +179,14 @@
         html += '<div class="banner exp rv">'+ICON.alert+'<div><b>El período de pago ha expirado.</b> Tu encargo pudo cancelarse. Escribinos por WhatsApp para revisarlo o volver a encargar.</div></div>';
       }
 
-      // 5) Cómo pagar
-      html += '<div class="sec-title rv">¿Cómo pagar?</div><section class="steps rv">'+pasos+'</section>';
-
-      // 6) Cuentas
+      // Cuentas PRIMERO: el cliente las ve apenas mira el total, sin scrollear.
       html += '<div class="sec-title rv">'+ICON.truck+' Transfiere a cualquiera de estas cuentas</div><section class="accts rv">'+cuentasHTML+'</section>';
 
-      // 7) WhatsApp
+      // WhatsApp: la acción principal, justo debajo de las cuentas.
       html += '<a class="cta-wa rv" href="'+waHref+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Enviar comprobante por WhatsApp</a>';
+
+      // "¿Cómo pagar?" queda como referencia, más abajo.
+      html += '<div class="sec-title rv">¿Cómo pagar?</div><section class="steps rv">'+pasos+'</section>';
     }
 
     // 8) Resumen
