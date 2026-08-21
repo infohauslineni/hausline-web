@@ -72,6 +72,56 @@
       .enc-acc .b small{display:block;color:#8a938d;font-weight:400;font-size:11px;margin-top:1px;}
       .enc-acc .num{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:#fff;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 9px;cursor:pointer;white-space:nowrap;}
       .enc-acc .num:active{background:rgba(183,255,0,.15);}
+
+      /* ===== Pasarela de pago (pantalla de éxito) ===== */
+      .enc-card{position:relative;}
+      .pz-x{position:absolute;top:16px;right:16px;z-index:2;}
+      .pz-hero{text-align:center;padding:6px 0 2px;}
+      .pz-check{width:64px;height:64px;border-radius:50%;background:#b7ff00;color:#052012;display:grid;place-items:center;margin:0 auto;font-size:32px;font-weight:900;box-shadow:0 0 0 8px rgba(183,255,0,.12);}
+      .pz-title{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:14px 0 0;}
+      .pz-sub{font-size:12.5px;color:#8a938d;margin:6px 0 10px;}
+      .pz-code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:17px;color:#b7ff00;letter-spacing:.08em;background:rgba(183,255,0,.08);border:1px solid rgba(183,255,0,.3);border-radius:10px;padding:7px 16px;}
+      .pz-pay{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:16px 18px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.055);border-radius:16px;}
+      .pz-pay-k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#b7ff00;}
+      .pz-pay-usd{font-size:34px;font-weight:900;letter-spacing:-.02em;line-height:1.05;margin-top:2px;}
+      .pz-pay-nio{font-size:13px;color:#8ec5ff;font-weight:700;margin-top:2px;}
+      .pz-clock{display:flex;gap:9px;align-items:flex-start;max-width:190px;}
+      .pz-clock .ic{width:32px;height:32px;border-radius:50%;background:rgba(183,255,0,.12);color:#b7ff00;display:grid;place-items:center;flex:none;font-size:16px;}
+      .pz-clock b{font-size:13px;display:block;}
+      .pz-clock small{font-size:11px;color:#8a938d;line-height:1.45;display:block;margin-top:2px;}
+      .pz-sec{display:flex;align-items:center;gap:10px;margin:22px 0 12px;color:#8a938d;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;justify-content:center;}
+      .pz-sec::before,.pz-sec::after{content:"";height:1px;flex:1;background:rgba(183,255,0,.18);max-width:60px;}
+      .pz-steps{display:flex;align-items:flex-start;gap:4px;padding:14px 8px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);}
+      .pz-step{flex:1;text-align:center;min-width:0;}
+      .pz-step .n{width:30px;height:30px;border-radius:50%;background:#b7ff00;color:#052012;font-weight:800;font-size:13px;display:grid;place-items:center;margin:0 auto;}
+      .pz-step .em{font-size:19px;margin-top:7px;line-height:1;}
+      .pz-step b{display:block;font-size:11.5px;margin-top:6px;}
+      .pz-step small{display:block;font-size:10px;color:#8a938d;line-height:1.35;margin-top:2px;}
+      .pz-step .ar{align-self:center;color:#b7ff00;font-size:15px;flex:none;padding-top:6px;}
+      .pz-acc-title{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;margin:20px 0 9px;}
+      .pz-acc-title .em{font-size:15px;}
+      .pz-accs{display:flex;flex-direction:column;gap:9px;}
+      .pz-acc-row{display:flex;align-items:center;gap:11px;flex-wrap:wrap;padding:11px 12px;border:1px solid rgba(255,255,255,.08);border-radius:13px;background:rgba(255,255,255,.02);}
+      .pz-badge{width:40px;height:40px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:800;text-align:center;line-height:1.05;letter-spacing:.02em;}
+      .pz-acc-info{flex:1;min-width:110px;}
+      .pz-acc-info b{font-size:13px;font-weight:700;display:block;}
+      .pz-acc-info small{font-size:11px;color:#8a938d;display:block;margin-top:1px;}
+      .pz-acc-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px;}
+      .pz-acc-num{text-align:right;}
+      .pz-acc-num .lbl{font-size:10px;color:#8a938d;text-transform:uppercase;letter-spacing:.06em;display:block;}
+      .pz-acc-num .val{font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:800;}
+      .pz-copy{flex:none;border:1px solid rgba(183,255,0,.35);background:rgba(183,255,0,.06);color:#b7ff00;border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+      .pz-copy:active{background:rgba(183,255,0,.18);}
+      .pz-wa{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 16px;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.07);border-radius:14px;}
+      .pz-wa .tx{flex:1;min-width:150px;}
+      .pz-wa b{font-size:13.5px;display:flex;align-items:center;gap:7px;}
+      .pz-wa small{font-size:11.5px;color:#a7b0aa;display:block;margin-top:2px;}
+      .pz-wa a{flex:none;background:#25d366;color:#052012;border-radius:11px;padding:11px 16px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap;}
+      .pz-help{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:11px;padding:13px 16px;border:1px solid rgba(255,255,255,.1);border-radius:14px;}
+      .pz-help .tx{flex:1;min-width:150px;}
+      .pz-help b{font-size:13px;display:flex;align-items:center;gap:7px;}
+      .pz-help small{font-size:11.5px;color:#8a938d;display:block;margin-top:2px;}
+      .pz-help a{flex:none;border:1px solid rgba(255,255,255,.18);color:#f3f6f3;border-radius:11px;padding:10px 15px;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;}
     `;
     document.head.appendChild(s);
   }
@@ -97,6 +147,64 @@
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
   function waNumero(){ return (typeof WHATSAPP_NUMERO!=="undefined"&&WHATSAPP_NUMERO) || (typeof WHATSAPP!=="undefined"&&WHATSAPP) || "50578995116"; }
   function envioCfg(){ return (typeof HAUSLINE_ENVIO!=="undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} }; }
+
+  // Pastilla de color por banco para la lista de cuentas de la pasarela.
+  function badgeCuenta(c){
+    const banco=(c.banco||"").toUpperCase(), moneda=(c.moneda||"").toLowerCase();
+    if(banco.includes("LAFISE")) return { bg:(moneda.indexOf("d")===0||moneda.includes("dól")||moneda.includes("dol")?"#12a15a":"#0e8a8a"), label:"LAFISE" };
+    if(banco.includes("BAC")) return { bg:"#c0392b", label:"BAC" };
+    if(banco.includes("BILLETERA")||banco.includes("MOVIL")||banco.includes("MÓVIL")) return { bg:"#7c4dbd", label:"📱" };
+    return { bg:"#3a3f3c", label:(c.banco||"").slice(0,5).toUpperCase() };
+  }
+  function esBilletera(c){ const b=(c.banco||"").toLowerCase(); return b.includes("billetera")||b.includes("movil")||b.includes("móvil"); }
+
+  // HTML de la pasarela de pago (pantalla de éxito), compartido por producto y carrito.
+  // o = { titulo, subCodigo, codigo, montoAhora, parcial, waMsg, ayudaMsg }
+  function pasarelaOkHTML(o){
+    const cuentas=(typeof HAUSLINE_CUENTAS!=="undefined"?HAUSLINE_CUENTAS:[]);
+    const usd=fmtUSD(o.montoAhora), nio=fmtNIO(cordobas(o.montoAhora));
+    const filas=cuentas.map(c=>{
+      const bd=badgeCuenta(c);
+      return `<div class="pz-acc-row">
+        <span class="pz-badge" style="background:${bd.bg}">${bd.label}</span>
+        <div class="pz-acc-info"><b>${esc(c.banco)}${c.moneda?" · "+esc(c.moneda):""}</b><small>${esc(c.titular)}</small></div>
+        <div class="pz-acc-right"><div class="pz-acc-num"><span class="lbl">${esBilletera(c)?"Número":"Cuenta"}</span><span class="val">${esc(c.numero)}</span></div><button class="pz-copy" type="button" data-copiar="${esc(c.numero)}">⧉ Copiar</button></div>
+      </div>`;
+    }).join("");
+    const accs = filas || `<div class="pz-acc-row"><div class="pz-acc-info"><b>Escríbenos por WhatsApp para los datos de pago</b></div></div>`;
+    return `
+      <button class="enc-x pz-x" type="button" aria-label="Cerrar">&times;</button>
+      <div class="pz-hero">
+        <div class="pz-check">✓</div>
+        <h3 class="pz-title">${esc(o.titulo)}</h3>
+        <div class="pz-sub">${esc(o.subCodigo)}</div>
+        <div class="pz-code">${esc(o.codigo)}</div>
+      </div>
+      <div class="pz-pay">
+        <div><div class="pz-pay-k">${o.parcial?"Total a pagar (50%)":"Total a pagar"}</div><div class="pz-pay-usd">${usd}</div><div class="pz-pay-nio">≈ ${nio}</div></div>
+        <div class="pz-clock"><span class="ic">⏱</span><div><b>Tenés 24 horas para pagar</b><small>Si no recibimos tu pago en este tiempo, tu encargo será cancelado.</small></div></div>
+      </div>
+      <div class="pz-sec">¿Cómo pagar?</div>
+      <div class="pz-steps">
+        <div class="pz-step"><div class="n">1</div><div class="em">🏦</div><b>Elegí una cuenta</b><small>La cuenta a la que vas a transferir</small></div>
+        <div class="ar">→</div>
+        <div class="pz-step"><div class="n">2</div><div class="em">📲</div><b>Transferí el monto</b><small>Enviá exactamente ${usd}</small></div>
+        <div class="ar">→</div>
+        <div class="pz-step"><div class="n">3</div><div class="em">💬</div><b>Enviá tu comprobante</b><small>Subí tu comprobante por WhatsApp</small></div>
+      </div>
+      <div class="pz-acc-title"><span class="em">🚚</span> Transferí a cualquiera de estas cuentas</div>
+      <div class="pz-accs">${accs}</div>
+      <div class="pz-wa"><div class="tx"><b>💬 Enviá tu comprobante por WhatsApp</b><small>Subí tu comprobante para confirmar tu pago</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.waMsg)}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a></div>
+      <div class="pz-help"><div class="tx"><b>🎧 ¿Necesitás ayuda?</b><small>Escribinos por WhatsApp y te ayudamos.</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.ayudaMsg)}" target="_blank" rel="noopener noreferrer">Contactar soporte</a></div>
+      <div class="enc-hint">Guardá tu código <b style="color:#b7ff00">${esc(o.codigo)}</b> para dar seguimiento a tu pedido. Si no coordinás el pago en 24 h, se cancela solo.</div>`;
+  }
+  function bindPasarela(){
+    const x=card.querySelector(".enc-x"); if(x) x.addEventListener("click", cerrar);
+    card.querySelectorAll("[data-copiar]").forEach(b=>b.addEventListener("click", ()=>{
+      const n=b.getAttribute("data-copiar"); if(navigator.clipboard) navigator.clipboard.writeText(n).catch(()=>{});
+      const o=b.innerHTML; b.innerHTML="✓ ¡Copiado!"; setTimeout(()=>{ b.innerHTML=o; }, 1200);
+    }));
+  }
 
   // producto: objeto del catálogo. opts: { talla, color, cantidad, precio } (opcional).
   window.abrirEncargo = function(producto, opts){
@@ -207,10 +315,6 @@
     function renderOk(sol, talla){
       const t = calc();
       const parcial = pago === "50";
-      const cuentas = (typeof HAUSLINE_CUENTAS!=="undefined" ? HAUSLINE_CUENTAS : []);
-      const filas = cuentas.map(c=>`
-        <div class="r"><div class="b">${esc(c.banco)}${c.moneda?" · "+esc(c.moneda):""}<small>${esc(c.titular)}</small></div>
-        <button class="num" type="button" data-copiar="${esc(c.numero)}" title="Tocar para copiar">${esc(c.numero)}</button></div>`).join("");
       const waMsg = `Hola HAUSLINE 👋, hice mi encargo ${sol}\n`+
         `Producto: ${nombre} (Código ${producto.codigo})\n`+
         (talla?`Talla: ${talla}\n`:"")+
@@ -219,27 +323,8 @@
         `A pagar: ${fmtUSD(t.ahora)}\n`+
         `\nAquí va mi comprobante de la transferencia:`;
       const ayudaMsg = `Hola HAUSLINE 👋, necesito ayuda con mi encargo ${sol} (${nombre}). Mi consulta es: `;
-      card.innerHTML = `
-        <div class="enc-top"><h3>¡Encargo recibido! ✅</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
-        <div class="enc-ok-ic">✓</div>
-        <div class="enc-sol">${esc(sol)}</div>
-        <p style="text-align:center;color:#e6e9e6;font-size:14px;margin-top:12px;line-height:1.6"><b>En unos momentos te contactamos por WhatsApp</b> para coordinar tu pedido. Si querés adelantar, transferí este monto y mandanos el comprobante 👇</p>
-        <div class="enc-total" style="margin-top:16px">
-          <div class="line"><div class="k hl">${parcial?'A pagar ahora (abono 50%)':'A pagar'}</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
-        </div>
-        <div class="enc-cta-title">Transferí a cualquiera de estas cuentas</div>
-        <div class="enc-acc">${filas || '<div class="r"><div class="b">Escríbenos por WhatsApp para los datos de pago</div></div>'}</div>
-        <a class="enc-btn wa" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>
-        <a class="enc-btn ghost" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(ayudaMsg)}" target="_blank" rel="noopener noreferrer">¿Necesitás ayuda?</a>
-        <div class="enc-hint">Guardá tu código <b style="color:#b7ff00">${esc(sol)}</b>. Si no coordinás el pago en 24 h, el encargo se cancela solo.</div>`;
-      card.querySelector(".enc-x").addEventListener("click", cerrar);
-      card.querySelectorAll("[data-copiar]").forEach(b=>{
-        b.addEventListener("click", ()=>{
-          const n = b.getAttribute("data-copiar");
-          if(navigator.clipboard) navigator.clipboard.writeText(n).catch(()=>{});
-          const orig = b.textContent; b.textContent = "¡Copiado!"; setTimeout(()=>{ b.textContent = orig; }, 1200);
-        });
-      });
+      card.innerHTML = pasarelaOkHTML({ titulo:"¡Encargo recibido!", subCodigo:"Tu código de encargo es", codigo:sol, montoAhora:t.ahora, parcial, waMsg, ayudaMsg });
+      bindPasarela();
     }
   };
 
@@ -313,22 +398,11 @@
     }
     function renderOk(sols){
       const t = calc();
-      const cuentas = (typeof HAUSLINE_CUENTAS!=="undefined"?HAUSLINE_CUENTAS:[]);
-      const filas = cuentas.map(c=>`<div class="r"><div class="b">${esc(c.banco)}${c.moneda?" · "+esc(c.moneda):""}<small>${esc(c.titular)}</small></div><button class="num" type="button" data-copiar="${esc(c.numero)}" title="Tocar para copiar">${esc(c.numero)}</button></div>`).join("");
       const codes = sols.join(", ");
       const waMsg = `Hola HAUSLINE 👋, hice mi pedido del carrito (${codes}).\nA pagar: ${fmtUSD(t.ahora)}\n\nAquí va mi comprobante de la transferencia:`;
-      card.innerHTML = `
-        <div class="enc-top"><h3>¡Pedido recibido! ✅</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
-        <div class="enc-ok-ic">✓</div>
-        <div class="enc-sol" style="font-size:15px">${esc(codes)}</div>
-        <p style="text-align:center;color:#e6e9e6;font-size:14px;margin-top:12px;line-height:1.6"><b>En unos momentos te contactamos por WhatsApp</b> para coordinar tu pedido. Si querés adelantar, transferí este monto y mandanos el comprobante 👇</p>
-        <div class="enc-total" style="margin-top:16px"><div class="line"><div class="k hl">${pago==='50'?'A pagar ahora (abono 50%)':'A pagar'}</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div></div>
-        <div class="enc-cta-title">Transferí a cualquiera de estas cuentas</div>
-        <div class="enc-acc">${filas || '<div class="r"><div class="b">Escríbenos por WhatsApp para los datos de pago</div></div>'}</div>
-        <a class="enc-btn wa" href="https://wa.me/${waNumero()}?text=${encodeURIComponent(waMsg)}" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>
-        <div class="enc-hint">Guardá tus códigos. Si no coordinás el pago en 24 h, el encargo se cancela solo.</div>`;
-      card.querySelector(".enc-x").addEventListener("click", cerrar);
-      card.querySelectorAll("[data-copiar]").forEach(b=> b.addEventListener("click", ()=>{ const n=b.getAttribute("data-copiar"); if(navigator.clipboard) navigator.clipboard.writeText(n).catch(()=>{}); const o=b.textContent; b.textContent="¡Copiado!"; setTimeout(()=>{b.textContent=o;},1200); }));
+      const ayudaMsg = `Hola HAUSLINE 👋, necesito ayuda con mi pedido del carrito (${codes}). Mi consulta es: `;
+      card.innerHTML = pasarelaOkHTML({ titulo:"¡Pedido recibido!", subCodigo:sols.length>1?"Tus códigos de encargo":"Tu código de encargo es", codigo:codes, montoAhora:t.ahora, parcial:pago==='50', waMsg, ayudaMsg });
+      bindPasarela();
     }
   };
 })();
