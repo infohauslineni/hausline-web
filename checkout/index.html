@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co https://hauslineshopni.es; font-src 'self' data:; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050505">
+  <title>Pago de tu encargo · HAUSLINE</title>
+  <link rel="icon" href="../logo.png" type="image/png">
+  <style>
+    :root{
+      --bg:#050505; --card:#141414; --card-2:#101010; --borde:#292929; --borde-fuerte:#3a3a3a;
+      --texto:#ffffff; --texto-2:#a5a5a5; --texto-3:#6f6f6f;
+      --verde:#b7ff00; --azul:#8ec5ff; --rojo:#ff8a8a; --ambar:#ffd166;
+      --font:'Inter','SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+      --ancho:640px; --radio:18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; background:var(--bg); color:var(--texto); font-family:var(--font);
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overflow-x:clip; }
+    body{ min-height:100vh; min-height:100dvh; }
+    a{ color:inherit; }
+    ::selection{ background:var(--verde); color:#050505; }
+    .wrap{ width:100%; max-width:var(--ancho); margin:0 auto; padding:20px 16px 56px; }
+    @media(min-width:640px){ .wrap{ padding:32px 24px 72px; } }
+
+    /* Header */
+    .ck-head{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:6px 2px 22px; }
+    .ck-brand b{ font-size:20px; font-weight:800; letter-spacing:.14em; }
+    .ck-brand span{ display:block; margin-top:3px; font-size:11.5px; color:var(--texto-2); font-weight:500; }
+    .ck-code-pill{ font-family:var(--mono); font-size:11px; color:var(--texto-2); border:1px solid var(--borde);
+      background:var(--card-2); border-radius:999px; padding:7px 12px; white-space:nowrap; }
+    .ck-code-pill b{ color:var(--verde); }
+
+    /* Cards */
+    .card{ background:var(--card); border:1px solid var(--borde); border-radius:var(--radio); padding:20px; margin-top:14px; }
+    @media(min-width:640px){ .card{ padding:24px; } }
+    .card-glow{ border-color:rgba(183,255,0,.28); background:linear-gradient(180deg,rgba(183,255,0,.05),rgba(183,255,0,.015)); }
+
+    /* Reveal animation */
+    .rv{ opacity:0; transform:translateY(14px); animation:rv .55s cubic-bezier(.22,1,.36,1) forwards; }
+    @keyframes rv{ to{ opacity:1; transform:none; } }
+    @media(prefers-reduced-motion:reduce){ .rv{ animation:none; opacity:1; transform:none; } }
+
+    /* Confirmación */
+    .ck-hero{ text-align:center; }
+    .ck-check{ width:70px; height:70px; border-radius:50%; margin:0 auto; display:grid; place-items:center;
+      background:var(--verde); color:#0a1400; box-shadow:0 0 0 8px rgba(183,255,0,.12); animation:pop .5s cubic-bezier(.2,1.4,.4,1) both; }
+    .ck-check svg{ width:34px; height:34px; }
+    @keyframes pop{ 0%{ transform:scale(.4); opacity:0; } 60%{ transform:scale(1.08); } 100%{ transform:scale(1); opacity:1; } }
+    .ck-hero h1{ font-size:23px; font-weight:800; letter-spacing:-.02em; margin:16px 0 0; }
+    .ck-hero p{ font-size:13.5px; color:var(--texto-2); margin:7px 0 0; line-height:1.5; }
+    .ck-code-label{ font-size:11px; text-transform:uppercase; letter-spacing:.14em; color:var(--texto-3); margin-top:18px; }
+    .ck-code-big{ display:inline-flex; align-items:center; gap:10px; margin-top:8px; }
+    .ck-code-big b{ font-family:var(--mono); font-size:22px; font-weight:800; letter-spacing:.06em; color:var(--verde); }
+    .btn-copy{ display:inline-flex; align-items:center; gap:6px; border:1px solid var(--borde-fuerte); background:var(--card-2);
+      color:var(--texto); font-family:var(--font); font-size:12px; font-weight:600; border-radius:10px; padding:8px 12px; cursor:pointer;
+      transition:.15s ease; }
+    .btn-copy:hover{ border-color:var(--verde); color:var(--verde); }
+    .btn-copy.ok{ border-color:var(--verde); color:var(--verde); background:rgba(183,255,0,.08); }
+
+    /* Total + tiempo */
+    .ck-pay{ display:flex; flex-wrap:wrap; gap:18px 24px; align-items:flex-start; justify-content:space-between; }
+    .ck-pay-k{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--verde); }
+    .ck-pay-usd{ font-size:40px; font-weight:800; letter-spacing:-.02em; line-height:1.02; margin-top:4px; }
+    .ck-pay-nio{ font-size:14px; color:var(--azul); font-weight:700; margin-top:4px; }
+    .ck-badge{ display:inline-block; margin-top:12px; font-size:11px; font-weight:700; color:var(--verde);
+      background:rgba(183,255,0,.1); border:1px solid rgba(183,255,0,.3); border-radius:999px; padding:5px 11px; }
+    .ck-clock{ min-width:180px; flex:1; }
+    .ck-clock .lbl{ display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; }
+    .ck-clock .lbl svg{ width:17px; height:17px; color:var(--verde); }
+    .ck-timer{ font-family:var(--mono); font-size:30px; font-weight:800; letter-spacing:.02em; margin-top:8px; color:var(--verde); }
+    .ck-clock small{ display:block; font-size:11.5px; color:var(--texto-2); line-height:1.5; margin-top:6px; }
+    .ck-timer.exp{ color:var(--rojo); font-size:16px; }
+
+    /* Secciones */
+    .sec-title{ display:flex; align-items:center; gap:10px; justify-content:center; margin:30px 0 4px; color:var(--texto-3);
+      font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .sec-title::before,.sec-title::after{ content:""; height:1px; flex:1; max-width:60px; background:rgba(183,255,0,.16); }
+    .sec-title svg{ width:16px; height:16px; flex:none; color:var(--verde); }
+    .shield-ic{ flex:none; } .shield-ic svg{ width:20px; height:20px; }
+    .err-ic svg{ width:42px; height:42px; }
+
+    /* Pasos */
+    .steps{ display:grid; grid-template-columns:1fr; gap:12px; }
+    @media(min-width:560px){ .steps{ grid-template-columns:repeat(3,1fr); } }
+    .step{ background:var(--card-2); border:1px solid var(--borde); border-radius:14px; padding:16px; text-align:center; transition:.2s ease; }
+    .step:hover{ border-color:var(--borde-fuerte); transform:translateY(-2px); }
+    .step .n{ font-family:var(--mono); font-size:12px; font-weight:800; color:#0a1400; background:var(--verde);
+      width:30px; height:30px; border-radius:50%; display:grid; place-items:center; margin:0 auto; }
+    .step .ic{ margin-top:10px; }
+    .step .ic svg{ width:24px; height:24px; color:var(--verde); }
+    .step b{ display:block; font-size:13.5px; margin-top:9px; }
+    .step small{ display:block; font-size:11.5px; color:var(--texto-2); line-height:1.45; margin-top:4px; }
+
+    /* Cuentas */
+    .accts{ display:flex; flex-direction:column; gap:12px; }
+    .acct{ display:flex; align-items:center; gap:13px; flex-wrap:wrap; background:var(--card); border:1px solid var(--borde);
+      border-radius:14px; padding:14px 16px; }
+    .acct .badge{ width:44px; height:44px; border-radius:50%; flex:none; display:grid; place-items:center; color:#fff;
+      font-size:9.5px; font-weight:800; text-align:center; line-height:1.05; letter-spacing:.02em; }
+    .acct .info{ flex:1; min-width:120px; }
+    .acct .info b{ display:block; font-size:14px; font-weight:700; }
+    .acct .info small{ display:block; font-size:12px; color:var(--texto-2); margin-top:2px; }
+    .acct .right{ margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+    .acct .num{ text-align:right; }
+    .acct .num .l{ font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--texto-3); display:block; }
+    .acct .num .v{ font-family:var(--mono); font-size:15px; font-weight:800; }
+
+    /* WhatsApp CTA */
+    .cta-wa{ display:flex; align-items:center; justify-content:center; gap:10px; width:100%; margin-top:16px;
+      background:#25d366; color:#04220f; border:0; border-radius:15px; padding:17px; font-family:var(--font); font-size:15.5px;
+      font-weight:800; cursor:pointer; text-decoration:none; transition:transform .12s ease, box-shadow .2s ease;
+      box-shadow:0 8px 26px rgba(37,211,102,.18); }
+    .cta-wa:hover{ transform:translateY(-2px); box-shadow:0 12px 34px rgba(37,211,102,.28); }
+    .cta-wa:active{ transform:translateY(0) scale(.99); }
+    .cta-wa svg{ width:22px; height:22px; }
+
+    /* Resumen */
+    .sumrow{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 0; border-top:1px solid var(--borde); font-size:13.5px; }
+    .sumrow:first-of-type{ border-top:0; }
+    .sumrow .k{ color:var(--texto-2); }
+    .sumrow .v{ font-weight:700; text-align:right; }
+    .sumrow .v.mono{ font-family:var(--mono); }
+    .sum-thumb{ width:40px; height:40px; border-radius:9px; object-fit:cover; background:var(--card-2); border:1px solid var(--borde); }
+
+    /* Estado del pago */
+    .pstate{ display:flex; align-items:center; gap:10px; font-size:13px; font-weight:700; }
+    .pstate .dot{ width:10px; height:10px; border-radius:50%; flex:none; }
+    .pstate.pend .dot{ background:var(--ambar); box-shadow:0 0 0 4px rgba(255,209,102,.14); animation:pulse 1.8s infinite; }
+    .pstate.pay .dot{ background:var(--verde); box-shadow:0 0 0 4px rgba(183,255,0,.16); }
+    .pstate.exp .dot{ background:var(--rojo); }
+    @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,209,102,.35); } 50%{ box-shadow:0 0 0 6px rgba(255,209,102,0); } }
+
+    /* Banners de estado */
+    .banner{ display:flex; gap:12px; align-items:flex-start; border-radius:14px; padding:14px 16px; margin-top:14px; font-size:13px; line-height:1.5; }
+    .banner.ok{ border:1px solid rgba(183,255,0,.3); background:rgba(183,255,0,.06); color:#dfffa6; }
+    .banner.exp{ border:1px solid rgba(255,138,138,.3); background:rgba(255,138,138,.06); color:#ffc9c9; }
+    .banner svg{ width:20px; height:20px; flex:none; margin-top:1px; }
+
+    .muted{ color:var(--texto-2); }
+    .center{ text-align:center; }
+    .foot{ text-align:center; color:var(--texto-3); font-size:11.5px; margin-top:26px; line-height:1.6; }
+    .foot a{ color:var(--verde); text-decoration:none; }
+
+    /* Loading / error */
+    .ck-load{ text-align:center; padding:60px 0; color:var(--texto-2); }
+    .spin{ width:34px; height:34px; border:3px solid var(--borde); border-top-color:var(--verde); border-radius:50%;
+      margin:0 auto 16px; animation:sp .8s linear infinite; }
+    @keyframes sp{ to{ transform:rotate(360deg); } }
+
+    /* Toast */
+    .toast{ position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); background:var(--verde);
+      color:#0a1400; font-weight:800; font-size:13px; padding:11px 18px; border-radius:12px; opacity:0; pointer-events:none;
+      transition:.25s ease; z-index:50; box-shadow:0 10px 30px rgba(0,0,0,.4); }
+    .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="ck-head">
+      <div class="ck-brand">
+        <b>HAUSLINE</b>
+        <span>Pago seguro de tu encargo</span>
+      </div>
+      <div class="ck-code-pill" id="headCode">Código: <b>—</b></div>
+    </header>
+    <main id="ck">
+      <div class="ck-load"><div class="spin"></div>Cargando tu encargo…</div>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="../config.js"></script>
+  <script src="./checkout.js"></script>
+</body>
+</html>
