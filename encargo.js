@@ -317,19 +317,11 @@
       function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }
     }
 
-    function renderOk(sol, talla){
-      const t = calc();
-      const parcial = pago === "50";
-      const waMsg = `Hola HAUSLINE 👋, hice mi encargo ${sol}\n`+
-        `Producto: ${nombre} (Código ${producto.codigo})\n`+
-        (talla?`Talla: ${talla}\n`:"")+
-        `Cantidad: ${cant}\n`+
-        `Envío: ${envio === "rapido" ? "Rápido" : "Estándar"}\n`+
-        `A pagar: ${fmtUSD(t.ahora)}\n`+
-        `\nAquí va mi comprobante de la transferencia:`;
-      const ayudaMsg = `Hola HAUSLINE 👋, necesito ayuda con mi encargo ${sol} (${nombre}). Mi consulta es: `;
-      card.innerHTML = pasarelaOkHTML({ titulo:"¡Encargo recibido!", subCodigo:"Tu código de encargo es", codigo:sol, montoAhora:t.ahora, parcial, waMsg, ayudaMsg });
-      bindPasarela();
+    function renderOk(sol){
+      // Nuevo flujo: en vez de mostrar un modal de pago, mandamos al checkout dedicado
+      // (/checkout/?c=CODE), una página completa de pago. El código va en la URL y la
+      // página lee el encargo desde la base por su código.
+      window.location.href = "/checkout/?c=" + encodeURIComponent(sol);
     }
   };
 
@@ -402,12 +394,8 @@
       }catch(ex){ btn.disabled=false; btn.innerHTML="Crear encargo →"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
     function renderOk(sols){
-      const t = calc();
-      const codes = sols.join(", ");
-      const waMsg = `Hola HAUSLINE 👋, hice mi pedido del carrito (${codes}).\nA pagar: ${fmtUSD(t.ahora)}\n\nAquí va mi comprobante de la transferencia:`;
-      const ayudaMsg = `Hola HAUSLINE 👋, necesito ayuda con mi pedido del carrito (${codes}). Mi consulta es: `;
-      card.innerHTML = pasarelaOkHTML({ titulo:"¡Pedido recibido!", subCodigo:sols.length>1?"Tus códigos de encargo":"Tu código de encargo es", codigo:codes, montoAhora:t.ahora, parcial:pago==='50', waMsg, ayudaMsg });
-      bindPasarela();
+      // El carrito crea varios encargos: los pasamos todos al checkout separados por coma.
+      window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(","));
     }
   };
 })();
