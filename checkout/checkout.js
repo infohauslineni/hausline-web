@@ -266,6 +266,9 @@
         if(!silencioso) error("No encontramos ese encargo", "Verificá que el código esté bien escrito (ejemplo: SOL-1234). Si acabás de crearlo, esperá unos segundos y recargá.");
         return;
       }
+      // En los refrescos silenciosos (cada 20 s) solo re-dibujamos si CAMBIÓ el estado
+      // del pago. Así el contador sigue corriendo solo y la página no "parpadea"/recarga.
+      if(silencioso && ultimoEstado !== null && calcular(items).estado === ultimoEstado) return;
       render(items);
     }catch(ex){
       if(!silencioso) error("No pudimos cargar tu encargo", "Revisá tu conexión e intentá de nuevo. Si el problema sigue, escribinos por WhatsApp.");
