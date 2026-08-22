@@ -280,6 +280,8 @@
         <p class="hint">Poné precio de oferta + fecha: sale en “Ofertas” con el precio tachado. Al vencer, vuelve al precio normal.</p>
         <label>Tallas <span style="font-weight:400;">(separadas por coma)</span></label>
         <input id="fTallas" placeholder="Ej: S, M, L, XL   ·   o   39, 40, 41">
+        <label>Colores <span style="font-weight:400;">(separados por coma · dejalo vacío si no aplica)</span></label>
+        <input id="fColores" placeholder="Ej: Negro, Blanco, Azul">
         <label>Descripción</label>
         <textarea id="fDescripcion" placeholder="Detalle del producto (opcional)"></textarea>
         <label>Fotos</label>
@@ -377,7 +379,7 @@
     const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
     return { codigo:p.codigo, nombre:p.nombreReal||p.nombre||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
       precio:Number(p.precio||0), cotizar:p.cotizar===true, precioOferta:Number(p.precioOferta||0), promocionHasta:p.promocionHasta||"",
-      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true };
+      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], colores:p.colores||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true };
   }
 
   // ============ Fotos ============
@@ -493,6 +495,7 @@
       const datos={ codigo, nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
         precio:cotizar?0:Number($("fPrecio").value||0), cotizar, precioOferta:oferta>0?oferta:0, promocionHasta:oferta>0?ofertaHasta:"",
         descripcion:$("fDescripcion").value.trim(), tallas:$("fTallas").value.split(",").map(s=>s.trim()).filter(Boolean),
+        colores:$("fColores").value.split(",").map(s=>s.trim()).filter(Boolean),
         imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
         posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
         escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
@@ -518,7 +521,7 @@
     finally{ btn.disabled=false; btn.innerHTML=t; }
   });
   function limpiarForm(){ $("tituloForm").textContent="Nuevo producto";
-    ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
+    ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fColores","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fAjuste").value="cover";
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
@@ -530,7 +533,7 @@
     $("fCategoria").value=datos.categoria||CATEGORIAS[0]; $("fCategoria").dispatchEvent(new Event("change"));
     $("fSubcategoria").value=datos.subcategoria||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;
     $("fOferta").value=datos.precioOferta||""; $("fOfertaHasta").value=(datos.promocionHasta||"").slice(0,10);
-    $("fTallas").value=(datos.tallas||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
+    $("fTallas").value=(datos.tallas||[]).join(", "); $("fColores").value=(datos.colores||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false;
