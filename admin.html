@@ -322,6 +322,9 @@
                   <div><label>Categoría *</label><select id="fCategoria"></select></div>
                   <div><label>Subcategoría</label><select id="fSubcategoria"></select></div>
                 </div>
+                <div class="fila" id="grpTipoRopa" style="display:none;">
+                  <div><label>Tipo de prenda</label><select id="fTipoRopa"></select></div>
+                </div>
                 <div class="fila">
                   <div><label>Marca</label><input id="fMarca" placeholder="Ej: Nike"></div>
                   <div><label>Precio (USD)</label><input id="fPrecio" type="number" inputmode="decimal" min="0" step="1" placeholder="0.00"></div>
@@ -343,10 +346,16 @@
 
               <div class="card">
                 <h2 class="card-h">Opciones del producto</h2>
-                <label>Tallas disponibles (calzado)</label>
-                <div id="tallasGrid" class="tallas-grid"></div>
-                <label style="margin-top:14px;">Otras tallas (ropa: S, M, L…)</label>
-                <input id="fTallasOtras" placeholder="Ej: S, M, L, XL">
+                <div id="bloqueCalzado">
+                  <label>Tallas disponibles (calzado)</label>
+                  <div id="tallasGrid" class="tallas-grid"></div>
+                </div>
+                <div id="bloqueRopa" style="display:none;">
+                  <label>Tallas disponibles (ropa)</label>
+                  <div id="tallasRopa" class="tallas-grid"></div>
+                </div>
+                <p class="hint" id="tallasHint" style="display:none;">Sin tallas para este tipo de producto.</p>
+                <input id="fTallasOtras" type="hidden">
                 <input id="fTallas" type="hidden">
                 <label style="margin-top:16px;">Colores disponibles (opcional)</label>
                 <div id="coloresChips" class="chips-color"></div>
@@ -567,23 +576,46 @@
   $("fAjuste").addEventListener("change", updatePreview);
   $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
     for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
-  $("fCategoria").addEventListener("change",()=>llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true));
+  $("fCategoria").addEventListener("change",()=>{ llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true); aplicarModoTallas(); tallasUIaCampo(); });
 
-  // ---------- Tallas (checkboxes de calzado 34-47 + otras tallas para ropa) ----------
-  (function(){ const cont=$("tallasGrid"); let html=""; for(let n=34;n<=47;n++) html+=`<label class="talla-chk"><input type="checkbox" value="${n}">${n}</label>`; cont.innerHTML=html;
-    cont.querySelectorAll("input").forEach(c=>c.addEventListener("change", tallasUIaCampo)); })();
-  function tallasUIaCampo(){
-    const nums=[...document.querySelectorAll("#tallasGrid input:checked")].map(c=>c.value);
-    const otras=($("fTallasOtras").value||"").split(",").map(s=>s.trim()).filter(Boolean);
-    $("fTallas").value=[...nums, ...otras].join(", ");
+  // ---------- Tallas: calzado (34-47) o ropa (S,M,L,XL) según la subcategoría ----------
+  const ROPA_TALLAS=["S","M","L","XL"];
+  // Tipo de prenda: se pide solo cuando la subcategoría es Ropa.
+  const TIPOS_ROPA=["Camisa","Camiseta","Short","Pantalón","Sudadera","Chaqueta","Conjunto","Vestido","Otro"];
+  (function(){
+    let h=""; for(let n=34;n<=47;n++) h+=`<label class="talla-chk"><input type="checkbox" value="${n}">${n}</label>`;
+    $("tallasGrid").innerHTML=h;
+    $("tallasRopa").innerHTML=ROPA_TALLAS.map(t=>`<label class="talla-chk"><input type="checkbox" value="${t}">${t}</label>`).join("");
+    $("fTipoRopa").innerHTML='<option value="">—</option>'+TIPOS_ROPA.map(t=>`<option value="${t}">${t}</option>`).join("");
+    document.querySelectorAll("#tallasGrid input, #tallasRopa input").forEach(c=>c.addEventListener("change", tallasUIaCampo));
+  })();
+  // Calzado / Ropa se decide por la SUBCATEGORÍA elegida.
+  function modoTallas(){ const s=($("fSubcategoria").value||"").toLowerCase(); if(s.indexOf("calzado")>=0) return "calzado"; if(s.indexOf("ropa")>=0) return "ropa"; return "otro"; }
+  // Muestra el bloque de tallas que corresponde y oculta el otro.
+  function aplicarModoTallas(){ const m=modoTallas();
+    $("bloqueCalzado").style.display = m==="calzado" ? "" : "none";
+    $("bloqueRopa").style.display    = m==="ropa"    ? "" : "none";
+    $("tallasHint").style.display    = m==="otro"    ? "" : "none";
+    $("grpTipoRopa").style.display   = m==="ropa"    ? "" : "none";
+    if(m!=="ropa") $("fTipoRopa").value="";
+  }
+  function tallasUIaCampo(){ const m=modoTallas(); let vals=[];
+    if(m==="calzado") vals=[...document.querySelectorAll("#tallasGrid input:checked")].map(c=>c.value);
+    else if(m==="ropa"){ const letras=[...document.querySelectorAll("#tallasRopa input:checked")].map(c=>c.value);
+      const extra=($("fTallasOtras").value||"").split(",").map(s=>s.trim()).filter(Boolean); vals=[...letras, ...extra]; }
+    $("fTallas").value=vals.join(", ");
   }
   function campoATallasUI(){
     const arr=($("fTallas").value||"").split(",").map(s=>s.trim()).filter(Boolean);
     const nums=new Set(arr.filter(v=>/^\d+$/.test(v)));
     document.querySelectorAll("#tallasGrid input").forEach(c=>c.checked=nums.has(c.value));
-    $("fTallasOtras").value=arr.filter(v=>!/^\d+$/.test(v)).join(", ");
+    const letras=arr.filter(v=>!/^\d+$/.test(v));
+    const setRopa=new Set(letras.map(v=>v.toUpperCase()));
+    document.querySelectorAll("#tallasRopa input").forEach(c=>c.checked=setRopa.has(c.value));
+    // Letras fuera de S/M/L/XL (raras): se conservan ocultas para no perderlas al editar.
+    $("fTallasOtras").value=letras.filter(v=>!ROPA_TALLAS.includes(v.toUpperCase())).join(", ");
   }
-  $("fTallasOtras").addEventListener("input", tallasUIaCampo);
+  $("fSubcategoria").addEventListener("change",()=>{ aplicarModoTallas(); tallasUIaCampo(); });
 
   // ---------- Colores (chips + "Agregar color") ----------
   let coloresArr=[];
@@ -616,6 +648,7 @@
     try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
       const ofertaHasta=$("fOfertaHasta").value?($("fOfertaHasta").value+"T23:59:59"):"";
       const datos={ codigo, nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
+        tipoPrenda:(modoTallas()==="ropa"?($("fTipoRopa").value||""):""),
         precio:cotizar?0:Number($("fPrecio").value||0), cotizar, precioOferta:oferta>0?oferta:0, promocionHasta:oferta>0?ofertaHasta:"",
         descripcion:$("fDescripcion").value.trim(), tallas:$("fTallas").value.split(",").map(s=>s.trim()).filter(Boolean),
         colores:$("fColores").value.split(",").map(s=>s.trim()).filter(Boolean),
@@ -645,6 +678,8 @@
   });
   function limpiarForm(){ $("tituloForm").textContent="Subir producto nuevo";
     ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fTallasOtras","fColores","fColorNuevo","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
+    document.querySelectorAll("#tallasGrid input, #tallasRopa input").forEach(c=>c.checked=false);
+    $("fTipoRopa").value="";
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fAjuste").value="cover";
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
@@ -656,10 +691,10 @@
     $("tituloForm").textContent="Editar: "+(datos.nombre||datos.codigo);
     $("fCodigo").value=datos.codigo||""; $("fNombre").value=datos.nombre||""; $("fMarca").value=datos.marca||"";
     $("fCategoria").value=datos.categoria||CATEGORIAS[0]; $("fCategoria").dispatchEvent(new Event("change"));
-    $("fSubcategoria").value=datos.subcategoria||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;
+    $("fSubcategoria").value=datos.subcategoria||""; $("fTipoRopa").value=datos.tipoPrenda||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;
     $("fOferta").value=datos.precioOferta||""; $("fOfertaHasta").value=(datos.promocionHasta||"").slice(0,10);
     $("fTallas").value=(datos.tallas||[]).join(", "); $("fColores").value=(datos.colores||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
-    campoATallasUI(); campoAColoresUI();
+    campoATallasUI(); aplicarModoTallas(); campoAColoresUI();
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false;
@@ -854,7 +889,7 @@
 
   // ============ Arranque ============
   llenarSelect($("fCategoria"),CATEGORIAS,false); $("fCategoria").dispatchEvent(new Event("change"));
-  pintarFotos(); campoATallasUI(); campoAColoresUI();
+  pintarFotos(); campoATallasUI(); aplicarModoTallas(); campoAColoresUI();
   supa.auth.getSession().then(({data})=>mostrarPanel(!!(data&&data.session)));
 })();
 </script>
