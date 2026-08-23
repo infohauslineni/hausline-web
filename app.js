@@ -1291,7 +1291,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // quedaba en ?producto= y salía la imagen genérica del sitio).
   // Ej: hauslineshopni.es/p/KAW002
   if(!sinHistorial){
-    try{ history.pushState({ producto: producto.codigo }, "", "/p/" + encodeURIComponent(producto.codigo)); }catch(e){}
+    try{ history.pushState({ producto: producto.codigo }, "", "/p/" + encodeURIComponent(producto.codigo) + "/"); }catch(e){}
   }
 
   registrarVisto(producto.codigo);
@@ -1583,7 +1583,9 @@ window.addEventListener("popstate", () => {
 // la foto del producto en sus etiquetas Open Graph para que WhatsApp/Facebook la
 // muestren en el preview. Esa página redirige al instante al catálogo normal.
 function urlProducto(codigo){
-  return location.origin + "/p/" + encodeURIComponent(codigo);
+  // Barra final: es la URL que carga con 200 directo (sin 301). Así el enlace que
+  // se comparte coincide con la canónica y no pasa por una redirección.
+  return location.origin + "/p/" + encodeURIComponent(codigo) + "/";
 }
 
 // Abre el panel de compartir (WhatsApp, Facebook, Telegram, copiar, sistema).
@@ -2410,7 +2412,7 @@ function iniciar(){
   if(codRuta && buscarProducto(codRuta)){
     try{
       history.replaceState({}, "", "/");
-      history.pushState({ producto: codRuta }, "", "/p/" + encodeURIComponent(codRuta));
+      history.pushState({ producto: codRuta }, "", "/p/" + encodeURIComponent(codRuta) + "/");
     }catch(e){}
     abrirProducto(codRuta, false, true);
   } else {

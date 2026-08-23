@@ -121,8 +121,11 @@ const paginaProducto = (producto) => {
   const precio = precioVigente(producto, false)
   const descripcion = recortar(descripcionProducto(producto) || `${marca} · Envíos a toda Nicaragua`)
 
-  // La página vive en /p/CODIGO y es su propia canónica (indexable).
-  const canonica = `${SITIO}/p/${encodeURIComponent(codigo)}`
+  // La página vive en /p/CODIGO/ y es su propia canónica (indexable). El GitHub
+  // Pages sirve el index.html de la carpeta con 200 SOLO con la barra final; sin
+  // ella hace 301 a la versión con barra (eso es lo que Google marcaba como
+  // "Página con redirección"). Por eso la canónica lleva la barra final.
+  const canonica = `${SITIO}/p/${encodeURIComponent(codigo)}/`
 
   // Imagen para el preview de WhatsApp/Facebook (jpg/png segura).
   const relPreview = imagenParaPreview(producto.imagen)
@@ -200,7 +203,9 @@ const urlSitemap = (loc, prioridad) =>
   `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prioridad}</priority>\n  </url>`
 const entradas = [urlSitemap(`${SITIO}/`, '1.0')]
 for (const codigo of codigosGenerados) {
-  const loc = `${SITIO}/p/${codigo.split('/').map(encodeURIComponent).join('/')}`
+  // Barra final: la URL que devuelve 200 en GitHub Pages (sin ella hay 301). Así
+  // el sitemap no lista URLs que redirigen y Google puede indexarlas.
+  const loc = `${SITIO}/p/${codigo.split('/').map(encodeURIComponent).join('/')}/`
   entradas.push(urlSitemap(loc, '0.8'))
 }
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entradas.join('\n')}\n</urlset>\n`
