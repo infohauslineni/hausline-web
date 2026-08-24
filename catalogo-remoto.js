@@ -71,11 +71,17 @@ async function cargarProductosDelPanel(){
     }
   }catch(e){}
 
-  // Si se entró por link directo a un producto del panel (/?producto=CODIGO,
-  // vía el 404.html que atrapa /p/CODIGO), abrirlo ahora que ya cargó.
-  // iniciar() corrió antes que esta carga async, así que ahí no lo encontró.
+  // Si se entró por link directo a un producto del panel, abrirlo ahora que ya
+  // cargó (iniciar() corrió antes que esta carga async y ahí no lo encontró).
+  // Cubre las DOS formas de enlace directo, porque los productos del panel las
+  // usan igual que los del catálogo base:
+  //   • ruta estática /p/CODIGO/  → la página propia con Open Graph (200 real)
+  //   • ?producto=CODIGO          → compatibilidad y fallback del 404.html
+  // Sin esto, un /p/CODIGO de un producto del panel abría solo el inicio.
   try{
-    const directo = new URLSearchParams(location.search).get("producto");
+    const mRuta = location.pathname.match(/^\/p\/([^\/?#]+)\/?$/);
+    const directo = mRuta ? decodeURIComponent(mRuta[1])
+                          : new URLSearchParams(location.search).get("producto");
     if(directo && typeof abrirProducto === "function"
        && typeof buscarProducto === "function" && buscarProducto(directo)
        && !document.body.classList.contains("en-producto")){
