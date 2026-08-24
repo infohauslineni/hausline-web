@@ -85,6 +85,15 @@ async function cargarProductosDelPanel(){
     if(directo && typeof abrirProducto === "function"
        && typeof buscarProducto === "function" && buscarProducto(directo)
        && !document.body.classList.contains("en-producto")){
+      // Deja "/" (inicio) como base del historial ANTES de abrir, igual que hace
+      // iniciar() para los productos del catálogo base. Sin esto la "X" del producto
+      // (que hace history.back()) no tenía a dónde volver y no cerraba.
+      try{
+        const destino = mRuta ? ("/p/" + encodeURIComponent(directo) + "/")
+                              : (location.pathname + location.search);
+        history.replaceState({}, "", "/");
+        history.pushState({ producto: directo }, "", destino);
+      }catch(e){}
       abrirProducto(directo, false, true);
     }
   }catch(e){}
