@@ -17,7 +17,7 @@
       .enc-fondo{position:fixed;inset:0;z-index:9999;display:none;background:rgba(3,4,3,.72);backdrop-filter:blur(4px);align-items:flex-end;justify-content:center;}
       .enc-fondo.activo{display:flex;}
       @media(min-width:640px){.enc-fondo{align-items:center;}}
-      .enc-card{width:100%;max-width:460px;max-height:92vh;overflow-y:auto;background:#0e120f;border:1px solid rgba(255,255,255,.09);border-radius:20px 20px 0 0;padding:20px;color:#f3f6f3;font-family:inherit;animation:enc-up .28s ease;}
+      .enc-card{width:100%;max-width:460px;max-height:min(92vh, 100%);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:#0e120f;border:1px solid rgba(255,255,255,.09);border-radius:20px 20px 0 0;padding:20px;color:#f3f6f3;font-family:inherit;animation:enc-up .28s ease;}
       @media(min-width:640px){.enc-card{border-radius:20px;}}
       @keyframes enc-up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
       .enc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
@@ -140,8 +140,37 @@
     fondo.appendChild(card);
     document.body.appendChild(fondo);
   }
-  function abrir(){ ensure(); fondo.classList.add("activo"); document.body.style.overflow = "hidden"; }
-  function cerrar(){ if(fondo){ fondo.classList.remove("activo"); document.body.style.overflow = ""; } }
+  // ── Teclado del teléfono (iOS/Android) ───────────────────────────────────
+  // La hoja es fija (position:fixed) y anclada abajo; al abrir el teclado el `vh`
+  // NO cambia, así que la parte de abajo del formulario (correo, botón) quedaba
+  // TAPADA por el teclado y no se podía subir a verla. Con VisualViewport
+  // ajustamos la altura/posición de la hoja al área visible real (encima del
+  // teclado) y llevamos el campo enfocado a la vista.
+  function ajustarTeclado(){
+    if(!fondo || !fondo.classList.contains("activo") || !window.visualViewport) return;
+    const vv = window.visualViewport;
+    fondo.style.height = vv.height + "px";
+    fondo.style.top = vv.offsetTop + "px";
+    fondo.style.bottom = "auto";
+  }
+  function resetTeclado(){ if(fondo){ fondo.style.height = ""; fondo.style.top = ""; fondo.style.bottom = ""; } }
+  function onFocusIn(e){
+    if(!card || !card.contains(e.target)) return;
+    // Espera a que el teclado termine de abrir y centra el campo dentro de la hoja.
+    setTimeout(() => { try{ e.target.scrollIntoView({ block:"center", behavior:"smooth" }); }catch(_){} }, 250);
+  }
+  function abrir(){
+    ensure(); fondo.classList.add("activo"); document.body.style.overflow = "hidden";
+    if(window.visualViewport){ window.visualViewport.addEventListener("resize", ajustarTeclado); window.visualViewport.addEventListener("scroll", ajustarTeclado); }
+    document.addEventListener("focusin", onFocusIn);
+    ajustarTeclado();
+  }
+  function cerrar(){
+    if(fondo){ fondo.classList.remove("activo"); document.body.style.overflow = ""; }
+    if(window.visualViewport){ window.visualViewport.removeEventListener("resize", ajustarTeclado); window.visualViewport.removeEventListener("scroll", ajustarTeclado); }
+    document.removeEventListener("focusin", onFocusIn);
+    resetTeclado();
+  }
 
   function fmtUSD(n){ return "$" + (Math.round((Number(n)||0)*100)/100).toLocaleString("en-US"); }
   function fmtNIO(n){ return "C$" + (Number(n)||0).toLocaleString("en-US"); }
