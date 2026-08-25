@@ -997,14 +997,16 @@ function irInicio(sinHistorial){
   window.scrollTo({ top: 0 });
 }
 
+// Normaliza una marca para comparar: sin mayúsculas, espacios ni símbolos.
+function normMarca(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,""); }
 // Devuelve la lista base de la colección abierta, antes de filtros.
 function baseColeccion(){
   if(!coleccionActual) return productos;
   const { tipo, valor } = coleccionActual;
 
   if(tipo === "categoria") return productos.filter(p => p.categoria === valor);
-  // Marca sin distinguir mayúsculas/espacios, para que no se fragmente una marca por como se escribió.
-  if(tipo === "marca")     return productos.filter(p => String(p.marca||"").trim().toLowerCase() === String(valor||"").trim().toLowerCase());
+  // Marca sin distinguir mayúsculas, espacios ni símbolos (así "DOLCE & GABANNA" = "DOLCE&GABANNA").
+  if(tipo === "marca")     return productos.filter(p => normMarca(p.marca) === normMarca(valor));
   if(tipo === "busqueda")  return productos;
 
   switch(valor){
@@ -1034,7 +1036,7 @@ function aplicarBusqueda(lista){
 function aplicarFiltros(lista){
   let out = lista;
 
-  if(filtroMarca) out = out.filter(p => String(p.marca||"").trim().toLowerCase() === String(filtroMarca||"").trim().toLowerCase());
+  if(filtroMarca) out = out.filter(p => normMarca(p.marca) === normMarca(filtroMarca));
 
   if(filtroPrecio){
     const [min, max] = filtroPrecio.split("-").map(Number);

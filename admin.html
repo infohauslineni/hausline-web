@@ -723,9 +723,15 @@
   // que es lo que hace que un producto no aparezca al filtrar por su marca en la tienda.
   function poblarMarcas(){
     const dl=$("marcasList"); if(!dl) return;
-    const set=new Map(); // clave normalizada -> primera forma vista (para no duplicar por mayúsculas)
-    itemsMerged.forEach(it=>{ const m=String((it.datos||{}).marca||"").trim(); if(!m) return; const k=m.toLowerCase(); if(!set.has(k)) set.set(k,m); });
-    dl.innerHTML=[...set.values()].sort((a,b)=>a.localeCompare(b)).map(m=>`<option value="${esc(m)}"></option>`).join("");
+    // Agrupa duplicados ignorando mayúsculas, espacios y símbolos (así "DOLCE & GABANNA"
+    // y "DOLCE&GABANNA" quedan como uno). De cada grupo muestra la forma MEJOR escrita
+    // (con minúsculas: "Balenciaga" > "BALENCIAGA"). Las erratas verdaderas (otra letra)
+    // no se pueden juntar solas; esas se corrigen en el producto.
+    const clave=s=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
+    const puntaje=s=>/[a-z]/.test(s)?1:0;
+    const mejor=new Map();
+    itemsMerged.forEach(it=>{ const m=String((it.datos||{}).marca||"").trim(); if(!m) return; const k=clave(m); if(!k) return; const prev=mejor.get(k); if(!prev||puntaje(m)>puntaje(prev)) mejor.set(k,m); });
+    dl.innerHTML=[...mejor.values()].sort((a,b)=>a.localeCompare(b)).map(m=>`<option value="${esc(m)}"></option>`).join("");
   }
   function filtrar(){
     const q=($("buscador").value||"").trim().toLowerCase();
