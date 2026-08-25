@@ -838,15 +838,14 @@ function renderInicio(){
   // Entrega inmediata va primero: tiene prioridad sobre el resto de secciones.
   const inmediata = productosInmediata();
   const contInmediata = $("#filaInmediata");
+  const secInmediata = document.getElementById("entrega-inmediata");
   if(inmediata.length){
+    if(secInmediata) secInmediata.hidden = false;
     pintarFila("#filaInmediata", tomar(inmediata, 12), true);
   } else {
-    contInmediata.innerHTML = `
-      <div class="editorial-vacio">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Aún no hay productos marcados para entrega inmediata.
-        <code>productos.js → entregaInmediata: true</code>
-      </div>`;
+    // Sin productos de entrega inmediata: se OCULTA la sección entera (no muestra caja vacía).
+    if(secInmediata) secInmediata.hidden = true;
+    contInmediata.innerHTML = "";
   }
 
   // Ofertas: la sección se oculta sola si no hay promociones vigentes.
