@@ -401,6 +401,10 @@
                   <div><b>¿Disponible para compra?</b><small>Visible en la tienda online</small></div>
                   <label class="switch"><input id="fActivo" type="checkbox" checked><span></span></label>
                 </div>
+                <div class="toggle-row">
+                  <div><b>¿Entrega inmediata?</b><small>Ya lo tenés en stock, sin espera de encargo</small></div>
+                  <label class="switch"><input id="fEntregaInmediata" type="checkbox"><span></span></label>
+                </div>
               </div>
 
               <div id="avisoForm" class="aviso"></div>
@@ -420,8 +424,8 @@
   const SUPA_URL = "https://xgdijumnmaqfirmckugw.supabase.co";
   const SUPA_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
   const BUCKET = "catalogo", MAX_LADO = 1600, CALIDAD = 0.8, PORPAG = 25;
-  const CATEGORIAS = ["Hombre", "Dama", "Accesorios", "Decoración"];
-  const SUBCATEGORIAS = { "Hombre":["Calzado","Ropa"], "Dama":["Calzado","Ropa"], "Accesorios":["Hombre","Dama"], "Decoración":[] };
+  const CATEGORIAS = ["Hombre", "Dama", "Unisex", "Accesorios", "Decoración"];
+  const SUBCATEGORIAS = { "Hombre":["Calzado","Ropa"], "Dama":["Calzado","Ropa"], "Unisex":["Calzado","Ropa"], "Accesorios":["Hombre","Dama"], "Decoración":[] };
 
   const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
   const $ = id => document.getElementById(id);
@@ -655,7 +659,7 @@
         imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
         posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
         escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
-        destacadoNuevo:$("fNuevo").checked, fecha:new Date().toISOString().slice(0,10) };
+        destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, fecha:new Date().toISOString().slice(0,10) };
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
 
       // El tracking es OTRO proyecto Supabase (el panel no tiene acceso a escribirle).
@@ -672,7 +676,7 @@
     document.querySelectorAll("#tallasGrid input, #tallasRopa input").forEach(c=>c.checked=false);
     $("fTipoRopa").value="";
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
-    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fAjuste").value="cover";
+    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fAjuste").value="cover";
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos();
     campoATallasUI(); campoAColoresUI(); }
@@ -688,7 +692,7 @@
     campoATallasUI(); aplicarModoTallas(); campoAColoresUI();
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
-    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false;
+    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true;
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
   // ============ Datos ============

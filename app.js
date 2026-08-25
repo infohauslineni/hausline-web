@@ -1004,7 +1004,12 @@ function baseColeccion(){
   if(!coleccionActual) return productos;
   const { tipo, valor } = coleccionActual;
 
-  if(tipo === "categoria") return productos.filter(p => p.categoria === valor);
+  // Los productos "Unisex" salen tanto en Hombre como en Dama.
+  if(tipo === "categoria"){
+    if(valor === "Hombre") return productos.filter(p => p.categoria === "Hombre" || p.categoria === "Unisex");
+    if(valor === "Dama")   return productos.filter(p => p.categoria === "Dama"   || p.categoria === "Unisex");
+    return productos.filter(p => p.categoria === valor);
+  }
   // Marca sin distinguir mayúsculas, espacios ni símbolos (así "DOLCE & GABANNA" = "DOLCE&GABANNA").
   if(tipo === "marca")     return productos.filter(p => normMarca(p.marca) === normMarca(valor));
   if(tipo === "busqueda")  return productos;
