@@ -1003,7 +1003,8 @@ function baseColeccion(){
   const { tipo, valor } = coleccionActual;
 
   if(tipo === "categoria") return productos.filter(p => p.categoria === valor);
-  if(tipo === "marca")     return productos.filter(p => p.marca === valor);
+  // Marca sin distinguir mayúsculas/espacios, para que no se fragmente una marca por como se escribió.
+  if(tipo === "marca")     return productos.filter(p => String(p.marca||"").trim().toLowerCase() === String(valor||"").trim().toLowerCase());
   if(tipo === "busqueda")  return productos;
 
   switch(valor){
@@ -1033,7 +1034,7 @@ function aplicarBusqueda(lista){
 function aplicarFiltros(lista){
   let out = lista;
 
-  if(filtroMarca) out = out.filter(p => p.marca === filtroMarca);
+  if(filtroMarca) out = out.filter(p => String(p.marca||"").trim().toLowerCase() === String(filtroMarca||"").trim().toLowerCase());
 
   if(filtroPrecio){
     const [min, max] = filtroPrecio.split("-").map(Number);

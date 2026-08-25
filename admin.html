@@ -326,7 +326,7 @@
                   <div><label>Tipo de prenda</label><select id="fTipoRopa"></select></div>
                 </div>
                 <div class="fila">
-                  <div><label>Marca</label><input id="fMarca" placeholder="Ej: Nike"></div>
+                  <div><label>Marca</label><input id="fMarca" placeholder="Ej: Nike" list="marcasList" autocomplete="off"><datalist id="marcasList"></datalist></div>
                   <div><label>Precio (USD)</label><input id="fPrecio" type="number" inputmode="decimal" min="0" step="1" placeholder="0.00"></div>
                 </div>
                 <div class="check"><input id="fCotizar" type="checkbox"><label for="fCotizar">Precio a consultar (botón “Cotizar por WhatsApp”)</label></div>
@@ -716,7 +716,16 @@
       else items.push({codigo:p.codigo,datos:datosDeBase(p),origen:"original",remoteId:null,activo:true}); });
     remotos.forEach(r=>{ const c=String(r.codigo||"").toUpperCase(); if(usados.has(c)) return;
       items.push({codigo:r.codigo,datos:r.datos||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
-    itemsMerged=items; renderInicio(); renderChips(); renderTabla();
+    itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas();
+  }
+  // Autocompletado de marcas: junta las marcas ya usadas (catálogo base + panel) para que
+  // al subir un producto elijas la marca EXACTA y no la reescribas mal (mayúsculas/erratas),
+  // que es lo que hace que un producto no aparezca al filtrar por su marca en la tienda.
+  function poblarMarcas(){
+    const dl=$("marcasList"); if(!dl) return;
+    const set=new Map(); // clave normalizada -> primera forma vista (para no duplicar por mayúsculas)
+    itemsMerged.forEach(it=>{ const m=String((it.datos||{}).marca||"").trim(); if(!m) return; const k=m.toLowerCase(); if(!set.has(k)) set.set(k,m); });
+    dl.innerHTML=[...set.values()].sort((a,b)=>a.localeCompare(b)).map(m=>`<option value="${esc(m)}"></option>`).join("");
   }
   function filtrar(){
     const q=($("buscador").value||"").trim().toLowerCase();
