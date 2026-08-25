@@ -274,7 +274,7 @@
             <div class="card">
               <h2>Acciones rápidas</h2>
               <button class="btn" id="btnNuevoInicio">Cargar producto nuevo</button>
-              <button class="btn btn-sec" id="btnSyncTracking" style="margin-top:10px;">Sincronizar todos al tracking</button>
+              <button class="btn btn-sec" id="btnSyncTracking" style="margin-top:10px;">Actualizar y ver estado del tracking</button>
               <div id="avisoSync" class="aviso"></div>
             </div>
           </div>
@@ -658,20 +658,11 @@
         destacadoNuevo:$("fNuevo").checked, fecha:new Date().toISOString().slice(0,10) };
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
 
-      // Sincroniza al TRACKING (misma base): crea/actualiza el producto en su
-      // inventario. Solo campos de catálogo; NO toca costo/proveedor/stock.
-      let notaSync = " También quedó en el tracking.";
-      try{
-        const { error:e2 } = await supa.from("productos").upsert({
-          codigo, nombre, marca: datos.marca || null, categoria,
-          descripcion: datos.descripcion || "", precio_venta: datos.precio || 0,
-          imagen: datos.imagen || null, tallas: (datos.tallas || []).join(","),
-          estado: "Activo", modelo_negocio: "Bajo pedido"
-        }, { onConflict:"codigo" });
-        if(e2) notaSync = " (ojo: no se pudo sincronizar al tracking: " + e2.message + ")";
-      }catch(err){ notaSync = " (ojo: no se pudo sincronizar al tracking)"; }
-
-      aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web." + notaSync, "ok");
+      // El tracking es OTRO proyecto Supabase (el panel no tiene acceso a escribirle).
+      // Se sincroniza SOLO desde el servidor del tracking, que lee este catálogo_web
+      // (una vez al día por cron y cada vez que se abre la app del tracking). Por eso
+      // acá basta con guardar en catalogo_web; no hay que —ni se puede— empujar nada.
+      aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web. El tracking lo toma solo.", "ok");
       limpiarForm(); await cargarRemotos(); irA("lista");
     }catch(err){ aviso($("avisoForm"),"Error al guardar: "+(err.message||err),"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
@@ -702,8 +693,20 @@
 
   // ============ Datos ============
   async function cargarRemotos(){
+    // Renová el token ANTES de leer. Si venció (típico si el panel estuvo abierto un
+    // rato o el reloj de la PC está atrasado), Supabase rechaza la lectura con 401 y el
+    // panel mostraría tus productos como si no existieran. Best-effort: si no hay sesión,
+    // seguimos igual (como anónimo se leen los productos activos).
+    try{ await supa.auth.refreshSession(); }catch(_){}
     const {data,error}=await supa.from("catalogo_web").select("id, codigo, activo, datos, created_at").order("created_at",{ascending:false});
-    remotos=error?[]:(data||[]); construirLista();
+    if(error){
+      // NO borres lo que ya había en pantalla por un error puntual de sesión/red: avisá
+      // y conservá el estado previo. Así no “desaparecen” los productos ya cargados.
+      console.warn("cargarRemotos:", error.message||error);
+      aviso($("avisoSync"), "No se pudieron cargar tus productos del panel (sesión o conexión). Reintentá o volvé a iniciar sesión.", "err");
+      return;
+    }
+    remotos=data||[]; construirLista();
   }
   function construirLista(){
     const map=new Map(); remotos.forEach(r=>map.set(String(r.codigo).toUpperCase(),r));
@@ -837,19 +840,19 @@
   $("tabForm").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
   $("btnNuevoInicio").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
 
-  // Empuja TODOS los productos del panel al inventario del tracking (backfill).
+  // Comprueba el catálogo y recuerda cómo llega al tracking. El tracking es OTRO
+  // proyecto Supabase: el panel NO le escribe. Se sincroniza solo desde el servidor
+  // del tracking (lee este catalogo_web una vez al día por cron y al abrir su app).
+  // Así que este botón solo refresca la lista y confirma el estado; no empuja nada.
   $("btnSyncTracking").addEventListener("click", async () => {
-    const btn=$("btnSyncTracking"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Sincronizando…';
+    const btn=$("btnSyncTracking"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Actualizando…';
     try{
-      if(!remotos.length){ aviso($("avisoSync"),"No hay productos del panel para sincronizar todavía.","ok"); return; }
-      const filas = remotos.map(r=>{ const d=r.datos||{}; return {
-        codigo:r.codigo, nombre:d.nombre||r.codigo, marca:d.marca||null, categoria:d.categoria||"",
-        descripcion:d.descripcion||"", precio_venta:Number(d.precio)||0, imagen:d.imagen||null,
-        tallas:(d.tallas||[]).join(","), estado:r.activo?"Activo":"Inactivo", modelo_negocio:"Bajo pedido" }; });
-      const { error } = await supa.from("productos").upsert(filas, { onConflict:"codigo" });
-      if(error) throw error;
-      aviso($("avisoSync"), "✓ "+filas.length+" productos enviados al tracking. Refrescá la app de tracking para verlos.", "ok");
-    }catch(err){ aviso($("avisoSync"), "No se pudo sincronizar: "+(err.message||err), "err"); }
+      await cargarRemotos();
+      const n = remotos.length;
+      aviso($("avisoSync"), n
+        ? "Tenés "+n+" producto(s) en el catálogo. El tracking los sincroniza solo: una vez al día y cada vez que se abre la app del tracking. No hace falta empujarlos a mano."
+        : "No hay productos del panel todavía.", "ok");
+    }catch(err){ aviso($("avisoSync"), "No se pudo actualizar: "+(err.message||err), "err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
   });
 

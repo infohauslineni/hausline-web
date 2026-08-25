@@ -333,7 +333,7 @@
             p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: null, p_direccion: null,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
             p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
-            p_envio: envio, p_recargo: recargo(), p_pago: pago
+            p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null
           })
         });
         if(!res.ok){ throw new Error("HTTP "+res.status); }
@@ -414,7 +414,7 @@
           const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
             body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:null, p_direccion:null,
               p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
-              p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago }) });
+              p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null }) });
           if(!res.ok) throw new Error("HTTP "+res.status);
           sols.push(String(await res.json()));
         }
