@@ -296,30 +296,70 @@ function tomar(lista, limite){
   return salida;
 }
 
-function seleccionDestacados(lista, limite){
+// Índice de día (UTC): cambia cada 24 h. Sirve para ROTAR los destacados de
+// la portada, así no salen siempre los mismos productos (antes se mostraban
+// fijos los primeros de cada categoría, p. ej. 12 Louboutin seguidos).
+function diaRotacion(){
+  return Math.floor(Date.now() / 86400000);
+}
+
+// Rota la lista un desplazamiento que cambia cada día. `paso` separa cada
+// sección para que no arranquen todas en el mismo punto.
+function rotarDiario(lista, paso){
+  if(lista.length <= 1) return lista.slice();
+  const off = (((diaRotacion() * 7 + (paso || 0)) % lista.length) + lista.length) % lista.length;
+  return lista.slice(off).concat(lista.slice(0, off));
+}
+
+// Reparte las marcas (round-robin) para que no salgan muchos productos
+// seguidos de la misma marca. Conserva el orden interno de cada marca.
+function diversificarMarcas(lista){
+  const grupos = new Map();
+  for(const p of lista){
+    const clave = p.marca || p.nombre || "";
+    if(!grupos.has(clave)) grupos.set(clave, []);
+    grupos.get(clave).push(p);
+  }
+  const colas = [...grupos.values()];
+  const salida = [];
+  let quedan = true;
+  while(quedan){
+    quedan = false;
+    for(const cola of colas){
+      if(cola.length){ salida.push(cola.shift()); quedan = true; }
+    }
+  }
+  return salida;
+}
+
+// Destacados de una sección: usa los marcados con destacado:true si existen;
+// si no, toma toda la categoría, la diversifica por marca y la rota cada día.
+function seleccionDestacados(lista, limite, paso){
   const marcados = lista.filter(p => p.destacado);
-  return tomar(marcados.length ? marcados : lista, limite);
+  if(marcados.length) return tomar(marcados, limite);
+  return tomar(rotarDiario(diversificarMarcas(lista), paso), limite);
 }
 
 // "Nuevo en HAUSLINE": los productos marcados con destacadoNuevo:true.
 // Para que un producto salga aquí (y lleve la etiqueta "Nuevo"), ponle
-// destacadoNuevo:true en productos.js.
+// destacadoNuevo:true en productos.js. Rota entre los más nuevos cada día.
 function productosNuevos(limite){
-  return tomar(ordenarNuevos(productos.filter(esNuevo)), limite || 12);
+  return tomar(rotarDiario(ordenarNuevos(productos.filter(esNuevo)), 4), limite || 12);
 }
 
 function productosTendencia(limite){
-  return seleccionDestacados(productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Calzado"), limite || 12);
+  return seleccionDestacados(productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Calzado"), limite || 12, 0);
 }
 
 function productosPopulares(limite){
   // Muestra equilibrada de todas las categorías, sin repetir lo ya mostrado.
   const mezcla = [];
   const porCategoria = CATEGORIAS.map(c => productos.filter(p => p.categoria === c.id));
-  for(let i = 0; i < 8; i++){
+  const maxLen = Math.max(0, ...porCategoria.map(g => g.length));
+  for(let i = 0; i < maxLen; i++){
     porCategoria.forEach(grupo => { if(grupo[i]) mezcla.push(grupo[i]); });
   }
-  return tomar(mezcla, limite || 12);
+  return tomar(rotarDiario(mezcla, 3), limite || 12);
 }
 
 function productosOferta(){
@@ -860,8 +900,8 @@ function renderInicio(){
 
   pintarFila("#filaTendencia", productosTendencia(12));
   pintarFila("#filaPopulares", productosPopulares(12));
-  pintarFila("#filaRopa", seleccionDestacados(productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Ropa"), 12));
-  pintarFila("#filaAccesorios", seleccionDestacados(productos.filter(p => p.categoria === "Accesorios"), 12));
+  pintarFila("#filaRopa", seleccionDestacados(productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Ropa"), 12, 1));
+  pintarFila("#filaAccesorios", seleccionDestacados(productos.filter(p => p.categoria === "Accesorios"), 12, 2));
   pintarFila("#filaNuevos", productosNuevos(12));
 
   renderMarcas(10);
