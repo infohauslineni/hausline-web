@@ -896,6 +896,10 @@ function renderInicio(){
     pintarFila("#filaOfertas", tomar(ofertas, 12));
   } else {
     secOfertas.hidden = true;
+    // Se limpia la fila para no dejar productos viejos ocultos en el DOM
+    // (si no, un producto podía quedar "repetido" en esta fila oculta).
+    const contOfertas = $("#filaOfertas");
+    if(contOfertas) contOfertas.innerHTML = "";
   }
 
   pintarFila("#filaTendencia", productosTendencia(12));
