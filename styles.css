@@ -1453,6 +1453,8 @@ footer{
   color:var(--texto-3);
   text-align:center;
 }
+.footer-legal a{ color:var(--texto-2); text-decoration:none; }
+.footer-legal a:hover{ color:var(--verde); }
 
 /* ============================================================
    BARRA INFERIOR
