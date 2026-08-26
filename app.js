@@ -942,6 +942,7 @@ function urlColeccion(tipo, valor){
   if(tipo === "categoria") return "?categoria=" + encodeURIComponent(valor);
   if(tipo === "seccion")   return "?coleccion=" + encodeURIComponent(valor);
   if(tipo === "marca")     return "?marca="     + encodeURIComponent(valor);
+  if(tipo === "busqueda")  return "?buscar="    + encodeURIComponent(valor);
   return null;
 }
 
@@ -1548,12 +1549,14 @@ window.addEventListener("popstate", () => {
   const categoria = p.get("categoria");
   const coleccion = p.get("coleccion");
   const marca     = p.get("marca");
+  const buscar    = p.get("buscar");
 
   // Descriptor del destino según la URL.
   let destino;
   if(categoria && CATEGORIAS.some(c => c.id === categoria)) destino = { tipo:"categoria", valor:categoria, titulo:categoria };
   else if(coleccion) destino = { tipo:"seccion", valor:coleccion, titulo:TITULOS_COLECCION[coleccion] || "Catálogo" };
   else if(marca)     destino = { tipo:"marca", valor:marca, titulo:marca };
+  else if(buscar)    destino = { tipo:"busqueda", valor:buscar, titulo:`Resultados para "${buscar}"` };
   else               destino = { tipo:"inicio" };
 
   // ¿El destino es la MISMA vista que ya está montada debajo del producto?
@@ -1576,6 +1579,11 @@ window.addEventListener("popstate", () => {
   if(destino.tipo === "categoria")   abrirColeccion("categoria", destino.valor, destino.titulo, true);
   else if(destino.tipo === "seccion") abrirColeccion("seccion", destino.valor, destino.titulo, true);
   else if(destino.tipo === "marca")   abrirColeccion("marca", destino.valor, destino.titulo, true);
+  else if(destino.tipo === "busqueda"){
+    textoBusqueda = destino.valor;
+    ["#buscador", "#buscadorMovil"].forEach(s => { if($(s)) $(s).value = destino.valor; });
+    abrirColeccion("busqueda", destino.valor, destino.titulo, true);
+  }
   else                                irInicio(true);
 
   // Si estábamos cerrando un producto (destino distinto), al menos restauramos
@@ -2323,10 +2331,16 @@ function manejarBusqueda(valor){
     return;
   }
   if(estadoVista !== "coleccion" || (coleccionActual && coleccionActual.tipo !== "busqueda")){
-    abrirColeccion("busqueda", "", `Resultados para "${valor}"`);
+    // Primera búsqueda: crea UNA entrada en el historial (?buscar=...) para que,
+    // al abrir un producto y cerrarlo, el "atrás" vuelva a los resultados y no al inicio.
+    abrirColeccion("busqueda", valor, `Resultados para "${valor}"`);
   } else {
+    // Ya estamos en resultados: solo actualizamos el término en la URL (sin nueva
+    // entrada de historial) para que quede fresco si se comparte o se recarga.
+    coleccionActual.valor = valor;
     $("#coleccionTitulo").textContent = `Resultados para "${valor}"`;
     renderColeccion();
+    try{ history.replaceState({ coleccion:{ tipo:"busqueda", valor } }, "", "?buscar=" + encodeURIComponent(valor)); }catch(e){}
   }
 }
 
@@ -2455,12 +2469,17 @@ function iniciar(){
   const catURL = params.get("categoria");
   const colURL = params.get("coleccion");
   const marURL = params.get("marca");
+  const busURL = params.get("buscar");
   if(catURL && CATEGORIAS.some(c => c.id === catURL)){
     abrirColeccion("categoria", catURL, catURL, true);
   } else if(colURL && colURL !== "marcas"){
     abrirColeccion("seccion", colURL, TITULOS_COLECCION[colURL] || "Catálogo", true);
   } else if(marURL){
     abrirColeccion("marca", marURL, marURL, true);
+  } else if(busURL){
+    textoBusqueda = busURL;
+    ["#buscador", "#buscadorMovil"].forEach(s => { if($(s)) $(s).value = busURL; });
+    abrirColeccion("busqueda", busURL, `Resultados para "${busURL}"`, true);
   }
 
   // Secciones nuevas y contador real (cuando lleguen las vistas de Supabase).
