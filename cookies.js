@@ -1,104 +1,96 @@
-/* Banner de consentimiento de cookies de HAUSLINE.
-   Guarda la elección del usuario en localStorage:
-   - "essential" = solo cookies necesarias (rechazó el rastreo)
-   - "all"       = aceptó también el rastreo/analítica
-   No carga scripts de terceros por sí solo; sirve como base para condicionar
-   cualquier rastreo a futuro con window.hauslineTrackingAllowed(). */
+/* Aviso de bienvenida + consentimiento de cookies de HAUSLINE.
+   Al entrar por primera vez muestra un aviso que explica cómo funciona la tienda
+   (todo por encargo salvo lo marcado "Entrega inmediata", el cambio de moneda, y
+   que el número solo es para consultas). El botón "Entendido, entrar" cierra el
+   aviso y deja registrado el consentimiento de cookies (solo las necesarias:
+   NO activa rastreo). Se muestra una sola vez por navegador.
+
+   localStorage:
+   - "hausline_cookie_consent": "essential" (solo necesarias) | "all" (con rastreo)
+   - "hausline_aviso_bienvenida": "1" cuando ya vio el aviso
+   window.hauslineTrackingAllowed() sigue siendo la puerta para cualquier analítica. */
 (function () {
   "use strict";
-  var KEY = "hausline_cookie_consent";
+  var KEY_CONSENT = "hausline_cookie_consent";
+  var KEY_AVISO = "hausline_aviso_bienvenida";
+  var TEL_CONSULTAS = "7899 5116"; // solo para consultas; los pedidos se hacen en la web
 
-  function leer() {
-    try {
-      var v = localStorage.getItem(KEY);
-      return v === "all" || v === "essential" ? v : null;
-    } catch (e) { return null; }
-  }
-  function guardar(v) {
-    try { localStorage.setItem(KEY, v); } catch (e) { /* modo privado */ }
-  }
+  function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* modo privado */ } }
 
-  // Expuesto por si a futuro se agrega analítica: solo activarla si devuelve true.
-  window.hauslineTrackingAllowed = function () { return leer() === "all"; };
+  // Puerta para analítica futura: solo activarla si devuelve true.
+  window.hauslineTrackingAllowed = function () { return leer(KEY_CONSENT) === "all"; };
 
-  if (leer() !== null) return; // ya eligió: no mostramos nada
+  if (leer(KEY_AVISO) === "1") return; // ya vio el aviso: no mostramos nada
 
   function inyectarEstilos() {
-    if (document.getElementById("hl-cookie-style")) return;
+    if (document.getElementById("hl-aviso-style")) return;
     var css =
-      ".hl-cookie{position:fixed;left:0;right:0;bottom:0;z-index:2000;display:flex;justify-content:center;padding:14px;pointer-events:none;}" +
-      ".hl-cookie__box{pointer-events:auto;display:flex;align-items:flex-start;gap:14px;width:100%;max-width:820px;background:#151515;border:1px solid #292929;border-radius:16px;padding:16px 18px;box-shadow:0 20px 70px rgba(0,0,0,.5);}" +
-      ".hl-cookie__ico{flex:none;font-size:22px;line-height:1;}" +
-      ".hl-cookie__txt{flex:1;min-width:0;}" +
-      ".hl-cookie__t{color:#fff;font-weight:700;font-size:15px;margin:0 0 4px;}" +
-      ".hl-cookie__p{color:#a5a5a5;font-size:13px;line-height:1.55;margin:0;}" +
-      ".hl-cookie__p a{color:#b7ff00;}" +
-      ".hl-cookie__btns{display:flex;gap:8px;flex:none;align-self:center;}" +
-      ".hl-cookie__btn{border:0;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;}" +
-      ".hl-cookie__btn--no{background:transparent;border:1px solid #3a3a3a;color:#a5a5a5;}" +
-      ".hl-cookie__btn--no:hover{color:#fff;border-color:#5a5a5a;}" +
-      ".hl-cookie__btn--si{background:#b7ff00;color:#050505;}" +
-      ".hl-cookie__btn--si:hover{background:#c5ff35;}" +
-      "@media(max-width:640px){.hl-cookie__box{flex-wrap:wrap;}.hl-cookie__btns{width:100%;}.hl-cookie__btn{flex:1;}}";
+      ".hl-aviso{position:fixed;inset:0;z-index:3000;display:flex;align-items:flex-end;justify-content:center;padding:0;background:rgba(3,4,3,.74);backdrop-filter:blur(5px);}" +
+      "@media(min-width:640px){.hl-aviso{align-items:center;padding:16px;}}" +
+      ".hl-aviso__box{width:100%;max-width:440px;max-height:92vh;overflow-y:auto;background:#0e120f;border:1px solid rgba(255,255,255,.09);border-radius:20px 20px 0 0;padding:22px 20px;color:#f3f6f3;box-shadow:0 24px 80px rgba(0,0,0,.55);animation:hl-up .28s ease;}" +
+      "@media(min-width:640px){.hl-aviso__box{border-radius:20px;}}" +
+      "@keyframes hl-up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}" +
+      ".hl-aviso__t{font-size:20px;font-weight:800;margin:0;letter-spacing:-.01em;}" +
+      ".hl-aviso__lead{font-size:13px;color:#a5ada7;line-height:1.55;margin:8px 0 16px;}" +
+      ".hl-aviso__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}" +
+      ".hl-aviso__li{display:flex;gap:11px;align-items:flex-start;}" +
+      ".hl-aviso__ic{flex:none;width:34px;height:34px;border-radius:10px;background:rgba(183,255,0,.1);color:#b7ff00;display:grid;place-items:center;font-size:17px;}" +
+      ".hl-aviso__li b{font-size:13.5px;font-weight:700;display:block;margin-bottom:2px;}" +
+      ".hl-aviso__li p{font-size:12.5px;color:#a5ada7;line-height:1.5;margin:0;}" +
+      ".hl-aviso__li em{color:#b7ff00;font-style:normal;font-weight:700;}" +
+      ".hl-aviso__tel{font-family:ui-monospace,Menlo,monospace;font-weight:800;color:#fff;}" +
+      ".hl-aviso__cookies{margin:16px 0 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);font-size:11.5px;color:#8a938d;line-height:1.55;}" +
+      ".hl-aviso__cookies a{color:#b7ff00;}" +
+      ".hl-aviso__btn{width:100%;margin-top:16px;border:0;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;background:#b7ff00;color:#050705;}" +
+      ".hl-aviso__btn:hover{background:#c5ff35;}";
     var s = document.createElement("style");
-    s.id = "hl-cookie-style";
+    s.id = "hl-aviso-style";
     s.textContent = css;
     document.head.appendChild(s);
+  }
+
+  function li(icono, titulo, htmlDetalle) {
+    return '<li class="hl-aviso__li"><span class="hl-aviso__ic">' + icono + '</span>' +
+      '<div><b>' + titulo + '</b><p>' + htmlDetalle + '</p></div></li>';
   }
 
   function mostrar() {
     inyectarEstilos();
     var wrap = document.createElement("div");
-    wrap.className = "hl-cookie";
+    wrap.className = "hl-aviso";
     wrap.setAttribute("role", "dialog");
-    wrap.setAttribute("aria-live", "polite");
-    wrap.setAttribute("aria-label", "Aviso de cookies");
+    wrap.setAttribute("aria-modal", "true");
+    wrap.setAttribute("aria-label", "Cómo funciona HAUSLINE");
 
     var box = document.createElement("div");
-    box.className = "hl-cookie__box";
+    box.className = "hl-aviso__box";
+    box.innerHTML =
+      '<p class="hl-aviso__t">Bienvenido a HAUSLINE 👟</p>' +
+      '<p class="hl-aviso__lead">Antes de entrar, tené en cuenta cómo funciona la tienda:</p>' +
+      '<ul class="hl-aviso__list">' +
+        li("📦", "Todo es por encargo",
+          'Los productos se importan bajo pedido. Solo los marcados como <em>Entrega inmediata</em> ya están en Nicaragua y se entregan de una vez.') +
+        li("💱", "Dólares o córdobas",
+          'Podés ver los precios en <em>US$</em> o <em>C$</em> con el botón de moneda en la parte de arriba.') +
+        li("🛒", "Los pedidos se hacen aquí",
+          'Encargá directamente desde la web. El número <span class="hl-aviso__tel">' + TEL_CONSULTAS + '</span> es <em>solo para consultas</em>.') +
+      '</ul>' +
+      '<p class="hl-aviso__cookies">🍪 Usamos cookies necesarias para que el sitio funcione. <a href="/privacidad.html">Más información</a>.</p>' +
+      '<button type="button" class="hl-aviso__btn">Entendido, entrar</button>';
 
-    var ico = document.createElement("div");
-    ico.className = "hl-cookie__ico";
-    ico.textContent = "🍪";
-
-    var txt = document.createElement("div");
-    txt.className = "hl-cookie__txt";
-    var t = document.createElement("p");
-    t.className = "hl-cookie__t";
-    t.textContent = "Usamos cookies";
-    var p = document.createElement("p");
-    p.className = "hl-cookie__p";
-    p.innerHTML = "Usamos cookies necesarias para que el sitio funcione. Con tu permiso también usaríamos " +
-      "cookies de rastreo para entender cómo se usa la página. " +
-      '<a href="/privacidad.html">Más información</a>.';
-    txt.appendChild(t);
-    txt.appendChild(p);
-
-    var btns = document.createElement("div");
-    btns.className = "hl-cookie__btns";
-    var no = document.createElement("button");
-    no.type = "button";
-    no.className = "hl-cookie__btn hl-cookie__btn--no";
-    no.textContent = "Rechazar";
-    var si = document.createElement("button");
-    si.type = "button";
-    si.className = "hl-cookie__btn hl-cookie__btn--si";
-    si.textContent = "Aceptar";
-    btns.appendChild(no);
-    btns.appendChild(si);
-
-    box.appendChild(ico);
-    box.appendChild(txt);
-    box.appendChild(btns);
     wrap.appendChild(box);
     document.body.appendChild(wrap);
+    var prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-    function cerrar(valor) {
-      guardar(valor);
+    box.querySelector(".hl-aviso__btn").addEventListener("click", function () {
+      guardar(KEY_AVISO, "1");
+      // Registra el consentimiento SOLO de cookies necesarias (sin rastreo) si aún no eligió.
+      if (leer(KEY_CONSENT) == null) guardar(KEY_CONSENT, "essential");
+      document.body.style.overflow = prevOverflow;
       wrap.remove();
-    }
-    no.addEventListener("click", function () { cerrar("essential"); });
-    si.addEventListener("click", function () { cerrar("all"); });
+    });
   }
 
   if (document.readyState === "loading") {

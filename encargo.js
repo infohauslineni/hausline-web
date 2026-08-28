@@ -29,8 +29,10 @@
       .enc-prod .mt{font-size:12px;color:#8a938d;margin-top:2px;}
       .enc-f{margin-top:14px;}
       .enc-f label{display:block;font-size:12px;font-weight:600;color:#c3c9c5;margin-bottom:5px;}
-      .enc-f input{width:100%;box-sizing:border-box;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 12px;color:#fff;font-size:15px;font-family:inherit;outline:none;}
-      .enc-f input:focus{border-color:rgba(183,255,0,.5);}
+      .enc-f input,.enc-f select{width:100%;box-sizing:border-box;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 12px;color:#fff;font-size:15px;font-family:inherit;outline:none;}
+      .enc-f select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a938d' d='M6 8 0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+      .enc-f select option{background:#0e120f;color:#fff;}
+      .enc-f input:focus,.enc-f select:focus{border-color:rgba(183,255,0,.5);}
       .enc-row{display:flex;gap:10px;}
       .enc-row .enc-f{flex:1;}
       .enc-sub{font-size:12px;font-weight:600;color:#c3c9c5;margin:16px 0 0;}
@@ -189,6 +191,11 @@
   }
   function esBilletera(c){ const b=(c.banco||"").toLowerCase(); return b.includes("billetera")||b.includes("movil")||b.includes("móvil"); }
 
+  // Departamentos de Nicaragua para el encargo (se guarda como ubicación del cliente y
+  // sirve para calcular el envío: Managua = delivery; el resto = bus / Cargotrans).
+  var DEPARTAMENTOS_NI = ["Managua","Masaya","Carazo","Granada","Rivas","León","Chinandega","Estelí","Madriz","Nueva Segovia","Matagalpa","Jinotega","Boaco","Chontales","Río San Juan","RACCN (Costa Caribe Norte)","RACCS (Costa Caribe Sur)"];
+  function deptoOptions(sel){ return '<option value="">Selecciona tu departamento</option>' + DEPARTAMENTOS_NI.map(function(d){ return '<option value="'+esc(d)+'"'+(sel===d?" selected":"")+'>'+esc(d)+'</option>'; }).join(""); }
+
   // HTML de la pasarela de pago (pantalla de éxito), compartido por producto y carrito.
   // o = { titulo, subCodigo, codigo, montoAhora, parcial, waMsg, ayudaMsg }
   function pasarelaOkHTML(o){
@@ -274,6 +281,7 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
+          <div class="enc-f"><label>Departamento *</label><select name="departamento" required>${deptoOptions("")}</select></div>
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
           <div class="enc-row">
             <div class="enc-f"><label>Talla / detalle</label><input name="talla" placeholder="Talla o N/A" value="${esc(opts.talla||"")}"></div>
@@ -315,11 +323,13 @@
       err.style.display = "none";
       const nombreV = form.nombre.value.trim();
       const wa = form.whatsapp.value.trim();
+      const departamento = form.departamento ? form.departamento.value : "";
       const correo = form.correo.value.trim();
       const talla = form.talla.value.trim();
       cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1));
       if(nombreV.length < 2) return mostrarErr("Escribe tu nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return mostrarErr("Escribe un WhatsApp válido (solo números).");
+      if(!departamento) return mostrarErr("Elegí tu departamento.");
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return mostrarErr("El correo no es válido.");
 
       const btn = form.querySelector(".enc-btn");
@@ -330,7 +340,7 @@
           method: "POST",
           headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer "+SUPABASE_ANON_KEY },
           body: JSON.stringify({
-            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: null, p_direccion: null,
+            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: null,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
             p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
             p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null
@@ -383,6 +393,7 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
+          <div class="enc-f"><label>Departamento *</label><select name="departamento" required>${deptoOptions("")}</select></div>
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
           <div class="enc-opts" data-pago>
@@ -403,8 +414,10 @@
       const err = card.querySelector("[data-err]"); err.style.display="none";
       function showErr(m){ err.textContent=m; err.style.display="block"; }
       const nombre = form.nombre.value.trim(), wa = form.whatsapp.value.trim(), correo = form.correo.value.trim();
+      const departamento = form.departamento ? form.departamento.value : "";
       if(nombre.length<2) return showErr("Escribe tu nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return showErr("Escribe un WhatsApp válido (solo números).");
+      if(!departamento) return showErr("Elegí tu departamento.");
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido.");
       const btn = form.querySelector(".enc-btn"); btn.disabled=true; btn.textContent="Creando…";
       const url = (typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"") + "rpc/crear_solicitud_publica";
@@ -412,7 +425,7 @@
       try{
         for(const it of items){
           const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
-            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:null, p_direccion:null,
+            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
               p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
               p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null }) });
           if(!res.ok) throw new Error("HTTP "+res.status);
