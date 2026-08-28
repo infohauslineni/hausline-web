@@ -60,8 +60,7 @@ function cordobasCerrados(usd){
 const HAUSLINE_CUENTAS = [
   { banco: "LAFISE",         moneda: "Dólares",  numero: "133210618", titular: "Xiomara Rivas López" },
   { banco: "LAFISE",         moneda: "Córdobas", numero: "137034030", titular: "Xiomara Rivas López" },
-  { banco: "BAC",            moneda: "Córdobas", numero: "360322192", titular: "Tania Vanessa Flores Rivas" },
-  { banco: "Billetera Móvil", moneda: "",        numero: "8487-6610", titular: "Alejandro Uzziel Linares Flores" },
+  { banco: "", moneda: "",        numero: "", titular: "" },
 ];
 
 // ============================================================
