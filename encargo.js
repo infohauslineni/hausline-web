@@ -64,6 +64,12 @@
       .enc-btn.ghost:hover{background:rgba(255,255,255,.04);}
       .enc-err{margin-top:12px;color:#ff9a9a;font-size:13px;display:none;}
       .enc-hint{margin-top:12px;font-size:11px;color:#5f6863;line-height:1.5;text-align:center;}
+      .enc-total .v .tiempo{font-size:14px;font-weight:800;color:#f3f6f3;}
+      .enc-trust{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .enc-trust .it{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;color:#c3c9c5;padding:9px 10px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.02);}
+      .enc-trust .it .em{font-size:14px;flex:none;line-height:1;}
+      .enc-trust-tag{margin-top:9px;text-align:center;font-size:11px;color:#8a938d;line-height:1.5;}
+      .enc-trust-tag b{color:#b7ff00;font-weight:700;}
       .enc-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(183,255,0,.14);color:#b7ff00;display:grid;place-items:center;margin:6px auto 0;font-size:28px;}
       .enc-sol{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:20px;color:#b7ff00;text-align:center;margin-top:8px;letter-spacing:.06em;}
       .enc-cta-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a938d;margin:18px 0 8px;}
@@ -252,6 +258,17 @@
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
   function waNumero(){ return (typeof WHATSAPP_NUMERO!=="undefined"&&WHATSAPP_NUMERO) || (typeof WHATSAPP!=="undefined"&&WHATSAPP) || "50578995116"; }
   function envioCfg(){ return (typeof HAUSLINE_ENVIO!=="undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} }; }
+  // "Compra con confianza": tira breve de seguridad cerca del botón de confirmar.
+  function trustHTML(){
+    return `
+      <div class="enc-trust">
+        <div class="it"><span class="em">🔒</span>Compra segura</div>
+        <div class="it"><span class="em">🛡️</span>Pago protegido</div>
+        <div class="it"><span class="em">📦</span>Seguimiento del pedido</div>
+        <div class="it"><span class="em">💬</span>Soporte por WhatsApp</div>
+      </div>
+      <div class="enc-trust-tag"><b>Compra con confianza.</b> Te mantenemos informado desde la confirmación hasta la entrega de tu pedido.</div>`;
+  }
 
   // Pastilla de color por banco para la lista de cuentas de la pasarela.
   function badgeCuenta(c){
@@ -353,7 +370,8 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
-          <div class="enc-f"><label>Departamento *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          <div class="enc-f"><label>Dirección o punto de entrega</label><input name="direccion" autocomplete="street-address" placeholder="Barrio, calle y referencia"></div>
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
           <div class="enc-row">
             <div class="enc-f"><label>Talla / detalle</label><input name="talla" placeholder="Talla o N/A" value="${esc(opts.talla||"")}"></div>
@@ -367,9 +385,10 @@
           </div>
 
           <div class="enc-total" data-total>${totalHTML(t)}</div>
+          ${trustHTML()}
           <div class="enc-err" data-err></div>
-          <button class="enc-btn" type="submit">Crear encargo →</button>
-          <div class="enc-hint">Al crear el encargo te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
+          <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
+          <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
@@ -385,9 +404,13 @@
     function totalHTML(t){
       const parcial = pago === "50";
       const envioTxt = envio === "rapido" ? " (incluye envío rápido)" : "";
+      const saldo = Math.round((t.total - t.ahora) * 100) / 100;
       return `
         <div class="line"><div class="k">Total del pedido${esc(envioTxt)}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
-        ${parcial ? `<div class="line"><div class="k hl">A pagar ahora (50%)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>` : ``}`;
+        ${parcial ? `
+        <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
+        <div class="line"><div class="k">Saldo pendiente</div><div class="v"><span class="usd">${fmtUSD(saldo)}</span><div class="nio">≈ ${fmtNIO(cordobas(saldo))}</div></div></div>` : ``}
+        <div class="line"><div class="k">Tiempo estimado</div><div class="v"><span class="tiempo">${esc(cfg[envio].dias)}</span></div></div>`;
     }
 
     async function enviar(form){
@@ -396,6 +419,7 @@
       const nombreV = form.nombre.value.trim();
       const wa = form.whatsapp.value.trim();
       const departamento = form.departamento ? form.departamento.value : "";
+      const direccion = form.direccion ? form.direccion.value.trim() : "";
       const correo = form.correo.value.trim();
       const talla = form.talla.value.trim();
       cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1));
@@ -412,7 +436,7 @@
           method: "POST",
           headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer "+SUPABASE_ANON_KEY },
           body: JSON.stringify({
-            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: null,
+            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: direccion||null,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
             p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
             p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null
@@ -422,7 +446,7 @@
         const sol = await res.json();
         renderOk(String(sol), talla);
       }catch(ex){
-        btn.disabled = false; btn.innerHTML = "Crear encargo →";
+        btn.disabled = false; btn.innerHTML = "CONFIRMAR PEDIDO";
         mostrarErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo.");
       }
       function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }
@@ -455,8 +479,14 @@
     }
     function totalHTML(t){
       const parcial = pago==='50';
+      const saldo = Math.round((t.total - t.ahora) * 100) / 100;
+      const cfg = envioCfg();
+      const dias = items.some(it=>it.envio==='rapido') ? cfg.rapido.dias : cfg.estandar.dias;
       return `<div class="line"><div class="k">Total del pedido</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
-        ${parcial?`<div class="line"><div class="k hl">A pagar ahora (50%)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>`:``}`;
+        ${parcial?`
+        <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
+        <div class="line"><div class="k">Saldo pendiente</div><div class="v"><span class="usd">${fmtUSD(saldo)}</span><div class="nio">≈ ${fmtNIO(cordobas(saldo))}</div></div></div>`:``}
+        <div class="line"><div class="k">Tiempo estimado</div><div class="v"><span class="tiempo">${esc(dias)}</span></div></div>`;
     }
     function renderForm(){
       const lista = items.map(it => `<div class="enc-cart-it"><div><b>${esc(it.nombre)}</b><small>${[esc(it.marca), it.talla?('Talla '+esc(it.talla)):'', '×'+(it.cantidad||1)].filter(Boolean).join(' · ')}${it.envio==='rapido'?' · Rápido':''}</small></div><span class="mono">${fmtUSD((Number(it.precioUnitario)||0)*(it.cantidad||1)+recargoItem(it))}</span></div>`).join("");
@@ -466,7 +496,8 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
-          <div class="enc-f"><label>Departamento *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          <div class="enc-f"><label>Dirección o punto de entrega</label><input name="direccion" autocomplete="street-address" placeholder="Barrio, calle y referencia"></div>
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
           <div class="enc-opts" data-pago>
@@ -474,9 +505,10 @@
             <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
           </div>
           <div class="enc-total" data-total>${totalHTML(calc())}</div>
+          ${trustHTML()}
           <div class="enc-err" data-err></div>
-          <button class="enc-btn" type="submit">Crear encargo →</button>
-          <div class="enc-hint">Al crear el encargo te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
+          <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
+          <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
@@ -488,6 +520,7 @@
       function showErr(m){ err.textContent=m; err.style.display="block"; }
       const nombre = form.nombre.value.trim(), wa = form.whatsapp.value.trim(), correo = form.correo.value.trim();
       const departamento = form.departamento ? form.departamento.value : "";
+      const direccion = form.direccion ? form.direccion.value.trim() : "";
       if(nombre.length<2) return showErr("Escribe tu nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return showErr("Escribe un WhatsApp válido (solo números).");
       if(!departamento) return showErr("Elegí tu departamento.");
@@ -498,7 +531,7 @@
       try{
         for(const it of items){
           const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
-            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
+            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:direccion||null,
               p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
               p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null }) });
           if(!res.ok) throw new Error("HTTP "+res.status);
@@ -506,7 +539,7 @@
         }
         if(typeof vaciarCarrito==="function") vaciarCarrito();
         renderOk(sols);
-      }catch(ex){ btn.disabled=false; btn.innerHTML="Crear encargo →"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
+      }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
     function renderOk(sols){
       // El carrito crea varios encargos: los pasamos todos al checkout separados por coma.
