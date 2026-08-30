@@ -3,7 +3,7 @@
    (todo por encargo salvo lo marcado "Entrega inmediata", el cambio de moneda, y
    que el número solo es para consultas). El botón "Entendido, entrar" cierra el
    aviso y deja registrado el consentimiento de cookies (solo las necesarias:
-   NO activa rastreo). Se muestra una sola vez por navegador.
+   NO activa rastreo). Se muestra CENTRADO y en CADA carga de la página.
 
    localStorage:
    - "hausline_cookie_consent": "essential" (solo necesarias) | "all" (con rastreo)
@@ -13,7 +13,7 @@
   "use strict";
   var KEY_CONSENT = "hausline_cookie_consent";
   var KEY_AVISO = "hausline_aviso_bienvenida";
-  var TEL_CONSULTAS = "7899 5116"; // solo para consultas; los pedidos se hacen en la web
+  var TEL_ATENCION = "+505 7899 5116"; // atención al cliente; los pedidos se hacen en la web
 
   function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* modo privado */ } }
@@ -21,16 +21,15 @@
   // Puerta para analítica futura: solo activarla si devuelve true.
   window.hauslineTrackingAllowed = function () { return leer(KEY_CONSENT) === "all"; };
 
-  if (leer(KEY_AVISO) === "1") return; // ya vio el aviso: no mostramos nada
+  // El aviso se muestra en CADA carga de la página (aunque el visitante recargue o ya lo
+  // haya visto), no una sola vez. Igual guardamos la elección de cookies para hauslineTrackingAllowed().
 
   function inyectarEstilos() {
     if (document.getElementById("hl-aviso-style")) return;
     var css =
-      ".hl-aviso{position:fixed;inset:0;z-index:3000;display:flex;align-items:flex-end;justify-content:center;padding:0;background:rgba(3,4,3,.74);backdrop-filter:blur(5px);}" +
-      "@media(min-width:640px){.hl-aviso{align-items:center;padding:16px;}}" +
-      ".hl-aviso__box{width:100%;max-width:440px;max-height:92vh;overflow-y:auto;background:#0e120f;border:1px solid rgba(255,255,255,.09);border-radius:20px 20px 0 0;padding:22px 20px;color:#f3f6f3;box-shadow:0 24px 80px rgba(0,0,0,.55);animation:hl-up .28s ease;}" +
-      "@media(min-width:640px){.hl-aviso__box{border-radius:20px;}}" +
-      "@keyframes hl-up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}" +
+      ".hl-aviso{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(3,4,3,.74);backdrop-filter:blur(5px);}" +
+      ".hl-aviso__box{width:100%;max-width:440px;max-height:92vh;overflow-y:auto;background:#0e120f;border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:22px 20px;color:#f3f6f3;box-shadow:0 24px 80px rgba(0,0,0,.55);animation:hl-up .28s ease;}" +
+      "@keyframes hl-up{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:none;opacity:1}}" +
       ".hl-aviso__t{font-size:20px;font-weight:800;margin:0;letter-spacing:-.01em;}" +
       ".hl-aviso__lead{font-size:13px;color:#a5ada7;line-height:1.55;margin:8px 0 16px;}" +
       ".hl-aviso__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}" +
@@ -74,7 +73,7 @@
         li("💱", "Dólares o córdobas",
           'Podés ver los precios en <em>US$</em> o <em>C$</em> con el botón de moneda en la parte de arriba.') +
         li("🛒", "Los pedidos se hacen aquí",
-          'Encargá directamente desde la web. El número <span class="hl-aviso__tel">' + TEL_CONSULTAS + '</span> es <em>solo para consultas</em>.') +
+          'Encargá directamente desde la web. Atención al cliente: <span class="hl-aviso__tel">' + TEL_ATENCION + '</span>.') +
       '</ul>' +
       '<p class="hl-aviso__cookies">🍪 Usamos cookies necesarias para que el sitio funcione. <a href="/privacidad.html">Más información</a>.</p>' +
       '<button type="button" class="hl-aviso__btn">Entendido, entrar</button>';
