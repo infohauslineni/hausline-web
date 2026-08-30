@@ -390,7 +390,6 @@
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
           <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
-          <div class="enc-f"><label>Dirección o punto de entrega</label><input name="direccion" autocomplete="street-address" placeholder="Barrio, calle y referencia"></div>
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
           ${optinHTML()}
           <div class="enc-row">
@@ -439,7 +438,6 @@
       const nombreV = form.nombre.value.trim();
       const wa = form.whatsapp.value.trim();
       const departamento = form.departamento ? form.departamento.value : "";
-      const direccion = form.direccion ? form.direccion.value.trim() : "";
       const correo = form.correo.value.trim();
       const talla = form.talla.value.trim();
       cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1));
@@ -456,7 +454,7 @@
           method: "POST",
           headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer "+SUPABASE_ANON_KEY },
           body: JSON.stringify({
-            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: direccion||null,
+            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: null,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
             p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
             p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null
@@ -518,7 +516,6 @@
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
           <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
-          <div class="enc-f"><label>Dirección o punto de entrega</label><input name="direccion" autocomplete="street-address" placeholder="Barrio, calle y referencia"></div>
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
           ${optinHTML()}
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
@@ -542,7 +539,6 @@
       function showErr(m){ err.textContent=m; err.style.display="block"; }
       const nombre = form.nombre.value.trim(), wa = form.whatsapp.value.trim(), correo = form.correo.value.trim();
       const departamento = form.departamento ? form.departamento.value : "";
-      const direccion = form.direccion ? form.direccion.value.trim() : "";
       if(nombre.length<2) return showErr("Escribe tu nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return showErr("Escribe un WhatsApp válido (solo números).");
       if(!departamento) return showErr("Elegí tu departamento.");
@@ -553,7 +549,7 @@
       try{
         for(const it of items){
           const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
-            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:direccion||null,
+            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
               p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
               p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null }) });
           if(!res.ok) throw new Error("HTTP "+res.status);
