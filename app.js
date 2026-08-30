@@ -1321,6 +1321,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   renderGaleria(true);
   renderSelectores(producto);
   renderAcordeon(producto);
+  if(typeof window.renderResenasProducto === "function") window.renderResenasProducto(producto.codigo);
   actualizarFavModal();
   $("#cantidadValor").textContent = "1";
 

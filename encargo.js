@@ -64,6 +64,14 @@
       .enc-btn.ghost:hover{background:rgba(255,255,255,.04);}
       .enc-err{margin-top:12px;color:#ff9a9a;font-size:13px;display:none;}
       .enc-hint{margin-top:12px;font-size:11px;color:#5f6863;line-height:1.5;text-align:center;}
+      .enc-total .v .tiempo{font-size:14px;font-weight:800;color:#f3f6f3;}
+      .enc-trust{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .enc-trust .it{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;color:#c3c9c5;padding:9px 10px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.02);}
+      .enc-trust .it .em{font-size:14px;flex:none;line-height:1;}
+      .enc-trust-tag{margin-top:9px;text-align:center;font-size:11px;color:#8a938d;line-height:1.5;}
+      .enc-trust-tag b{color:#b7ff00;font-weight:700;}
+      .enc-optin{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:12px;color:#c3c9c5;line-height:1.4;cursor:pointer;}
+      .enc-optin input{width:16px;height:16px;margin-top:1px;accent-color:#b7ff00;flex:none;}
       .enc-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(183,255,0,.14);color:#b7ff00;display:grid;place-items:center;margin:6px auto 0;font-size:28px;}
       .enc-sol{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:20px;color:#b7ff00;text-align:center;margin-top:8px;letter-spacing:.06em;}
       .enc-cta-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a938d;margin:18px 0 8px;}
@@ -130,6 +138,78 @@
     document.head.appendChild(s);
   }
 
+  // ── Animación de "Pedido confirmado" ─────────────────────────────────────
+  // Al crear el encargo, antes de mandar al checkout, se ve una camioneta de reparto
+  // HAUSLINE que cruza la pantalla llevando el paquete. Es solo visual: el redirect
+  // (cb) está GARANTIZADO por un timer + una red de seguridad, así que aunque la
+  // animación no corra (navegador viejo, etc.) el pedido siempre avanza al pago.
+  function inyectarEstilosAnim(){
+    if(document.getElementById("pa-css")) return;
+    const st = document.createElement("style");
+    st.id = "pa-css";
+    st.textContent = `
+      .pa-fondo{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;padding:24px;background:rgba(3,5,3,.94);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:pa-fade .3s ease;font-family:inherit;}
+      @keyframes pa-fade{from{opacity:0}to{opacity:1}}
+      .pa-wrap{width:100%;max-width:440px;text-align:center;}
+      .pa-stage{position:relative;height:156px;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,#141911,#0a0d08);border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 70px rgba(0,0,0,.55);}
+      .pa-road{position:absolute;left:0;right:0;bottom:0;height:44px;background:#191d15;border-top:2px solid rgba(255,255,255,.07);}
+      .pa-lane{position:absolute;left:-48px;right:-48px;top:20px;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(183,255,0,.55) 0 24px,transparent 24px 48px);animation:pa-lane .45s linear infinite;}
+      @keyframes pa-lane{to{transform:translateX(-48px)}}
+      .pa-van{position:absolute;bottom:24px;left:0;width:158px;height:76px;animation:pa-drive 2.6s cubic-bezier(.45,0,.15,1) forwards;}
+      @keyframes pa-drive{0%{transform:translateX(-180px)}40%{transform:translateX(120px)}60%{transform:translateX(120px)}100%{transform:translateX(560px)}}
+      .pa-wheel{transform-box:fill-box;transform-origin:center;animation:pa-spin .42s linear infinite;}
+      @keyframes pa-spin{to{transform:rotate(360deg)}}
+      .pa-title{margin-top:24px;font-size:22px;font-weight:800;letter-spacing:-.01em;color:#fff;opacity:0;transform:translateY(8px);animation:pa-pop .45s ease .95s forwards;}
+      .pa-title b{color:#b7ff00;}
+      .pa-sub{margin-top:7px;font-size:13.5px;line-height:1.4;color:#9aa39a;opacity:0;transform:translateY(8px);animation:pa-pop .45s ease 1.2s forwards;}
+      @keyframes pa-pop{to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion: reduce){
+        .pa-van{animation:none;left:50%;transform:translateX(-50%);}
+        .pa-wheel,.pa-lane{animation:none;}
+        .pa-title,.pa-sub{animation-delay:.05s;}
+      }
+    `;
+    document.head.appendChild(st);
+  }
+  function animacionPedido(cb){
+    let hecho = false;
+    const go = () => { if(hecho) return; hecho = true; try{ cb(); }catch(_){} };
+    try{
+      inyectarEstilosAnim();
+      const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const ov = document.createElement("div");
+      ov.className = "pa-fondo";
+      ov.innerHTML = `
+        <div class="pa-wrap">
+          <div class="pa-stage">
+            <div class="pa-road"><div class="pa-lane"></div></div>
+            <svg class="pa-van" viewBox="0 0 158 76" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <ellipse cx="72" cy="70" rx="66" ry="5" fill="rgba(0,0,0,.35)"/>
+              <g><rect x="26" y="4" width="26" height="14" rx="2" fill="#d8a24a"/><rect x="37.5" y="4" width="3" height="14" fill="#b6853a"/><rect x="26" y="9.8" width="26" height="2.4" fill="#b6853a"/></g>
+              <rect x="4" y="20" width="96" height="34" rx="6" fill="#f4f6f1"/>
+              <rect x="4" y="44" width="96" height="8" fill="#b7ff00"/>
+              <text x="12" y="37" font-family="Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="1" fill="#10130e">HAUSLINE</text>
+              <path d="M100 26 h30 a6 6 0 0 1 5 3 l7 12 a4 4 0 0 1 .6 2 v9 a2 2 0 0 1 -2 2 h-40.6 a2 2 0 0 1 -2 -2 V28 a2 2 0 0 1 2 -2 z" fill="#f4f6f1"/>
+              <path d="M129 30 h4 a3 3 0 0 1 2.5 1.4 l5.2 8.6 h-11.7 z" fill="#2b322a"/>
+              <rect x="141" y="42" width="4" height="4" rx="1" fill="#b7ff00"/>
+              <g class="pa-wheel"><circle cx="30" cy="56" r="10" fill="#14180f"/><path d="M30 47 V65 M21 56 H39" stroke="#39412f" stroke-width="1.6" stroke-linecap="round"/><circle cx="30" cy="56" r="3.4" fill="#b7ff00"/></g>
+              <g class="pa-wheel"><circle cx="112" cy="56" r="10" fill="#14180f"/><path d="M112 47 V65 M103 56 H121" stroke="#39412f" stroke-width="1.6" stroke-linecap="round"/><circle cx="112" cy="56" r="3.4" fill="#b7ff00"/></g>
+            </svg>
+          </div>
+          <div class="pa-title">¡Pedido confirmado! <b>✓</b></div>
+          <div class="pa-sub">Preparando tu envío — te llevamos al pago seguro…</div>
+        </div>`;
+      document.body.appendChild(ov);
+      document.body.style.overflow = "hidden";
+      const espera = reduce ? 950 : 2600;
+      setTimeout(go, espera);
+      setTimeout(go, espera + 1600); // red de seguridad: el pedido siempre avanza
+    }catch(_){
+      // Si algo falla al montar la animación, redirige de una para no bloquear el pedido.
+      go();
+    }
+  }
+
   let fondo = null, card = null;
   function ensure(){
     if(fondo) return;
@@ -180,6 +260,17 @@
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
   function waNumero(){ return (typeof WHATSAPP_NUMERO!=="undefined"&&WHATSAPP_NUMERO) || (typeof WHATSAPP!=="undefined"&&WHATSAPP) || "50578995116"; }
   function envioCfg(){ return (typeof HAUSLINE_ENVIO!=="undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} }; }
+  // "Compra con confianza": tira breve de seguridad cerca del botón de confirmar.
+  function trustHTML(){
+    return `
+      <div class="enc-trust">
+        <div class="it"><span class="em">🔒</span>Compra segura</div>
+        <div class="it"><span class="em">🛡️</span>Pago protegido</div>
+        <div class="it"><span class="em">📦</span>Seguimiento del pedido</div>
+        <div class="it"><span class="em">💬</span>Soporte por WhatsApp</div>
+      </div>
+      <div class="enc-trust-tag"><b>Compra con confianza.</b> Te mantenemos informado desde la confirmación hasta la entrega de tu pedido.</div>`;
+  }
 
   // Pastilla de color por banco para la lista de cuentas de la pasarela.
   function badgeCuenta(c){
@@ -247,6 +338,35 @@
     }));
   }
 
+  // Casilla de consentimiento para email marketing (opt-in). Va junto al correo.
+  function optinHTML(){
+    return `<label class="enc-optin"><input type="checkbox" name="optin" checked> Quiero recibir novedades y ofertas de HAUSLINE por correo.</label>`;
+  }
+  // Guarda el/los códigos del pedido en el navegador para que el cliente pueda VOLVER
+  // a su pedido (ver cuentas / estado) aunque cierre la página. Lo lee mipedido.js.
+  function recordarPedido(codigos, producto){
+    try{
+      var arr = JSON.parse(localStorage.getItem("hausline_pedidos") || "[]");
+      (Array.isArray(codigos) ? codigos : [codigos]).forEach(function(c){
+        if(c) arr.push({ codigo: String(c), producto: producto || "", ts: Date.now() });
+      });
+      localStorage.setItem("hausline_pedidos", JSON.stringify(arr.slice(-6)));
+    }catch(e){}
+  }
+
+  // Alta en la lista de suscriptores (con consentimiento). Fire-and-forget: nunca
+  // bloquea ni rompe la creación del encargo si falla.
+  function suscribir(correo, nombre, optin){
+    if(!optin || !correo) return;
+    try{
+      fetch(SUPABASE_URL + "rpc/suscribir_publico", {
+        method: "POST",
+        headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY },
+        body: JSON.stringify({ p_correo: correo, p_nombre: nombre || null, p_fuente: "checkout" })
+      }).catch(function(){});
+    }catch(e){}
+  }
+
   // producto: objeto del catálogo. opts: { talla, color, cantidad, precio } (opcional).
   window.abrirEncargo = function(producto, opts){
     if(!producto) return;
@@ -281,8 +401,9 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
-          <div class="enc-f"><label>Departamento *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
+          ${optinHTML()}
           <div class="enc-row">
             <div class="enc-f"><label>Talla / detalle</label><input name="talla" placeholder="Talla o N/A" value="${esc(opts.talla||"")}"></div>
             <div class="enc-f" style="max-width:110px"><label>Cantidad</label><input name="cantidad" type="number" min="1" max="20" value="${cant}"></div>
@@ -295,9 +416,10 @@
           </div>
 
           <div class="enc-total" data-total>${totalHTML(t)}</div>
+          ${trustHTML()}
           <div class="enc-err" data-err></div>
-          <button class="enc-btn" type="submit">Crear encargo →</button>
-          <div class="enc-hint">Al crear el encargo te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
+          <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
+          <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
@@ -313,9 +435,13 @@
     function totalHTML(t){
       const parcial = pago === "50";
       const envioTxt = envio === "rapido" ? " (incluye envío rápido)" : "";
+      const saldo = Math.round((t.total - t.ahora) * 100) / 100;
       return `
         <div class="line"><div class="k">Total del pedido${esc(envioTxt)}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
-        ${parcial ? `<div class="line"><div class="k hl">A pagar ahora (50%)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>` : ``}`;
+        ${parcial ? `
+        <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
+        <div class="line"><div class="k">Saldo pendiente</div><div class="v"><span class="usd">${fmtUSD(saldo)}</span><div class="nio">≈ ${fmtNIO(cordobas(saldo))}</div></div></div>` : ``}
+        <div class="line"><div class="k">Tiempo estimado</div><div class="v"><span class="tiempo">${esc(cfg[envio].dias)}</span></div></div>`;
     }
 
     async function enviar(form){
@@ -348,9 +474,11 @@
         });
         if(!res.ok){ throw new Error("HTTP "+res.status); }
         const sol = await res.json();
+        suscribir(correo, nombreV, form.optin && form.optin.checked);
+        recordarPedido(String(sol), nombre);
         renderOk(String(sol), talla);
       }catch(ex){
-        btn.disabled = false; btn.innerHTML = "Crear encargo →";
+        btn.disabled = false; btn.innerHTML = "CONFIRMAR PEDIDO";
         mostrarErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo.");
       }
       function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }
@@ -359,8 +487,9 @@
     function renderOk(sol){
       // Nuevo flujo: en vez de mostrar un modal de pago, mandamos al checkout dedicado
       // (/checkout/?c=CODE), una página completa de pago. El código va en la URL y la
-      // página lee el encargo desde la base por su código.
-      window.location.href = "/checkout/?c=" + encodeURIComponent(sol);
+      // página lee el encargo desde la base por su código. Antes del redirect corre la
+      // animación de "Pedido confirmado" (la camioneta); el redirect está garantizado.
+      animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sol); });
     }
   };
 
@@ -382,8 +511,14 @@
     }
     function totalHTML(t){
       const parcial = pago==='50';
+      const saldo = Math.round((t.total - t.ahora) * 100) / 100;
+      const cfg = envioCfg();
+      const dias = items.some(it=>it.envio==='rapido') ? cfg.rapido.dias : cfg.estandar.dias;
       return `<div class="line"><div class="k">Total del pedido</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
-        ${parcial?`<div class="line"><div class="k hl">A pagar ahora (50%)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>`:``}`;
+        ${parcial?`
+        <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
+        <div class="line"><div class="k">Saldo pendiente</div><div class="v"><span class="usd">${fmtUSD(saldo)}</span><div class="nio">≈ ${fmtNIO(cordobas(saldo))}</div></div></div>`:``}
+        <div class="line"><div class="k">Tiempo estimado</div><div class="v"><span class="tiempo">${esc(dias)}</span></div></div>`;
     }
     function renderForm(){
       const lista = items.map(it => `<div class="enc-cart-it"><div><b>${esc(it.nombre)}</b><small>${[esc(it.marca), it.talla?('Talla '+esc(it.talla)):'', '×'+(it.cantidad||1)].filter(Boolean).join(' · ')}${it.envio==='rapido'?' · Rápido':''}</small></div><span class="mono">${fmtUSD((Number(it.precioUnitario)||0)*(it.cantidad||1)+recargoItem(it))}</span></div>`).join("");
@@ -393,17 +528,19 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
-          <div class="enc-f"><label>Departamento *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
+          ${optinHTML()}
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
           <div class="enc-opts" data-pago>
             <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
             <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
           </div>
           <div class="enc-total" data-total>${totalHTML(calc())}</div>
+          ${trustHTML()}
           <div class="enc-err" data-err></div>
-          <button class="enc-btn" type="submit">Crear encargo →</button>
-          <div class="enc-hint">Al crear el encargo te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
+          <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
+          <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
@@ -432,12 +569,15 @@
           sols.push(String(await res.json()));
         }
         if(typeof vaciarCarrito==="function") vaciarCarrito();
+        suscribir(correo, nombre, form.optin && form.optin.checked);
+        recordarPedido(sols, items.length === 1 ? items[0].nombre : "Tu carrito");
         renderOk(sols);
-      }catch(ex){ btn.disabled=false; btn.innerHTML="Crear encargo →"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
+      }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
     function renderOk(sols){
       // El carrito crea varios encargos: los pasamos todos al checkout separados por coma.
-      window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(","));
+      // Antes del redirect corre la animación de "Pedido confirmado" (el redirect va seguro).
+      animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(",")); });
     }
   };
 })();

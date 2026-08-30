@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <base href="/">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co; font-src 'self' data:; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex,follow">
+  <title>Deja tu reseña | HAUSLINE</title>
+  <meta name="theme-color" content="#050505">
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{--neg:#050505;--verde:#b7ff00;--linea:rgba(255,255,255,.1);}
+    body{background:#050505;color:#f3f6f3;font-family:'Inter','SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;-webkit-text-size-adjust:100%;}
+    .caja{width:100%;max-width:440px;background:#0e120f;border:1px solid var(--linea);border-radius:20px;padding:28px 24px;}
+    .logo{text-align:center;font-size:22px;font-weight:800;letter-spacing:5px;margin-bottom:4px;}
+    .logo span{color:var(--verde);}
+    .sub{text-align:center;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8a938d;margin-bottom:22px;}
+    h1{font-size:20px;font-weight:800;text-align:center;letter-spacing:-.01em;}
+    .cod{text-align:center;font-size:12px;color:#8a938d;margin-top:6px;margin-bottom:20px;}
+    .estrellas-sel{display:flex;justify-content:center;gap:8px;margin:0 0 22px;}
+    .estrellas-sel button{background:none;border:0;cursor:pointer;padding:2px;line-height:0;}
+    .estrellas-sel svg{width:38px;height:38px;fill:none;stroke:#5f6863;stroke-width:1.5;transition:.12s;}
+    .estrellas-sel button.on svg{fill:var(--verde);stroke:var(--verde);}
+    .campo{margin-bottom:14px;}
+    .campo label{display:block;font-size:12px;font-weight:600;color:#c3c9c5;margin-bottom:5px;}
+    .campo input,.campo textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--linea);border-radius:10px;padding:12px;color:#fff;font-size:15px;font-family:inherit;outline:none;resize:vertical;}
+    .campo input:focus,.campo textarea:focus{border-color:rgba(183,255,0,.5);}
+    .btn{width:100%;margin-top:8px;border:0;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;background:var(--verde);color:#050705;}
+    .btn:disabled{opacity:.55;cursor:default;}
+    .err{color:#ff9a9a;font-size:13px;margin-top:10px;display:none;text-align:center;}
+    .ok{text-align:center;padding:14px 0;}
+    .ok .ic{width:60px;height:60px;border-radius:50%;background:rgba(183,255,0,.14);color:var(--verde);display:grid;place-items:center;margin:0 auto 14px;font-size:30px;}
+    .ok h2{font-size:19px;font-weight:800;margin-bottom:8px;}
+    .ok p{font-size:14px;color:#c3c9c5;line-height:1.6;}
+    .volver{display:block;text-align:center;margin-top:18px;font-size:13px;color:#8a938d;text-decoration:none;}
+    .volver:hover{color:#fff;}
+    .hint{font-size:11px;color:#5f6863;text-align:center;margin-top:14px;line-height:1.5;}
+  </style>
+</head>
+<body>
+  <div class="caja" id="caja">
+    <div class="logo">HAUS<span>LINE</span></div>
+    <div class="sub">Tu reseña</div>
+
+    <form id="form">
+      <h1>¿Cómo estuvo tu experiencia?</h1>
+      <p class="cod" id="cod"></p>
+
+      <div class="estrellas-sel" id="estrellas" role="radiogroup" aria-label="Calificación">
+        <button type="button" data-v="1" aria-label="1 estrella"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="2" aria-label="2 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="3" aria-label="3 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="4" aria-label="4 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="5" aria-label="5 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+      </div>
+
+      <div class="campo">
+        <label for="nombre">Tu nombre</label>
+        <input id="nombre" type="text" autocomplete="name" placeholder="Ej. María G." maxlength="60" required>
+      </div>
+      <div class="campo">
+        <label for="comentario">Tu comentario (opcional)</label>
+        <textarea id="comentario" rows="4" placeholder="Contanos cómo te fue con tu pedido…" maxlength="500"></textarea>
+      </div>
+
+      <button class="btn" type="submit" id="enviar">Enviar reseña</button>
+      <div class="err" id="err"></div>
+      <p class="hint">Tu reseña se publica tras una breve revisión. ¡Gracias por ayudar a otros clientes!</p>
+    </form>
+  </div>
+
+  <script src="config.js?v=20260724"></script>
+  <script src="resena/resena.js?v=20260829"></script>
+</body>
+</html>
