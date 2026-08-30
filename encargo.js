@@ -342,6 +342,18 @@
   function optinHTML(){
     return `<label class="enc-optin"><input type="checkbox" name="optin" checked> Quiero recibir novedades y ofertas de HAUSLINE por correo.</label>`;
   }
+  // Guarda el/los códigos del pedido en el navegador para que el cliente pueda VOLVER
+  // a su pedido (ver cuentas / estado) aunque cierre la página. Lo lee mipedido.js.
+  function recordarPedido(codigos, producto){
+    try{
+      var arr = JSON.parse(localStorage.getItem("hausline_pedidos") || "[]");
+      (Array.isArray(codigos) ? codigos : [codigos]).forEach(function(c){
+        if(c) arr.push({ codigo: String(c), producto: producto || "", ts: Date.now() });
+      });
+      localStorage.setItem("hausline_pedidos", JSON.stringify(arr.slice(-6)));
+    }catch(e){}
+  }
+
   // Alta en la lista de suscriptores (con consentimiento). Fire-and-forget: nunca
   // bloquea ni rompe la creación del encargo si falla.
   function suscribir(correo, nombre, optin){
@@ -463,6 +475,7 @@
         if(!res.ok){ throw new Error("HTTP "+res.status); }
         const sol = await res.json();
         suscribir(correo, nombreV, form.optin && form.optin.checked);
+        recordarPedido(String(sol), nombre);
         renderOk(String(sol), talla);
       }catch(ex){
         btn.disabled = false; btn.innerHTML = "CONFIRMAR PEDIDO";
@@ -557,6 +570,7 @@
         }
         if(typeof vaciarCarrito==="function") vaciarCarrito();
         suscribir(correo, nombre, form.optin && form.optin.checked);
+        recordarPedido(sols, items.length === 1 ? items[0].nombre : "Tu carrito");
         renderOk(sols);
       }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
