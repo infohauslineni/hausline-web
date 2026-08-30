@@ -130,6 +130,78 @@
     document.head.appendChild(s);
   }
 
+  // ── Animación de "Pedido confirmado" ─────────────────────────────────────
+  // Al crear el encargo, antes de mandar al checkout, se ve una camioneta de reparto
+  // HAUSLINE que cruza la pantalla llevando el paquete. Es solo visual: el redirect
+  // (cb) está GARANTIZADO por un timer + una red de seguridad, así que aunque la
+  // animación no corra (navegador viejo, etc.) el pedido siempre avanza al pago.
+  function inyectarEstilosAnim(){
+    if(document.getElementById("pa-css")) return;
+    const st = document.createElement("style");
+    st.id = "pa-css";
+    st.textContent = `
+      .pa-fondo{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;padding:24px;background:rgba(3,5,3,.94);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:pa-fade .3s ease;font-family:inherit;}
+      @keyframes pa-fade{from{opacity:0}to{opacity:1}}
+      .pa-wrap{width:100%;max-width:440px;text-align:center;}
+      .pa-stage{position:relative;height:156px;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,#141911,#0a0d08);border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 70px rgba(0,0,0,.55);}
+      .pa-road{position:absolute;left:0;right:0;bottom:0;height:44px;background:#191d15;border-top:2px solid rgba(255,255,255,.07);}
+      .pa-lane{position:absolute;left:-48px;right:-48px;top:20px;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(183,255,0,.55) 0 24px,transparent 24px 48px);animation:pa-lane .45s linear infinite;}
+      @keyframes pa-lane{to{transform:translateX(-48px)}}
+      .pa-van{position:absolute;bottom:24px;left:0;width:158px;height:76px;animation:pa-drive 2.6s cubic-bezier(.45,0,.15,1) forwards;}
+      @keyframes pa-drive{0%{transform:translateX(-180px)}40%{transform:translateX(120px)}60%{transform:translateX(120px)}100%{transform:translateX(560px)}}
+      .pa-wheel{transform-box:fill-box;transform-origin:center;animation:pa-spin .42s linear infinite;}
+      @keyframes pa-spin{to{transform:rotate(360deg)}}
+      .pa-title{margin-top:24px;font-size:22px;font-weight:800;letter-spacing:-.01em;color:#fff;opacity:0;transform:translateY(8px);animation:pa-pop .45s ease .95s forwards;}
+      .pa-title b{color:#b7ff00;}
+      .pa-sub{margin-top:7px;font-size:13.5px;line-height:1.4;color:#9aa39a;opacity:0;transform:translateY(8px);animation:pa-pop .45s ease 1.2s forwards;}
+      @keyframes pa-pop{to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion: reduce){
+        .pa-van{animation:none;left:50%;transform:translateX(-50%);}
+        .pa-wheel,.pa-lane{animation:none;}
+        .pa-title,.pa-sub{animation-delay:.05s;}
+      }
+    `;
+    document.head.appendChild(st);
+  }
+  function animacionPedido(cb){
+    let hecho = false;
+    const go = () => { if(hecho) return; hecho = true; try{ cb(); }catch(_){} };
+    try{
+      inyectarEstilosAnim();
+      const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const ov = document.createElement("div");
+      ov.className = "pa-fondo";
+      ov.innerHTML = `
+        <div class="pa-wrap">
+          <div class="pa-stage">
+            <div class="pa-road"><div class="pa-lane"></div></div>
+            <svg class="pa-van" viewBox="0 0 158 76" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <ellipse cx="72" cy="70" rx="66" ry="5" fill="rgba(0,0,0,.35)"/>
+              <g><rect x="26" y="4" width="26" height="14" rx="2" fill="#d8a24a"/><rect x="37.5" y="4" width="3" height="14" fill="#b6853a"/><rect x="26" y="9.8" width="26" height="2.4" fill="#b6853a"/></g>
+              <rect x="4" y="20" width="96" height="34" rx="6" fill="#f4f6f1"/>
+              <rect x="4" y="44" width="96" height="8" fill="#b7ff00"/>
+              <text x="12" y="37" font-family="Arial, sans-serif" font-size="11" font-weight="800" letter-spacing="1" fill="#10130e">HAUSLINE</text>
+              <path d="M100 26 h30 a6 6 0 0 1 5 3 l7 12 a4 4 0 0 1 .6 2 v9 a2 2 0 0 1 -2 2 h-40.6 a2 2 0 0 1 -2 -2 V28 a2 2 0 0 1 2 -2 z" fill="#f4f6f1"/>
+              <path d="M129 30 h4 a3 3 0 0 1 2.5 1.4 l5.2 8.6 h-11.7 z" fill="#2b322a"/>
+              <rect x="141" y="42" width="4" height="4" rx="1" fill="#b7ff00"/>
+              <g class="pa-wheel"><circle cx="30" cy="56" r="10" fill="#14180f"/><path d="M30 47 V65 M21 56 H39" stroke="#39412f" stroke-width="1.6" stroke-linecap="round"/><circle cx="30" cy="56" r="3.4" fill="#b7ff00"/></g>
+              <g class="pa-wheel"><circle cx="112" cy="56" r="10" fill="#14180f"/><path d="M112 47 V65 M103 56 H121" stroke="#39412f" stroke-width="1.6" stroke-linecap="round"/><circle cx="112" cy="56" r="3.4" fill="#b7ff00"/></g>
+            </svg>
+          </div>
+          <div class="pa-title">¡Pedido confirmado! <b>✓</b></div>
+          <div class="pa-sub">Preparando tu envío — te llevamos al pago seguro…</div>
+        </div>`;
+      document.body.appendChild(ov);
+      document.body.style.overflow = "hidden";
+      const espera = reduce ? 950 : 2600;
+      setTimeout(go, espera);
+      setTimeout(go, espera + 1600); // red de seguridad: el pedido siempre avanza
+    }catch(_){
+      // Si algo falla al montar la animación, redirige de una para no bloquear el pedido.
+      go();
+    }
+  }
+
   let fondo = null, card = null;
   function ensure(){
     if(fondo) return;
@@ -359,8 +431,9 @@
     function renderOk(sol){
       // Nuevo flujo: en vez de mostrar un modal de pago, mandamos al checkout dedicado
       // (/checkout/?c=CODE), una página completa de pago. El código va en la URL y la
-      // página lee el encargo desde la base por su código.
-      window.location.href = "/checkout/?c=" + encodeURIComponent(sol);
+      // página lee el encargo desde la base por su código. Antes del redirect corre la
+      // animación de "Pedido confirmado" (la camioneta); el redirect está garantizado.
+      animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sol); });
     }
   };
 
@@ -437,7 +510,8 @@
     }
     function renderOk(sols){
       // El carrito crea varios encargos: los pasamos todos al checkout separados por coma.
-      window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(","));
+      // Antes del redirect corre la animación de "Pedido confirmado" (el redirect va seguro).
+      animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(",")); });
     }
   };
 })();
