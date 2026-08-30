@@ -221,6 +221,7 @@ function crearCard(producto, modoInmediata){
             : `<button class="card-btn card-btn-order" type="button" data-encargar="${esc(producto.codigo)}" aria-label="Encargar por WhatsApp">Encargar</button>
           <button class="card-btn card-btn-cart" type="button" data-agregar="${esc(producto.codigo)}" aria-label="Añadir al carrito">Añadir</button>`}
         </div>
+        <div class="card-rating" data-rating="${esc(producto.codigo)}"></div>
       </div>
     </article>
   `;

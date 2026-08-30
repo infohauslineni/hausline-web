@@ -37,6 +37,11 @@
       .resenas-home-prom{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
       .resenas-home-prom .num{font-size:20px;font-weight:900;}
       .resenas-home-prom .cnt{font-size:13px;color:#8a938d;}
+      /* Estrellas en la tarjeta del producto (debajo de los botones) */
+      .card-rating{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;}
+      .card-rating:empty{display:none;}
+      .card-rating .estrellas svg{width:13px;height:13px;}
+      .card-rating .cnt{font-size:11px;color:#8a938d;font-weight:600;}
     `;
     document.head.appendChild(s);
   }
@@ -126,10 +131,42 @@
     sec.hidden = false;
   }
 
-  // Arranca la sección del inicio cuando el DOM está listo.
+  // ── Estrellas en las tarjetas del catálogo (debajo de Encargar/Añadir) ──────
+  var ratingsMap = null;
+  var fillProgramado = false;
+  function estrellasMiniHTML(prom, total){
+    return estrellasHTML(prom) + '<span class="cnt">(' + (Number(total) || 0) + ')</span>';
+  }
+  function llenarTarjetas(){
+    if(!ratingsMap) return;
+    document.querySelectorAll(".card-rating:not([data-done])").forEach(function(el){
+      el.setAttribute("data-done", "1");
+      var code = (el.getAttribute("data-rating") || "").toUpperCase();
+      var r = ratingsMap[code];
+      if(r && r.total > 0) el.innerHTML = estrellasMiniHTML(r.promedio, r.total);
+    });
+  }
+  function programarLlenado(){
+    if(fillProgramado) return;
+    fillProgramado = true;
+    requestAnimationFrame(function(){ fillProgramado = false; llenarTarjetas(); });
+  }
+  async function iniciarEstrellasTarjetas(){
+    inyectarEstilos();
+    var datos = await rpc("resenas_resumen_todos", {});
+    if(!Array.isArray(datos)) return; // sin reseñas / migración sin aplicar: no pasa nada
+    ratingsMap = {};
+    datos.forEach(function(d){ if(d && d.producto_codigo) ratingsMap[String(d.producto_codigo).toUpperCase()] = { promedio: d.promedio, total: d.total }; });
+    llenarTarjetas();
+    // Las tarjetas se re-renderizan al navegar: un observer llena las nuevas.
+    try{ new MutationObserver(programarLlenado).observe(document.body, { childList: true, subtree: true }); }catch(e){}
+  }
+
+  // Arranca cuando el DOM está listo.
+  function iniciarTodo(){ renderResenasHome(); iniciarEstrellasTarjetas(); }
   if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", renderResenasHome);
+    document.addEventListener("DOMContentLoaded", iniciarTodo);
   } else {
-    renderResenasHome();
+    iniciarTodo();
   }
 })();
