@@ -85,9 +85,10 @@
   <script defer src="favoritos.js?v=20260724"></script>
   <script defer src="carrito.js?v=20260724"></script>
   <script defer src="supabase-views.js?v=20260724"></script>
-  <script defer src="app.js?v=20260826b"></script>
-  <script defer src="encargo.js?v=20260829"></script>
+  <script defer src="app.js?v=20260829"></script>
+  <script defer src="encargo.js?v=20260829b"></script>
   <script defer src="catalogo-remoto.js?v=20260816"></script>
+  <script defer src="resenas.js?v=20260829"></script>
   <script defer src="cookies.js?v=20260827"></script>
 </head>
 
@@ -298,6 +299,17 @@
         <h2 id="tit-vistos">Vistos recientemente</h2>
       </div>
       <div class="fila" id="filaVistos"></div>
+    </section>
+
+    <!-- Reseñas de clientes (se muestra sola si hay reseñas aprobadas) -->
+    <section class="seccion resenas-home" id="seccionResenas" aria-labelledby="tit-resenas" hidden>
+      <div class="seccion-cabecera">
+        <div>
+          <h2 id="tit-resenas">Clientes que ya compraron con HAUSLINE</h2>
+          <p class="seccion-sub" id="resenasResumen"></p>
+        </div>
+      </div>
+      <div class="fila" id="filaResenas"></div>
     </section>
 
     <!-- Clientes -->
@@ -672,6 +684,9 @@
         <button class="btn-secundario" id="btnAgregarCarrito" type="button">Agregar al carrito</button>
 
         <div class="acordeon" id="acordeon"></div>
+
+        <!-- Reseñas del producto (se llenan solas si hay aprobadas) -->
+        <div id="modalResenas"></div>
       </div>
     </div>
 

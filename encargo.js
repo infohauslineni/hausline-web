@@ -70,6 +70,8 @@
       .enc-trust .it .em{font-size:14px;flex:none;line-height:1;}
       .enc-trust-tag{margin-top:9px;text-align:center;font-size:11px;color:#8a938d;line-height:1.5;}
       .enc-trust-tag b{color:#b7ff00;font-weight:700;}
+      .enc-optin{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:12px;color:#c3c9c5;line-height:1.4;cursor:pointer;}
+      .enc-optin input{width:16px;height:16px;margin-top:1px;accent-color:#b7ff00;flex:none;}
       .enc-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(183,255,0,.14);color:#b7ff00;display:grid;place-items:center;margin:6px auto 0;font-size:28px;}
       .enc-sol{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:20px;color:#b7ff00;text-align:center;margin-top:8px;letter-spacing:.06em;}
       .enc-cta-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a938d;margin:18px 0 8px;}
@@ -336,6 +338,23 @@
     }));
   }
 
+  // Casilla de consentimiento para email marketing (opt-in). Va junto al correo.
+  function optinHTML(){
+    return `<label class="enc-optin"><input type="checkbox" name="optin" checked> Quiero recibir novedades y ofertas de HAUSLINE por correo.</label>`;
+  }
+  // Alta en la lista de suscriptores (con consentimiento). Fire-and-forget: nunca
+  // bloquea ni rompe la creación del encargo si falla.
+  function suscribir(correo, nombre, optin){
+    if(!optin || !correo) return;
+    try{
+      fetch(SUPABASE_URL + "rpc/suscribir_publico", {
+        method: "POST",
+        headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY },
+        body: JSON.stringify({ p_correo: correo, p_nombre: nombre || null, p_fuente: "checkout" })
+      }).catch(function(){});
+    }catch(e){}
+  }
+
   // producto: objeto del catálogo. opts: { talla, color, cantidad, precio } (opcional).
   window.abrirEncargo = function(producto, opts){
     if(!producto) return;
@@ -373,6 +392,7 @@
           <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
           <div class="enc-f"><label>Dirección o punto de entrega</label><input name="direccion" autocomplete="street-address" placeholder="Barrio, calle y referencia"></div>
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
+          ${optinHTML()}
           <div class="enc-row">
             <div class="enc-f"><label>Talla / detalle</label><input name="talla" placeholder="Talla o N/A" value="${esc(opts.talla||"")}"></div>
             <div class="enc-f" style="max-width:110px"><label>Cantidad</label><input name="cantidad" type="number" min="1" max="20" value="${cant}"></div>
@@ -444,6 +464,7 @@
         });
         if(!res.ok){ throw new Error("HTTP "+res.status); }
         const sol = await res.json();
+        suscribir(correo, nombreV, form.optin && form.optin.checked);
         renderOk(String(sol), talla);
       }catch(ex){
         btn.disabled = false; btn.innerHTML = "CONFIRMAR PEDIDO";
@@ -499,6 +520,7 @@
           <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
           <div class="enc-f"><label>Dirección o punto de entrega</label><input name="direccion" autocomplete="street-address" placeholder="Barrio, calle y referencia"></div>
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
+          ${optinHTML()}
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
           <div class="enc-opts" data-pago>
             <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
@@ -538,6 +560,7 @@
           sols.push(String(await res.json()));
         }
         if(typeof vaciarCarrito==="function") vaciarCarrito();
+        suscribir(correo, nombre, form.optin && form.optin.checked);
         renderOk(sols);
       }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
