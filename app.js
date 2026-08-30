@@ -199,7 +199,7 @@ function crearCard(producto, modoInmediata){
       <div class="card-img">
         <img class="${claseAjuste}" src="${esc(producto.imagen)}" alt="${esc(nombreProducto(producto))}" loading="lazy" decoding="async"${estiloEscala}
              onerror="this.closest('.card-img').classList.add('sin-imagen')">
-        <div class="etiquetas">${etiquetas}</div>
+        <div class="etiquetas"><div class="card-rating" data-rating="${esc(producto.codigo)}"></div>${etiquetas}</div>
         <span class="foto-marca" aria-hidden="true">HAUSLINE</span>
         <button class="btn-fav ${fav ? "activo" : ""}" type="button"
                 data-fav="${esc(producto.codigo)}"
@@ -221,7 +221,6 @@ function crearCard(producto, modoInmediata){
             : `<button class="card-btn card-btn-order" type="button" data-encargar="${esc(producto.codigo)}" aria-label="Encargar por WhatsApp">Encargar</button>
           <button class="card-btn card-btn-cart" type="button" data-agregar="${esc(producto.codigo)}" aria-label="Añadir al carrito">Añadir</button>`}
         </div>
-        <div class="card-rating" data-rating="${esc(producto.codigo)}"></div>
       </div>
     </article>
   `;

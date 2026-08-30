@@ -37,11 +37,11 @@
       .resenas-home-prom{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
       .resenas-home-prom .num{font-size:20px;font-weight:900;}
       .resenas-home-prom .cnt{font-size:13px;color:#8a938d;}
-      /* Estrellas en la tarjeta del producto (debajo de los botones) */
-      .card-rating{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;}
+      /* Estrellas de la tarjeta: pill sobre la foto, esquina superior izquierda */
+      .card-rating{display:inline-flex;align-items:center;gap:5px;background:rgba(5,5,5,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:3px 8px;border-radius:999px;}
       .card-rating:empty{display:none;}
-      .card-rating .estrellas svg{width:13px;height:13px;}
-      .card-rating .cnt{font-size:11px;color:#8a938d;font-weight:600;}
+      .card-rating .estrellas svg{width:12px;height:12px;}
+      .card-rating .cnt{font-size:10px;color:#e7ebe8;font-weight:700;}
     `;
     document.head.appendChild(s);
   }
