@@ -13,6 +13,17 @@
   <title>Conjunto Casablanca Olas Verde · HAUSLINE</title>
   <meta name="description" content="Conjunto de camisa con cuello solapa y short a juego en verde jade con estampado de espirales y olas blancas.">
   <meta name="theme-color" content="#050505">
+  <link rel="canonical" href="https://hauslineshopni.es/">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+
+  <!-- Velocidad: adelanta el handshake con los hosts de imágenes y datos (Supabase)
+       para que la primera foto del catálogo cargue antes, sobre todo en móvil. -->
+  <link rel="preconnect" href="https://xgdijumnmaqfirmckugw.supabase.co" crossorigin>
+  <link rel="preconnect" href="https://epslwaxjemlysqtubbfu.supabase.co" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://xgdijumnmaqfirmckugw.supabase.co">
+  <link rel="dns-prefetch" href="https://epslwaxjemlysqtubbfu.supabase.co">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="apple-touch-icon" href="logo.png">
@@ -22,9 +33,14 @@
   <meta property="og:title" content="Conjunto Casablanca Olas Verde · HAUSLINE">
   <meta property="og:description" content="Conjunto de camisa con cuello solapa y short a juego en verde jade con estampado de espirales y olas blancas.">
   <meta property="og:image" content="https://hauslineshopni.es/imgP/ropa/054.1.jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="HAUSLINE — Sneakers, ropa y accesorios en Nicaragua">
+  <meta property="og:locale" content="es_NI">
   <meta property="og:url" content="https://hauslineshopni.es/p/054R/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Conjunto Casablanca Olas Verde · HAUSLINE">
+  <meta name="twitter:description" content="Sneakers • Ropa • Accesorios. Envíos a toda Nicaragua.">
   <meta name="twitter:image" content="https://hauslineshopni.es/imgP/ropa/054.1.jpeg">
 
   <!-- Datos estructurados: identifica a HAUSLINE como tienda ante Google. -->
@@ -38,13 +54,63 @@
     "logo": "https://hauslineshopni.es/logo.png",
     "image": "https://hauslineshopni.es/hausline-og-image.jpg",
     "description": "Catálogo HAUSLINE: sneakers, ropa y accesorios de marcas premium. Pedidos bajo encargo y entrega inmediata. Envíos a toda Nicaragua.",
-    "areaServed": { "@type": "Country", "name": "Nicaragua" }
+    "areaServed": { "@type": "Country", "name": "Nicaragua" },
+    "sameAs": [
+      "https://instagram.com/hausline.ni",
+      "https://tiktok.com/@hausline.niof",
+      "https://www.facebook.com/profile.php?id=61593435208084"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "telephone": "+50578995116",
+      "email": "alerta@hauslineshopni.es",
+      "availableLanguage": ["es"],
+      "areaServed": "NI"
+    }
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=20260826">
+  <!-- Datos estructurados de las preguntas frecuentes (coinciden con la sección #faq). -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "¿Cómo puedo comprar?", "acceptedAnswer": { "@type": "Answer", "text": "Elegí tu producto, la talla y la cantidad, tocá Encargar y completá tus datos. Te contactamos por WhatsApp para coordinar el pago. También podés escribirnos directo por WhatsApp." } },
+      { "@type": "Question", "name": "¿Cómo funcionan los pedidos bajo pedido?", "acceptedAnswer": { "@type": "Answer", "text": "La mayoría de los productos se traen por encargo desde el exterior: al confirmar tu pedido lo importamos para vos. Los marcados como Entrega inmediata ya están en Nicaragua y se entregan de una vez." } },
+      { "@type": "Question", "name": "¿Cuánto tarda mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Envío estándar: 20 a 25 días. Envío rápido: 14 a 17 días, con un costo adicional por producto. Los de entrega inmediata se entregan enseguida." } },
+      { "@type": "Question", "name": "¿Qué métodos de pago aceptan?", "acceptedAnswer": { "@type": "Answer", "text": "Transferencia bancaria (LAFISE, en córdobas o dólares). Al confirmar tu pedido te damos las cuentas y enviás tu comprobante por WhatsApp. No se cobra nada en línea." } },
+      { "@type": "Question", "name": "¿Cuánto debo pagar para confirmar mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Podés dejar un anticipo del 50% para reservar tu pedido o pagarlo completo. El saldo restante se paga cuando el producto llega, antes de la entrega." } },
+      { "@type": "Question", "name": "¿Cómo puedo rastrear mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Con tu código de pedido en el rastreador de HAUSLINE. Además te avisamos por correo en cada etapa, desde la confirmación hasta la entrega." } },
+      { "@type": "Question", "name": "¿Hacen entregas en Managua?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. En Managua hacemos delivery a domicilio; el costo depende de la zona. Coordinamos la entrega por WhatsApp cuando tu pedido esté disponible." } },
+      { "@type": "Question", "name": "¿Realizan envíos a otros departamentos?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, enviamos a todo el país por bus o Cargotrans. Coordinamos el envío según tu departamento." } },
+      { "@type": "Question", "name": "¿Puedo cambiar la talla?", "acceptedAnswer": { "@type": "Answer", "text": "Antes de hacer el pedido al proveedor, sí. Una vez encargado no siempre es posible, así que escribinos lo antes posible si necesitás cambiarla." } },
+      { "@type": "Question", "name": "¿Qué ocurre si mi producto llega con un defecto?", "acceptedAnswer": { "@type": "Answer", "text": "Revisamos cada pedido en control de calidad y te enviamos fotos antes de despacharlo. Si aun así llega con un defecto de fábrica, escribinos y lo gestionamos según nuestra garantía." } }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css?v=20260829">
   <!-- Precarga la primera foto del carrusel para que aparezca de inmediato -->
   <link rel="preload" as="image" href="imgP/banners/1.jpg" fetchpriority="high">
+
+  <!-- Scripts con defer en el <head>: se descargan EN PARALELO mientras el
+       navegador arma la página (más rápido en móvil), pero se ejecutan en
+       orden y solo cuando el DOM está listo. app.js llama iniciar() al final
+       y ningún script usa document.write, así que defer es seguro. -->
+  <script defer src="config.js?v=20260724"></script>
+  <script defer src="productos.js?v=20260724"></script>
+  <script defer src="clientes.js?v=20260724"></script>
+  <script defer src="favoritos.js?v=20260724"></script>
+  <script defer src="carrito.js?v=20260724"></script>
+  <script defer src="supabase-views.js?v=20260724"></script>
+  <script defer src="app.js?v=20260829"></script>
+  <script defer src="encargo.js?v=20260829c"></script>
+  <script defer src="catalogo-remoto.js?v=20260816"></script>
+  <script defer src="resenas.js?v=20260829"></script>
+  <script defer src="whatsapp.js?v=20260829"></script>
+  <script defer src="cookies.js?v=20260827"></script>
 <link rel="canonical" href="https://hauslineshopni.es/p/054R/">
 <script type="application/ld+json">{"@context":"https://schema.org/","@type":"Product","name":"Conjunto Casablanca Olas Verde","image":["https://hauslineshopni.es/imgP/ropa/054.1.jpeg","https://hauslineshopni.es/imgP/ropa/054.2.jpeg","https://hauslineshopni.es/imgP/ropa/054.3.jpeg"],"description":"Conjunto de camisa con cuello solapa y short a juego en verde jade con estampado de espirales y olas blancas.","sku":"054R","brand":{"@type":"Brand","name":"Casablanca"},"url":"https://hauslineshopni.es/p/054R/","offers":{"@type":"Offer","priceCurrency":"USD","price":"75","availability":"https://schema.org/InStock","url":"https://hauslineshopni.es/p/054R/","seller":{"@type":"Organization","name":"HAUSLINE"}}}</script>
 </head>
@@ -114,6 +180,8 @@
 <!-- ============================ INICIO ============================ -->
 <main class="vista-inicio" id="vistaInicio">
   <div class="contenedor">
+
+    <h1 class="solo-lectores">HAUSLINE — Tienda online de sneakers, ropa y accesorios en Nicaragua</h1>
 
     <!-- Categorías visuales -->
     <section class="seccion" aria-labelledby="tit-categorias">
@@ -256,6 +324,17 @@
       <div class="fila" id="filaVistos"></div>
     </section>
 
+    <!-- Reseñas de clientes (se muestra sola si hay reseñas aprobadas) -->
+    <section class="seccion resenas-home" id="seccionResenas" aria-labelledby="tit-resenas" hidden>
+      <div class="seccion-cabecera">
+        <div>
+          <h2 id="tit-resenas">Clientes que ya compraron con HAUSLINE</h2>
+          <p class="seccion-sub" id="resenasResumen"></p>
+        </div>
+      </div>
+      <div class="fila" id="filaResenas"></div>
+    </section>
+
     <!-- Clientes -->
     <section class="seccion" id="clientes" aria-labelledby="tit-clientes">
       <div class="seccion-cabecera">
@@ -359,6 +438,25 @@
           <h3>Pedidos bajo encargo</h3>
           <p>Traemos lo que buscas</p>
         </div>
+      </div>
+    </section>
+
+    <!-- Preguntas frecuentes -->
+    <section class="seccion" id="faq" aria-labelledby="tit-faq">
+      <div class="seccion-cabecera">
+        <h2 id="tit-faq">Preguntas frecuentes</h2>
+      </div>
+      <div class="faq">
+        <details class="faq-item"><summary>¿Cómo puedo comprar?</summary><div class="faq-a">Elegí tu producto, la talla y la cantidad, tocá <strong>Encargar</strong> y completá tus datos. Te contactamos por WhatsApp para coordinar el pago. También podés escribirnos directo por WhatsApp con el botón verde.</div></details>
+        <details class="faq-item"><summary>¿Cómo funcionan los pedidos bajo pedido?</summary><div class="faq-a">La mayoría de los productos se traen por encargo desde el exterior: al confirmar tu pedido lo importamos para vos. Los marcados como <strong>Entrega inmediata</strong> ya están en Nicaragua y se entregan de una vez.</div></details>
+        <details class="faq-item"><summary>¿Cuánto tarda mi pedido?</summary><div class="faq-a">Envío <strong>estándar: 20 a 25 días</strong>. Envío <strong>rápido: 14 a 17 días</strong> (con un costo adicional por producto). Los de entrega inmediata se entregan enseguida.</div></details>
+        <details class="faq-item"><summary>¿Qué métodos de pago aceptan?</summary><div class="faq-a">Transferencia bancaria (LAFISE, en córdobas o dólares). Al confirmar tu pedido te damos las cuentas y enviás tu comprobante por WhatsApp. No se cobra nada en línea.</div></details>
+        <details class="faq-item"><summary>¿Cuánto debo pagar para confirmar mi pedido?</summary><div class="faq-a">Podés dejar un <strong>anticipo del 50%</strong> para reservar tu pedido o pagarlo completo. El saldo restante se paga cuando el producto llega, antes de la entrega.</div></details>
+        <details class="faq-item"><summary>¿Cómo puedo rastrear mi pedido?</summary><div class="faq-a">Con tu código de pedido en <a href="https://hausline-tracking.vercel.app/tracking" target="_blank" rel="noopener noreferrer">nuestro rastreador</a>. Además te avisamos por correo en cada etapa, desde la confirmación hasta la entrega.</div></details>
+        <details class="faq-item"><summary>¿Hacen entregas en Managua?</summary><div class="faq-a">Sí. En Managua hacemos <strong>delivery a domicilio</strong>; el costo depende de la zona. Coordinamos la entrega por WhatsApp cuando tu pedido esté disponible.</div></details>
+        <details class="faq-item"><summary>¿Realizan envíos a otros departamentos?</summary><div class="faq-a">Sí, enviamos a <strong>todo el país</strong> por bus o Cargotrans. Coordinamos el envío según tu departamento y compartís tu dirección al momento de la entrega.</div></details>
+        <details class="faq-item"><summary>¿Puedo cambiar la talla?</summary><div class="faq-a">Antes de hacer el pedido al proveedor, sí. Una vez encargado no siempre es posible, así que escribinos lo antes posible si necesitás cambiarla.</div></details>
+        <details class="faq-item"><summary>¿Qué ocurre si mi producto llega con un defecto?</summary><div class="faq-a">Revisamos cada pedido en <strong>control de calidad</strong> y te enviamos fotos antes de despacharlo. Si aun así llega con un defecto de fábrica, escribinos y lo gestionamos según nuestra garantía.</div></details>
       </div>
     </section>
 
@@ -628,6 +726,9 @@
         <button class="btn-secundario" id="btnAgregarCarrito" type="button">Agregar al carrito</button>
 
         <div class="acordeon" id="acordeon"></div>
+
+        <!-- Reseñas del producto (se llenan solas si hay aprobadas) -->
+        <div id="modalResenas"></div>
       </div>
     </div>
 
@@ -678,22 +779,19 @@
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
-<!-- ========================= WHATSAPP FLOTANTE ========================= -->
-<a href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer"
-   class="whatsapp-flotante" aria-label="Escribir por WhatsApp">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5v-.5c-.1-.2-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
-</a>
-
-<script src="config.js?v=20260724"></script>
-<script src="productos.js?v=20260724"></script>
-<script src="clientes.js?v=20260724"></script>
-<script src="favoritos.js?v=20260724"></script>
-<script src="carrito.js?v=20260724"></script>
-<script src="supabase-views.js?v=20260724"></script>
-<script src="app.js?v=20260826b"></script>
-<script src="encargo.js?v=20260827"></script>
-<script src="catalogo-remoto.js?v=20260816"></script>
-<script src="cookies.js?v=20260827"></script>
+<!-- ================= WHATSAPP FLOTANTE (accesos rápidos) ================= -->
+<div class="wa-fab" id="waFab">
+  <div class="wa-menu" id="waMenu" hidden>
+    <div class="wa-menu-head">¿Cómo te ayudamos?</div>
+    <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B%2C%20necesito%20ayuda%20con%20la%20tienda."><span class="em">💬</span>¿Necesitas ayuda?</a>
+    <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B%2C%20quiero%20consultar%20sobre%20un%20producto%3A%20"><span class="em">🛍️</span>Consultar sobre un producto</a>
+    <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B%2C%20quiero%20consultar%20el%20estado%20de%20mi%20pedido.%20Mi%20c%C3%B3digo%20es%3A%20"><span class="em">📦</span>Consultar mi pedido</a>
+    <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B"><span class="em">✳️</span>Hablar con HAUSLINE</a>
+  </div>
+  <button class="whatsapp-flotante" id="waToggle" type="button" aria-label="Abrir ayuda por WhatsApp" aria-expanded="false" aria-controls="waMenu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5v-.5c-.1-.2-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
+  </button>
+</div>
 
 </body>
 </html>
