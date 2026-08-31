@@ -199,7 +199,8 @@
       + '<span class="shield-ic" style="color:var(--verde)">'+ICON.shield+'</span>'
       + '<div><b style="font-size:13.5px">Pago seguro por transferencia</b>'
       + '<p class="muted" style="font-size:12px;margin:5px 0 0;line-height:1.5">No se cobra nada en línea. Transferí a una de las cuentas y enviá tu comprobante por WhatsApp. '
-      + '<a href="'+ayudaHref+'" target="_blank" rel="noopener noreferrer" style="color:var(--verde);text-decoration:none">¿Necesitás ayuda?</a></p></div></section>';
+      + '<a href="'+ayudaHref+'" target="_blank" rel="noopener noreferrer" style="color:var(--verde);text-decoration:none">¿Necesitás ayuda?</a></p>'
+      + '<p class="muted" style="font-size:11.5px;margin:8px 0 0;line-height:1.5">Los pedidos por encargo <b>no admiten devoluciones de dinero ni cambios</b>.</p></div></section>';
 
     html += '<div class="foot rv">© HAUSLINE · King of Shoes · <a href="/">Volver a la tienda</a></div>';
 

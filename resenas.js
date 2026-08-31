@@ -30,6 +30,11 @@
       .resena-txt{font-size:13px;line-height:1.55;color:#c3c9c5;}
       .resena-foto{margin-top:10px;}
       .resena-foto img{width:100%;max-width:220px;border-radius:10px;border:1px solid rgba(255,255,255,.1);display:block;}
+      /* Producto reseñado: mini tarjeta para que se vea el modelo */
+      .resena-producto{display:flex;align-items:center;gap:10px;margin-top:11px;padding:7px 9px;border:1px solid rgba(255,255,255,.09);border-radius:11px;background:rgba(255,255,255,.02);cursor:pointer;transition:border-color .15s,background .15s;}
+      .resena-producto:hover{border-color:rgba(183,255,0,.4);background:rgba(255,255,255,.04);}
+      .resena-producto img{width:48px;height:48px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:#0c0e0d;}
+      .resena-producto-nombre{font-size:12px;font-weight:700;color:#c3c9c5;line-height:1.35;}
       /* Sección del inicio */
       .resenas-home .fila{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;}
       .resenas-home .resena-card{flex:0 0 82%;max-width:340px;scroll-snap-align:start;}
@@ -76,16 +81,26 @@
     }catch(e){ return ""; }
   }
 
-  function cardHTML(r){
+  function cardHTML(r, opts){
+    const mostrarProducto = !!(opts && opts.mostrarProducto);
     const foto = r.foto_url ? `<div class="resena-foto"><img src="${esc(r.foto_url)}" alt="Foto de reseña de ${esc(r.cliente_nombre)}" loading="lazy"></div>` : "";
     const txt = r.comentario ? `<p class="resena-txt">${esc(r.comentario)}</p>` : "";
+    // Foto del producto reseñado: para que la gente vea cuál fue el modelo.
+    // Solo en la sección del inicio; en la página del producto sería redundante.
+    // Clic abre el producto (app.js escucha [data-codigo] fuera de .card).
+    const prod = (mostrarProducto && typeof buscarProducto === "function" && r.producto_codigo) ? buscarProducto(r.producto_codigo) : null;
+    const nombre = prod ? (typeof nombreProducto === "function" ? nombreProducto(prod) : (prod.nombre || prod.codigo)) : "";
+    const producto = (prod && prod.imagen) ? `<div class="resena-producto" data-codigo="${esc(prod.codigo)}" role="button" tabindex="0" title="Ver ${esc(nombre)}">
+        <img src="${esc(prod.imagen)}" alt="${esc(nombre)}" loading="lazy">
+        <span class="resena-producto-nombre">${esc(nombre)}</span>
+      </div>` : "";
     return `<div class="resena-card">
       <div class="resena-top">
         <span class="resena-nombre">${esc(r.cliente_nombre)}</span>
         <span class="resena-fecha">${esc(fecha(r.created_at))}</span>
       </div>
       ${estrellasHTML(r.estrellas)}
-      ${txt}${foto}
+      ${txt}${foto}${producto}
     </div>`;
   }
 
@@ -127,7 +142,7 @@
     const fila = document.getElementById("filaResenas");
     const cab = document.getElementById("resenasResumen");
     if(cab) cab.innerHTML = `${estrellasHTML(prom)} <span class="num">${Number(prom).toFixed(1)}</span> <span class="cnt">· ${total} ${total===1?"reseña":"reseñas"}</span>`;
-    if(fila) fila.innerHTML = dest.map(cardHTML).join("");
+    if(fila) fila.innerHTML = dest.map(function(r){ return cardHTML(r, { mostrarProducto:true }); }).join("");
     sec.hidden = false;
   }
 

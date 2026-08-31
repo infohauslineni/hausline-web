@@ -35,7 +35,7 @@
   <meta property="og:image" content="https://xgdijumnmaqfirmckugw.supabase.co/storage/v1/object/public/catalogo/CRH004/1787525489510-0.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="HAUSLINE — Sneakers, ropa y accesorios en Nicaragua">
+  <meta property="og:image:alt" content="HAUSLINE — King of Shoes">
   <meta property="og:locale" content="es_NI">
   <meta property="og:url" content="https://hauslineshopni.es/p/CRH004/">
   <meta name="twitter:card" content="summary_large_image">
@@ -92,8 +92,6 @@
   </script>
 
   <link rel="stylesheet" href="styles.css?v=20260829">
-  <!-- Precarga la primera foto del carrusel para que aparezca de inmediato -->
-  <link rel="preload" as="image" href="imgP/banners/1.jpg" fetchpriority="high">
 
   <!-- Scripts con defer en el <head>: se descargan EN PARALELO mientras el
        navegador arma la página (más rápido en móvil), pero se ejecutan en
@@ -255,18 +253,7 @@
       <div class="fila" id="filaVendidos"></div>
     </section>
 
-    <!-- Banner destacado (entre Más populares y Ropa popular) -->
-    <section class="banners" aria-label="Destacados" id="banners">
-      <div class="banners-fondo" id="bannersFondo" aria-hidden="true"></div>
-      <div class="banners-marca">
-        <span class="banners-marca-logo"><span class="banners-marca-dot"></span>HAUSLINE</span>
-        <span class="banners-marca-sub">KING OF SHOES</span>
-      </div>
-      <div class="banners-viewport" id="bannersViewport">
-        <div class="banners-track" id="bannersTrack"></div>
-      </div>
-      <div class="banner-puntos" id="bannerPuntos"></div>
-    </section>
+    <!-- Banner destacado (carrusel de fotos) retirado por decisión de HAUSLINE -->
 
     <!-- Ropa popular -->
     <section class="seccion" aria-labelledby="tit-ropa">
@@ -786,7 +773,7 @@
     <div class="wa-menu-head">¿Cómo te ayudamos?</div>
     <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B%2C%20necesito%20ayuda%20con%20la%20tienda."><span class="em">💬</span>¿Necesitas ayuda?</a>
     <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B%2C%20quiero%20consultar%20sobre%20un%20producto%3A%20"><span class="em">🛍️</span>Consultar sobre un producto</a>
-    <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B%2C%20quiero%20consultar%20el%20estado%20de%20mi%20pedido.%20Mi%20c%C3%B3digo%20es%3A%20"><span class="em">📦</span>Consultar mi pedido</a>
+    <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://hausline-tracking.vercel.app/tracking"><span class="em">📦</span>Consultar mi pedido</a>
     <a class="wa-opt" target="_blank" rel="noopener noreferrer" href="https://wa.me/50578995116?text=Hola%20HAUSLINE%20%F0%9F%91%8B"><span class="em">✳️</span>Hablar con HAUSLINE</a>
   </div>
   <button class="whatsapp-flotante" id="waToggle" type="button" aria-label="Abrir ayuda por WhatsApp" aria-expanded="false" aria-controls="waMenu">

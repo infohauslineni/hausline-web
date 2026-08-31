@@ -1,0 +1,24 @@
+{
+  "name": "hausline-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infohauslineni/hausline-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/infohauslineni/hausline-web/issues"
+  },
+  "homepage": "https://github.com/infohauslineni/hausline-web#readme",
+  "dependencies": {
+    "sharp": "^0.35.4"
+  }
+}
