@@ -1308,6 +1308,12 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   const producto = buscarProducto(codigo);
   if(!producto) return;
 
+  // ¿Ya había un producto abierto? Si sí, estamos SALTANDO de un producto a otro
+  // (sugerencia del buscador, "relacionados", etc.): se reemplaza la entrada del
+  // historial en vez de apilar, para que la "X" vuelva al catálogo y no vaya
+  // recorriendo uno por uno todos los productos que se miraron encima.
+  const yaHabiaProducto = document.body.classList.contains("en-producto");
+
   productoActual = producto;
   modoInmediataActual = !!modoInmediata && producto.entregaInmediata;
   imagenesActuales = producto.imagenes.length ? producto.imagenes : [producto.imagen];
@@ -1418,7 +1424,11 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // quedaba en ?producto= y salía la imagen genérica del sitio).
   // Ej: hauslineshopni.es/p/KAW002
   if(!sinHistorial){
-    try{ history.pushState({ producto: producto.codigo }, "", "/p/" + encodeURIComponent(producto.codigo) + "/"); }catch(e){}
+    const url = "/p/" + encodeURIComponent(producto.codigo) + "/";
+    try{
+      if(yaHabiaProducto) history.replaceState({ producto: producto.codigo }, "", url);
+      else                history.pushState({ producto: producto.codigo }, "", url);
+    }catch(e){}
   }
 
   registrarVisto(producto.codigo);
