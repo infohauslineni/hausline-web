@@ -5,13 +5,21 @@ name: Generar previews /p
 # (Supabase · catalogo_web). Así cada producto obtiene su enlace con vista
 # previa (foto en WhatsApp/Facebook) sin correr nada a mano.
 #
-# Se dispara de 3 formas:
+# Se dispara de 4 formas:
 #   1. push que cambie productos.js o el generador (cambios en el código).
-#   2. schedule: cada 2 horas, para recoger los productos que se agregan desde
-#      el panel (esos guardan en Supabase, NO hacen push, así que sin horario
-#      nunca tendrían preview). El commit del bot solo se hace si hay cambios.
+#   2. schedule: cada 15 minutos, para recoger los productos que se agregan
+#      desde el panel (esos guardan en Supabase, NO hacen push, así que sin
+#      horario nunca tendrían preview). Así un producto nuevo del panel obtiene
+#      su foto de WhatsApp solo, en ~15 min máximo, sin correr nada a mano.
+#      El commit del bot solo se hace si hay cambios (runs vacíos = no-op).
 #   3. workflow_dispatch: botón "Run workflow" para forzarlo al instante.
+#   4. repository_dispatch (tipo "nuevo-producto"): para disparo INSTANTÁNEO.
+#      Si algún día se conecta un Webhook de Supabase (al insertar en
+#      catalogo_web) que llame a la API de GitHub, el preview se genera al
+#      momento. Mientras no exista el webhook, este trigger simplemente no se
+#      usa; el cron de cada 15 min ya lo cubre.
 #
+# Repo público ⇒ minutos de Actions gratis, por eso el cron corto no cuesta.
 # El commit del bot solo toca /p/** y sitemap.xml, que NO están en "paths", por
 # lo que no se vuelve a disparar a sí mismo (sin bucles).
 
@@ -22,8 +30,10 @@ on:
       - 'productos.js'
       - 'scripts/gen-og.mjs'
   schedule:
-    - cron: '0 */2 * * *'   # cada 2 horas (UTC)
+    - cron: '*/15 * * * *'   # cada 15 minutos (UTC)
   workflow_dispatch:
+  repository_dispatch:
+    types: [nuevo-producto]
 
 permissions:
   contents: write
