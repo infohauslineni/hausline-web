@@ -80,6 +80,7 @@ let filtroMarca = "";
 let filtroPrecio = "";
 let filtroSub = "";                  // subcategoría activa ("" = todas)
 const filtrosActivos = new Set();    // "nuevo" | "oferta" | "inmediata" | "rapido"
+let contextoBusqueda = null;         // categoría/subcategoría desde donde se inició la búsqueda (null = global)
 
 let productoActual = null;
 let modoInmediataActual = false;   // true si se abrió desde "Entrega inmediata"
@@ -993,6 +994,9 @@ function urlColeccion(tipo, valor){
 function abrirColeccion(tipo, valor, titulo, sinHistorial){
   // Si venimos de la vista de producto, la cerramos para mostrar el catálogo.
   cerrarModal(true);
+  // Entrar a una categoría/marca/sección "de verdad" descarta el contexto de una
+  // búsqueda previa (solo la propia vista de búsqueda lo conserva).
+  if(tipo !== "busqueda") contextoBusqueda = null;
   coleccionActual = { tipo, valor, titulo };
   estadoVista = "coleccion";
   paginaActual = 1;
@@ -1032,6 +1036,7 @@ function irInicio(sinHistorial){
   cerrarModal(true);
   estadoVista = "inicio";
   coleccionActual = null;
+  contextoBusqueda = null;
   document.body.classList.remove("en-coleccion");
   marcarNav("inicio");
   // Vuelve la URL a la raíz (quita ?categoria= etc.).
@@ -1043,6 +1048,72 @@ function irInicio(sinHistorial){
 
 // Normaliza una marca para comparar: sin mayúsculas, espacios ni símbolos.
 function normMarca(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,""); }
+// Lista base para una búsqueda, respetando el contexto (categoría/subcategoría o
+// marca) desde el que el cliente empezó a buscar. Así, si estaba viendo "Ropa" y
+// busca, no se le cruza el calzado. Sin contexto la búsqueda es sobre todo el catálogo.
+function baseParaBusqueda(ctx){
+  if(ctx === undefined) ctx = contextoBusqueda;
+  if(!ctx) return productos;
+  if(ctx.marca) return productos.filter(p => normMarca(p.marca) === normMarca(ctx.marca));
+  let base;
+  if(ctx.categoria === "Hombre")    base = productos.filter(p => p.categoria === "Hombre" || p.categoria === "Unisex");
+  else if(ctx.categoria === "Dama") base = productos.filter(p => p.categoria === "Dama"   || p.categoria === "Unisex");
+  else if(ctx.categoria)            base = productos.filter(p => p.categoria === ctx.categoria);
+  else                              base = productos;
+  if(ctx.sub) base = base.filter(p => mismaSubcat(subcategoriaDe(p), ctx.sub));
+  return base;
+}
+
+// Captura el contexto de navegación actual (categoría/subcategoría o marca) para
+// acotar una búsqueda que empieza AHORA. Se llama justo antes de entrar a la vista
+// de resultados, cuando coleccionActual todavía apunta a la categoría/marca previa.
+function capturarContextoBusqueda(){
+  if(coleccionActual && coleccionActual.tipo === "categoria"){
+    contextoBusqueda = { categoria: coleccionActual.valor, sub: filtroSub || "" };
+  } else if(coleccionActual && coleccionActual.tipo === "marca"){
+    contextoBusqueda = { marca: coleccionActual.valor };
+  } else {
+    contextoBusqueda = null;
+  }
+}
+
+// Contexto de búsqueda derivado de la vista actual (sin mutar estado). Sirve para
+// que el desplegable de sugerencias acote igual que la vista de resultados.
+function contextoBusquedaActual(){
+  if(contextoBusqueda) return contextoBusqueda;
+  if(coleccionActual && coleccionActual.tipo === "categoria") return { categoria: coleccionActual.valor, sub: filtroSub || "" };
+  if(coleccionActual && coleccionActual.tipo === "marca")     return { marca: coleccionActual.valor };
+  return null;
+}
+
+// Hasta `limite` productos que coinciden con el texto, acotados al contexto actual.
+// Alimenta el desplegable de sugerencias del buscador.
+function sugerenciasBusqueda(texto, limite){
+  limite = limite || 6;
+  const t = String(texto == null ? "" : texto).trim().toLowerCase();
+  if(!t) return [];
+  const base = baseParaBusqueda(contextoBusquedaActual());
+  return base.filter(p =>
+    nombreProducto(p).toLowerCase().includes(t) ||
+    String(p.codigo).toLowerCase().includes(t) ||
+    String(p.marca || "").toLowerCase().includes(t) ||
+    String(p.categoria || "").toLowerCase().includes(t)
+  ).slice(0, limite);
+}
+
+// Título de la vista de resultados, indicando el contexto si la búsqueda está acotada.
+function tituloBusqueda(valor){
+  let t = `Resultados para "${valor}"`;
+  if(contextoBusqueda){
+    if(contextoBusqueda.marca) t += ` en ${contextoBusqueda.marca}`;
+    else if(contextoBusqueda.categoria){
+      t += ` en ${contextoBusqueda.categoria}`;
+      if(contextoBusqueda.sub) t += ` · ${contextoBusqueda.sub}`;
+    }
+  }
+  return t;
+}
+
 // Devuelve la lista base de la colección abierta, antes de filtros.
 function baseColeccion(){
   if(!coleccionActual) return productos;
@@ -1056,7 +1127,10 @@ function baseColeccion(){
   }
   // Marca sin distinguir mayúsculas, espacios ni símbolos (así "DOLCE & GABANNA" = "DOLCE&GABANNA").
   if(tipo === "marca")     return productos.filter(p => normMarca(p.marca) === normMarca(valor));
-  if(tipo === "busqueda")  return productos;
+  // Búsqueda: si el cliente ya estaba dentro de una categoría/subcategoría (p. ej.
+  // Ropa) al buscar, los resultados se quedan DENTRO de ese contexto para que no
+  // se crucen calzado y ropa. Sin contexto (búsqueda desde el inicio) es global.
+  if(tipo === "busqueda")  return baseParaBusqueda();
 
   switch(valor){
     case "tendencia":         return productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Calzado");
@@ -2375,15 +2449,22 @@ function manejarBusqueda(valor){
     if(coleccionActual && coleccionActual.tipo === "busqueda") irInicio();
     return;
   }
+  // Si el cliente estaba viendo un producto y empieza a buscar, lo sacamos del
+  // detalle y lo llevamos a los resultados (aunque debajo ya hubiera una búsqueda).
+  if(document.body.classList.contains("en-producto")) cerrarModal(true);
   if(estadoVista !== "coleccion" || (coleccionActual && coleccionActual.tipo !== "busqueda")){
-    // Primera búsqueda: crea UNA entrada en el historial (?buscar=...) para que,
-    // al abrir un producto y cerrarlo, el "atrás" vuelva a los resultados y no al inicio.
-    abrirColeccion("busqueda", valor, `Resultados para "${valor}"`);
+    // Primera búsqueda: recuerda desde qué categoría/subcategoría se está buscando
+    // (para no cruzar calzado con ropa) ANTES de cambiar de vista, porque
+    // abrirColeccion reinicia coleccionActual y filtroSub.
+    capturarContextoBusqueda();
+    // Crea UNA entrada en el historial (?buscar=...) para que, al abrir un producto
+    // y cerrarlo, el "atrás" vuelva a los resultados y no al inicio.
+    abrirColeccion("busqueda", valor, tituloBusqueda(valor));
   } else {
     // Ya estamos en resultados: solo actualizamos el término en la URL (sin nueva
     // entrada de historial) para que quede fresco si se comparte o se recarga.
     coleccionActual.valor = valor;
-    $("#coleccionTitulo").textContent = `Resultados para "${valor}"`;
+    $("#coleccionTitulo").textContent = tituloBusqueda(valor);
     renderColeccion();
     try{ history.replaceState({ coleccion:{ tipo:"busqueda", valor } }, "", "?buscar=" + encodeURIComponent(valor)); }catch(e){}
   }

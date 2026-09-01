@@ -7,22 +7,26 @@
 
    localStorage:
    - "hausline_cookie_consent": "essential" (solo necesarias) | "all" (con rastreo)
-   - "hausline_aviso_bienvenida": "1" cuando ya vio el aviso
+   sessionStorage:
+   - "hausline_aviso_sesion": "1" cuando ya se mostró el aviso en ESTA visita
    window.hauslineTrackingAllowed() sigue siendo la puerta para cualquier analítica. */
 (function () {
   "use strict";
   var KEY_CONSENT = "hausline_cookie_consent";
-  var KEY_AVISO = "hausline_aviso_bienvenida";
+  var KEY_SESION = "hausline_aviso_sesion"; // por visita (sessionStorage), no por carga
   var TEL_ATENCION = "+505 7899 5116"; // atención al cliente; los pedidos se hacen en la web
 
   function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function guardar(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* modo privado */ } }
+  function leerSesion(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function guardarSesion(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { /* modo privado */ } }
 
   // Puerta para analítica futura: solo activarla si devuelve true.
   window.hauslineTrackingAllowed = function () { return leer(KEY_CONSENT) === "all"; };
 
-  // El aviso se muestra en CADA carga de la página (aunque el visitante recargue o ya lo
-  // haya visto), no una sola vez. Igual guardamos la elección de cookies para hauslineTrackingAllowed().
+  // El aviso se muestra UNA sola vez por visita (al entrar a la web). Al navegar
+  // entre productos o volver del detalle NO reaparece, porque el flag vive en
+  // sessionStorage. Una visita nueva (otra pestaña o más tarde) sí lo vuelve a ver.
 
   function inyectarEstilos() {
     if (document.getElementById("hl-aviso-style")) return;
@@ -55,6 +59,9 @@
   }
 
   function mostrar() {
+    // Ya se mostró en esta visita: no reaparecer al cerrar un producto ni al navegar.
+    if (leerSesion(KEY_SESION) === "1") return;
+    guardarSesion(KEY_SESION, "1");
     inyectarEstilos();
     var wrap = document.createElement("div");
     wrap.className = "hl-aviso";
@@ -84,7 +91,6 @@
     document.body.style.overflow = "hidden";
 
     box.querySelector(".hl-aviso__btn").addEventListener("click", function () {
-      guardar(KEY_AVISO, "1");
       // Registra el consentimiento SOLO de cookies necesarias (sin rastreo) si aún no eligió.
       if (leer(KEY_CONSENT) == null) guardar(KEY_CONSENT, "essential");
       document.body.style.overflow = prevOverflow;
