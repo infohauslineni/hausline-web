@@ -17,6 +17,15 @@
 
   function el(sel) { return document.querySelector(sel); }
 
+  // Si el cliente estaba viendo un producto, lo cierra para volver a la pantalla
+  // principal (catálogo/inicio de abajo) antes de buscar, así el buscador y el
+  // producto que elija no quedan encima del que estaba viendo.
+  function salirDeProductoSiHace() {
+    if (document.body.classList.contains("en-producto") && typeof cerrarModal === "function") {
+      cerrarModal(); // revela la vista de abajo y limpia la URL /p/CODIGO
+    }
+  }
+
   // Camioncito de reparto HAUSLINE (SVG), con acento verde de la marca.
   const TRUCK = '' +
     '<svg class="suge-camion" viewBox="0 0 64 32" aria-hidden="true">' +
@@ -178,12 +187,16 @@
 
       input.addEventListener("focus", () => {
         inputActivo = input;
+        // Si estaba viendo un producto, salir a la pantalla principal ANTES de
+        // mostrar el buscador, para que la búsqueda no quede encima del producto.
+        salirDeProductoSiHace();
         abrir();
         render(input.value);
       });
 
       input.addEventListener("input", () => {
         inputActivo = input;
+        salirDeProductoSiHace();
         actualizarBotonesX();
         abrir();
         render(input.value);
