@@ -984,10 +984,12 @@ function marcarNav(tipo, valor){
 // (?categoria=Ropa, ?coleccion=ofertas, ?marca=Nike). Devuelve null si la vista
 // no tiene link propio (ej. búsqueda).
 function urlColeccion(tipo, valor){
-  if(tipo === "categoria") return "?categoria=" + encodeURIComponent(valor);
-  if(tipo === "seccion")   return "?coleccion=" + encodeURIComponent(valor);
-  if(tipo === "marca")     return "?marca="     + encodeURIComponent(valor);
-  if(tipo === "busqueda")  return "?buscar="    + encodeURIComponent(valor);
+  // Absolutas (con "/" al inicio): si venimos de la ruta de un producto
+  // (/p/CODIGO/) la URL de la colección NO debe colgar de esa ruta.
+  if(tipo === "categoria") return "/?categoria=" + encodeURIComponent(valor);
+  if(tipo === "seccion")   return "/?coleccion=" + encodeURIComponent(valor);
+  if(tipo === "marca")     return "/?marca="     + encodeURIComponent(valor);
+  if(tipo === "busqueda")  return "/?buscar="    + encodeURIComponent(valor);
   return null;
 }
 
@@ -1037,11 +1039,17 @@ function irInicio(sinHistorial){
   estadoVista = "inicio";
   coleccionActual = null;
   contextoBusqueda = null;
+  textoBusqueda = "";
   document.body.classList.remove("en-coleccion");
   marcarNav("inicio");
-  // Vuelve la URL a la raíz (quita ?categoria= etc.).
-  if(!sinHistorial && location.search){
-    try{ history.pushState({}, "", location.pathname); }catch(e){}
+  // Al volver al inicio se borra lo que había en la barra de búsqueda.
+  ["#buscador", "#buscadorMovil"].forEach(s => { if($(s)) $(s).value = ""; });
+  document.querySelectorAll(".buscador-x").forEach(b => { b.hidden = true; });
+  const suge = document.getElementById("sugeBox"); if(suge) suge.hidden = true;
+  // Vuelve la URL a la raíz, ya sea que viniera de ?categoria=... o de la ruta de
+  // un producto (/p/CODIGO/). Antes solo limpiaba las que tenían "?".
+  if(!sinHistorial && (location.search || location.pathname !== "/")){
+    try{ history.pushState({}, "", "/"); }catch(e){}
   }
   window.scrollTo({ top: 0 });
 }
@@ -1093,12 +1101,7 @@ function sugerenciasBusqueda(texto, limite){
   const t = String(texto == null ? "" : texto).trim().toLowerCase();
   if(!t) return [];
   const base = baseParaBusqueda(contextoBusquedaActual());
-  return base.filter(p =>
-    nombreProducto(p).toLowerCase().includes(t) ||
-    String(p.codigo).toLowerCase().includes(t) ||
-    String(p.marca || "").toLowerCase().includes(t) ||
-    String(p.categoria || "").toLowerCase().includes(t)
-  ).slice(0, limite);
+  return base.filter(p => coincideBusqueda(p, t)).slice(0, limite);
 }
 
 // Título de la vista de resultados, indicando el contexto si la búsqueda está acotada.
@@ -1144,16 +1147,44 @@ function baseColeccion(){
   }
 }
 
+// Sinónimos comunes en Nicaragua → término real del catálogo, para que buscar
+// "camisa", "tenis", "chancla", etc. encuentre el producto aunque se llame distinto.
+const SINONIMOS_BUSQUEDA = {
+  "camisa":"camiseta", "camisas":"camiseta", "playera":"camiseta", "playeras":"camiseta", "polo":"camiseta", "polos":"camiseta",
+  "tenis":"calzado", "zapato":"calzado", "zapatos":"calzado", "zapatilla":"calzado", "zapatillas":"calzado", "sneaker":"calzado", "sneakers":"calzado",
+  "sandalia":"slides", "sandalias":"slides", "chinela":"slides", "chinelas":"slides", "chancla":"slides", "chanclas":"slides",
+  "chaqueta":"jacket", "chaquetas":"jacket", "chamarra":"jacket", "abrigo":"jacket",
+  "pantaloneta":"short", "pantalonetas":"short", "calzoneta":"short", "shorts":"short",
+  "bolsos":"bolso", "carteras":"cartera", "gorras":"gorra", "accesorio":"accesorios"
+};
+
+// Texto donde se busca: nombre, código, marca, categoría, SUBCATEGORÍA (Ropa,
+// Calzado, Short, Camisetas…), tipo de prenda y descripción. Así se puede buscar
+// por tipo/categoría, no solo por nombre.
+function textoBuscableProducto(p){
+  return [
+    nombreProducto(p), p.codigo, p.marca, p.categoria,
+    subcategoriaDe(p), p.tipoPrenda, p.genero, descripcionProducto(p)
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
+// ¿El producto coincide con la consulta? Cada palabra debe estar (como texto o
+// como sinónimo), así "camisa amiri" encuentra las camisetas de Amiri.
+function coincideBusqueda(p, consulta){
+  const texto = textoBuscableProducto(p);
+  const palabras = String(consulta || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if(!palabras.length) return false;
+  return palabras.every(w => {
+    if(texto.includes(w)) return true;
+    const syn = SINONIMOS_BUSQUEDA[w];
+    return syn ? texto.includes(syn) : false;
+  });
+}
+
 function aplicarBusqueda(lista){
   const t = textoBusqueda.trim().toLowerCase();
   if(!t) return lista;
-  return lista.filter(p =>
-    nombreProducto(p).toLowerCase().includes(t) ||
-    String(p.codigo).toLowerCase().includes(t) ||
-    String(p.marca || "").toLowerCase().includes(t) ||
-    String(p.categoria || "").toLowerCase().includes(t) ||
-    descripcionProducto(p).toLowerCase().includes(t)
-  );
+  return lista.filter(p => coincideBusqueda(p, t));
 }
 
 function aplicarFiltros(lista){
@@ -2476,7 +2507,7 @@ function manejarBusqueda(valor){
     coleccionActual.valor = valor;
     $("#coleccionTitulo").textContent = tituloBusqueda(valor);
     renderColeccion();
-    try{ history.replaceState({ coleccion:{ tipo:"busqueda", valor } }, "", "?buscar=" + encodeURIComponent(valor)); }catch(e){}
+    try{ history.replaceState({ coleccion:{ tipo:"busqueda", valor } }, "", "/?buscar=" + encodeURIComponent(valor)); }catch(e){}
   }
 }
 
