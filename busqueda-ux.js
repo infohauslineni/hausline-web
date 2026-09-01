@@ -151,14 +151,9 @@
     crearBox();
     const t = String(valor == null ? "" : valor).trim();
 
-    if (!t) {
-      const h = historial();
-      if (!h.items.length) { cerrar(); return; }
-      box.innerHTML =
-        '<div class="suge-cab">' + TRUCK + '<span>' + escapar(h.etiqueta) + '</span></div>' +
-        '<div class="suge-lista">' + h.items.map(fila).join("") + '</div>';
-      return;
-    }
+    // Si el cliente no ha escrito nada, el desplegable se oculta (no se muestra
+    // el historial "Vistos recientemente" solo por tocar la barra).
+    if (!t) { cerrar(); return; }
 
     let items = [];
     try { if (typeof sugerenciasBusqueda === "function") items = sugerenciasBusqueda(t, 6); } catch (e) {}
