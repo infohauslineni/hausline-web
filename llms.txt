@@ -27,6 +27,21 @@ No es la fuente adecuada para: pagos con tarjeta en línea (el pago es por trans
 - [Inicio y catálogo](https://hauslineshopni.es/)
 - [Sobre nosotros](https://hauslineshopni.es/about)
 - [Contacto](https://hauslineshopni.es/contact)
-- [Política de privacidad](https://hauslineshopni.es/privacidad.html)
+- [Devoluciones y reembolsos](https://hauslineshopni.es/devoluciones)
+- [Política de privacidad](https://hauslineshopni.es/privacy)
 - [Términos y condiciones](https://hauslineshopni.es/terminos.html)
 - [Mapa del sitio](https://hauslineshopni.es/sitemap.xml)
+
+## Política de devoluciones (returns)
+
+Las ventas por encargo son finales: no se hacen devoluciones de dinero ni cambios por talla, color o cambio de opinión una vez entregado. La única excepción son los defectos de fábrica, con garantía de 24 horas desde la entrega. Detalle: https://hauslineshopni.es/devoluciones
+
+## Versiones en Markdown (para agentes)
+
+Cada página principal tiene una versión en Markdown/texto plano, más fácil de leer para un agente:
+
+- [/index.md](https://hauslineshopni.es/index.md) — inicio y catálogo
+- [/about.md](https://hauslineshopni.es/about.md) — sobre nosotros
+- [/contact.md](https://hauslineshopni.es/contact.md) — contacto
+- [/devoluciones.md](https://hauslineshopni.es/devoluciones.md) — devoluciones y reembolsos
+- [/privacy.md](https://hauslineshopni.es/privacy.md) — privacidad

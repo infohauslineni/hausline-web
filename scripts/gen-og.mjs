@@ -203,7 +203,7 @@ const urlSitemap = (loc, prioridad) =>
   `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prioridad}</priority>\n  </url>`
 const entradas = [urlSitemap(`${SITIO}/`, '1.0')]
 // Páginas fijas de confianza/agentes (además del catálogo).
-for (const loc of [`${SITIO}/about`, `${SITIO}/contact`, `${SITIO}/privacidad.html`, `${SITIO}/terminos.html`]) {
+for (const loc of [`${SITIO}/about`, `${SITIO}/contact`, `${SITIO}/devoluciones`, `${SITIO}/privacy`, `${SITIO}/privacidad.html`, `${SITIO}/terminos.html`]) {
   entradas.push(urlSitemap(loc, '0.5'))
 }
 for (const codigo of codigosGenerados) {
