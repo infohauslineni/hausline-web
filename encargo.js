@@ -48,15 +48,15 @@
       .enc-cart-it b{font-weight:700;}
       .enc-cart-it small{display:block;color:#8a938d;font-size:11px;margin-top:2px;}
       .enc-cart-it .mono{font-family:ui-monospace,Menlo,monospace;font-weight:700;white-space:nowrap;}
-      .enc-total{margin-top:16px;padding:14px 16px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.06);border-radius:12px;}
+      .enc-total{margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.1);}
       .enc-total .line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-      .enc-total .line + .line{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);}
-      .enc-total .k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a938d;}
+      .enc-total .line + .line{margin-top:6px;}
+      .enc-total .k{font-size:11px;font-weight:600;letter-spacing:.04em;color:#8a938d;}
       .enc-total .k.hl{color:#b7ff00;}
       .enc-total .v{text-align:right;}
-      .enc-total .usd{font-size:16px;font-weight:800;}
-      .enc-total .usd.big{font-size:24px;letter-spacing:-.02em;}
-      .enc-total .nio{font-size:12px;color:#8ec5ff;font-weight:700;}
+      .enc-total .usd{font-size:14px;font-weight:700;}
+      .enc-total .usd.big{font-size:19px;font-weight:800;letter-spacing:-.02em;}
+      .enc-total .nio{font-size:11px;color:#7a8580;font-weight:600;}
       .enc-btn{width:100%;margin-top:16px;border:0;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;background:#b7ff00;color:#050705;display:flex;align-items:center;justify-content:center;gap:8px;}
       .enc-btn:disabled{opacity:.55;cursor:default;}
       .enc-btn.wa{background:#25d366;color:#052012;}
@@ -421,7 +421,6 @@
 
           <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(t)}</div>
-          ${trustHTML()}
           <div class="enc-err" data-err></div>
           <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
           <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
@@ -586,7 +585,6 @@
           </div>
           <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(calc())}</div>
-          ${trustHTML()}
           <div class="enc-err" data-err></div>
           <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
           <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
