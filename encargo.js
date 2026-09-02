@@ -379,15 +379,19 @@
     let cant = Math.max(1, parseInt(opts.cantidad,10) || 1);
     const envio = (opts.envio === 'rapido') ? 'rapido' : 'estandar'; // viene del producto (obligatorio)
     let pago = "total";              // 'total' | '50'
+    let cupon = null;                // {id, codigo, tipo, valor} si el cliente aplicó un código
 
     abrir();
     renderForm();
 
     function recargo(){ return envio === "rapido" ? (Number(cfg.rapido.recargo)||0) * cant : 0; }
+    function descuentoCupon(base){ if(!cupon) return 0; const d = cupon.tipo === "porcentaje" ? base * cupon.valor / 100 : Math.min(cupon.valor, base); return Math.round(d * 100) / 100; }
     function calc(){
-      const total = precioU * cant + recargo();
+      const bruto = precioU * cant + recargo();
+      const desc = descuentoCupon(bruto);
+      const total = Math.max(0, Math.round((bruto - desc) * 100) / 100);
       const ahora = pago === "50" ? Math.round(total * 50) / 100 : total;
-      return { total, ahora };
+      return { bruto, desc, total, ahora };
     }
 
     function renderForm(){
@@ -415,6 +419,7 @@
             <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
           </div>
 
+          <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(t)}</div>
           ${trustHTML()}
           <div class="enc-err" data-err></div>
@@ -425,6 +430,7 @@
       const form = card.querySelector(".enc-form");
       form.cantidad.addEventListener("input", ()=>{ cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1)); refrescar(); });
       card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; marcar("[data-pago]", b); refrescar(); }));
+      wireCupon();
       form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
       card.__talla = opts.talla || "";
       form.talla.addEventListener("input", ()=>{ card.__talla = form.talla.value; });
@@ -432,12 +438,47 @@
     function marcar(sel, activo){ card.querySelectorAll(sel+" .enc-opt").forEach(x=>x.classList.remove("sel")); activo.classList.add("sel"); }
     function refrescar(){ const box = card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }
 
+    // ── Cupón de descuento ─────────────────────────────────────────────────────
+    function cuponHTML(){
+      if(cupon){
+        const et = cupon.tipo === "porcentaje" ? (cupon.valor + "%") : ("US$ " + Number(cupon.valor).toFixed(2));
+        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.06);border-radius:10px"><span>🎟️ <b>${esc(cupon.codigo)}</b> · ${esc(et)}</span><button type="button" data-cup-quitar style="background:none;border:0;color:#8a938d;cursor:pointer;font-weight:700">Quitar</button></div>`;
+      }
+      return `<div style="display:flex;gap:8px"><input type="text" data-cup-code placeholder="Código (opcional)" autocomplete="off" style="flex:1;text-transform:uppercase"><button type="button" data-cup-aplicar style="padding:0 16px;border-radius:10px;border:1px solid rgba(183,255,0,.4);background:rgba(183,255,0,.1);color:#b7ff00;font-weight:700;cursor:pointer">Aplicar</button></div><div data-cup-err style="display:none;color:#ff9696;font-size:12px;margin-top:6px"></div>`;
+    }
+    function renderCupon(){ const box = card.querySelector("[data-cupon]"); if(box){ box.innerHTML = cuponHTML(); wireCupon(); } }
+    function wireCupon(){
+      const box = card.querySelector("[data-cupon]"); if(!box) return;
+      const ap = box.querySelector("[data-cup-aplicar]"); if(ap) ap.addEventListener("click", ()=>{ const i = box.querySelector("[data-cup-code]"); aplicarCupon(i ? i.value : ""); });
+      const inp = box.querySelector("[data-cup-code]"); if(inp) inp.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); aplicarCupon(inp.value); } });
+      const q = box.querySelector("[data-cup-quitar]"); if(q) q.addEventListener("click", ()=>{ cupon = null; renderCupon(); refrescar(); });
+    }
+    async function aplicarCupon(code){
+      code = (code || "").trim();
+      if(!code) return;
+      const errB = card.querySelector("[data-cup-err]");
+      try{
+        const t = calc();
+        const url = (typeof SUPABASE_URL!=="undefined" ? SUPABASE_URL : "") + "rpc/validar_cupon";
+        const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY }, body: JSON.stringify({ p_codigo: code, p_total: t.bruto }) });
+        if(!res.ok) throw new Error("HTTP "+res.status);
+        const r = await res.json();
+        if(!r || !r.valido){ if(errB){ errB.textContent = (r && r.motivo) || "Código no válido."; errB.style.display = "block"; } return; }
+        cupon = { id: r.id, codigo: r.codigo, tipo: r.tipo, valor: Number(r.valor) };
+        renderCupon(); refrescar();
+      }catch(_){ if(errB){ errB.textContent = "No se pudo validar el código."; errB.style.display = "block"; } }
+    }
+
     function totalHTML(t){
       const parcial = pago === "50";
       const envioTxt = envio === "rapido" ? " (incluye envío rápido)" : "";
       const saldo = Math.round((t.total - t.ahora) * 100) / 100;
+      const descLines = t.desc > 0 ? `
+        <div class="line"><div class="k">Subtotal${esc(envioTxt)}</div><div class="v"><span class="usd">${fmtUSD(t.bruto)}</span></div></div>
+        <div class="line"><div class="k hl">Descuento${cupon?" ("+esc(cupon.codigo)+")":""}</div><div class="v"><span class="usd" style="color:#b7ff00">− ${fmtUSD(t.desc)}</span></div></div>` : ``;
       return `
-        <div class="line"><div class="k">Total del pedido${esc(envioTxt)}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
+        ${descLines}
+        <div class="line"><div class="k">${t.desc>0 ? "Total con descuento" : "Total del pedido"+esc(envioTxt)}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
         ${parcial ? `
         <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
         <div class="line"><div class="k">Saldo pendiente</div><div class="v"><span class="usd">${fmtUSD(saldo)}</span><div class="nio">≈ ${fmtNIO(cordobas(saldo))}</div></div></div>` : ``}
@@ -469,7 +510,8 @@
             p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: null,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
             p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
-            p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null
+            p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null,
+            p_cupon_codigo: cupon ? cupon.codigo : null
           })
         });
         if(!res.ok){ throw new Error("HTTP "+res.status); }
@@ -499,22 +541,28 @@
     items = (items||[]).filter(it => it && !it.entregaInmediata);
     if(!items.length){ if(typeof enviarPedidoWhatsApp==="function") enviarPedidoWhatsApp(); return; }
     let pago = "total";
+    let cupon = null;                // {id, codigo, tipo, valor} si aplicó un código al carrito
     abrir();
     renderForm();
 
     function recargoItem(it){ return (it.envio === 'rapido' && typeof HAUSLINE_ENVIO!=='undefined') ? (Number(HAUSLINE_ENVIO.rapido.recargo)||0) * (Number(it.cantidad)||1) : 0; }
+    function descuentoCupon(base){ if(!cupon) return 0; const d = cupon.tipo === "porcentaje" ? base * cupon.valor / 100 : Math.min(cupon.valor, base); return Math.round(d * 100) / 100; }
     function calc(){
-      let total = 0;
-      for(const it of items) total += (Number(it.precioUnitario)||0) * (Number(it.cantidad)||1) + recargoItem(it);
-      total = Math.round(total*100)/100;
-      return { total, ahora: pago==='50' ? Math.round(total*50)/100 : total };
+      let bruto = 0;
+      for(const it of items) bruto += (Number(it.precioUnitario)||0) * (Number(it.cantidad)||1) + recargoItem(it);
+      bruto = Math.round(bruto*100)/100;
+      const desc = descuentoCupon(bruto);
+      const total = Math.max(0, Math.round((bruto - desc) * 100) / 100);
+      return { bruto, desc, total, ahora: pago==='50' ? Math.round(total*50)/100 : total };
     }
     function totalHTML(t){
       const parcial = pago==='50';
       const saldo = Math.round((t.total - t.ahora) * 100) / 100;
       const cfg = envioCfg();
       const dias = items.some(it=>it.envio==='rapido') ? cfg.rapido.dias : cfg.estandar.dias;
-      return `<div class="line"><div class="k">Total del pedido</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
+      const descLines = t.desc > 0 ? `<div class="line"><div class="k">Subtotal</div><div class="v"><span class="usd">${fmtUSD(t.bruto)}</span></div></div>
+        <div class="line"><div class="k hl">Descuento${cupon?" ("+esc(cupon.codigo)+")":""}</div><div class="v"><span class="usd" style="color:#b7ff00">− ${fmtUSD(t.desc)}</span></div></div>` : ``;
+      return `${descLines}<div class="line"><div class="k">${t.desc>0?"Total con descuento":"Total del pedido"}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
         ${parcial?`
         <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
         <div class="line"><div class="k">Saldo pendiente</div><div class="v"><span class="usd">${fmtUSD(saldo)}</span><div class="nio">≈ ${fmtNIO(cordobas(saldo))}</div></div></div>`:``}
@@ -536,6 +584,7 @@
             <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
             <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
           </div>
+          <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(calc())}</div>
           ${trustHTML()}
           <div class="enc-err" data-err></div>
@@ -545,7 +594,37 @@
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
       card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; card.querySelectorAll("[data-pago] .enc-opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); const box=card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }));
+      wireCupon();
       form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
+    }
+    function refrescarTotal(){ const box = card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }
+    function cuponHTML(){
+      if(cupon){
+        const et = cupon.tipo === "porcentaje" ? (cupon.valor + "%") : ("US$ " + Number(cupon.valor).toFixed(2));
+        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid rgba(183,255,0,.28);background:rgba(183,255,0,.06);border-radius:10px"><span>🎟️ <b>${esc(cupon.codigo)}</b> · ${esc(et)}</span><button type="button" data-cup-quitar style="background:none;border:0;color:#8a938d;cursor:pointer;font-weight:700">Quitar</button></div>`;
+      }
+      return `<div style="display:flex;gap:8px"><input type="text" data-cup-code placeholder="Código (opcional)" autocomplete="off" style="flex:1;text-transform:uppercase"><button type="button" data-cup-aplicar style="padding:0 16px;border-radius:10px;border:1px solid rgba(183,255,0,.4);background:rgba(183,255,0,.1);color:#b7ff00;font-weight:700;cursor:pointer">Aplicar</button></div><div data-cup-err style="display:none;color:#ff9696;font-size:12px;margin-top:6px"></div>`;
+    }
+    function renderCupon(){ const box = card.querySelector("[data-cupon]"); if(box){ box.innerHTML = cuponHTML(); wireCupon(); } }
+    function wireCupon(){
+      const box = card.querySelector("[data-cupon]"); if(!box) return;
+      const ap = box.querySelector("[data-cup-aplicar]"); if(ap) ap.addEventListener("click", ()=>{ const i = box.querySelector("[data-cup-code]"); aplicarCupon(i ? i.value : ""); });
+      const inp = box.querySelector("[data-cup-code]"); if(inp) inp.addEventListener("keydown", (e)=>{ if(e.key === "Enter"){ e.preventDefault(); aplicarCupon(inp.value); } });
+      const q = box.querySelector("[data-cup-quitar]"); if(q) q.addEventListener("click", ()=>{ cupon = null; renderCupon(); refrescarTotal(); });
+    }
+    async function aplicarCupon(code){
+      code = (code || "").trim(); if(!code) return;
+      const errB = card.querySelector("[data-cup-err]");
+      try{
+        const t = calc();
+        const url = (typeof SUPABASE_URL!=="undefined" ? SUPABASE_URL : "") + "rpc/validar_cupon";
+        const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY }, body: JSON.stringify({ p_codigo: code, p_total: t.bruto }) });
+        if(!res.ok) throw new Error("HTTP "+res.status);
+        const r = await res.json();
+        if(!r || !r.valido){ if(errB){ errB.textContent = (r && r.motivo) || "Código no válido."; errB.style.display = "block"; } return; }
+        cupon = { id: r.id, codigo: r.codigo, tipo: r.tipo, valor: Number(r.valor) };
+        renderCupon(); refrescarTotal();
+      }catch(_){ if(errB){ errB.textContent = "No se pudo validar el código."; errB.style.display = "block"; } }
     }
     async function enviar(form){
       const err = card.querySelector("[data-err]"); err.style.display="none";
@@ -560,11 +639,16 @@
       const url = (typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"") + "rpc/crear_solicitud_publica";
       const sols = [];
       try{
-        for(const it of items){
+        for(let idx=0; idx<items.length; idx++){
+          const it = items[idx];
+          // El cupón de PORCENTAJE se aplica a cada ítem (equivale a % de todo el carrito). El de
+          // MONTO fijo se manda solo con el primer ítem, para no restar el monto en cada uno.
+          const codigoCup = cupon ? ((cupon.tipo === "porcentaje" || idx === 0) ? cupon.codigo : null) : null;
           const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
             body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
               p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
-              p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null }) });
+              p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null,
+              p_cupon_codigo: codigoCup }) });
           if(!res.ok) throw new Error("HTTP "+res.status);
           sols.push(String(await res.json()));
         }

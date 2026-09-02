@@ -202,6 +202,10 @@ const hoy = new Date().toISOString().slice(0, 10)
 const urlSitemap = (loc, prioridad) =>
   `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prioridad}</priority>\n  </url>`
 const entradas = [urlSitemap(`${SITIO}/`, '1.0')]
+// Páginas fijas de confianza/agentes (además del catálogo).
+for (const loc of [`${SITIO}/about`, `${SITIO}/contact`, `${SITIO}/privacidad.html`, `${SITIO}/terminos.html`]) {
+  entradas.push(urlSitemap(loc, '0.5'))
+}
 for (const codigo of codigosGenerados) {
   // Barra final: la URL que devuelve 200 en GitHub Pages (sin ella hay 301). Así
   // el sitemap no lista URLs que redirigen y Google puede indexarlas.

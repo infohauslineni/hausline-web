@@ -3,23 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HAUSLINE</title>
+<title>Página no encontrada (404) | HAUSLINE</title>
+<meta name="description" content="La página que buscás no existe en HAUSLINE. Volvé al catálogo o revisá el mapa del sitio.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050505">
 <link rel="icon" href="/logo.png" type="image/png">
-<!-- Fallback de GitHub Pages para rutas sin archivo (ej: /p/CODIGO de productos
-     cargados desde el PANEL, que no tienen página estática generada).
-     Extrae el código de la ruta y abre el producto en la app (que lo carga
-     desde Supabase). Para cualquier otra ruta desconocida, va al inicio. -->
+<!-- Fallback de GitHub Pages SOLO para /p/CODIGO (productos cargados desde el PANEL, que no
+     tienen página estática): abre el producto en la app (Supabase lo carga). Cualquier otra
+     ruta desconocida NO se redirige: muestra este 404 (status 404 real) con enlaces útiles,
+     para que los agentes/buscadores no crean que toda ruta existe. -->
 <script>
 (function(){
   var m = location.pathname.match(/\/p\/([^\/?#]+)/);
-  var code = m ? m[1] : "";
-  location.replace("/" + (code ? "?producto=" + code : ""));
+  if (m && m[1]) { location.replace("/?producto=" + encodeURIComponent(m[1])); }
 })();
 </script>
+<style>
+  :root{ --bg:#050505; --texto:#f3f6f3; --texto2:#b9c2ba; --texto3:#8a938d; --verde:#b7ff00; --borde:rgba(255,255,255,.1); }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--texto); font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+  .wrap{ max-width:720px; margin:0 auto; padding:28px 20px 80px; }
+  .top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 0; }
+  .logo{ font-weight:800; letter-spacing:.02em; font-size:22px; color:var(--texto); text-decoration:none; }
+  .logo span{ color:var(--verde); }
+  .volver{ color:var(--texto2); text-decoration:none; font-size:14px; font-weight:600; }
+  h1{ font-size:30px; line-height:1.15; margin:22px 0 8px; }
+  p{ color:var(--texto2); line-height:1.7; }
+  ul{ color:var(--texto2); line-height:1.9; padding-left:20px; }
+  a{ color:var(--verde); }
+  .md{ margin-top:28px; padding:16px; border:1px solid var(--borde); border-radius:12px; background:rgba(255,255,255,.02); color:var(--texto3); font-size:12.5px; white-space:pre-wrap; overflow:auto; }
+</style>
 </head>
-<body style="background:#050505;color:#fff;font-family:system-ui,Arial,sans-serif;text-align:center;padding:44px">
-<p>Cargando…</p>
-<p><a href="/" style="color:#b7ff00">Ir a HAUSLINE</a></p>
-<noscript><meta http-equiv="refresh" content="0; url=/"></noscript>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a class="logo" href="/">HAUS<span>LINE</span></a>
+      <a class="volver" href="/">&larr; Volver a la tienda</a>
+    </div>
+
+    <h1>Página no encontrada (404)</h1>
+    <p>La dirección que buscás no existe o cambió. Por acá podés seguir:</p>
+    <ul>
+      <li><a href="/">Inicio y catálogo</a></li>
+      <li><a href="/about">Sobre HAUSLINE</a></li>
+      <li><a href="/contact">Contacto</a></li>
+      <li><a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a></li>
+      <li><a href="/sitemap.xml">Mapa del sitio (sitemap.xml)</a></li>
+      <li><a href="/llms.txt">Guía para agentes (llms.txt)</a></li>
+    </ul>
+
+    <pre class="md"># 404 – Página no encontrada / Not found
+
+Esta ruta no existe en hauslineshopni.es. Puntos de entrada:
+
+- Inicio y catálogo / Home & catalog: https://hauslineshopni.es/
+- Sobre nosotros / About: https://hauslineshopni.es/about
+- Contacto / Contact: https://hauslineshopni.es/contact
+- Mapa del sitio / Sitemap: https://hauslineshopni.es/sitemap.xml
+- Guía para agentes / Agent guide: https://hauslineshopni.es/llms.txt</pre>
+  </div>
 </body>
 </html>
