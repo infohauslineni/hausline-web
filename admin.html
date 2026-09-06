@@ -406,6 +406,7 @@
                   <label class="switch"><input id="fEntregaInmediata" type="checkbox"><span></span></label>
                 </div>
                 <div id="rowTallasEI" style="display:none;margin-top:10px"><label>Tallas disponibles ahora (entrega inmediata)</label><input id="fTallasEntregaInmediata" placeholder="Ej: 40, 41, 42"><small class="hint">Separadas por coma. Son las tallas que ya tenés físicamente.</small></div>
+                <div id="rowColoresEI" style="display:none;margin-top:10px"><label>Colores disponibles ahora (entrega inmediata)</label><input id="fColoresEntregaInmediata" placeholder="Ej: Negro, Blanco"><small class="hint">Separados por coma. Solo si el producto tiene colores. Dejalo vacío si no aplica.</small></div>
               </div>
 
               <div id="avisoForm" class="aviso"></div>
@@ -578,7 +579,7 @@
   $("preReset").addEventListener("click", ()=>{ prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; updatePreview(); });
   ["fNombre","fPrecio"].forEach(id=>$(id).addEventListener("input", updatePreview));
   $("fCotizar").addEventListener("change", updatePreview);
-  $("fEntregaInmediata").addEventListener("change", ()=>{ $("rowTallasEI").style.display = $("fEntregaInmediata").checked ? "block" : "none"; });
+  $("fEntregaInmediata").addEventListener("change", ()=>{ const v = $("fEntregaInmediata").checked ? "block" : "none"; $("rowTallasEI").style.display = v; $("rowColoresEI").style.display = v; });
   $("fAjuste").addEventListener("change", updatePreview);
   $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
     for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
@@ -661,7 +662,7 @@
         imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
         posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
         escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
-        destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), fecha:new Date().toISOString().slice(0,10) };
+        destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), fecha:new Date().toISOString().slice(0,10) };
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
 
       // El tracking es OTRO proyecto Supabase (el panel no tiene acceso a escribirle).
@@ -678,7 +679,7 @@
     document.querySelectorAll("#tallasGrid input, #tallasRopa input").forEach(c=>c.checked=false);
     $("fTipoRopa").value="";
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
-    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fAjuste").value="cover";
+    $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos();
     campoATallasUI(); campoAColoresUI(); }
@@ -694,7 +695,7 @@
     campoATallasUI(); aplicarModoTallas(); campoAColoresUI();
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
-    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none";
+    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
   // ============ Datos ============
