@@ -169,8 +169,13 @@ const paginaProducto = (producto) => {
   html = html.replace(/<meta property="og:url"[^>]*>/, `<meta property="og:url" content="${esc(canonica)}">`)
   html = html.replace(/<meta name="twitter:title"[^>]*>/, `<meta name="twitter:title" content="${esc(nombre)}">`)
   html = html.replace(/<meta name="twitter:image"[^>]*>/, `<meta name="twitter:image" content="${esc(imagenOg)}">`)
-  // Canónica del producto + JSON-LD Product, justo antes de cerrar el <head>.
-  html = html.replace(/<\/head>/, `<link rel="canonical" href="${esc(canonica)}">\n<script type="application/ld+json">${jsonLd}</script>\n</head>`)
+  // La canónica del producto REEMPLAZA a la que trae index.html (que apunta a la
+  // home). Si solo la agregáramos, la página quedaría con DOS <link canonical>
+  // (home + producto) y Google, ante el conflicto, trata el producto como
+  // duplicado de la home y no lo indexa. Por eso se sustituye, no se añade.
+  html = html.replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${esc(canonica)}">`)
+  // JSON-LD Product justo antes de cerrar el <head>.
+  html = html.replace(/<\/head>/, `<script type="application/ld+json">${jsonLd}</script>\n</head>`)
   return html
 }
 
@@ -202,8 +207,10 @@ const hoy = new Date().toISOString().slice(0, 10)
 const urlSitemap = (loc, prioridad) =>
   `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${hoy}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>${prioridad}</priority>\n  </url>`
 const entradas = [urlSitemap(`${SITIO}/`, '1.0')]
-// Páginas fijas de confianza/agentes (además del catálogo).
-for (const loc of [`${SITIO}/about`, `${SITIO}/contact`, `${SITIO}/devoluciones`, `${SITIO}/privacy`, `${SITIO}/privacidad.html`, `${SITIO}/terminos.html`]) {
+// Páginas fijas de confianza/agentes (además del catálogo). Las que son CARPETAS
+// llevan barra final: /about sin barra hace 301 a /about/ en GitHub Pages y Google
+// lo marcaría como "Página con redirección". Los .html son archivos (sin barra).
+for (const loc of [`${SITIO}/about/`, `${SITIO}/contact/`, `${SITIO}/devoluciones/`, `${SITIO}/privacy/`, `${SITIO}/privacidad.html`, `${SITIO}/terminos.html`]) {
   entradas.push(urlSitemap(loc, '0.5'))
 }
 for (const codigo of codigosGenerados) {
