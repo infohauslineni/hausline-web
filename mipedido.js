@@ -42,19 +42,22 @@
   function esc(v){ return String(v ?? "").replace(/[&<>"]/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" })[c]; }); }
 
   async function estadoPendiente(codigo){
-    // Si podemos, consultamos el estado: solo mostramos si sigue pendiente. Si la
+    // Consultamos el estado: solo mostramos el acceso si el pedido SIGUE pendiente de pago.
+    // Usamos obtener_solicitud_grupo (resuelve el código de grupo del carrito y también un
+    // código suelto viejo) y devolvemos true solo si ALGÚN producto sigue pendiente. Si la
     // consulta falla (sin red), devolvemos true para no esconder el acceso.
     if(typeof SUPABASE_URL === "undefined" || !SUPABASE_URL) return true;
     try{
-      var res = await fetch(SUPABASE_URL + "rpc/obtener_solicitud_publica", {
+      var res = await fetch(SUPABASE_URL + "rpc/obtener_solicitud_grupo", {
         method: "POST",
         headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY },
         body: JSON.stringify({ p_codigo: codigo })
       });
       if(!res.ok) return true;
-      var s = await res.json();
-      if(!s) return true;
-      return s.estado === "pendiente";
+      var arr = await res.json();
+      if(!Array.isArray(arr) || !arr.length) return true;
+      // "En proceso" solo si al menos un producto del pedido sigue pendiente de pago.
+      return arr.some(function(s){ return s && s.estado === "pendiente"; });
     }catch(e){ return true; }
   }
 
