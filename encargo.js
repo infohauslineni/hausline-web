@@ -634,31 +634,31 @@
       if(!departamento) return showErr("Elegí tu departamento.");
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido.");
       const btn = form.querySelector(".enc-btn"); btn.disabled=true; btn.textContent="Creando…";
-      const url = (typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"") + "rpc/crear_solicitud_publica";
-      const sols = [];
+      // TODO el carrito se crea en UNA sola llamada atómica que devuelve UN código de grupo
+      // (SOL-####), el único que ve el cliente. Así no se pierden productos si algo falla a
+      // mitad, y el pedido es una sola orden con varios productos.
+      const url = (typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"") + "rpc/crear_solicitud_carrito";
       try{
-        for(let idx=0; idx<items.length; idx++){
-          const it = items[idx];
-          // El cupón de PORCENTAJE se aplica a cada ítem (equivale a % de todo el carrito). El de
-          // MONTO fijo se manda solo con el primer ítem, para no restar el monto en cada uno.
-          const codigoCup = cupon ? ((cupon.tipo === "porcentaje" || idx === 0) ? cupon.codigo : null) : null;
-          const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
-            body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
-              p_producto:it.nombre, p_producto_codigo:it.codigo||null, p_marca:it.marca||null, p_talla:it.talla||null, p_color:it.color||null,
-              p_cantidad:it.cantidad||1, p_precio_unitario:it.precioUnitario||0, p_envio:it.envio==='rapido'?'rapido':'estandar', p_recargo:recargoItem(it), p_pago:pago, p_imagen:it.imagen||null,
-              p_cupon_codigo: codigoCup }) });
-          if(!res.ok) throw new Error("HTTP "+res.status);
-          sols.push(String(await res.json()));
-        }
+        const envioCarrito = items.some(function(it){ return it.envio === "rapido"; }) ? "rapido" : "estandar";
+        const payloadItems = items.map(function(it){
+          return { producto: it.nombre, producto_codigo: it.codigo||null, marca: it.marca||null, talla: it.talla||null,
+            color: it.color||null, cantidad: it.cantidad||1, precio_unitario: it.precioUnitario||0,
+            recargo: recargoItem(it), envio: it.envio==='rapido'?'rapido':'estandar', imagen: it.imagen||null };
+        });
+        const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
+          body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
+            p_envio: envioCarrito, p_pago: pago, p_cupon_codigo: cupon ? cupon.codigo : null, p_items: payloadItems }) });
+        if(!res.ok) throw new Error("HTTP "+res.status);
+        const grupo = String(await res.json());
         if(typeof vaciarCarrito==="function") vaciarCarrito();
         suscribir(correo, nombre, form.optin && form.optin.checked);
-        recordarPedido(sols, items.length === 1 ? items[0].nombre : "Tu carrito");
-        renderOk(sols);
+        recordarPedido([grupo], items.length === 1 ? items[0].nombre : "Tu carrito");
+        renderOk([grupo]);
       }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
     function renderOk(sols){
-      // El carrito crea varios encargos: los pasamos todos al checkout separados por coma.
-      // Antes del redirect corre la animación de "Pedido confirmado" (el redirect va seguro).
+      // Ahora es UN solo código de grupo. Antes del redirect corre la animación de "Pedido
+      // confirmado" (el redirect va seguro).
       animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(",")); });
     }
   };

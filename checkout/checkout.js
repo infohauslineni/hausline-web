@@ -73,6 +73,19 @@
     return (data && data.codigo) ? data : null;
   }
 
+  // Expande UN código (de grupo/carrito, o una sola solicitud vieja) a la lista de sus
+  // productos. Devuelve un array o null. Sirve para el nuevo flujo de un solo código SOL.
+  async function fetchGrupo(codigo){
+    var res = await fetch(SB_URL + "rpc/obtener_solicitud_grupo", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "apikey":SB_KEY, "Authorization":"Bearer "+SB_KEY },
+      body: JSON.stringify({ p_codigo: codigo })
+    });
+    if(!res.ok) return null;
+    var data = await res.json();
+    return (Array.isArray(data) && data.length) ? data : null;
+  }
+
   // ---- Cálculo del estado agregado ----
   function calcular(items){
     var now = Date.now();
@@ -96,8 +109,10 @@
 
   function render(items){
     var c = calcular(items);
-    var codes = items.map(function(s){ return s.codigo; });
-    var codeStr = codes.join(", ");
+    // Un carrito comparte UN código de grupo: ese es el único que ve el cliente. Si no hay
+    // grupo (encargos viejos), se muestran los códigos individuales como antes.
+    var grupo = (items[0] && items[0].grupo_codigo) || null;
+    var codeStr = grupo || items.map(function(s){ return s.codigo; }).join(", ");
     var nombre = primerNombre(items[0] && items[0].cliente_nombre);
     ultimoEstado = c.estado;
 
@@ -119,7 +134,7 @@
     // Resumen (una fila por encargo + totales)
     var resumen = items.map(function(s){
       var rows = ""
-        + fila("Código", '<span class="v mono">'+esc(s.codigo)+'</span>')
+        + (s.grupo_codigo ? "" : fila("Código", '<span class="v mono">'+esc(s.codigo)+'</span>'))
         + fila("Producto", '<span class="v">'+esc(s.producto)+(s.marca?' · '+esc(s.marca):'')+'</span>')
         + (s.talla ? fila("Talla", '<span class="v">'+esc(s.talla)+'</span>') : "")
         + fila("Cantidad", '<span class="v">×'+esc(s.cantidad)+'</span>')
@@ -261,8 +276,16 @@
   var CODIGOS = [];
   async function cargar(silencioso){
     try{
-      var resultados = await Promise.all(CODIGOS.map(function(c){ return fetchSolicitud(c).catch(function(){ return null; }); }));
-      var items = resultados.filter(Boolean);
+      var items = null;
+      // Un solo código: puede ser el código de GRUPO de un carrito → lo expandimos a todos
+      // sus productos con una sola consulta. (También funciona para un código viejo suelto.)
+      if(CODIGOS.length === 1){
+        items = await fetchGrupo(CODIGOS[0]).catch(function(){ return null; });
+      }
+      if(!items){
+        var resultados = await Promise.all(CODIGOS.map(function(c){ return fetchSolicitud(c).catch(function(){ return null; }); }));
+        items = resultados.filter(Boolean);
+      }
       if(!items.length){
         if(!silencioso) error("No encontramos ese encargo", "Verificá que el código esté bien escrito (ejemplo: SOL-1234). Si acabás de crearlo, esperá unos segundos y recargá.");
         return;
