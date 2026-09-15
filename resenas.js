@@ -20,7 +20,7 @@
       .resenas-prom .cnt{font-size:12px;color:#8B857B;}
       .estrellas{display:inline-flex;gap:2px;line-height:1;}
       .estrellas svg{width:15px;height:15px;}
-      .estrellas .on{fill:#8A6A3B;}
+      .estrellas .on{fill:#E0A82E;}
       .estrellas .off{fill:none;stroke:#C9C4BC;stroke-width:1.5;}
       .resena-lista{display:flex;flex-direction:column;gap:11px;}
       .resena-card{border:1px solid #E7E3DC;border-radius:13px;padding:14px 15px;background:#F6F4F0;}
@@ -32,7 +32,7 @@
       .resena-foto img{width:100%;max-width:220px;border-radius:10px;border:1px solid #E7E3DC;display:block;}
       /* Producto reseñado: mini tarjeta para que se vea el modelo */
       .resena-producto{display:flex;align-items:center;gap:10px;margin-top:11px;padding:7px 9px;border:1px solid #E7E3DC;border-radius:11px;background:#F6F4F0;cursor:pointer;transition:border-color .15s,background .15s;}
-      .resena-producto:hover{border-color:rgba(138,106,59,.4);background:rgba(0,0,0,.04);}
+      .resena-producto:hover{border-color:rgba(23,19,16,.4);background:rgba(0,0,0,.04);}
       .resena-producto img{width:48px;height:48px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:#EFEDE8;}
       .resena-producto-nombre{font-size:12px;font-weight:700;color:#4A443C;line-height:1.35;}
       /* Sección del inicio */

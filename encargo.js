@@ -32,15 +32,15 @@
       .enc-f input,.enc-f select{width:100%;box-sizing:border-box;background:#F6F4F0;border:1px solid #E7E3DC;border-radius:10px;padding:11px 12px;color:#171310;font-size:15px;font-family:inherit;outline:none;}
       .enc-f select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a938d' d='M6 8 0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
       .enc-f select option{background:#FFFFFF;color:#171310;}
-      .enc-f input:focus,.enc-f select:focus{border-color:rgba(138,106,59,.5);}
+      .enc-f input:focus,.enc-f select:focus{border-color:rgba(23,19,16,.5);}
       .enc-row{display:flex;gap:10px;}
       .enc-row .enc-f{flex:1;}
       .enc-sub{font-size:12px;font-weight:600;color:#4A443C;margin:16px 0 0;}
       .enc-opts{display:flex;gap:8px;margin-top:7px;}
       .enc-opt{flex:1;border:1px solid #DDD8D0;border-radius:11px;padding:10px 11px;cursor:pointer;background:#F6F4F0;text-align:left;transition:.15s;}
-      .enc-opt.sel{border-color:#8A6A3B;background:rgba(138,106,59,.08);}
+      .enc-opt.sel{border-color:#171310;background:rgba(23,19,16,.08);}
       .enc-opt b{font-size:13px;display:block;}
-      .enc-opt.sel b{color:#8A6A3B;}
+      .enc-opt.sel b{color:#171310;}
       .enc-opt small{font-size:11px;color:#8B857B;display:block;margin-top:2px;}
       .enc-cart{margin-top:14px;border:1px solid #E7E3DC;border-radius:12px;overflow:hidden;}
       .enc-cart-it{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-bottom:1px solid #EDEAE3;font-size:12.5px;}
@@ -52,7 +52,7 @@
       .enc-total .line{display:flex;align-items:center;justify-content:space-between;gap:10px;}
       .enc-total .line + .line{margin-top:6px;}
       .enc-total .k{font-size:11px;font-weight:600;letter-spacing:.04em;color:#8B857B;}
-      .enc-total .k.hl{color:#8A6A3B;}
+      .enc-total .k.hl{color:#171310;}
       .enc-total .v{text-align:right;}
       .enc-total .usd{font-size:14px;font-weight:700;}
       .enc-total .usd.big{font-size:19px;font-weight:800;letter-spacing:-.02em;}
@@ -69,11 +69,11 @@
       .enc-trust .it{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;color:#4A443C;padding:9px 10px;border:1px solid #EDEAE3;border-radius:10px;background:#F6F4F0;}
       .enc-trust .it .em{font-size:14px;flex:none;line-height:1;}
       .enc-trust-tag{margin-top:9px;text-align:center;font-size:11px;color:#8B857B;line-height:1.5;}
-      .enc-trust-tag b{color:#8A6A3B;font-weight:700;}
+      .enc-trust-tag b{color:#171310;font-weight:700;}
       .enc-optin{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:12px;color:#4A443C;line-height:1.4;cursor:pointer;}
-      .enc-optin input{width:16px;height:16px;margin-top:1px;accent-color:#8A6A3B;flex:none;}
-      .enc-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(138,106,59,.14);color:#8A6A3B;display:grid;place-items:center;margin:6px auto 0;font-size:28px;}
-      .enc-sol{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:20px;color:#8A6A3B;text-align:center;margin-top:8px;letter-spacing:.06em;}
+      .enc-optin input{width:16px;height:16px;margin-top:1px;accent-color:#171310;flex:none;}
+      .enc-ok-ic{width:56px;height:56px;border-radius:50%;background:rgba(23,19,16,.14);color:#171310;display:grid;place-items:center;margin:6px auto 0;font-size:28px;}
+      .enc-sol{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:20px;color:#171310;text-align:center;margin-top:8px;letter-spacing:.06em;}
       .enc-cta-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8B857B;margin:18px 0 8px;}
       .enc-acc{border:1px solid #E7E3DC;border-radius:12px;overflow:hidden;}
       .enc-acc .r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-bottom:1px solid #EDEAE3;}
@@ -81,33 +81,33 @@
       .enc-acc .b{font-size:12.5px;font-weight:600;}
       .enc-acc .b small{display:block;color:#8B857B;font-weight:400;font-size:11px;margin-top:1px;}
       .enc-acc .num{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:#171310;background:rgba(0,0,0,.04);border:1px solid #E7E3DC;border-radius:8px;padding:5px 9px;cursor:pointer;white-space:nowrap;}
-      .enc-acc .num:active{background:rgba(138,106,59,.15);}
+      .enc-acc .num:active{background:rgba(23,19,16,.15);}
 
       /* ===== Pasarela de pago (pantalla de éxito) ===== */
       .enc-card{position:relative;}
       .pz-x{position:absolute;top:16px;right:16px;z-index:2;}
       .pz-hero{text-align:center;padding:6px 0 2px;}
-      .pz-check{width:64px;height:64px;border-radius:50%;background:#171310;color:#F7F3EC;display:grid;place-items:center;margin:0 auto;font-size:32px;font-weight:900;box-shadow:0 0 0 8px rgba(138,106,59,.12);}
+      .pz-check{width:64px;height:64px;border-radius:50%;background:#171310;color:#F7F3EC;display:grid;place-items:center;margin:0 auto;font-size:32px;font-weight:900;box-shadow:0 0 0 8px rgba(23,19,16,.12);}
       .pz-title{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:14px 0 0;}
       .pz-sub{font-size:12.5px;color:#8B857B;margin:6px 0 10px;}
-      .pz-code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:17px;color:#8A6A3B;letter-spacing:.08em;background:rgba(138,106,59,.08);border:1px solid rgba(138,106,59,.3);border-radius:10px;padding:7px 16px;}
-      .pz-pay{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:16px 18px;border:1px solid rgba(138,106,59,.28);background:rgba(138,106,59,.055);border-radius:16px;}
-      .pz-pay-k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8A6A3B;}
+      .pz-code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:17px;color:#171310;letter-spacing:.08em;background:rgba(23,19,16,.08);border:1px solid rgba(23,19,16,.3);border-radius:10px;padding:7px 16px;}
+      .pz-pay{margin-top:18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:16px 18px;border:1px solid rgba(23,19,16,.28);background:rgba(23,19,16,.055);border-radius:16px;}
+      .pz-pay-k{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#171310;}
       .pz-pay-usd{font-size:34px;font-weight:900;letter-spacing:-.02em;line-height:1.05;margin-top:2px;}
       .pz-pay-nio{font-size:13px;color:#3A6DA8;font-weight:700;margin-top:2px;}
       .pz-clock{display:flex;gap:9px;align-items:flex-start;max-width:190px;}
-      .pz-clock .ic{width:32px;height:32px;border-radius:50%;background:rgba(138,106,59,.12);color:#8A6A3B;display:grid;place-items:center;flex:none;font-size:16px;}
+      .pz-clock .ic{width:32px;height:32px;border-radius:50%;background:rgba(23,19,16,.12);color:#171310;display:grid;place-items:center;flex:none;font-size:16px;}
       .pz-clock b{font-size:13px;display:block;}
       .pz-clock small{font-size:11px;color:#8B857B;line-height:1.45;display:block;margin-top:2px;}
       .pz-sec{display:flex;align-items:center;gap:10px;margin:22px 0 12px;color:#8B857B;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;justify-content:center;}
-      .pz-sec::before,.pz-sec::after{content:"";height:1px;flex:1;background:rgba(138,106,59,.18);max-width:60px;}
+      .pz-sec::before,.pz-sec::after{content:"";height:1px;flex:1;background:rgba(23,19,16,.18);max-width:60px;}
       .pz-steps{display:flex;align-items:flex-start;gap:4px;padding:14px 8px;border:1px solid #E7E3DC;border-radius:14px;background:#F6F4F0;}
       .pz-step{flex:1;text-align:center;min-width:0;}
       .pz-step .n{width:30px;height:30px;border-radius:50%;background:#171310;color:#F7F3EC;font-weight:800;font-size:13px;display:grid;place-items:center;margin:0 auto;}
       .pz-step .em{font-size:19px;margin-top:7px;line-height:1;}
       .pz-step b{display:block;font-size:11.5px;margin-top:6px;}
       .pz-step small{display:block;font-size:10px;color:#8B857B;line-height:1.35;margin-top:2px;}
-      .pz-step .ar{align-self:center;color:#8A6A3B;font-size:15px;flex:none;padding-top:6px;}
+      .pz-step .ar{align-self:center;color:#171310;font-size:15px;flex:none;padding-top:6px;}
       .pz-acc-title{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;margin:20px 0 9px;}
       .pz-acc-title .em{font-size:15px;}
       .pz-accs{display:flex;flex-direction:column;gap:9px;}
@@ -120,8 +120,8 @@
       .pz-acc-num{text-align:right;}
       .pz-acc-num .lbl{font-size:10px;color:#8B857B;text-transform:uppercase;letter-spacing:.06em;display:block;}
       .pz-acc-num .val{font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:800;}
-      .pz-copy{flex:none;border:1px solid rgba(138,106,59,.35);background:rgba(138,106,59,.06);color:#8A6A3B;border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
-      .pz-copy:active{background:rgba(138,106,59,.18);}
+      .pz-copy{flex:none;border:1px solid rgba(23,19,16,.35);background:rgba(23,19,16,.06);color:#171310;border-radius:9px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+      .pz-copy:active{background:rgba(23,19,16,.18);}
       .pz-wa{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 16px;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.07);border-radius:14px;}
       .pz-wa .tx{flex:1;min-width:150px;}
       .pz-wa b{font-size:13.5px;display:flex;align-items:center;gap:7px;}
@@ -132,8 +132,8 @@
       .pz-help b{font-size:13px;display:flex;align-items:center;gap:7px;}
       .pz-help small{font-size:11.5px;color:#8B857B;display:block;margin-top:2px;}
       .pz-help a{flex:none;border:1px solid rgba(0,0,0,.16);color:#171310;border-radius:11px;padding:10px 15px;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;}
-      .pz-again{width:100%;margin-top:14px;border:1px solid rgba(138,106,59,.4);background:rgba(138,106,59,.07);color:#8A6A3B;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;}
-      .pz-again:hover{background:rgba(138,106,59,.12);}
+      .pz-again{width:100%;margin-top:14px;border:1px solid rgba(23,19,16,.4);background:rgba(23,19,16,.07);color:#171310;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;}
+      .pz-again:hover{background:rgba(23,19,16,.12);}
     `;
     document.head.appendChild(s);
   }
@@ -326,7 +326,7 @@
       <div class="pz-wa"><div class="tx"><b>💬 Enviá tu comprobante por WhatsApp</b><small>Subí tu comprobante para confirmar tu pago</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.waMsg)}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a></div>
       <div class="pz-help"><div class="tx"><b>🎧 ¿Necesitás ayuda?</b><small>Escribinos por WhatsApp y te ayudamos.</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.ayudaMsg)}" target="_blank" rel="noopener noreferrer">Contactar soporte</a></div>
       <button class="pz-again" type="button">🛍️ Encargar otro producto</button>
-      <div class="enc-hint">Guardá tu código <b style="color:#8A6A3B">${esc(o.codigo)}</b> para dar seguimiento a tu pedido. Si no coordinás el pago en 24 h, se cancela solo.</div>`;
+      <div class="enc-hint">Guardá tu código <b style="color:#171310">${esc(o.codigo)}</b> para dar seguimiento a tu pedido. Si no coordinás el pago en 24 h, se cancela solo.</div>`;
   }
   function bindPasarela(){
     const x=card.querySelector(".enc-x"); if(x) x.addEventListener("click", cerrar);
@@ -441,9 +441,9 @@
     function cuponHTML(){
       if(cupon){
         const et = cupon.tipo === "porcentaje" ? (cupon.valor + "%") : ("US$ " + Number(cupon.valor).toFixed(2));
-        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid rgba(138,106,59,.28);background:rgba(138,106,59,.06);border-radius:10px"><span>🎟️ <b>${esc(cupon.codigo)}</b> · ${esc(et)}</span><button type="button" data-cup-quitar style="background:none;border:0;color:#8B857B;cursor:pointer;font-weight:700">Quitar</button></div>`;
+        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid rgba(23,19,16,.28);background:rgba(23,19,16,.06);border-radius:10px"><span>🎟️ <b>${esc(cupon.codigo)}</b> · ${esc(et)}</span><button type="button" data-cup-quitar style="background:none;border:0;color:#8B857B;cursor:pointer;font-weight:700">Quitar</button></div>`;
       }
-      return `<div style="display:flex;gap:8px"><input type="text" data-cup-code placeholder="Código (opcional)" autocomplete="off" style="flex:1;text-transform:uppercase"><button type="button" data-cup-aplicar style="padding:0 16px;border-radius:10px;border:1px solid rgba(138,106,59,.4);background:rgba(138,106,59,.1);color:#8A6A3B;font-weight:700;cursor:pointer">Aplicar</button></div><div data-cup-err style="display:none;color:#C0392B;font-size:12px;margin-top:6px"></div>`;
+      return `<div style="display:flex;gap:8px"><input type="text" data-cup-code placeholder="Código (opcional)" autocomplete="off" style="flex:1;text-transform:uppercase"><button type="button" data-cup-aplicar style="padding:0 16px;border-radius:10px;border:1px solid rgba(23,19,16,.4);background:rgba(23,19,16,.1);color:#171310;font-weight:700;cursor:pointer">Aplicar</button></div><div data-cup-err style="display:none;color:#C0392B;font-size:12px;margin-top:6px"></div>`;
     }
     function renderCupon(){ const box = card.querySelector("[data-cupon]"); if(box){ box.innerHTML = cuponHTML(); wireCupon(); } }
     function wireCupon(){
@@ -474,7 +474,7 @@
       const saldo = Math.round((t.total - t.ahora) * 100) / 100;
       const descLines = t.desc > 0 ? `
         <div class="line"><div class="k">Subtotal${esc(envioTxt)}</div><div class="v"><span class="usd">${fmtUSD(t.bruto)}</span></div></div>
-        <div class="line"><div class="k hl">Descuento${cupon?" ("+esc(cupon.codigo)+")":""}</div><div class="v"><span class="usd" style="color:#8A6A3B">− ${fmtUSD(t.desc)}</span></div></div>` : ``;
+        <div class="line"><div class="k hl">Descuento${cupon?" ("+esc(cupon.codigo)+")":""}</div><div class="v"><span class="usd" style="color:#171310">− ${fmtUSD(t.desc)}</span></div></div>` : ``;
       return `
         ${descLines}
         <div class="line"><div class="k">${t.desc>0 ? "Total con descuento" : "Total del pedido"+esc(envioTxt)}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
@@ -560,7 +560,7 @@
       const cfg = envioCfg();
       const dias = items.some(it=>it.envio==='rapido') ? cfg.rapido.dias : cfg.estandar.dias;
       const descLines = t.desc > 0 ? `<div class="line"><div class="k">Subtotal</div><div class="v"><span class="usd">${fmtUSD(t.bruto)}</span></div></div>
-        <div class="line"><div class="k hl">Descuento${cupon?" ("+esc(cupon.codigo)+")":""}</div><div class="v"><span class="usd" style="color:#8A6A3B">− ${fmtUSD(t.desc)}</span></div></div>` : ``;
+        <div class="line"><div class="k hl">Descuento${cupon?" ("+esc(cupon.codigo)+")":""}</div><div class="v"><span class="usd" style="color:#171310">− ${fmtUSD(t.desc)}</span></div></div>` : ``;
       return `${descLines}<div class="line"><div class="k">${t.desc>0?"Total con descuento":"Total del pedido"}</div><div class="v"><span class="usd${parcial?'':' big'}">${fmtUSD(t.total)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.total))}</div></div></div>
         ${parcial?`
         <div class="line"><div class="k hl">Anticipo (a pagar ahora)</div><div class="v"><span class="usd big">${fmtUSD(t.ahora)}</span><div class="nio">≈ ${fmtNIO(cordobas(t.ahora))}</div></div></div>
@@ -599,9 +599,9 @@
     function cuponHTML(){
       if(cupon){
         const et = cupon.tipo === "porcentaje" ? (cupon.valor + "%") : ("US$ " + Number(cupon.valor).toFixed(2));
-        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid rgba(138,106,59,.28);background:rgba(138,106,59,.06);border-radius:10px"><span>🎟️ <b>${esc(cupon.codigo)}</b> · ${esc(et)}</span><button type="button" data-cup-quitar style="background:none;border:0;color:#8B857B;cursor:pointer;font-weight:700">Quitar</button></div>`;
+        return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid rgba(23,19,16,.28);background:rgba(23,19,16,.06);border-radius:10px"><span>🎟️ <b>${esc(cupon.codigo)}</b> · ${esc(et)}</span><button type="button" data-cup-quitar style="background:none;border:0;color:#8B857B;cursor:pointer;font-weight:700">Quitar</button></div>`;
       }
-      return `<div style="display:flex;gap:8px"><input type="text" data-cup-code placeholder="Código (opcional)" autocomplete="off" style="flex:1;text-transform:uppercase"><button type="button" data-cup-aplicar style="padding:0 16px;border-radius:10px;border:1px solid rgba(138,106,59,.4);background:rgba(138,106,59,.1);color:#8A6A3B;font-weight:700;cursor:pointer">Aplicar</button></div><div data-cup-err style="display:none;color:#C0392B;font-size:12px;margin-top:6px"></div>`;
+      return `<div style="display:flex;gap:8px"><input type="text" data-cup-code placeholder="Código (opcional)" autocomplete="off" style="flex:1;text-transform:uppercase"><button type="button" data-cup-aplicar style="padding:0 16px;border-radius:10px;border:1px solid rgba(23,19,16,.4);background:rgba(23,19,16,.1);color:#171310;font-weight:700;cursor:pointer">Aplicar</button></div><div data-cup-err style="display:none;color:#C0392B;font-size:12px;margin-top:6px"></div>`;
     }
     function renderCupon(){ const box = card.querySelector("[data-cupon]"); if(box){ box.innerHTML = cuponHTML(); wireCupon(); } }
     function wireCupon(){

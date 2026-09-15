@@ -22,7 +22,7 @@
     var s = document.createElement("style");
     s.id = "mp-css";
     s.textContent = `
-      .mp-bar{display:grid;grid-template-columns:auto 1fr auto;gap:9px 12px;align-items:center;margin:14px 0 0;padding:13px 15px;border:1px solid rgba(138,106,59,.35);background:rgba(138,106,59,.06);border-radius:14px;animation:mp-in .25s ease;}
+      .mp-bar{display:grid;grid-template-columns:auto 1fr auto;gap:9px 12px;align-items:center;margin:14px 0 0;padding:13px 15px;border:1px solid rgba(23,19,16,.35);background:rgba(23,19,16,.06);border-radius:14px;animation:mp-in .25s ease;}
       .mp-bar .ic{grid-row:1;font-size:22px;line-height:1;}
       .mp-bar .tx{grid-row:1;min-width:0;}
       .mp-bar .tx b{display:block;font-size:13.5px;color:#171310;}
