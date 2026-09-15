@@ -7,13 +7,16 @@
        resuelvan SIEMPRE desde la raíz y no contra /p/ (si no, las fotos 404). -->
   <base href="/">
   <!-- Seguridad: limita de dónde puede cargar recursos el navegador (anti inyección de código). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co; font-src 'self' data:; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co wss://epslwaxjemlysqtubbfu.supabase.co https://xgdijumnmaqfirmckugw.supabase.co wss://xgdijumnmaqfirmckugw.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co wss://epslwaxjemlysqtubbfu.supabase.co https://xgdijumnmaqfirmckugw.supabase.co wss://xgdijumnmaqfirmckugw.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Louboutin Low Top Spikes Estampado Geométrico · HAUSLINE</title>
   <meta name="description" content="Sneaker low top con paneles de gamuza negra y laterales con estampado geométrico multicolor, puntera blanca cubierta de tachuelas plateadas y suela blanca.">
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#FCFBF9">
   <link rel="canonical" href="https://hauslineshopni.es/p/CL0028/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
   <!-- Versión en Markdown para agentes/LLM (misma info del catálogo en texto plano). -->
   <link rel="alternate" type="text/markdown" href="https://hauslineshopni.es/index.md">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
@@ -129,44 +132,42 @@
 <header class="header">
   <div class="contenedor">
     <div class="header-fila">
-      <button class="btn-icono menu-toggle" id="menuToggle" type="button"
-              aria-label="Abrir menú" aria-expanded="false" aria-controls="menuLateral">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
-
-      <button class="logo" type="button" data-ir-inicio>HAUS<span>LINE</span></button>
-
-      <nav class="menu-desktop" aria-label="Navegación principal">
-        <button type="button" data-ir-inicio class="activo">Inicio</button>
-        <button type="button" data-categoria="Hombre">Hombre</button>
-        <button type="button" data-categoria="Dama">Dama</button>
-        <button type="button" data-categoria="Accesorios">Accesorios</button>
-        <button type="button" data-categoria="Decoración">Decoración</button>
-        <button type="button" data-coleccion="marcas">Marcas</button>
-        <button type="button" data-coleccion="ofertas">Ofertas</button>
-      </nav>
-
-      <div class="buscador-caja">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="search" id="buscador" placeholder="Buscar marca, producto o código…"
-               aria-label="Buscar marca, producto o código" autocomplete="off">
+      <div class="header-grp izq">
+        <button class="btn-icono menu-toggle" id="menuToggle" type="button"
+                aria-label="Abrir menú" aria-expanded="false" aria-controls="menuLateral">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
       </div>
 
-      <div class="conversor" role="group" aria-label="Cambiar moneda">
-        <button type="button" data-moneda="USD">USD</button>
-        <button type="button" data-moneda="NIO">C$</button>
+      <button class="logo" type="button" data-ir-inicio aria-label="HAUSLINE — inicio">
+        HAUSLINE
+      </button>
+
+      <div class="header-grp der">
+        <div class="conversor" role="group" aria-label="Cambiar moneda">
+          <button type="button" data-moneda="USD">USD</button>
+          <button type="button" data-moneda="NIO">C$</button>
+        </div>
+        <button class="btn-icono" id="btnFavoritos" type="button" aria-label="Ver favoritos">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          <span class="contador vacio" data-contador-favoritos>0</span>
+        </button>
+        <button class="btn-icono" id="btnCarrito" type="button" aria-label="Ver carrito">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="contador vacio" data-contador-carrito>0</span>
+        </button>
       </div>
-
-      <button class="btn-icono" id="btnFavoritos" type="button" aria-label="Ver favoritos">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        <span class="contador vacio" data-contador-favoritos>0</span>
-      </button>
-
-      <button class="btn-icono" id="btnCarrito" type="button" aria-label="Ver carrito">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span class="contador vacio" data-contador-carrito>0</span>
-      </button>
     </div>
+
+    <nav class="menu-desktop" aria-label="Navegación principal">
+      <button type="button" data-ir-inicio class="activo">Inicio</button>
+      <button type="button" data-categoria="Hombre">Hombre</button>
+      <button type="button" data-categoria="Dama">Dama</button>
+      <button type="button" data-categoria="Accesorios">Accesorios</button>
+      <button type="button" data-categoria="Decoración">Decoración</button>
+      <button type="button" data-coleccion="marcas">Marcas</button>
+      <button type="button" data-coleccion="ofertas">Ofertas</button>
+    </nav>
 
     <div class="fila-buscador">
       <div class="buscador-caja">
@@ -191,13 +192,65 @@
 
     <h1 class="solo-lectores">HAUSLINE — Tienda online de sneakers, ropa y accesorios en Nicaragua</h1>
 
-    <!-- Categorías visuales -->
-    <section class="seccion" aria-labelledby="tit-categorias">
-      <div class="seccion-cabecera">
-        <h2 id="tit-categorias">Explora por categoría</h2>
+    <!-- Hero editorial (portada) -->
+    <section class="hl-hero" aria-label="Presentación">
+      <p class="hl-hero-eyebrow">Colección · Temporada 2026</p>
+      <p class="hl-hero-titulo">luxury footwear &amp; fashion</p>
+      <p class="hl-hero-sub">Las marcas que buscás, en un solo lugar. Comprá con confianza y seguí tu pedido en todo momento.</p>
+      <div class="hl-hero-marcas" id="heroMarcas" role="group" aria-label="Comprar por marca">
+        <button class="hl-marca" type="button" data-marca="Golden Goose">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/Golden Goose/GG001/1.avif" alt="Golden Goose" loading="lazy"></span>
+          <span class="hl-marca-nombre">Golden Goose</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Christian Louboutin">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/Christian Loubutin/CL0001/CL001.jfif" alt="Christian Louboutin" loading="lazy"></span>
+          <span class="hl-marca-nombre">Louboutin</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Dolce &amp; Gabbana">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/Dolce &amp; Gabanna/D&amp;C001/1.jpg" alt="Dolce &amp; Gabbana" loading="lazy"></span>
+          <span class="hl-marca-nombre">Dolce &amp; Gabbana</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Off-White">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg" alt="Off-White" loading="lazy"></span>
+          <span class="hl-marca-nombre">Off-White</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Amiri">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/AMIRI/AR001/1.jpeg" alt="Amiri" loading="lazy"></span>
+          <span class="hl-marca-nombre">Amiri</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Balenciaga">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/BALENCIAGA/BL001/1.jpeg" alt="Balenciaga" loading="lazy"></span>
+          <span class="hl-marca-nombre">Balenciaga</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Casablanca">
+          <span class="hl-marca-foto"><img src="imgP/ropa/020.1.jpg" alt="Casablanca" loading="lazy"></span>
+          <span class="hl-marca-nombre">Casablanca</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Chrome Hearts">
+          <span class="hl-marca-foto"><img src="imgP/ropa/013.1.jpg" alt="Chrome Hearts" loading="lazy"></span>
+          <span class="hl-marca-nombre">Chrome Hearts</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Louis Vuitton">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/1.jpg" alt="Louis Vuitton" loading="lazy"></span>
+          <span class="hl-marca-nombre">Louis Vuitton</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Christian Dior">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/Christian Dior/CH001/1.webp" alt="Dior" loading="lazy"></span>
+          <span class="hl-marca-nombre">Dior</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Moncler">
+          <span class="hl-marca-foto"><img src="imgP/ropa/010.1.jpg" alt="Moncler" loading="lazy"></span>
+          <span class="hl-marca-nombre">Moncler</span>
+        </button>
+        <button class="hl-marca" type="button" data-marca="Birkenstock">
+          <span class="hl-marca-foto"><img src="imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg" alt="Birkenstock" loading="lazy"></span>
+          <span class="hl-marca-nombre">Birkenstock</span>
+        </button>
       </div>
-      <div class="fila fila-ancha" id="filaCategorias"></div>
     </section>
+
+    <!-- "Explora por categoría" retirada por decisión de HAUSLINE -->
+    <div id="filaCategorias" hidden></div>
 
     <!-- Entrega inmediata -->
     <section class="seccion" id="entrega-inmediata" aria-labelledby="tit-inmediata">
@@ -297,16 +350,8 @@
       <div class="fila" id="filaOfertas"></div>
     </section>
 
-    <!-- Marcas -->
-    <section class="seccion" aria-labelledby="tit-marcas">
-      <div class="seccion-cabecera">
-        <h2 id="tit-marcas">Marcas populares</h2>
-        <button class="ver-todo" type="button" data-coleccion="marcas">
-          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
-      <div class="fila fila-ancha" id="filaMarcas"></div>
-    </section>
+    <!-- Marcas populares: retirada; las marcas ahora van con foto en el hero (#heroMarcas) -->
+    <div id="filaMarcas" hidden></div>
 
     <!-- Lookbook (banner grande de un estilo) -->
     <section class="seccion" aria-label="Lookbook">
