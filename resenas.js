@@ -17,31 +17,31 @@
       .resenas-cab h3{font-size:16px;font-weight:800;margin:0;letter-spacing:-.01em;}
       .resenas-prom{display:flex;align-items:center;gap:8px;}
       .resenas-prom .num{font-size:15px;font-weight:800;}
-      .resenas-prom .cnt{font-size:12px;color:#8a938d;}
+      .resenas-prom .cnt{font-size:12px;color:#8B857B;}
       .estrellas{display:inline-flex;gap:2px;line-height:1;}
       .estrellas svg{width:15px;height:15px;}
-      .estrellas .on{fill:#b7ff00;}
-      .estrellas .off{fill:none;stroke:#5f6863;stroke-width:1.5;}
+      .estrellas .on{fill:#8A6A3B;}
+      .estrellas .off{fill:none;stroke:#C9C4BC;stroke-width:1.5;}
       .resena-lista{display:flex;flex-direction:column;gap:11px;}
-      .resena-card{border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:14px 15px;background:rgba(255,255,255,.02);}
+      .resena-card{border:1px solid #E7E3DC;border-radius:13px;padding:14px 15px;background:#F6F4F0;}
       .resena-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;}
       .resena-nombre{font-size:13.5px;font-weight:700;}
-      .resena-fecha{font-size:11px;color:#8a938d;white-space:nowrap;}
-      .resena-txt{font-size:13px;line-height:1.55;color:#c3c9c5;}
+      .resena-fecha{font-size:11px;color:#8B857B;white-space:nowrap;}
+      .resena-txt{font-size:13px;line-height:1.55;color:#4A443C;}
       .resena-foto{margin-top:10px;}
-      .resena-foto img{width:100%;max-width:220px;border-radius:10px;border:1px solid rgba(255,255,255,.1);display:block;}
+      .resena-foto img{width:100%;max-width:220px;border-radius:10px;border:1px solid #E7E3DC;display:block;}
       /* Producto reseñado: mini tarjeta para que se vea el modelo */
-      .resena-producto{display:flex;align-items:center;gap:10px;margin-top:11px;padding:7px 9px;border:1px solid rgba(255,255,255,.09);border-radius:11px;background:rgba(255,255,255,.02);cursor:pointer;transition:border-color .15s,background .15s;}
-      .resena-producto:hover{border-color:rgba(183,255,0,.4);background:rgba(255,255,255,.04);}
-      .resena-producto img{width:48px;height:48px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:#0c0e0d;}
-      .resena-producto-nombre{font-size:12px;font-weight:700;color:#c3c9c5;line-height:1.35;}
+      .resena-producto{display:flex;align-items:center;gap:10px;margin-top:11px;padding:7px 9px;border:1px solid #E7E3DC;border-radius:11px;background:#F6F4F0;cursor:pointer;transition:border-color .15s,background .15s;}
+      .resena-producto:hover{border-color:rgba(138,106,59,.4);background:rgba(0,0,0,.04);}
+      .resena-producto img{width:48px;height:48px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:#EFEDE8;}
+      .resena-producto-nombre{font-size:12px;font-weight:700;color:#4A443C;line-height:1.35;}
       /* Sección del inicio */
       .resenas-home .fila{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;}
       .resenas-home .resena-card{flex:0 0 82%;max-width:340px;scroll-snap-align:start;}
       @media(min-width:720px){.resenas-home .resena-card{flex:0 0 320px;}}
       .resenas-home-prom{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
       .resenas-home-prom .num{font-size:20px;font-weight:900;}
-      .resenas-home-prom .cnt{font-size:13px;color:#8a938d;}
+      .resenas-home-prom .cnt{font-size:13px;color:#8B857B;}
       /* Estrellas de la tarjeta: pill sobre la foto, esquina superior izquierda */
       .card-rating{display:inline-flex;align-items:center;gap:5px;background:rgba(5,5,5,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:3px 8px;border-radius:999px;}
       .card-rating:empty{display:none;}

@@ -213,8 +213,8 @@ function crearCard(producto, modoInmediata){
         <h3 class="card-nombre">${esc(nombreProducto(producto))}</h3>
         <div class="card-meta">
           <div class="card-precio">${precioHtml}</div>
-          <div class="card-codigo">${esc(producto.codigo)}</div>
         </div>
+        <span class="card-codigo">${esc(producto.codigo)}</span>
         ${tallasHtml}
         <div class="card-acciones">
           ${cotizar
@@ -2143,9 +2143,9 @@ document.addEventListener("click", e => {
     const valor = col.dataset.coleccion;
     if(valor === "marcas"){
       irInicio();
-      renderMarcas();
       marcarNav("coleccion", "marcas");
-      $("#filaMarcas").scrollIntoView({ behavior:"smooth", block:"center" });
+      const hm = $("#heroMarcas");
+      if(hm) hm.scrollIntoView({ behavior:"smooth", block:"center" });
       cerrarMenu();
       return;
     }
