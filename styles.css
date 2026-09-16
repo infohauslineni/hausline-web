@@ -1716,23 +1716,32 @@ footer{
 
 .btn-whatsapp{
   width:100%;
-  height:50px;
+  height:56px;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:9px;
+  gap:10px;
   background:var(--verde);
   color:var(--cream);
   border:none;
-  border-radius:var(--radio-pill);
-  font-size:15px;
-  font-weight:700;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:.07em;
+  text-transform:uppercase;
   cursor:pointer;
-  transition:background var(--t-rapida) var(--ease), transform var(--t-rapida) var(--ease);
+  box-shadow:0 10px 26px rgba(23,19,16,.20);
+  animation:cta-latido 2.8s var(--ease) infinite;
+  transition:background var(--t-rapida) var(--ease), transform var(--t-rapida) var(--ease), box-shadow var(--t-rapida) var(--ease);
 }
-.btn-whatsapp:hover{ background:#2b2420; }
-.btn-whatsapp:active{ transform:scale(.98); }
-.btn-whatsapp svg{ width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.9; }
+@keyframes cta-latido{
+  0%,100%{ box-shadow:0 10px 26px rgba(23,19,16,.20); }
+  50%{ box-shadow:0 14px 32px rgba(23,19,16,.34); }
+}
+@media(prefers-reduced-motion:reduce){ .btn-whatsapp{ animation:none; } }
+.btn-whatsapp:hover{ background:#2b2420; transform:translateY(-2px); animation:none; }
+.btn-whatsapp:active{ transform:translateY(0) scale(.98); }
+.btn-whatsapp svg{ width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2; }
 
 .btn-secundario{
   width:100%;
@@ -2939,7 +2948,7 @@ body.en-producto .vista-coleccion{ display:none; }
 
 .btn-verde:hover,
 .btn-whatsapp:hover{
-  box-shadow:0 0 0 1px rgba(23,19,16,.5), 0 6px 22px rgba(23,19,16,.22);
+  box-shadow:0 16px 38px rgba(23,19,16,.32);
 }
 .chip.activo,
 .conversor button.activo,

@@ -1388,7 +1388,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // no tiene sentido pagar/agregar algo sin precio, así que solo se cotiza.
   const btnWa = $("#btnWhatsappProducto");
   if(btnWa && btnWa.lastChild){
-    btnWa.lastChild.textContent = cotizar ? " Cotizar por WhatsApp" : " Encargar";
+    btnWa.lastChild.textContent = cotizar ? " Cotizar" : " Comprar";
   }
   const btnCart = $("#btnAgregarCarrito");
   if(btnCart) btnCart.hidden = cotizar;
