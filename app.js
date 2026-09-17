@@ -921,13 +921,8 @@ function renderInicio(){
 // Respeta "reducir movimiento" del dispositivo.
 let observadorRevelado = null;
 function activarRevelado(){
-  const secciones = document.querySelectorAll(".vista-inicio .seccion, .vista-inicio .banners");
-  // Si el dispositivo pide menos movimiento o no hay IntersectionObserver, mostrar TODO de
-  // una (nunca dejar contenido invisible).
-  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)){
-    secciones.forEach(el => el.classList.add("revelado"));
-    return;
-  }
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if(!("IntersectionObserver" in window)) return;
 
   if(!observadorRevelado){
     observadorRevelado = new IntersectionObserver(entradas => {
@@ -937,32 +932,16 @@ function activarRevelado(){
           observadorRevelado.unobserve(e.target);
         }
       });
-    // rootMargin inferior POSITIVO: revela la sección un poco ANTES de entrar del todo, para
-    // que nunca quede un hueco invisible en el borde de la pantalla (antes era -40px y dejaba
-    // "Nuevo en HAUSLINE" fantasma en el celular).
-    }, { threshold: 0, rootMargin: "0px 0px 12% 0px" });
+    }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
   }
 
-  const vh = window.innerHeight || document.documentElement.clientHeight;
-  secciones.forEach(el => {
-    if(el.classList.contains("revelado")) return;
-    // Lo que está en la primera pantalla-y-media al cargar se muestra de inmediato, sin esperar
-    // scroll: así el arranque nunca aparece con un hueco en blanco (ej. "Nuevo en HAUSLINE",
-    // que queda justo debajo del fold en el celular). Solo las secciones más abajo se animan.
-    if(el.getBoundingClientRect().top < vh * 1.4){
-      el.classList.add("revelado");
-      return;
-    }
-    el.classList.add("por-revelar");
-    observadorRevelado.observe(el);
-  });
-
-  // Failsafe: si por lo que sea el observer no dispara (scroll raro, timing), a los 1.6s se
-  // muestra todo lo que siga oculto. El contenido nunca queda invisible.
-  setTimeout(() => {
-    document.querySelectorAll(".vista-inicio .seccion.por-revelar:not(.revelado), .vista-inicio .banners.por-revelar:not(.revelado)")
-      .forEach(el => el.classList.add("revelado"));
-  }, 1600);
+  document.querySelectorAll(".vista-inicio .seccion, .vista-inicio .banners")
+    .forEach(el => {
+      if(!el.classList.contains("revelado")){
+        el.classList.add("por-revelar");
+        observadorRevelado.observe(el);
+      }
+    });
 }
 
 function renderVistos(){
