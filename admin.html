@@ -105,6 +105,9 @@
   .tallas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px;margin-top:8px}
   .talla-chk{display:flex;align-items:center;gap:7px;border:1px solid var(--linea2);border-radius:10px;padding:9px 10px;font-size:13px;cursor:pointer;background:var(--panel2);margin:0;text-transform:none;letter-spacing:0;color:var(--texto);font-weight:500}
   .talla-chk input{width:15px;height:15px;accent-color:var(--verde)}
+  /* Etiquetas del producto */
+  .etq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+  @media(max-width:520px){ .etq-grid{grid-template-columns:1fr} }
 
   /* Colores chips */
   .chips-color{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
@@ -409,6 +412,21 @@
                 <div id="rowColoresEI" style="display:none;margin-top:10px"><label>Colores disponibles ahora (entrega inmediata)</label><input id="fColoresEntregaInmediata" placeholder="Ej: Negro, Blanco"><small class="hint">Separados por coma. Solo si el producto tiene colores. Dejalo vacío si no aplica.</small></div>
               </div>
 
+              <div class="card">
+                <h2 class="card-h">Etiquetas del producto</h2>
+                <p class="hint" style="margin:0 0 12px">Salen en la tarjeta y en la página del producto. Prendé solo las que apliquen (podés varias).</p>
+                <div class="etq-grid">
+                  <label class="talla-chk"><input id="fEtqOg100" type="checkbox"><span>100% OG</span></label>
+                  <label class="talla-chk"><input id="fEtqMasVendido" type="checkbox"><span>Más vendido</span></label>
+                  <label class="talla-chk"><input id="fEtqUltimasUnidades" type="checkbox"><span>Últimas unidades</span></label>
+                  <label class="talla-chk"><input id="fEtqExclusivo" type="checkbox"><span>Exclusivo</span></label>
+                  <label class="talla-chk"><input id="fEtqPreventa" type="checkbox"><span>Preventa</span></label>
+                  <label class="talla-chk"><input id="fEtqEdicionLimitada" type="checkbox"><span>Edición limitada</span></label>
+                  <label class="talla-chk"><input id="fEtqRestock" type="checkbox"><span>De vuelta</span></label>
+                  <label class="talla-chk"><input id="fEtqRecomendado" type="checkbox"><span>Recomendado</span></label>
+                </div>
+              </div>
+
               <div id="avisoForm" class="aviso"></div>
               <button id="btnLimpiar" class="btn btn-sec" style="margin-top:14px;">Limpiar formulario</button>
             </div>
@@ -473,7 +491,10 @@
     const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
     return { codigo:p.codigo, nombre:p.nombreReal||p.nombre||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
       precio:Number(p.precio||0), cotizar:p.cotizar===true, precioOferta:Number(p.precioOferta||0), promocionHasta:p.promocionHasta||"",
-      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], colores:p.colores||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true };
+      descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], colores:p.colores||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true,
+      // Etiquetas opcionales del producto base (para que al editar un producto que ya las trae
+      // del código —ej. los Birkenstock con 100% OG— salgan pre-marcadas y no se pierdan al guardar).
+      og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true };
   }
 
   // ============ Fotos ============
@@ -647,6 +668,9 @@
       const ruta=`${codigo}/${Date.now()}-${i}.jpg`;
       const {error}=await supa.storage.from(BUCKET).upload(ruta,f.blob,{contentType:"image/jpeg",upsert:true}); if(error) throw error;
       urls.push(supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl); } return urls; }
+  // Etiquetas opcionales del producto: [idDelCheckbox, propiedadEnDatos]. Deben coincidir con
+  // ETIQUETAS_OPCIONALES de productos.js (el sitio lee esa propiedad y muestra el badge).
+  const ETQ_ADMIN=[["fEtqOg100","og100"],["fEtqMasVendido","masVendido"],["fEtqUltimasUnidades","ultimasUnidades"],["fEtqExclusivo","exclusivo"],["fEtqPreventa","preventa"],["fEtqEdicionLimitada","edicionLimitada"],["fEtqRestock","restock"],["fEtqRecomendado","recomendado"]];
   $("btnGuardar").addEventListener("click",async()=>{
     const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
     if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
@@ -663,6 +687,8 @@
         posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
         escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
         destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), fecha:new Date().toISOString().slice(0,10) };
+      // Etiquetas opcionales elegidas en el formulario.
+      ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
 
       // El tracking es OTRO proyecto Supabase (el panel no tiene acceso a escribirle).
@@ -680,6 +706,7 @@
     $("fTipoRopa").value="";
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
+    ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos();
     campoATallasUI(); campoAColoresUI(); }
@@ -696,6 +723,7 @@
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
+    ETQ_ADMIN.forEach(([id,prop])=>{ $(id).checked=datos[prop]===true; });
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
   // ============ Datos ============

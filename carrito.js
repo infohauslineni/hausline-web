@@ -24,6 +24,16 @@ function claveVariante(codigo, talla, color){
 function agregarAlCarrito(item, cantidad){
   cantidad = cantidad || 1;
   const items = leerCarrito();
+  const nuevoInmediata = !!item.entregaInmediata;
+  // No se pueden mezclar productos de ENTREGA INMEDIATA con productos POR ENCARGO en el mismo
+  // carrito: el pago es distinto (los de encargo llevan abono del 50% y van al checkout; los
+  // inmediatos se pagan al recibir). Si el carrito ya tiene del otro tipo, se bloquea y se le
+  // pide al cliente hacer los pedidos por separado. Devuelve {ok:false, motivo} en ese caso.
+  if(items.length && items.some(i => !!i.entregaInmediata !== nuevoInmediata)){
+    return { ok:false, motivo: nuevoInmediata
+      ? "Este producto es de entrega inmediata y tu carrito tiene productos por encargo. Terminá ese pedido (o vaciá el carrito) y pedí los de entrega inmediata por separado."
+      : "Este producto es por encargo y tu carrito tiene productos de entrega inmediata. Terminá ese pedido (o vaciá el carrito) y encargá por separado." };
+  }
   const clave = claveVariante(item.codigo, item.talla, item.color);
   const existente = items.find(i => claveVariante(i.codigo, i.talla, i.color) === clave);
 
@@ -48,6 +58,7 @@ function agregarAlCarrito(item, cantidad){
     });
   }
   guardarCarrito(items);
+  return { ok:true };
 }
 
 function cambiarCantidad(clave, delta){

@@ -2044,11 +2044,15 @@ document.addEventListener("click", e => {
     e.stopPropagation();
     const p = buscarProducto(btnAgregar.dataset.agregar);
     if(p){
-      agregarAlCarrito(itemCarritoDesde(p), 1);
-      mostrarAviso("Agregado al carrito");
-      animarContador("[data-contador-carrito]");
-      btnAgregar.classList.add("ok");
-      setTimeout(() => btnAgregar.classList.remove("ok"), 900);
+      const r = agregarAlCarrito(itemCarritoDesde(p), 1);
+      if(r && r.ok === false){
+        mostrarAviso(r.motivo);
+      } else {
+        mostrarAviso("Agregado al carrito");
+        animarContador("[data-contador-carrito]");
+        btnAgregar.classList.add("ok");
+        setTimeout(() => btnAgregar.classList.remove("ok"), 900);
+      }
     }
     return;
   }
@@ -2365,9 +2369,13 @@ $("#cantidadMas").addEventListener("click", () => {
 // Agregar al carrito
 $("#btnAgregarCarrito").addEventListener("click", () => {
   if(!productoActual || !validarSeleccion()) return;
-  agregarAlCarrito(itemDesdeProducto(), cantidadSeleccionada);
-  animarContador("[data-contador-carrito]");
-  mostrarAviso("Agregado al carrito");
+  const r = agregarAlCarrito(itemDesdeProducto(), cantidadSeleccionada);
+  if(r && r.ok === false){
+    mostrarAviso(r.motivo);
+  } else {
+    animarContador("[data-contador-carrito]");
+    mostrarAviso("Agregado al carrito");
+  }
 });
 
 // Encargar por WhatsApp (producto individual)
