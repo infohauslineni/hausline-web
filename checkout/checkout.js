@@ -272,6 +272,45 @@
       + '</section>';
   }
 
+  // ---- Google Customer Reviews (opt-in) ----
+  // Al aterrizar en la confirmación, si en el paso anterior guardamos los datos del pedido
+  // (código + correo + entrega estimada), mostramos el módulo de opt-in de Google para que el
+  // cliente acepte recibir la encuesta de reseña. Se dispara UNA sola vez por página. El
+  // módulo solo aparece en el dominio real reclamado en Merchant Center, no en localhost.
+  var GCR_MERCHANT_ID = "5847964157";
+  var gcrDisparado = false;
+  function dispararResenaGoogle(){
+    if(gcrDisparado) return;
+    var raw; try{ raw = sessionStorage.getItem("hausline_gcr"); }catch(_){ return; }
+    if(!raw) return;
+    var d; try{ d = JSON.parse(raw); }catch(_){ return; }
+    if(!d || !d.email || !d.order_id) return;
+    // Solo si estos datos son del pedido que se está viendo (no dispararlo en otro código).
+    if(CODIGOS.length && CODIGOS.indexOf(String(d.order_id).toUpperCase()) === -1) return;
+    gcrDisparado = true;
+    try{ sessionStorage.removeItem("hausline_gcr"); }catch(_){}
+    // renderOptIn debe ser global: platform.js lo llama con ?onload=renderOptIn.
+    window.renderOptIn = function(){
+      if(!window.gapi || !window.gapi.load) return;
+      window.gapi.load("surveyoptin", function(){
+        try{
+          window.gapi.surveyoptin.render({
+            "merchant_id": GCR_MERCHANT_ID,
+            "order_id": String(d.order_id),
+            "email": String(d.email),
+            "delivery_country": "NI",
+            "estimated_delivery_date": String(d.estimated_delivery_date || ""),
+            "opt_in_style": "CENTER_DIALOG"
+          });
+        }catch(_){}
+      });
+    };
+    var s = document.createElement("script");
+    s.src = "https://apis.google.com/js/platform.js?onload=renderOptIn";
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  }
+
   // ---- Carga + polling ----
   var CODIGOS = [];
   async function cargar(silencioso){
@@ -294,6 +333,8 @@
       // del pago. Así el contador sigue corriendo solo y la página no "parpadea"/recarga.
       if(silencioso && ultimoEstado !== null && calcular(items).estado === ultimoEstado) return;
       render(items);
+      // Tras la primera carga válida, ofrecemos la encuesta de reseña de Google (una vez).
+      dispararResenaGoogle();
     }catch(ex){
       if(!silencioso) error("No pudimos cargar tu encargo", "Revisá tu conexión e intentá de nuevo. Si el problema sigue, escribinos por WhatsApp.");
     }

@@ -367,6 +367,24 @@
     }catch(e){}
   }
 
+  // Google Customer Reviews: guardamos los datos del pedido recién creado para que la página
+  // de confirmación (/checkout/) muestre el módulo de opt-in de Google (encuesta de reseña).
+  // Solo si el cliente dejó correo (Google envía la encuesta por email). Se pasa por
+  // sessionStorage a propósito: NO exponemos el correo en la URL ni en la base pública.
+  function guardarDatosResenaGoogle(codigo, correo, envio){
+    try{
+      if(!codigo || !correo) return;
+      var dias = envio === "rapido" ? 17 : 25; // margen holgado sobre el tiempo de entrega
+      var f = new Date(Date.now() + dias * 24 * 60 * 60 * 1000);
+      var fecha = f.getFullYear() + "-" + String(f.getMonth() + 1).padStart(2, "0") + "-" + String(f.getDate()).padStart(2, "0");
+      sessionStorage.setItem("hausline_gcr", JSON.stringify({
+        order_id: String(codigo),
+        email: String(correo),
+        estimated_delivery_date: fecha
+      }));
+    }catch(e){}
+  }
+
   // producto: objeto del catálogo. opts: { talla, color, cantidad, precio } (opcional).
   window.abrirEncargo = function(producto, opts){
     if(!producto) return;
@@ -516,6 +534,7 @@
         if(!res.ok){ throw new Error("HTTP "+res.status); }
         const sol = await res.json();
         suscribir(correo, nombreV, form.optin && form.optin.checked);
+        guardarDatosResenaGoogle(String(sol), correo, envio);
         recordarPedido(String(sol), nombre);
         renderOk(String(sol), talla);
       }catch(ex){
@@ -652,6 +671,7 @@
         const grupo = String(await res.json());
         if(typeof vaciarCarrito==="function") vaciarCarrito();
         suscribir(correo, nombre, form.optin && form.optin.checked);
+        guardarDatosResenaGoogle(grupo, correo, envioCarrito);
         recordarPedido([grupo], items.length === 1 ? items[0].nombre : "Tu carrito");
         renderOk([grupo]);
       }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
