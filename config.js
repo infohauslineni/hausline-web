@@ -54,11 +54,10 @@ function cordobasCerrados(usd){
 // ---------- CUENTAS DE PAGO (encargos por transferencia) ----------
 // El cliente ve estas cuentas al encargar para hacer la transferencia.
 // Para cambiar una cuenta, edita solo esta lista.
-// NOTA: la LAFISE Dólares ya es la de Alejandro (133254039). La LAFISE Córdobas
-// sigue siendo la de Xiomara (137034030); cuando se desbloquee, cambiarla a 138038710.
+// NOTA: todas las cuentas son de Alejandro Uzziel Linares Flores.
 const HAUSLINE_CUENTAS = [
   { banco: "LAFISE",         moneda: "Dólares",  numero: "133254039", titular: "Alejandro Uzziel Linares Flores" },
-  { banco: "LAFISE",         moneda: "Córdobas", numero: "137034030", titular: "Xiomara Rivas López" },
+  { banco: "LAFISE",         moneda: "Córdobas", numero: "138038710", titular: "Alejandro Uzziel Linares Flores" },
   { banco: "BAC",            moneda: "Dólares",  numero: "374570968", titular: "Alejandro Uzziel Linares Flores" },
   { banco: "BAC",            moneda: "Córdobas", numero: "374570869", titular: "Alejandro Uzziel Linares Flores" },
 ];
