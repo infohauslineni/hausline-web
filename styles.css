@@ -3215,6 +3215,20 @@ body.en-producto .vista-coleccion{ display:none; }
   text-align:center;
 }
 @media(max-width:520px){ .hl-marca{ flex-basis:84px; } }
+/* En PC las marcas se estiran para llenar TODO el ancho del hero (antes quedaban pegadas a
+   la izquierda con un hueco a la derecha). En teléfono/tablet se mantienen chicas y
+   deslizables (scroll horizontal). */
+@media(min-width:900px){
+  .hl-hero-marcas{
+    overflow-x:visible;
+    scroll-snap-type:none;
+    gap:14px;
+  }
+  .hl-hero-marcas .hl-marca{
+    flex:1 1 0;
+    min-width:0;
+  }
+}
 .hl-marca:hover{
   border-color:var(--texto);
   transform:translateY(-3px);
