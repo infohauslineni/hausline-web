@@ -27,10 +27,9 @@
   form.addEventListener("submit", async function(e){
     e.preventDefault();
     err.style.display = "none";
-    var nombre = document.getElementById("nombre").value.trim();
+    var nombre = "Cliente verificado";
     var comentario = document.getElementById("comentario").value.trim();
     if(!estrellas) return mostrarErr("Elegí cuántas estrellas.");
-    if(nombre.length < 2) return mostrarErr("Escribí tu nombre.");
 
     var btn = document.getElementById("enviar");
     btn.disabled = true; btn.textContent = "Enviando…";
