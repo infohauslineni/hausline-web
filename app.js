@@ -988,7 +988,9 @@ function urlColeccion(tipo, valor){
   // (/p/CODIGO/) la URL de la colección NO debe colgar de esa ruta.
   if(tipo === "categoria") return "/?categoria=" + encodeURIComponent(valor);
   if(tipo === "seccion")   return "/?coleccion=" + encodeURIComponent(valor);
-  if(tipo === "marca")     return "/?marca="     + encodeURIComponent(valor);
+  // La marca usa su propia ruta /m/<slug>/ (indexable + con preview propio al
+  // compartir en WhatsApp/Facebook, generada por scripts/gen-og-marcas.mjs).
+  if(tipo === "marca")     return "/m/" + slugMarca(valor) + "/";
   if(tipo === "busqueda")  return "/?buscar="    + encodeURIComponent(valor);
   return null;
 }
@@ -1056,6 +1058,28 @@ function irInicio(sinHistorial){
 
 // Normaliza una marca para comparar: sin mayúsculas, espacios ni símbolos.
 function normMarca(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,""); }
+
+// Slug "bonito" y legible de una marca para la URL compartible (/m/<slug>/):
+// minúsculas, sin acentos, espacios y símbolos → guiones. "Golden Goose" → "golden-goose",
+// "Dolce & Gabbana" → "dolce-gabbana", "Off-White" → "off-white".
+function slugMarca(nombre){
+  return String(nombre||"")
+    .normalize("NFD").replace(/[̀-ͯ]/g,"")   // quita acentos
+    .toLowerCase()
+    .replace(/&/g," ")                                   // "&" → espacio (se colapsa a guión)
+    .replace(/[^a-z0-9]+/g,"-")                          // no alfanumérico → guión
+    .replace(/^-+|-+$/g,"");                             // sin guiones al inicio/fin
+}
+// Busca la marca real del catálogo a partir de un slug de la URL. Compara sin
+// símbolos (normMarca) para que "golden-goose" case con "Golden Goose".
+function marcaPorSlug(slug){
+  const objetivo = normMarca(slug);
+  if(!objetivo) return null;
+  const m = (typeof marcasCatalogo !== "undefined" ? marcasCatalogo : []).find(x => normMarca(x.nombre) === objetivo);
+  if(m) return m.nombre;
+  const p = productos.find(x => x.marca && normMarca(x.marca) === objetivo);
+  return p ? p.marca : null;
+}
 // Lista base para una búsqueda, respetando el contexto (categoría/subcategoría o
 // marca) desde el que el cliente empezó a buscar. Así, si estaba viendo "Ropa" y
 // busca, no se le cruza el calzado. Sin contexto la búsqueda es sobre todo el catálogo.
@@ -1708,8 +1732,13 @@ window.addEventListener("popstate", () => {
 
   const categoria = p.get("categoria");
   const coleccion = p.get("coleccion");
-  const marca     = p.get("marca");
+  let   marca     = p.get("marca");
   const buscar    = p.get("buscar");
+  // La marca puede venir por su ruta propia (/m/<slug>/), no solo por ?marca=.
+  if(!marca){
+    const mm = location.pathname.match(/^\/m\/([^\/]+)\/?$/);
+    if(mm) marca = marcaPorSlug(decodeURIComponent(mm[1]));
+  }
 
   // Descriptor del destino según la URL.
   let destino;
@@ -2645,7 +2674,13 @@ function iniciar(){
   const colURL = params.get("coleccion");
   const marURL = params.get("marca");
   const busURL = params.get("buscar");
-  if(catURL && CATEGORIAS.some(c => c.id === catURL)){
+  // Ruta propia de marca (/m/<slug>/): página indexable con preview al compartir.
+  // Igual que /p/CODIGO/, se abre SIEMPRE (también al recargar) sin tocar la URL.
+  const rutaMarca = location.pathname.match(/^\/m\/([^\/]+)\/?$/);
+  const marcaRuta = rutaMarca ? marcaPorSlug(decodeURIComponent(rutaMarca[1])) : null;
+  if(marcaRuta){
+    abrirColeccion("marca", marcaRuta, marcaRuta, true);
+  } else if(catURL && CATEGORIAS.some(c => c.id === catURL)){
     abrirColeccion("categoria", catURL, catURL, true);
   } else if(colURL && colURL !== "marcas"){
     abrirColeccion("seccion", colURL, TITULOS_COLECCION[colURL] || "Catálogo", true);

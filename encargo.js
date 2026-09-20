@@ -64,6 +64,8 @@
       .enc-btn.ghost:hover{background:rgba(0,0,0,.04);}
       .enc-err{margin-top:12px;color:#C0392B;font-size:13px;display:none;}
       .enc-hint{margin-top:12px;font-size:11px;color:#9C958A;line-height:1.5;text-align:center;}
+      .enc-intl-note{margin-top:2px;padding:11px 13px;font-size:12px;color:#4A443C;line-height:1.5;background:#F6F4F0;border:1px solid #EDEAE3;border-radius:10px;}
+      .enc-intl-note b{color:#171310;font-weight:700;}
       .enc-total .v .tiempo{font-size:14px;font-weight:800;color:#171310;}
       .enc-trust{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
       .enc-trust .it{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;color:#4A443C;padding:9px 10px;border:1px solid #EDEAE3;border-radius:10px;background:#F6F4F0;}
@@ -134,6 +136,60 @@
       .pz-help a{flex:none;border:1px solid rgba(0,0,0,.16);color:#171310;border-radius:11px;padding:10px 15px;font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap;}
       .pz-again{width:100%;margin-top:14px;border:1px solid rgba(23,19,16,.4);background:rgba(23,19,16,.07);color:#171310;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;}
       .pz-again:hover{background:rgba(23,19,16,.12);}
+
+      /* ===== Asistente de 3 pasos (Información · Pago · Confirmación) ===== */
+      .enc-steps{display:flex;align-items:center;gap:6px;margin:16px 0 6px;}
+      .enc-steps .st{display:flex;flex-direction:column;align-items:center;gap:5px;flex:none;}
+      .enc-steps .st .n{width:27px;height:27px;border-radius:50%;border:2px solid #DDD8D0;color:#8B857B;display:grid;place-items:center;font-size:12px;font-weight:800;background:#fff;transition:.15s;}
+      .enc-steps .st .lb{font-size:10px;font-weight:600;color:#8B857B;}
+      .enc-steps .st.on .n,.enc-steps .st.done .n{border-color:#171310;background:#171310;color:#fff;}
+      .enc-steps .st.on .lb,.enc-steps .st.done .lb{color:#171310;}
+      .enc-steps .ln{flex:1;height:2px;background:#E7E3DC;border-radius:2px;}
+      .enc-steps .ln.on{background:#171310;}
+      .enc-pay-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid rgba(23,19,16,.16);background:#F6F4F0;border-radius:14px;margin-top:8px;}
+      .enc-pay-bar .k{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8B857B;}
+      .enc-pay-bar .v{font-size:26px;font-weight:900;letter-spacing:-.02em;line-height:1.05;margin-top:2px;}
+      .enc-pay-bar .nio{font-size:12px;color:#3A6DA8;font-weight:700;margin-top:2px;}
+      .enc-pay-bar .code{font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:14px;color:#171310;}
+      .enc-pm-hint{font-size:12px;color:#8B857B;margin:2px 0 0;}
+      .enc-pm-list{border:1px solid #E7E3DC;border-radius:14px;overflow:hidden;margin-top:8px;}
+      .enc-pm + .enc-pm{border-top:1px solid #EDEAE3;}
+      .enc-pm-head{display:flex;align-items:center;gap:11px;width:100%;padding:13px 14px;background:#fff;border:0;cursor:pointer;text-align:left;font-family:inherit;color:#171310;}
+      .enc-pm-head:hover{background:#F6F4F0;}
+      .enc-pm-radio{width:19px;height:19px;border-radius:50%;border:2px solid #CFC9C0;flex:none;display:grid;place-items:center;}
+      .enc-pm.sel .enc-pm-radio{border-color:#171310;}
+      .enc-pm.sel .enc-pm-radio::after{content:"";width:9px;height:9px;border-radius:50%;background:#171310;}
+      .enc-pm-badge{width:42px;height:30px;border-radius:7px;flex:none;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:800;text-align:center;line-height:1.05;}
+      .enc-pm-name{flex:1;min-width:0;}
+      .enc-pm-name b{display:block;font-size:13.5px;font-weight:700;}
+      .enc-pm-name small{display:block;font-size:11px;color:#8B857B;margin-top:1px;}
+      .enc-pm-chev{flex:none;color:#B7B0A6;font-size:12px;transition:transform .2s;}
+      .enc-pm.sel .enc-pm-chev{transform:rotate(180deg);color:#171310;}
+      .enc-pm.sel,.enc-pm.sel .enc-pm-head{background:#F6F4F0;}
+      .enc-pm-body{padding:2px 14px 14px 44px;}
+      .enc-pm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #EDEAE3;font-size:12.5px;}
+      .enc-pm-row:first-child{border-top:0;}
+      .enc-pm-k{color:#8B857B;flex:none;}
+      .enc-pm-v{font-weight:700;text-align:right;word-break:break-word;}
+      .enc-pm-v.mono{font-family:ui-monospace,Menlo,monospace;}
+      .enc-pm-copy{display:inline-flex;align-items:center;gap:8px;}
+      .enc-pm-cp{border:1px solid rgba(23,19,16,.3);background:rgba(23,19,16,.05);color:#171310;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+      .enc-pm-cp:active{background:rgba(23,19,16,.16);}
+      .enc-up{margin-top:10px;}
+      .enc-up-drop{display:flex;align-items:center;gap:12px;padding:15px;border:1.5px dashed #CFC9C0;border-radius:12px;background:#F6F4F0;cursor:pointer;}
+      .enc-up-drop:hover{border-color:#171310;}
+      .enc-up-ic{width:40px;height:40px;border-radius:10px;background:rgba(23,19,16,.08);display:grid;place-items:center;flex:none;font-size:18px;}
+      .enc-up-txt b{display:block;font-size:13px;}
+      .enc-up-txt small{display:block;font-size:11px;color:#8B857B;margin-top:2px;}
+      .enc-up-status{margin-top:10px;font-size:12.5px;font-weight:600;padding:10px 12px;border-radius:10px;line-height:1.4;}
+      .enc-up-load{color:#8a6d00;background:#fdf3d6;border:1px solid #f0e0a8;}
+      .enc-up-done{color:#1a6b34;background:#e5f6e9;border:1px solid #b8e6c4;}
+      .enc-up-error{color:#a3271f;background:#fbe6e4;border:1px solid #f0c4bf;}
+      .enc-ok-list{margin-top:16px;display:flex;flex-direction:column;gap:11px;}
+      .enc-ok-item{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:#4A443C;line-height:1.45;}
+      .enc-ok-item .em{font-size:15px;flex:none;line-height:1.2;}
+      .enc-back{width:100%;margin-top:16px;border:1px solid rgba(23,19,16,.16);background:transparent;color:#171310;border-radius:12px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+      .enc-back:hover{background:rgba(0,0,0,.04);}
     `;
     document.head.appendChild(s);
   }
@@ -287,6 +343,50 @@
   var DEPARTAMENTOS_NI = ["Managua","Masaya","Carazo","Granada","Rivas","León","Chinandega","Estelí","Madriz","Nueva Segovia","Matagalpa","Jinotega","Boaco","Chontales","Río San Juan","RACCN (Costa Caribe Norte)","RACCS (Costa Caribe Sur)"];
   function deptoOptions(sel){ return '<option value="">Selecciona tu departamento</option>' + DEPARTAMENTOS_NI.map(function(d){ return '<option value="'+esc(d)+'"'+(sel===d?" selected":"")+'>'+esc(d)+'</option>'; }).join(""); }
 
+  // Países a los que enviamos (a todo el mundo). Nicaragua va primero y es el valor por
+  // defecto. Para envíos fuera de Nicaragua, el costo del envío se COTIZA por WhatsApp.
+  var PAISES = ["Nicaragua","Costa Rica","Panamá","Honduras","El Salvador","Guatemala","Belice","México","Estados Unidos","Canadá","Colombia","Venezuela","Ecuador","Perú","Bolivia","Chile","Argentina","Uruguay","Paraguay","Brasil","República Dominicana","Cuba","Puerto Rico","Haití","Jamaica","Trinidad y Tobago","España","Portugal","Francia","Italia","Alemania","Reino Unido","Irlanda","Países Bajos","Bélgica","Luxemburgo","Suiza","Austria","Dinamarca","Noruega","Suecia","Finlandia","Islandia","Polonia","República Checa","Eslovaquia","Hungría","Rumanía","Bulgaria","Grecia","Croacia","Eslovenia","Serbia","Ucrania","Rusia","Turquía","Israel","Emiratos Árabes Unidos","Catar","Arabia Saudita","Kuwait","Baréin","Omán","Jordania","Líbano","Egipto","Marruecos","Argelia","Túnez","Sudáfrica","Nigeria","Kenia","Ghana","Etiopía","China","Japón","Corea del Sur","Taiwán","Hong Kong","Singapur","Malasia","Tailandia","Vietnam","Filipinas","Indonesia","India","Pakistán","Bangladés","Sri Lanka","Australia","Nueva Zelanda","Otro país"];
+  function paisOptions(sel){ sel = sel || "Nicaragua"; return PAISES.map(function(p){ return '<option value="'+esc(p)+'"'+(sel===p?" selected":"")+'>'+esc(p)+'</option>'; }).join(""); }
+
+  // Bloque de ubicación del formulario: País + (Departamento si es Nicaragua, o
+  // Ciudad + Dirección + aviso de cotización si es internacional). Compartido por el
+  // formulario de producto único y el del carrito.
+  function ubicacionNI(sel){ return '<div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>'+deptoOptions(sel)+'</select></div>'; }
+  function ubicacionIntl(){
+    return ''
+      + '<div class="enc-f"><label>Ciudad *</label><input name="ciudad" autocomplete="address-level2" placeholder="Ej. Miami" required></div>'
+      + '<div class="enc-f"><label>Dirección completa *</label><input name="direccion" autocomplete="street-address" placeholder="Calle, número, ZIP / código postal" required></div>'
+      + '<div class="enc-intl-note">🌍 <b>Envío internacional:</b> el costo del envío se cotiza por WhatsApp según tu país. El precio que ves es solo el del producto; el tiempo de entrega también se coordina por WhatsApp.</div>';
+  }
+  function ubicacionHTML(){
+    return ''
+      + '<div class="enc-f"><label>País *</label><select name="pais" data-pais required>'+paisOptions("Nicaragua")+'</select></div>'
+      + '<div data-ubicacion>'+ubicacionNI("")+'</div>';
+  }
+  // Cambia el bloque de ubicación según el país elegido. Se llama tras renderizar el form.
+  function wireUbicacion(form){
+    var sel = form.querySelector("[data-pais]"); if(!sel) return;
+    sel.addEventListener("change", function(){
+      var box = form.querySelector("[data-ubicacion]"); if(!box) return;
+      box.innerHTML = (sel.value === "Nicaragua") ? ubicacionNI("") : ubicacionIntl();
+    });
+  }
+  // Lee y valida la ubicación. Devuelve {ok, internacional, pais, ciudad, direccion, errMsg}.
+  // Para que el país quede VISIBLE en el panel de tracking (que muestra cliente_ciudad),
+  // en envíos internacionales guardamos "Ciudad, País" en ciudad y la calle en dirección.
+  function leerUbicacion(form){
+    var pais = (form.pais && form.pais.value) ? form.pais.value : "Nicaragua";
+    if(pais === "Nicaragua"){
+      var dep = form.departamento ? form.departamento.value : "";
+      return { ok: !!dep, internacional: false, pais: pais, ciudad: dep, direccion: null, errMsg: "Elegí tu departamento." };
+    }
+    var ciudad = form.ciudad ? form.ciudad.value.trim() : "";
+    var direccion = form.direccion ? form.direccion.value.trim() : "";
+    return { ok: !!(ciudad && direccion), internacional: true, pais: pais,
+      ciudad: ciudad ? (ciudad + ", " + pais) : pais, direccion: direccion || null,
+      errMsg: "Completá tu ciudad y dirección para el envío internacional." };
+  }
+
   // HTML de la pasarela de pago (pantalla de éxito), compartido por producto y carrito.
   // o = { titulo, subCodigo, codigo, montoAhora, parcial, waMsg, ayudaMsg }
   function pasarelaOkHTML(o){
@@ -385,10 +485,130 @@
     }catch(e){}
   }
 
+  // ── ASISTENTE DE 3 PASOS (compartido por producto único y carrito) ──────────
+  // Paso 1 = Información (formulario), Paso 2 = Pago (cuentas + comprobante),
+  // Paso 3 = Confirmación. El SOL-#### se crea al pasar de 1→2 y NO cambia: sigue
+  // siendo SOL hasta que el admin confirma el pago (recién ahí nace el pedido HS).
+  function esCord(c){ var m=String(c&&c.moneda||"").toLowerCase(); return m.indexOf("c")===0||m.indexOf("cór")>=0||m.indexOf("cor")>=0; }
+  function topHTML(t){ return '<div class="enc-top"><h3>'+esc(t)+'</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>'; }
+  function bindTop(){ var x=card.querySelector(".enc-x"); if(x) x.addEventListener("click", cerrar); }
+  function stepperHTML(paso){
+    function st(n,lb){ var cls = paso>n?"done":(paso===n?"on":""); return '<div class="st '+cls+'"><span class="n">'+(paso>n?"✓":n)+'</span><span class="lb">'+lb+'</span></div>'; }
+    function ln(n){ return '<div class="ln'+(paso>n?" on":"")+'"></div>'; }
+    return '<div class="enc-steps">'+st(1,"Información")+ln(1)+st(2,"Pago")+ln(2)+st(3,"Confirmación")+'</div>';
+  }
+  // Lista de cuentas tipo pasarela: el número se despliega al seleccionar el banco.
+  function cuentasAccordionHTML(monto){
+    var cuentas = (typeof HAUSLINE_CUENTAS!=="undefined"?HAUSLINE_CUENTAS:[]);
+    if(!cuentas.length) return '<div class="enc-intl-note"><b>Escríbenos por WhatsApp</b> y te damos los datos de pago.</div>';
+    return '<div class="enc-pm-list">'+cuentas.map(function(cu,i){
+      var bd=badgeCuenta(cu), cord=esCord(cu);
+      var montoNum = cord ? String(cordobas(monto)) : (Number(monto)||0).toFixed(2);
+      var montoTxt = cord ? fmtNIO(cordobas(monto)) : fmtUSD(monto);
+      var etq = esBilletera(cu)?"Número":"N° de cuenta";
+      return '<div class="enc-pm" data-acct="'+i+'">'
+        + '<button class="enc-pm-head" type="button" aria-expanded="false">'
+        +   '<span class="enc-pm-radio"></span>'
+        +   '<span class="enc-pm-badge" style="background:'+bd.bg+'">'+bd.label+'</span>'
+        +   '<span class="enc-pm-name"><b>'+esc(cu.banco)+(cu.moneda?" · "+esc(cu.moneda):"")+'</b><small>Transferencia bancaria</small></span>'
+        +   '<span class="enc-pm-chev">▾</span>'
+        + '</button>'
+        + '<div class="enc-pm-body" hidden>'
+        +   '<div class="enc-pm-row"><span class="enc-pm-k">'+etq+'</span><span class="enc-pm-copy"><span class="enc-pm-v mono">'+esc(cu.numero)+'</span><button class="enc-pm-cp" type="button" data-cp="'+esc(cu.numero)+'">Copiar</button></span></div>'
+        +   '<div class="enc-pm-row"><span class="enc-pm-k">Monto exacto</span><span class="enc-pm-copy"><span class="enc-pm-v mono">'+esc(montoTxt)+'</span><button class="enc-pm-cp" type="button" data-cp="'+esc(montoNum)+'">Copiar</button></span></div>'
+        +   '<div class="enc-pm-row"><span class="enc-pm-k">Titular</span><span class="enc-pm-v">'+esc(cu.titular)+'</span></div>'
+        + '</div></div>';
+    }).join("")+'</div>';
+  }
+  function wireCuentas(root){
+    var pms = root.querySelectorAll(".enc-pm[data-acct]");
+    function toggle(pm){
+      var abrir = !pm.classList.contains("sel");
+      for(var i=0;i<pms.length;i++){ pms[i].classList.remove("sel"); var h=pms[i].querySelector(".enc-pm-head"); if(h)h.setAttribute("aria-expanded","false"); var b=pms[i].querySelector(".enc-pm-body"); if(b)b.hidden=true; }
+      if(abrir){ pm.classList.add("sel"); var h2=pm.querySelector(".enc-pm-head"); if(h2)h2.setAttribute("aria-expanded","true"); var b2=pm.querySelector(".enc-pm-body"); if(b2)b2.hidden=false; }
+    }
+    for(var i=0;i<pms.length;i++){ (function(pm){ var h=pm.querySelector(".enc-pm-head"); if(h) h.addEventListener("click", function(){ toggle(pm); }); })(pms[i]); }
+    root.querySelectorAll("[data-cp]").forEach(function(b){ b.addEventListener("click", function(e){ e.stopPropagation(); var v=b.getAttribute("data-cp"); if(navigator.clipboard) navigator.clipboard.writeText(v).catch(function(){}); var o=b.textContent; b.textContent="✓ Copiado"; setTimeout(function(){ b.textContent=o; },1200); }); });
+  }
+  // Sube el comprobante al bucket privado y lo registra en la solicitud (opcional).
+  function subirComp(file, codigo){
+    var st=card.querySelector("#encUpStatus"), drop=card.querySelector("#encUpDrop");
+    function set(t,m){ if(!st)return; st.hidden=false; st.className="enc-up-status enc-up-"+t; st.textContent=m; if(drop) drop.style.display=(t==="load"||t==="done")?"none":""; }
+    if(!file) return;
+    if(!/^(image\/|application\/pdf)/.test(file.type||"")){ set("error","Formato no válido. Subí una imagen o PDF."); return; }
+    if(file.size>6*1024*1024){ set("error","El archivo pesa demasiado (máx. 6 MB)."); return; }
+    set("load","Subiendo tu comprobante…");
+    var K=(typeof SUPABASE_ANON_KEY!=="undefined"?SUPABASE_ANON_KEY:""), U=(typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"");
+    var base=U.replace(/\/rest\/v1\/?$/,"");
+    var ext=String(file.name||"").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || (file.type.indexOf("pdf")>=0?"pdf":"jpg");
+    var ruta=String(codigo).replace(/[^A-Za-z0-9-]/g,"")+"/"+Date.now()+"."+ext;
+    fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:K,Authorization:"Bearer "+K,"Content-Type":file.type||"application/octet-stream","x-upsert":"true"},body:file})
+      .then(function(r){ if(!r.ok) throw 0; return fetch(U+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+K},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})}); })
+      .then(function(r){ return r.ok?r.json():false; })
+      .then(function(ok){ if(!ok) throw 0; set("done","¡Listo! Recibimos tu comprobante. Lo verificamos y te contactamos por WhatsApp."); })
+      .catch(function(){ set("error","No se pudo subir el comprobante. Probá de nuevo o enviálo por WhatsApp."); });
+  }
+  // Paso 2 (Pago) y Paso 3 (Confirmación). o = { codigo, monto, nombre }.
+  function entrarPago(o){
+    var waMsg = "Hola" + (o.nombre?", soy "+o.nombre:"") + ". Acabo de realizar el pago de mi encargo " + o.codigo + " por " + fmtUSD(o.monto) + ". Adjunto mi comprobante.";
+    var waHref = "https://wa.me/"+waNumero()+"?text="+encodeURIComponent(waMsg);
+    card.innerHTML = topHTML("Pago") + stepperHTML(2)
+      + '<div class="enc-pay-bar"><div><div class="k">Total a pagar</div><div class="v">'+fmtUSD(o.monto)+'</div><div class="nio">≈ '+fmtNIO(cordobas(o.monto))+'</div></div>'
+      +   '<div style="text-align:right"><div class="k">Código</div><div class="code">'+esc(o.codigo)+'</div></div></div>'
+      + '<div class="enc-cta-title">Elegí cómo pagar</div>'
+      + '<p class="enc-pm-hint">Tocá el banco al que vas a transferir para ver el número de cuenta.</p>'
+      + cuentasAccordionHTML(o.monto)
+      + '<div class="enc-cta-title">Enviá tu comprobante</div>'
+      + '<a class="enc-btn wa" href="'+waHref+'" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>'
+      + '<div class="enc-up"><label class="enc-up-drop" id="encUpDrop"><input type="file" id="encUpInput" accept="image/*,application/pdf" hidden><span class="enc-up-ic">📎</span><span class="enc-up-txt"><b>O subí tu comprobante aquí</b><small>Imagen o PDF · opcional · máximo 6 MB</small></span></label><div class="enc-up-status" id="encUpStatus" hidden></div></div>'
+      + '<button class="enc-btn" id="encConfirmar" type="button">CONFIRMAR PEDIDO</button>'
+      + '<div class="enc-hint">También podés pagar más tarde: guardá tu código <b style="color:#171310">'+esc(o.codigo)+'</b> y volvé cuando quieras. Si no coordinás en 24 h, el encargo se cancela solo.</div>';
+    bindTop();
+    wireCuentas(card);
+    var input=card.querySelector("#encUpInput"); if(input) input.addEventListener("change", function(){ if(this.files&&this.files[0]) subirComp(this.files[0], o.codigo); });
+    var conf=card.querySelector("#encConfirmar"); if(conf) conf.addEventListener("click", function(){ mostrarOk(o.codigo); });
+    if(card.parentElement) card.parentElement.scrollTop = 0; card.scrollTop = 0;
+  }
+  function mostrarOk(codigo){
+    card.innerHTML = topHTML("Confirmación") + stepperHTML(3)
+      + '<div class="enc-ok-ic">✓</div>'
+      + '<h3 style="text-align:center;font-size:20px;font-weight:800;margin:12px 0 0">¡Gracias por tu compra!</h3>'
+      + '<p style="text-align:center;font-size:13px;color:#8B857B;margin:6px 0 0;line-height:1.5">Tu pedido fue recibido y está en proceso. Verificamos tu pago y te contactamos.</p>'
+      + '<div class="enc-cta-title" style="text-align:center">Código de seguimiento</div>'
+      + '<div style="text-align:center"><span class="pz-code">'+esc(codigo)+'</span> <button class="enc-pm-cp" type="button" data-cp="'+esc(codigo)+'" style="margin-left:6px">Copiar</button></div>'
+      + '<div class="enc-ok-list">'
+      +   '<div class="enc-ok-item"><span class="em">✉️</span><span>Te enviamos un correo con los detalles del pedido (si dejaste tu correo).</span></div>'
+      +   '<div class="enc-ok-item"><span class="em">💬</span><span>Podés contactarnos por WhatsApp si tenés alguna duda.</span></div>'
+      +   '<div class="enc-ok-item"><span class="em">📦</span><span>Seguí el estado de tu pedido en tiempo real con tu código.</span></div>'
+      + '</div>'
+      + '<button class="enc-back" id="encVolver" type="button">Volver a la tienda</button>';
+    bindTop();
+    card.querySelectorAll("[data-cp]").forEach(function(b){ b.addEventListener("click", function(){ var v=b.getAttribute("data-cp"); if(navigator.clipboard) navigator.clipboard.writeText(v).catch(function(){}); var o=b.textContent; b.textContent="✓ Copiado"; setTimeout(function(){ b.textContent=o; },1200); }); });
+    var v=card.querySelector("#encVolver"); if(v) v.addEventListener("click", function(){ cerrar(); window.location.href="/"; });
+    card.scrollTop = 0;
+  }
+
   // producto: objeto del catálogo. opts: { talla, color, cantidad, precio } (opcional).
   window.abrirEncargo = function(producto, opts){
     if(!producto) return;
     opts = opts || {};
+    // NUEVO FLUJO: el encargo es una PÁGINA aparte con 3 pasos (/checkout/?paso=info),
+    // ya NO un modal encima del producto. Guardamos los datos del pedido y redirigimos.
+    try{
+      var _n = (typeof nombreProducto==="function") ? nombreProducto(producto) : (producto.nombre||"Producto");
+      var _m = producto.marca || (typeof marcaProducto==="function" ? marcaProducto(producto) : "");
+      var _p = Number(opts.precio != null ? opts.precio : (typeof precioVigente==="function" ? precioVigente(producto, false) : (producto.precio||0)));
+      var _img = (producto.imagenes && producto.imagenes[0]) || producto.imagen || producto.foto || "";
+      var _cot = (typeof necesitaCotizar==="function") ? !!necesitaCotizar(producto) : !(_p > 0);
+      sessionStorage.setItem("hausline_encargo", JSON.stringify({
+        tipo:"producto",
+        producto:{ codigo:producto.codigo, nombre:_n, marca:_m, imagen:_img, precio:_p, cotizar:_cot },
+        opts:{ talla:opts.talla||"", color:opts.color||"", cantidad:Math.max(1,parseInt(opts.cantidad,10)||1), envio:opts.envio||"estandar", precio:_p }
+      }));
+    }catch(e){}
+    location.href = "/checkout/?paso=info";
+    return;
+    // ↓↓↓ código viejo del modal (queda inactivo por el return de arriba) ↓↓↓
     const nombre = (typeof nombreProducto==="function") ? nombreProducto(producto) : (producto.nombre||"Producto");
     const marca = producto.marca || (typeof marcaProducto==="function" ? marcaProducto(producto) : "");
     const precioU = Number(opts.precio != null ? opts.precio : (typeof precioVigente==="function" ? precioVigente(producto, false) : (producto.precio||0)));
@@ -416,6 +636,7 @@
       const t = calc();
       card.innerHTML = `
         <div class="enc-top"><h3>Encargar producto</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
+        ${stepperHTML(1)}
         <div class="enc-prod">
           ${img?`<img src="${esc(img)}" alt="" onerror="this.style.display='none'">`:""}
           <div><div class="nm">${esc(nombre)}</div><div class="mt">${[esc(marca), "Código "+esc(producto.codigo)].filter(Boolean).join(" · ")}</div></div>
@@ -423,7 +644,7 @@
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
-          <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          ${ubicacionHTML()}
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
           ${optinHTML()}
           <div class="enc-row">
@@ -440,14 +661,15 @@
           <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(t)}</div>
           <div class="enc-err" data-err></div>
-          <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
-          <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. No se cobra nada en línea. Si no coordinás en 24 h, el encargo se cancela solo.</div>
+          <button class="enc-btn" type="submit">Continuar con el pago →</button>
+          <div class="enc-hint">No se cobra nada en línea. En el siguiente paso elegís la cuenta y enviás tu comprobante. Si no coordinás en 24 h, el encargo se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
       form.cantidad.addEventListener("input", ()=>{ cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1)); refrescar(); });
       card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; marcar("[data-pago]", b); refrescar(); }));
       wireCupon();
+      wireUbicacion(form);
       form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
       card.__talla = opts.talla || "";
       form.talla.addEventListener("input", ()=>{ card.__talla = form.talla.value; });
@@ -507,13 +729,13 @@
       err.style.display = "none";
       const nombreV = form.nombre.value.trim();
       const wa = form.whatsapp.value.trim();
-      const departamento = form.departamento ? form.departamento.value : "";
+      const ub = leerUbicacion(form);
       const correo = form.correo.value.trim();
       const talla = form.talla.value.trim();
       cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1));
       if(nombreV.length < 2) return mostrarErr("Escribe tu nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return mostrarErr("Escribe un WhatsApp válido (solo números).");
-      if(!departamento) return mostrarErr("Elegí tu departamento.");
+      if(!ub.ok) return mostrarErr(ub.errMsg);
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return mostrarErr("El correo no es válido.");
 
       const btn = form.querySelector(".enc-btn");
@@ -524,7 +746,7 @@
           method: "POST",
           headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer "+SUPABASE_ANON_KEY },
           body: JSON.stringify({
-            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: departamento||null, p_direccion: null,
+            p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: ub.ciudad||null, p_direccion: ub.direccion,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
             p_talla: talla||null, p_color: opts.color||null, p_cantidad: cant, p_precio_unitario: precioU,
             p_envio: envio, p_recargo: recargo(), p_pago: pago, p_imagen: img||null,
@@ -536,20 +758,13 @@
         suscribir(correo, nombreV, form.optin && form.optin.checked);
         guardarDatosResenaGoogle(String(sol), correo, envio);
         recordarPedido(String(sol), nombre);
-        renderOk(String(sol), talla);
+        // Paso 2: Pago (dentro del mismo modal, sin redirigir).
+        entrarPago({ codigo: String(sol), monto: calc().ahora, nombre: nombreV });
       }catch(ex){
-        btn.disabled = false; btn.innerHTML = "CONFIRMAR PEDIDO";
+        btn.disabled = false; btn.innerHTML = "Continuar con el pago →";
         mostrarErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo.");
       }
       function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }
-    }
-
-    function renderOk(sol){
-      // Nuevo flujo: en vez de mostrar un modal de pago, mandamos al checkout dedicado
-      // (/checkout/?c=CODE), una página completa de pago. El código va en la URL y la
-      // página lee el encargo desde la base por su código. Antes del redirect corre la
-      // animación de "Pedido confirmado" (la camioneta); el redirect está garantizado.
-      animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sol); });
     }
   };
 
@@ -558,6 +773,16 @@
   window.abrirEncargoCarrito = function(items){
     items = (items||[]).filter(it => it && !it.entregaInmediata);
     if(!items.length){ if(typeof enviarPedidoWhatsApp==="function") enviarPedidoWhatsApp(); return; }
+    // NUEVO FLUJO: el encargo del carrito también va a la PÁGINA /checkout/?paso=info.
+    try{
+      sessionStorage.setItem("hausline_encargo", JSON.stringify({
+        tipo:"carrito",
+        items: items.map(function(it){ return { codigo:it.codigo, nombre:it.nombre, marca:it.marca, imagen:it.imagen, precioUnitario:it.precioUnitario, cantidad:it.cantidad, talla:it.talla, color:it.color, envio:it.envio }; })
+      }));
+    }catch(e){}
+    location.href = "/checkout/?paso=info";
+    return;
+    // ↓↓↓ código viejo del modal (queda inactivo por el return de arriba) ↓↓↓
     let pago = "total";
     let cupon = null;                // {id, codigo, tipo, valor} si aplicó un código al carrito
     abrir();
@@ -590,11 +815,12 @@
       const lista = items.map(it => `<div class="enc-cart-it"><div><b>${esc(it.nombre)}</b><small>${[esc(it.marca), it.talla?('Talla '+esc(it.talla)):'', '×'+(it.cantidad||1)].filter(Boolean).join(' · ')}${it.envio==='rapido'?' · Rápido':''}</small></div><span class="mono">${fmtUSD((Number(it.precioUnitario)||0)*(it.cantidad||1)+recargoItem(it))}</span></div>`).join("");
       card.innerHTML = `
         <div class="enc-top"><h3>Encargar tu carrito</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
+        ${stepperHTML(1)}
         <div class="enc-cart">${lista}</div>
         <form class="enc-form" novalidate>
           <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
-          <div class="enc-f"><label>Departamento / ciudad *</label><select name="departamento" required>${deptoOptions("")}</select></div>
+          ${ubicacionHTML()}
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
           ${optinHTML()}
           <p class="enc-sub">¿Cuánto pagas ahora?</p>
@@ -605,13 +831,14 @@
           <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(calc())}</div>
           <div class="enc-err" data-err></div>
-          <button class="enc-btn" type="submit">CONFIRMAR PEDIDO</button>
-          <div class="enc-hint">Al confirmar te contactamos por WhatsApp para coordinar el pago. Si no coordinás en 24 h, se cancela solo.</div>
+          <button class="enc-btn" type="submit">Continuar con el pago →</button>
+          <div class="enc-hint">No se cobra nada en línea. En el siguiente paso elegís la cuenta y enviás tu comprobante. Si no coordinás en 24 h, se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
       card.querySelectorAll("[data-pago] .enc-opt").forEach(b=> b.addEventListener("click", ()=>{ pago = b.dataset.p; card.querySelectorAll("[data-pago] .enc-opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); const box=card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }));
       wireCupon();
+      wireUbicacion(form);
       form.addEventListener("submit", (e)=>{ e.preventDefault(); enviar(form); });
     }
     function refrescarTotal(){ const box = card.querySelector("[data-total]"); if(box) box.innerHTML = totalHTML(calc()); }
@@ -647,10 +874,10 @@
       const err = card.querySelector("[data-err]"); err.style.display="none";
       function showErr(m){ err.textContent=m; err.style.display="block"; }
       const nombre = form.nombre.value.trim(), wa = form.whatsapp.value.trim(), correo = form.correo.value.trim();
-      const departamento = form.departamento ? form.departamento.value : "";
+      const ub = leerUbicacion(form);
       if(nombre.length<2) return showErr("Escribe tu nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return showErr("Escribe un WhatsApp válido (solo números).");
-      if(!departamento) return showErr("Elegí tu departamento.");
+      if(!ub.ok) return showErr(ub.errMsg);
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido.");
       const btn = form.querySelector(".enc-btn"); btn.disabled=true; btn.textContent="Creando…";
       // TODO el carrito se crea en UNA sola llamada atómica que devuelve UN código de grupo
@@ -665,7 +892,7 @@
             recargo: recargoItem(it), envio: it.envio==='rapido'?'rapido':'estandar', imagen: it.imagen||null };
         });
         const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
-          body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:departamento||null, p_direccion:null,
+          body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:ub.ciudad||null, p_direccion:ub.direccion,
             p_envio: envioCarrito, p_pago: pago, p_cupon_codigo: cupon ? cupon.codigo : null, p_items: payloadItems }) });
         if(!res.ok) throw new Error("HTTP "+res.status);
         const grupo = String(await res.json());
@@ -673,13 +900,9 @@
         suscribir(correo, nombre, form.optin && form.optin.checked);
         guardarDatosResenaGoogle(grupo, correo, envioCarrito);
         recordarPedido([grupo], items.length === 1 ? items[0].nombre : "Tu carrito");
-        renderOk([grupo]);
-      }catch(ex){ btn.disabled=false; btn.innerHTML="CONFIRMAR PEDIDO"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
-    }
-    function renderOk(sols){
-      // Ahora es UN solo código de grupo. Antes del redirect corre la animación de "Pedido
-      // confirmado" (el redirect va seguro).
-      animacionPedido(function(){ window.location.href = "/checkout/?c=" + encodeURIComponent(sols.join(",")); });
+        // Paso 2: Pago (dentro del mismo modal, sin redirigir).
+        entrarPago({ codigo: grupo, monto: calc().ahora, nombre: nombre });
+      }catch(ex){ btn.disabled=false; btn.innerHTML="Continuar con el pago →"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
     }
   };
 })();

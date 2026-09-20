@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "og": "node scripts/gen-og.mjs && node scripts/gen-og-marcas.mjs"
   },
   "repository": {
     "type": "git",

@@ -133,8 +133,9 @@
   .fotos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:8px}
   .fotos-grid.drag{outline:2px dashed var(--verde);outline-offset:4px;border-radius:12px}
   .foto-item{position:relative;aspect-ratio:1;border:1px solid var(--linea2);border-radius:12px;overflow:hidden;background:var(--panel2)}
-  .foto-item img{width:100%;height:100%;object-fit:cover}
+  .foto-item img{width:100%;height:100%;object-fit:cover;cursor:pointer}
   .foto-item.principal{border-color:var(--verde)}
+  .foto-item.activa{outline:2px solid var(--verde);outline-offset:1px}
   .foto-item .quitar{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;cursor:pointer;font-size:14px}
   .foto-item .estrella{position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fde047;border:none;cursor:pointer;font-size:13px}
   .foto-item .etq-principal{position:absolute;top:4px;left:4px;background:var(--verde);color:var(--verde-txt);font-size:8.5px;font-weight:800;padding:2px 6px;border-radius:20px}
@@ -381,7 +382,11 @@
                   <div class="preview-vacio" id="preVacio">Agregá una foto para ver la vista previa</div>
                 </div>
                 <div class="preview-ctrls">
-                  <span style="font-size:12px;color:var(--texto2);">Zoom</span>
+                  <span style="font-size:12px;color:var(--texto2);min-width:64px;">↕ Subir / bajar</span>
+                  <input type="range" id="prePosY" min="0" max="100" step="1" value="50">
+                </div>
+                <div class="preview-ctrls">
+                  <span style="font-size:12px;color:var(--texto2);min-width:64px;">🔍 Zoom</span>
                   <input type="range" id="preZoom" min="1" max="2.5" step="0.05" value="1">
                   <button type="button" class="btn btn-sec btn-mini" id="preReset">Centrar</button>
                 </div>
@@ -391,7 +396,7 @@
                   <option value="cover">Llenar el marco (sin bordes blancos)</option>
                   <option value="contain">Mostrar completa (sin recortar)</option>
                 </select>
-                <p class="hint">Arrastrá la foto con el dedo/ratón para encuadrarla.</p>
+                <p class="hint">Tocá una foto de arriba para verla acá. Arrastrá la foto o usá <b>↕ Subir / bajar</b> para encuadrarla (útil si el producto sale muy arriba).</p>
               </div>
 
               <div class="card">
@@ -506,8 +511,8 @@
   function pintarFotos(){
     const g=$("fotosGrid");
     g.innerHTML=fotos.map((f,i)=>`
-      <div class="foto-item ${i===0?"principal":""}">
-        <img src="${esc(f.url)}" alt="">
+      <div class="foto-item ${i===0?"principal":""} ${i===activePhoto?"activa":""}">
+        <img src="${esc(f.url)}" alt="" data-ver="${i}" title="Ver esta foto en la vista previa">
         ${i===0 ? '<span class="etq-principal">Principal</span>' : `<button type="button" class="estrella" data-principal="${i}" title="Hacer principal">★</button>`}
         <button type="button" class="quitar" data-quitar="${i}">×</button>
         ${f.sinFondo ? "" : `<button type="button" class="cortar" data-fondo="${i}" title="Quitar fondo (dejar sobre el fondo del catálogo)">✂️ Fondo</button>`}
@@ -519,6 +524,8 @@
     g.querySelectorAll("[data-principal]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.principal; const m=fotos.splice(i,1)[0]; fotos.unshift(m); pintarFotos(); }));
     // ✂️ = quitar fondo (opcional, gratis, en el teléfono)
     g.querySelectorAll("[data-fondo]").forEach(b=>b.addEventListener("click",()=>quitarFondo(+b.dataset.fondo)));
+    // Tocar una foto la muestra en la Vista previa (para ver TODAS las fotos y encuadrarlas).
+    g.querySelectorAll("[data-ver]").forEach(im=>im.addEventListener("click",()=>{ activePhoto=+im.dataset.ver; pintarFotos(); const pf=$("preFrame"); if(pf) pf.scrollIntoView({block:"center",behavior:"smooth"}); }));
     updatePreview();
   }
 
@@ -571,19 +578,22 @@
   })();
 
   // ---------- Vista previa interactiva (encuadre con el dedo) ----------
-  let prePos = { x:50, y:50 }, preScale = 1;
+  let prePos = { x:50, y:50 }, preScale = 1, activePhoto = 0;
   function parsePos(str){
     const m = String(str||"").match(/([\d.]+)%\s+([\d.]+)%/);
     return m ? { x:Math.max(0,Math.min(100,+m[1])), y:Math.max(0,Math.min(100,+m[2])) } : { x:50, y:50 };
   }
   function updatePreview(){
     const img=$("preImg"), vacio=$("preVacio"), agua=$("preAgua");
-    const url = fotos[0] ? fotos[0].url : "";
+    if(activePhoto>=fotos.length) activePhoto=0;
+    const url = fotos[activePhoto] ? fotos[activePhoto].url : "";
     if(url){ img.src=url; img.style.display="block"; vacio.style.display="none"; agua.style.display="block"; }
     else{ img.removeAttribute("src"); img.style.display="none"; vacio.style.display="flex"; agua.style.display="none"; }
     img.classList.toggle("contain", $("fAjuste").value==="contain");
     img.style.objectPosition = prePos.x+"% "+prePos.y+"%";
     img.style.transform = "scale("+preScale+")";
+    // Mantiene el slider "Subir/bajar" en sincronía con el arrastre.
+    var sy=$("prePosY"); if(sy) sy.value=Math.round(prePos.y);
     $("preNombre").textContent = $("fNombre").value.trim() || "Nombre del producto";
     const cot=$("fCotizar").checked, precio=Number($("fPrecio").value||0);
     $("prePrecio").textContent = (cot || !(precio>0)) ? "Precio a consultar" : ("$"+precio);
@@ -597,7 +607,8 @@
     frame.addEventListener("pointerup", fin); frame.addEventListener("pointercancel", fin); frame.addEventListener("pointerleave", fin);
   })();
   $("preZoom").addEventListener("input", ()=>{ preScale=Number($("preZoom").value); updatePreview(); });
-  $("preReset").addEventListener("click", ()=>{ prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; updatePreview(); });
+  $("prePosY").addEventListener("input", ()=>{ prePos.y=Number($("prePosY").value); updatePreview(); });
+  $("preReset").addEventListener("click", ()=>{ prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; updatePreview(); });
   ["fNombre","fPrecio"].forEach(id=>$(id).addEventListener("input", updatePreview));
   $("fCotizar").addEventListener("change", updatePreview);
   $("fEntregaInmediata").addEventListener("change", ()=>{ const v = $("fEntregaInmediata").checked ? "block" : "none"; $("rowTallasEI").style.display = v; $("rowColoresEI").style.display = v; });
@@ -707,7 +718,7 @@
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
-    prePos={x:50,y:50}; preScale=1; $("preZoom").value=1;
+    prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos();
     campoATallasUI(); campoAColoresUI(); }
   $("btnLimpiar").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); });
@@ -721,7 +732,7 @@
     $("fTallas").value=(datos.tallas||[]).join(", "); $("fColores").value=(datos.colores||[]).join(", "); $("fDescripcion").value=datos.descripcion||"";
     campoATallasUI(); aplicarModoTallas(); campoAColoresUI();
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
-    prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale;
+    prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale; $("prePosY").value=Math.round(prePos.y); activePhoto=0;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
     ETQ_ADMIN.forEach(([id,prop])=>{ $(id).checked=datos[prop]===true; });
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }

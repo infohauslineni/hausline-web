@@ -72,7 +72,7 @@
     bar.innerHTML =
       '<span class="ic">🧾</span>' +
       '<div class="tx"><b>Tenés un pedido en proceso</b><small>' + detalle + ' — mirá las cuentas y el estado.</small></div>' +
-      '<a class="mp-go" href="/checkout/?c=' + encodeURIComponent(pedido.codigo) + '">Ver mi pedido</a>' +
+      '<a class="mp-go" href="/checkout/?c=' + encodeURIComponent(pedido.codigo) + '&paso=confirmacion">Ver mi pedido</a>' +
       '<button class="mp-x" type="button" aria-label="Ocultar">&times;</button>';
     cont.insertBefore(bar, cont.firstChild);
     bar.querySelector(".mp-x").addEventListener("click", function(){
