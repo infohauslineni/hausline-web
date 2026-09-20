@@ -174,6 +174,15 @@ const paginaProducto = (producto) => {
   // (home + producto) y Google, ante el conflicto, trata el producto como
   // duplicado de la home y no lo indexa. Por eso se sustituye, no se añade.
   html = html.replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${esc(canonica)}">`)
+  // CONTENIDO ÚNICO por producto (clave para SEO): el index.html trae un
+  // <h1 class="solo-lectores"> genérico igual en todas las páginas, así que Google veía
+  // /p/CODIGO como DUPLICADO de la home y elegía otra canónica. Acá lo reemplazamos por el
+  // nombre + descripción + precio reales del producto (invisible para el usuario, legible
+  // para Google), para que cada página tenga contenido propio y se indexe con su canónica.
+  const precioTxt = (!cotizar && precio > 0) ? `Precio: $${precio} USD.` : 'Precio a consultar por WhatsApp.'
+  const seoBloque = `<h1 class="solo-lectores">${esc(nombreBase)}${marca ? ` — ${esc(marca)}` : ''}</h1>`
+    + `<section class="solo-lectores"><p>${esc(descripcion)}</p><p>Código ${esc(codigo)}. ${esc(precioTxt)} ${marca ? esc(marca) + '. ' : ''}HAUSLINE · King of Shoes. Envíos a toda Nicaragua y al mundo.</p></section>`
+  html = html.replace(/<h1 class="solo-lectores">[\s\S]*?<\/h1>/, seoBloque)
   // JSON-LD Product justo antes de cerrar el <head>.
   html = html.replace(/<\/head>/, `<script type="application/ld+json">${jsonLd}</script>\n</head>`)
   return html

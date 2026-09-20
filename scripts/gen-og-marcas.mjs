@@ -132,6 +132,15 @@ const paginaMarca = (marca, items) => {
   html = html.replace(/<meta name="twitter:title"[^>]*>/, `<meta name="twitter:title" content="${esc(nombre)}">`)
   html = html.replace(/<meta name="twitter:image"[^>]*>/, `<meta name="twitter:image" content="${esc(imagenOg)}">`)
   html = html.replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${esc(canonica)}">`)
+  // Contenido ÚNICO por marca (SEO): reemplaza el <h1 class="solo-lectores"> genérico por el
+  // nombre de la marca + la lista de sus productos, para que Google no la vea como duplicado
+  // de la home y la indexe con su propia canónica.
+  const nombresProd = items.slice(0, 60).map((it) => it.nombre || it.codigo).filter(Boolean)
+  const seoBloque = `<h1 class="solo-lectores">${esc(marca)} en HAUSLINE</h1>`
+    + `<section class="solo-lectores"><p>${esc(descripcion)}</p>`
+    + (nombresProd.length ? `<ul>${nombresProd.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : '')
+    + `</section>`
+  html = html.replace(/<h1 class="solo-lectores">[\s\S]*?<\/h1>/, seoBloque)
   return html
 }
 
