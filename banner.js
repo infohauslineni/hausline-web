@@ -15,7 +15,8 @@
   var KEY = "hausline_banner_visto";
   function visto(){ try{ return sessionStorage.getItem(KEY) === "1"; }catch(e){ return false; } }
   function marcar(){ try{ sessionStorage.setItem(KEY, "1"); }catch(e){} }
-  function imgUrl(src){ if(!src) return ""; return /^https?:\/\//i.test(src) ? src : "/" + String(src).replace(/^\.?\//, ""); }
+  // Arma la URL de la imagen. encodeURI para que rutas con espacios (ej. "BANER PROM 1.jpg") funcionen.
+  function imgUrl(src){ if(!src) return ""; var u = /^https?:\/\//i.test(src) ? src : "/" + String(src).replace(/^\.?\//, ""); try{ return encodeURI(u); }catch(e){ return u; } }
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
 
   function inyectarCss(){

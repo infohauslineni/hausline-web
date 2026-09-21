@@ -615,8 +615,16 @@
     if(["empaquetado","disponible_entrega","transito_nicaragua","recibido_estados_unidos","transito_internacional","despachado","etiqueta_creada"].indexOf(e)>=0) return 4;
     return 3; // pedido_confirmado, pagado, en_preparacion, control_calidad…
   }
+  // Cancelado: la solicitud se descartó/venció, o el pedido ya confirmado se canceló.
+  function canceladoDe(items){
+    if(!items || !items.length) return false;
+    var todosMuertos = items.every(function(s){ return s.estado==="descartada" || s.estado==="vencida" || s.estado==="cancelada"; });
+    var pedidoCancelado = items.some(function(s){ return s.pedido_estado==="cancelado"; });
+    return todosMuertos || pedidoCancelado;
+  }
   function estadosConf(items){
-    var confirmado = !!(items && items.length && items.every(function(s){ return s.estado==="confirmada"; }));
+    var cancelado = canceladoDe(items);
+    var confirmado = !cancelado && !!(items && items.length && items.every(function(s){ return s.estado==="confirmada"; }));
     var pe=null; if(items){ items.forEach(function(s){ if(s.pedido_estado && pe==null) pe=s.pedido_estado; }); }
     var nivel = confirmado ? nivelPedido(pe) : 1; // sin confirmar: "Pago en revisión" activo
     var defs=[
@@ -627,14 +635,15 @@
       { t:"Enviado", s:"Tu pedido va en camino" },
       { t:"Entregado", s:"¡Gracias por tu compra!" }
     ];
-    return { confirmado:confirmado, pe:pe, estados: defs.map(function(d,i){
+    return { cancelado:cancelado, confirmado:confirmado, pe:pe, estados: defs.map(function(d,i){
       return { t:d.t, s:d.s, st: i<nivel ? "done" : (i===nivel ? (nivel===5?"done":"active") : "pending") };
     }) };
   }
   function firmaConf(items){
-    var c = !!(items && items.length && items.every(function(s){ return s.estado==="confirmada"; }));
-    var pe=""; if(items){ items.forEach(function(s){ if(s.pedido_estado && !pe) pe=s.pedido_estado; }); }
-    return c+"|"+pe+"|"+(items?items.length:0);
+    if(!items || !items.length) return "none";
+    var est = items.map(function(s){ return s.estado; }).sort().join(",");
+    var pe=""; items.forEach(function(s){ if(s.pedido_estado && !pe) pe=s.pedido_estado; });
+    return est+"|"+pe;
   }
   async function renderConfirmacion(codigo){
     progreso(3); clearInterval(pollInt); clearInterval(timerInt); clearInterval(confInt);
@@ -642,6 +651,18 @@
     var firma=null;
     function pintar(items){
       var r=estadosConf(items); var confirmado=r.confirmado;
+      if(r.cancelado){
+        $("ck").innerHTML='<div class="conf">'
+          + '<div class="conf-check" style="background:#d8402e">'+ICON.alert+'</div>'
+          + '<h1 class="conf-h">Pedido cancelado</h1>'
+          + '<p class="conf-p">Este pedido fue cancelado. Si creés que es un error o querés retomarlo, escribinos por WhatsApp.</p>'
+          + '<div class="conf-code"><span class="lb">Número de orden</span><b>'+esc(codigo)+'</b><button class="copy" data-copy="'+esc(codigo)+'" data-msg="¡Número copiado!">Copiar número</button></div>'
+          + '<a class="btn btn-wa" style="margin-top:16px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escribinos por WhatsApp</a>'
+          + '<a class="btn btn-ghost" style="margin-top:10px" href="/">Volver a la tienda</a>'
+          + '</div>';
+        wireCopy($("ck"));
+        return;
+      }
       $("ck").innerHTML='<div class="conf">'
         + '<div class="conf-check'+(confirmado?"":" pend")+'">'+ICON.check+'</div>'
         + '<h1 class="conf-h">'+(confirmado?"¡Pago confirmado!":"¡Pedido recibido!")+'</h1>'
@@ -663,7 +684,7 @@
       var f=firmaConf(items);
       if(silencioso && f===firma) return;
       firma=f; pintar(items);
-      if(items && items.some(function(s){ return s.pedido_estado==="entregado"; })) clearInterval(confInt);
+      if(canceladoDe(items) || (items && items.some(function(s){ return s.pedido_estado==="entregado"; }))) clearInterval(confInt);
     }
     await tick(false);
     confInt=setInterval(function(){ if(document.hidden) return; tick(true); }, 15000);
