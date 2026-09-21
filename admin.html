@@ -207,6 +207,22 @@
   .paginacion button{background:var(--panel2);border:1px solid var(--linea2);color:var(--texto);padding:8px 14px;border-radius:9px;cursor:pointer}
   .paginacion button:disabled{opacity:.4;cursor:default}
   .cargando{padding:24px;text-align:center;color:var(--texto2);font-size:13px}
+  /* Selección múltiple + descuento en lote */
+  .selbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:12px}
+  .selbar .selall{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--texto2);cursor:pointer;user-select:none}
+  .bulk{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--linea);border-radius:12px;padding:10px 12px}
+  .bulk .selcount{font-weight:800;font-size:13px;color:var(--texto)}
+  .bulk input{width:auto;margin:0}
+  .bulk input[type=number]{width:96px}
+  .bulk button{cursor:pointer;border-radius:9px;padding:8px 12px;font-size:12.5px;font-weight:800;border:1px solid var(--linea2)}
+  .bulk button:disabled{opacity:.5;cursor:default}
+  .bulk .b-apply{background:var(--verde);color:#0a0d0b;border-color:var(--verde)}
+  .bulk .b-clear-off{background:var(--panel2);color:var(--rojo)}
+  .bulk .b-cancel{background:var(--panel2);color:var(--texto2)}
+  .chk{display:inline-flex;flex:none}
+  .chk input,.selall input{width:18px;height:18px;cursor:pointer;accent-color:var(--verde);flex:none}
+  .selbar .aviso{font-size:12.5px}
+  .selbar .aviso.ok{color:var(--verde)} .selbar .aviso.err{color:var(--rojo)}
   @media(max-width:820px){
     .thead{display:none}
     .tr{grid-template-columns:1fr auto;gap:10px}
@@ -297,6 +313,18 @@
           <input id="buscador" placeholder="Buscar por código, nombre o marca…" style="margin-bottom:12px;">
           <div class="chips" id="chipsEstado"></div>
           <div class="chips" id="chipsCategoria"></div>
+          <div class="selbar">
+            <label class="selall"><input type="checkbox" id="selTodos"> Seleccionar todos</label>
+            <div id="bulkControls" class="bulk hidden">
+              <span class="selcount" id="selCount">0 seleccionados</span>
+              <input id="bulkPct" type="number" min="1" max="94" step="1" placeholder="% desc.">
+              <input id="bulkHasta" type="date">
+              <button class="b-apply" id="bulkAplicar">Aplicar descuento</button>
+              <button class="b-clear-off" id="bulkQuitar">Quitar oferta</button>
+              <button class="b-cancel" id="bulkLimpiar">Limpiar</button>
+            </div>
+            <span class="aviso" id="bulkAviso"></span>
+          </div>
           <div class="tabla">
             <div class="thead">
               <span>Producto</span><span>Categoría</span><span>Precio</span><span>Estado</span><span class="r">Acciones</span>
@@ -542,6 +570,8 @@
 
   let fotos = [], baseProductos = [], remotos = [], itemsMerged = [];
   let filtroEstado = "todos", filtroCategoria = "todas", pagina = 1;
+  const seleccion = new Set(); // códigos seleccionados para el descuento en lote
+  let selbarWired = false;
 
   function aviso(el, texto, tipo){ el.textContent = texto; el.className = "aviso " + (tipo || ""); if(texto) el.scrollIntoView({ behavior:"smooth", block:"nearest" }); }
   function llenarSelect(sel, valores, vac){ sel.innerHTML = (vac ? '<option value="">—</option>' : "") + valores.map(v => `<option value="${v}">${v}</option>`).join(""); }
@@ -898,7 +928,7 @@
       chart.querySelectorAll(".chart-row span:first-child").forEach((s,idx)=>{ s.style.cursor="pointer"; s.addEventListener("click",()=>{ filtroCategoria=counts[idx].c; filtroEstado="todos"; pagina=1; renderChips(); renderTabla(); irA("lista"); }); }); }
     // Últimos agregados por el panel (los nuevos, hasta 5)
     const recientes=itemsMerged.filter(i=>i.origen==="nuevo").slice(0,5);
-    $("recientes").innerHTML = recientes.length ? recientes.map(filaHTML).join("") : '<div class="cargando">Todavía no cargaste productos por el panel.</div>';
+    $("recientes").innerHTML = recientes.length ? recientes.map(i=>filaHTML(i)).join("") : '<div class="cargando">Todavía no cargaste productos por el panel.</div>';
     activarAcciones($("recientes"), recientes);
   }
 
@@ -912,8 +942,9 @@
     $("chipsEstado").querySelectorAll("[data-estado]").forEach(b=>b.addEventListener("click",()=>{ filtroEstado=b.dataset.estado; pagina=1; renderChips(); renderTabla(); }));
     $("chipsCategoria").querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{ filtroCategoria=b.dataset.cat; pagina=1; renderChips(); renderTabla(); }));
   }
-  function filaHTML(i){
+  function filaHTML(i, sel){
     const d=i.datos||{}; const oferta=enOferta(d);
+    const chk=sel?`<label class="chk"><input type="checkbox" class="rowchk" data-cod="${esc(i.codigo)}" ${seleccion.has(i.codigo)?"checked":""}></label>`:"";
     const pill=i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
     const bOf=oferta?'<span class="pill oferta">Oferta</span>':"";
     const bOc=i.remoteId&&!i.activo?'<span class="pill oculto">Oculto</span>':"";
@@ -921,7 +952,7 @@
     const acc=`${pausaBtn}<button class="icon-btn" data-borrar title="Eliminar del catalogo">🗑</button>`;
     return `<div class="tr" data-cod="${esc(i.codigo)}">
       <div class="c-prod">
-        <img ${d.imagen?`src="${esc(d.imagen)}"`:""} alt="" loading="lazy" onerror="this.removeAttribute('src')">
+        ${chk}<img ${d.imagen?`src="${esc(d.imagen)}"`:""} alt="" loading="lazy" onerror="this.removeAttribute('src')">
         <div class="info"><b>${esc(d.nombre||i.codigo)}</b>
           <span>${esc(i.codigo)}<span class="movil-meta"> · ${precioTxt(d).replace(/<[^>]+>/g,"")} · ${esc(d.categoria||"")}</span></span></div>
       </div>
@@ -958,8 +989,11 @@
     if(pagina>paginas) pagina=paginas;
     const desde=(pagina-1)*PORPAG; const pageItems=lista.slice(desde,desde+PORPAG);
     const cont=$("filas");
-    cont.innerHTML = pageItems.length ? pageItems.map(filaHTML).join("") : '<div class="cargando">Sin resultados.</div>';
+    cont.innerHTML = pageItems.length ? pageItems.map(i=>filaHTML(i,true)).join("") : '<div class="cargando">Sin resultados.</div>';
     activarAcciones(cont, pageItems);
+    // Selección múltiple: enganchar checkboxes de cada fila.
+    cont.querySelectorAll(".rowchk").forEach(chk=>chk.addEventListener("change",()=>{ const c=chk.dataset.cod; if(chk.checked) seleccion.add(c); else seleccion.delete(c); refrescarSel(); }));
+    wireSelbar(); refrescarSel();
     $("paginacion").innerHTML = lista.length ?
       `<button id="pgPrev" ${pagina<=1?"disabled":""}>‹ Anterior</button>
        <span>Página ${pagina} de ${paginas} · ${lista.length} productos</span>
@@ -969,6 +1003,61 @@
     if(next) next.addEventListener("click",()=>{ if(pagina<paginas){ pagina++; renderTabla(); window.scrollTo({top:0}); } });
   }
   let bt=null; $("buscador").addEventListener("input",()=>{ clearTimeout(bt); bt=setTimeout(()=>{ pagina=1; renderTabla(); },180); });
+
+  // ============ Descuento en lote ============
+  function refrescarSel(){
+    const n=seleccion.size;
+    const bc=$("bulkControls"); if(bc) bc.classList.toggle("hidden", n===0);
+    const sc=$("selCount"); if(sc) sc.textContent = n+" seleccionado"+(n===1?"":"s");
+    const st=$("selTodos"); if(st){ const filt=filtrar();
+      st.checked = filt.length>0 && filt.every(i=>seleccion.has(i.codigo));
+      st.indeterminate = !st.checked && filt.some(i=>seleccion.has(i.codigo));
+    }
+  }
+  function wireSelbar(){
+    if(selbarWired) return; selbarWired=true;
+    $("selTodos").addEventListener("change",e=>{ const filt=filtrar(); filt.forEach(i=>{ if(e.target.checked) seleccion.add(i.codigo); else seleccion.delete(i.codigo); }); renderTabla(); });
+    $("bulkLimpiar").addEventListener("click",()=>{ seleccion.clear(); $("bulkAviso").textContent=""; renderTabla(); });
+    $("bulkAplicar").addEventListener("click",aplicarDescuentoLote);
+    $("bulkQuitar").addEventListener("click",quitarOfertaLote);
+  }
+  async function aplicarDescuentoLote(){
+    const av=$("bulkAviso");
+    if(!(await asegurarSesion())) return;
+    const pct=Number($("bulkPct").value||0);
+    const hastaRaw=$("bulkHasta").value;
+    if(!(pct>0&&pct<95)){ aviso(av,"Poné un % de descuento entre 1 y 94.","err"); return; }
+    if(!hastaRaw){ aviso(av,"Elegí la fecha 'hasta' de la oferta.","err"); return; }
+    const hasta=hastaRaw+"T23:59:59";
+    let saltados=0; const rows=[];
+    itemsMerged.filter(i=>seleccion.has(i.codigo)).forEach(it=>{ const d=it.datos||{}; const precio=Number(d.precio||0);
+      if(d.cotizar===true||!(precio>0)){ saltados++; return; }
+      const off=Math.max(1, Math.round(precio*(1-pct/100)));
+      rows.push({ codigo:it.codigo, activo:it.activo!==false, datos:{...d, precioOferta:off, promocionHasta:hasta} });
+    });
+    if(!rows.length){ aviso(av,"Ninguno de los seleccionados tiene precio para descontar (los 'a consultar' se omiten).","err"); return; }
+    const btn=$("bulkAplicar"); btn.disabled=true;
+    const {error}=await supa.from("catalogo_web").upsert(rows,{onConflict:"codigo"});
+    btn.disabled=false;
+    if(error){ aviso(av,"No se pudo aplicar: "+error.message,"err"); return; }
+    seleccion.clear();
+    aviso(av,`Descuento del ${pct}% aplicado a ${rows.length} producto(s)${saltados?` · ${saltados} omitido(s) sin precio`:""}.`,"ok");
+    cargarRemotos();
+  }
+  async function quitarOfertaLote(){
+    const av=$("bulkAviso");
+    if(!(await asegurarSesion())) return;
+    const rows=itemsMerged.filter(i=>seleccion.has(i.codigo)&&enOferta(i.datos))
+      .map(it=>({ codigo:it.codigo, activo:it.activo!==false, datos:{...(it.datos||{}), precioOferta:0, promocionHasta:""} }));
+    if(!rows.length){ aviso(av,"Ninguno de los seleccionados está en oferta.","err"); return; }
+    const btn=$("bulkQuitar"); btn.disabled=true;
+    const {error}=await supa.from("catalogo_web").upsert(rows,{onConflict:"codigo"});
+    btn.disabled=false;
+    if(error){ aviso(av,"No se pudo quitar: "+error.message,"err"); return; }
+    seleccion.clear();
+    aviso(av,`Oferta quitada a ${rows.length} producto(s).`,"ok");
+    cargarRemotos();
+  }
 
   // ============ Navegación ============
   function irA(tab){
