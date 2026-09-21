@@ -256,6 +256,8 @@
           <button class="nav-item" id="tabLista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg> Productos</button>
           <button class="nav-item" id="tabForm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg> Subir producto nuevo</button>
           <button class="nav-item" id="tabBanners"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="m3 14 5-4 4 3 3-2 6 5"/><circle cx="8.5" cy="8.5" r="1.5"/></svg> Banners</button>
+          <button class="nav-item" id="tabCupones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"/><path d="M10 6v12"/></svg> Cupones</button>
+          <button class="nav-item" id="tabPromos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9h.01M15 15h.01M8 16 16 8"/><circle cx="12" cy="12" r="9"/></svg> Promociones</button>
         </nav>
         <div class="nav-spacer"></div>
         <div class="userbox">
@@ -460,6 +462,61 @@
           </div>
         </div>
 
+        <!-- ---------- CUPONES ---------- -->
+        <div id="viewCupones" class="hidden">
+          <div class="page-head"><div><h1>Cupones</h1><p class="page-sub">Códigos de descuento que el cliente escribe o recibe por correo (Brevo). Se aplican al pagar.</p></div></div>
+          <div class="card">
+            <h2>Nuevo cupón</h2>
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:2px 0 6px;">Código</label>
+            <div style="display:flex;gap:8px;"><input id="cupCodigo" placeholder="HAUS-XXXXX" style="flex:1;text-transform:uppercase;"><button id="cupGen" class="btn btn-sec" style="flex:none;padding:0 14px;">Generar</button></div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+              <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Tipo</label><select id="cupTipo"><option value="porcentaje">Porcentaje (%)</option><option value="monto">Monto fijo (US$)</option></select></div>
+              <div style="flex:1;min-width:120px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;" id="cupValorLbl">Porcentaje (%)</label><input id="cupValor" type="number" min="0" step="1" value="10"></div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+              <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Usos</label><select id="cupUsos"><option value="1">Un solo uso</option><option value="varios">Varios (con tope)</option><option value="ilimitado">Ilimitado</option></select></div>
+              <div style="flex:1;min-width:120px;" id="cupTopeWrap" hidden><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Tope de usos</label><input id="cupTope" type="number" min="1" step="1" value="20"></div>
+              <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Vence (opcional)</label><input id="cupVence" type="date"></div>
+            </div>
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Nota (opcional)</label>
+            <input id="cupNota" placeholder="Ej. promo del Día de las Madres">
+            <button id="cupAdd" class="btn" style="margin-top:14px;">Crear cupón</button>
+            <div id="cupAviso" class="aviso"></div>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <h2>Cupones actuales</h2>
+            <div id="cupLista"><div class="cargando">Cargando…</div></div>
+          </div>
+        </div>
+
+        <!-- ---------- PROMOCIONES ---------- -->
+        <div id="viewPromos" class="hidden">
+          <div class="page-head"><div><h1>Promociones automáticas</h1><p class="page-sub">Se aplican SOLAS en el checkout cuando el carrito cumple una condición (sin código).</p></div></div>
+          <div class="card">
+            <h2>Nueva promoción</h2>
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:2px 0 6px;">Nombre</label>
+            <input id="prmNombre" placeholder="Ej. 4+ productos 10%">
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+              <div style="flex:1;min-width:150px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Condición</label><select id="prmCondTipo"><option value="cantidad">Por cantidad de productos</option><option value="monto">Por monto del total (US$)</option></select></div>
+              <div style="flex:1;min-width:120px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;" id="prmCondLbl">Mínimo de productos</label><input id="prmCondValor" type="number" min="1" step="1" value="4"></div>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+              <div style="flex:1;min-width:150px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Tipo de descuento</label><select id="prmTipo"><option value="porcentaje">Porcentaje (%)</option><option value="monto">Monto fijo (US$)</option></select></div>
+              <div style="flex:1;min-width:120px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;" id="prmValorLbl">Porcentaje (%)</label><input id="prmValor" type="number" min="0" step="1" value="10"></div>
+            </div>
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Vence (opcional)</label>
+            <input id="prmVence" type="date">
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Nota (opcional)</label>
+            <input id="prmNota" placeholder="Ej. promo de fin de mes">
+            <button id="prmAdd" class="btn" style="margin-top:14px;">Crear promoción</button>
+            <div id="prmAviso" class="aviso"></div>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <h2>Promociones actuales</h2>
+            <div id="prmLista"><div class="cargando">Cargando…</div></div>
+          </div>
+        </div>
+
       </main>
     </div>
   </div>
@@ -475,6 +532,11 @@
   const SUBCATEGORIAS = { "Hombre":["Calzado","Ropa"], "Dama":["Calzado","Ropa"], "Unisex":["Calzado","Ropa"], "Accesorios":["Hombre","Dama"], "Decoración":[] };
 
   const supa = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  // Segundo proyecto: la TIENDA/tracking (epslwaxjemlysqtubbfu), donde viven cupones y
+  // promociones. Se entra con las MISMAS credenciales del admin (login dual).
+  const TIENDA_URL = "https://epslwaxjemlysqtubbfu.supabase.co";
+  const TIENDA_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";
+  const supaTienda = window.supabase.createClient(TIENDA_URL, TIENDA_KEY, { auth: { storageKey: "hausline-tienda-auth", persistSession: true, autoRefreshToken: true } });
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 
@@ -910,20 +972,26 @@
 
   // ============ Navegación ============
   function irA(tab){
-    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm", banners:"viewBanners" };
+    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm", banners:"viewBanners", cupones:"viewCupones", promos:"viewPromos" };
     Object.values(vis).forEach(v=>$(v).classList.add("hidden"));
     $(vis[tab]).classList.remove("hidden");
     $("tabInicio").classList.toggle("activa",tab==="inicio");
     $("tabLista").classList.toggle("activa",tab==="lista");
     $("tabForm").classList.toggle("activa",tab==="form");
     $("tabBanners").classList.toggle("activa",tab==="banners");
+    $("tabCupones").classList.toggle("activa",tab==="cupones");
+    $("tabPromos").classList.toggle("activa",tab==="promos");
     if(tab==="banners") cargarBanners();
+    if(tab==="cupones") cargarCupones();
+    if(tab==="promos") cargarPromos();
     window.scrollTo({top:0,behavior:"instant" in window?"instant":"auto"});
   }
   $("tabInicio").addEventListener("click",()=>irA("inicio"));
   $("tabLista").addEventListener("click",()=>irA("lista"));
   $("tabForm").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
   $("tabBanners").addEventListener("click",()=>irA("banners"));
+  $("tabCupones").addEventListener("click",()=>irA("cupones"));
+  $("tabPromos").addEventListener("click",()=>irA("promos"));
   $("btnNuevoInicio").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
 
   // Comprueba el catálogo y recuerda cómo llega al tracking. El tracking es OTRO
@@ -989,6 +1057,84 @@
     }));
   }
 
+  // ============ Cupones (proyecto de la tienda · login dual) ============
+  function generarCodigoCupon(){ var abc="ABCDEFGHJKMNPQRSTUVWXYZ23456789",s=""; for(var i=0;i<5;i++) s+=abc[Math.floor(Math.random()*abc.length)]; return "HAUS-"+s; }
+  $("cupTipo").addEventListener("change",()=>{ $("cupValorLbl").textContent = $("cupTipo").value==="porcentaje"?"Porcentaje (%)":"Monto (US$)"; });
+  $("cupUsos").addEventListener("change",()=>{ $("cupTopeWrap").hidden = $("cupUsos").value!=="varios"; });
+  $("cupGen").addEventListener("click",()=>{ $("cupCodigo").value=generarCodigoCupon(); });
+  $("cupAdd").addEventListener("click", async ()=>{
+    const codigo=($("cupCodigo").value||"").trim().toUpperCase(), tipo=$("cupTipo").value, valor=Number($("cupValor").value||0);
+    if(codigo.length<3){ aviso($("cupAviso"),"El código es muy corto.","err"); return; }
+    if(!(valor>0)){ aviso($("cupAviso"),"Indicá el valor del descuento.","err"); return; }
+    if(tipo==="porcentaje"&&valor>100){ aviso($("cupAviso"),"El porcentaje no puede pasar de 100.","err"); return; }
+    const usosSel=$("cupUsos").value, usos_max = usosSel==="ilimitado"?null:(usosSel==="1"?1:Math.max(1,Number($("cupTope").value||1)));
+    const btn=$("cupAdd"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Creando…'; aviso($("cupAviso"),"","");
+    try{
+      const {error}=await supaTienda.from("cupones").insert({ codigo, tipo, valor, usos_max, vence_el:$("cupVence").value||null, nota:($("cupNota").value||"").trim()||null, cliente_id:null });
+      if(error) throw error;
+      $("cupCodigo").value=""; $("cupNota").value=""; $("cupVence").value="";
+      aviso($("cupAviso"),"✓ Cupón creado. Link para Brevo: hauslineshopni.es/?cupon="+codigo,"ok"); cargarCupones();
+    }catch(err){ aviso($("cupAviso"), /duplicate/i.test(err.message||"")?"Ese código ya existe.":"Error: "+(err.message||err),"err"); }
+    finally{ btn.disabled=false; btn.innerHTML=t; }
+  });
+  async function cargarCupones(){
+    const cont=$("cupLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
+    const {data,error}=await supaTienda.from("cupones").select("id,codigo,tipo,valor,usos_max,usos_confirmados,vence_el,activo").order("created_at",{ascending:false});
+    if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar. Cerrá sesión y volvé a entrar (para el login del segundo proyecto).</div>'; return; }
+    if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin cupones todavía.</div>'; return; }
+    const hoy=new Date().toISOString().slice(0,10);
+    cont.innerHTML=data.map(c=>{
+      const val=c.tipo==="porcentaje"?(c.valor+"%"):("US$ "+Number(c.valor).toFixed(2));
+      const usos=c.usos_max==null?(c.usos_confirmados+" usos · ilimitado"):(c.usos_confirmados+" / "+c.usos_max+" usos");
+      const venc=c.vence_el&&c.vence_el<hoy, inact=!c.activo||venc;
+      return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--linea);'+(inact?"opacity:.6;":"")+'">'
+        +'<div style="flex:1;min-width:160px;"><b style="font-family:monospace;font-size:14px;">'+esc(c.codigo)+'</b> <span style="color:var(--texto2);font-size:12px;">· '+val+' · '+usos+'</span>'+(venc?'<span style="color:#e5484d;font-size:11px;font-weight:700;"> · VENCIDO</span>':'')+'</div>'
+        +'<button class="btn btn-sec" data-cup-copy="'+esc(c.codigo)+'" style="padding:6px 10px;font-size:12px;">Copiar link</button>'
+        +'<button class="btn btn-sec" data-cup-toggle="'+c.id+'" style="padding:6px 10px;font-size:12px;">'+(c.activo?"Desactivar":"Activar")+'</button>'
+        +'<button class="btn btn-sec" data-cup-del="'+c.id+'" style="padding:6px 10px;font-size:12px;color:#e5484d;">Borrar</button></div>';
+    }).join("");
+    cont.querySelectorAll("[data-cup-copy]").forEach(b=>b.addEventListener("click",()=>{ const url="https://hauslineshopni.es/?cupon="+encodeURIComponent(b.dataset.cupCopy); try{navigator.clipboard.writeText(url);}catch(e){} const o=b.textContent; b.textContent="✓ Copiado"; setTimeout(()=>b.textContent=o,1200); }));
+    cont.querySelectorAll("[data-cup-toggle]").forEach(b=>b.addEventListener("click",async()=>{ const c=data.find(x=>x.id===b.dataset.cupToggle); await supaTienda.from("cupones").update({activo:!c.activo}).eq("id",c.id); cargarCupones(); }));
+    cont.querySelectorAll("[data-cup-del]").forEach(b=>b.addEventListener("click",async()=>{ if(!confirm("¿Borrar este cupón?"))return; await supaTienda.from("cupones").delete().eq("id",b.dataset.cupDel); cargarCupones(); }));
+  }
+
+  // ============ Promociones automáticas (proyecto de la tienda · login dual) ============
+  $("prmTipo").addEventListener("change",()=>{ $("prmValorLbl").textContent = $("prmTipo").value==="porcentaje"?"Porcentaje (%)":"Monto (US$)"; });
+  $("prmCondTipo").addEventListener("change",()=>{ $("prmCondLbl").textContent = $("prmCondTipo").value==="cantidad"?"Mínimo de productos":"Monto mínimo (US$)"; });
+  $("prmAdd").addEventListener("click", async ()=>{
+    const nombre=($("prmNombre").value||"").trim(), condVal=Number($("prmCondValor").value||0), tipo=$("prmTipo").value, valor=Number($("prmValor").value||0);
+    if(nombre.length<2){ aviso($("prmAviso"),"Ponele un nombre.","err"); return; }
+    if(!(condVal>0)){ aviso($("prmAviso"),"Indicá la condición.","err"); return; }
+    if(!(valor>0)){ aviso($("prmAviso"),"Indicá el valor del descuento.","err"); return; }
+    if(tipo==="porcentaje"&&valor>100){ aviso($("prmAviso"),"El porcentaje no puede pasar de 100.","err"); return; }
+    const btn=$("prmAdd"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Creando…'; aviso($("prmAviso"),"","");
+    try{
+      const {error}=await supaTienda.from("promociones").insert({ nombre, condicion_tipo:$("prmCondTipo").value, condicion_valor:condVal, tipo, valor, vence_el:$("prmVence").value||null, nota:($("prmNota").value||"").trim()||null });
+      if(error) throw error;
+      $("prmNombre").value=""; $("prmNota").value=""; $("prmVence").value="";
+      aviso($("prmAviso"),"✓ Promoción creada. Se aplica sola en el checkout.","ok"); cargarPromos();
+    }catch(err){ aviso($("prmAviso"),"Error: "+(err.message||err),"err"); }
+    finally{ btn.disabled=false; btn.innerHTML=t; }
+  });
+  async function cargarPromos(){
+    const cont=$("prmLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
+    const {data,error}=await supaTienda.from("promociones").select("id,nombre,condicion_tipo,condicion_valor,tipo,valor,vence_el,activo").order("created_at",{ascending:false});
+    if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar. ¿Aplicaste la migración de promociones (202609200005)?</div>'; return; }
+    if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin promociones todavía.</div>'; return; }
+    const hoy=new Date().toISOString().slice(0,10);
+    cont.innerHTML=data.map(p=>{
+      const val=p.tipo==="porcentaje"?(p.valor+"%"):("US$ "+Number(p.valor).toFixed(2));
+      const cond=p.condicion_tipo==="cantidad"?(p.condicion_valor+"+ productos"):("+US$ "+Number(p.condicion_valor).toFixed(0));
+      const venc=p.vence_el&&p.vence_el<hoy, inact=!p.activo||venc;
+      return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--linea);'+(inact?"opacity:.6;":"")+'">'
+        +'<div style="flex:1;min-width:160px;"><b style="font-size:13px;">'+esc(p.nombre)+'</b> <span style="color:var(--texto2);font-size:12px;">· '+cond+' → '+val+'</span>'+(venc?'<span style="color:#e5484d;font-size:11px;font-weight:700;"> · VENCIDA</span>':'')+'</div>'
+        +'<button class="btn btn-sec" data-prm-toggle="'+p.id+'" style="padding:6px 10px;font-size:12px;">'+(p.activo?"Desactivar":"Activar")+'</button>'
+        +'<button class="btn btn-sec" data-prm-del="'+p.id+'" style="padding:6px 10px;font-size:12px;color:#e5484d;">Borrar</button></div>';
+    }).join("");
+    cont.querySelectorAll("[data-prm-toggle]").forEach(b=>b.addEventListener("click",async()=>{ const p=data.find(x=>x.id===b.dataset.prmToggle); await supaTienda.from("promociones").update({activo:!p.activo}).eq("id",p.id); cargarPromos(); }));
+    cont.querySelectorAll("[data-prm-del]").forEach(b=>b.addEventListener("click",async()=>{ if(!confirm("¿Borrar esta promoción?"))return; await supaTienda.from("promociones").delete().eq("id",b.dataset.prmDel); cargarPromos(); }));
+  }
+
   // ============ Sesión ============
   async function mostrarPanel(m){
     $("vistaLogin").classList.toggle("hidden",m); $("vistaPanel").classList.toggle("hidden",!m);
@@ -1014,13 +1160,17 @@
     const email=$("loginEmail").value.trim(),password=$("loginPass").value;
     if(!email||!password){ aviso($("avisoLogin"),"Poné correo y contraseña.","err"); return; }
     const btn=$("btnEntrar"); btn.disabled=true; const t=btn.textContent; btn.textContent="Entrando…";
-    const {error}=await supa.auth.signInWithPassword({email,password}); btn.disabled=false; btn.textContent=t;
+    const {error}=await supa.auth.signInWithPassword({email,password});
+    // Login DUAL: también al proyecto de la tienda (cupones/promos), con las mismas credenciales.
+    // Best-effort: si falla, banners y catálogo igual funcionan.
+    try{ await supaTienda.auth.signInWithPassword({email,password}); }catch(_){}
+    btn.disabled=false; btn.textContent=t;
     if(error){ aviso($("avisoLogin"),"No se pudo entrar: "+error.message,"err"); return; }
     aviso($("avisoLogin"),"",""); mostrarPanel(true);
   });
   $("loginPass").addEventListener("keydown",e=>{ if(e.key==="Enter") $("btnEntrar").click(); });
   $("verPass").addEventListener("click",()=>{ const p=$("loginPass"); p.type=p.type==="password"?"text":"password"; });
-  $("btnSalir").addEventListener("click",async()=>{ await supa.auth.signOut(); limpiarForm(); mostrarPanel(false); });
+  $("btnSalir").addEventListener("click",async()=>{ await supa.auth.signOut(); try{ await supaTienda.auth.signOut(); }catch(_){} limpiarForm(); mostrarPanel(false); });
   ["gesturestart","gesturechange","gestureend"].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
 
   // ============ Arranque ============
