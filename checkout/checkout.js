@@ -448,7 +448,7 @@
   }
 
   // =========================== PASO 2 · PAGO (pedido YA creado: links de correo/mipedido) ===
-  var timerInt=null, pollInt=null, ultimoEstado=null;
+  var timerInt=null, pollInt=null, confInt=null, ultimoEstado=null;
 
   function metodosHTML(monto){
     if(!CUENTAS.length) return '<div class="note"><b>Escríbenos por WhatsApp</b> y te damos los datos de pago.</div>';
@@ -572,34 +572,66 @@
       return '<div class="tl-step '+e.st+'"><div class="tl-dot">'+ic+'</div><div class="tl-txt"><b>'+esc(e.t)+'</b>'+(e.s?'<small>'+esc(e.s)+'</small>':'')+'</div></div>';
     }).join("")+'</div>';
   }
-  async function renderConfirmacion(codigo){
-    progreso(3); clearInterval(pollInt); clearInterval(timerInt);
-    var ayuda="https://wa.me/"+WA+"?text="+encodeURIComponent("Hola, sobre mi pedido "+codigo+": ");
-    // Estado real del pedido (para la línea de estados).
-    var items=null; try{ items=await fetchGrupo(codigo); }catch(_){ items=null; }
+  // Mapea el estado REAL del pedido (ya confirmado) al índice de la línea pública:
+  //   3 = Preparando · 4 = Enviado/en camino · 5 = Entregado.
+  function nivelPedido(pe){
+    var e=String(pe||"");
+    if(e==="entregado") return 5;
+    if(["empaquetado","disponible_entrega","transito_nicaragua","recibido_estados_unidos","transito_internacional","despachado","etiqueta_creada"].indexOf(e)>=0) return 4;
+    return 3; // pedido_confirmado, pagado, en_preparacion, control_calidad…
+  }
+  function estadosConf(items){
     var confirmado = !!(items && items.length && items.every(function(s){ return s.estado==="confirmada"; }));
-    var reportado = !!(items && items.some(function(s){ return s.pago_reportado || s.comprobante; })) || true; // llegó acá = reportó
-    var vencido = !!(items && items.length && items.every(function(s){ return s.estado==="vencida" || s.estado==="descartada"; }));
-    var estados = [
-      { t:"Pedido recibido", s:"Registramos tu pedido", st:"done" },
-      { t:"Pago en revisión", s: reportado ? "Estamos verificando tu pago" : "Esperando tu comprobante", st: reportado ? (confirmado?"done":"active") : "pending" },
-      { t:"Orden confirmada", s: confirmado ? "¡Tu pago fue confirmado!" : "Cuando validemos tu pago", st: confirmado ? "done" : "pending" },
-      { t:"Preparando tu pedido", s:"Alistamos tu producto", st: confirmado ? "active" : "pending" },
-      { t:"Enviado", s:"Vas a poder seguirlo con tu código", st:"pending" }
+    var pe=null; if(items){ items.forEach(function(s){ if(s.pedido_estado && pe==null) pe=s.pedido_estado; }); }
+    var nivel = confirmado ? nivelPedido(pe) : 1; // sin confirmar: "Pago en revisión" activo
+    var defs=[
+      { t:"Pedido recibido", s:"Registramos tu pedido" },
+      { t:"Pago en revisión", s: confirmado?"Verificamos tu pago":"Estamos verificando tu pago" },
+      { t:"Orden confirmada", s: confirmado?"¡Tu pago fue confirmado!":"Cuando validemos tu pago" },
+      { t:"Preparando tu pedido", s:"Alistamos tu producto" },
+      { t:"Enviado", s:"Tu pedido va en camino" },
+      { t:"Entregado", s:"¡Gracias por tu compra!" }
     ];
-    $("ck").innerHTML='<div class="conf">'
-      + '<div class="conf-check'+(confirmado?"":" pend")+'">'+ICON.check+'</div>'
-      + '<h1 class="conf-h">'+(confirmado?"¡Pago confirmado!":"¡Pedido recibido!")+'</h1>'
-      + '<p class="conf-p">'+(confirmado?"Tu pago fue confirmado y tu pedido ya está en proceso.":"Gracias por tu compra. Estamos verificando tu pago; te confirmamos por WhatsApp.")+'</p>'
-      + '<div class="conf-code"><span class="lb">Número de orden</span><b>'+esc(codigo)+'</b><button class="copy" data-copy="'+esc(codigo)+'" data-msg="¡Número copiado!">Copiar número</button></div>'
-      + '<div class="panel" style="margin-top:22px;text-align:left"><h3 class="panel-h" style="margin-bottom:14px">Estado de tu pedido</h3>'+timelineHTML(estados)+'</div>'
-      + '<p class="conf-hint">Guardá tu número de orden <b>'+esc(codigo)+'</b>: lo necesitás para consultar tu pedido.</p>'
-      + (confirmado ? '' : '<a class="btn" style="margin-top:8px" href="/checkout/?c='+encodeURIComponent(codigo)+'&paso=pago">Ver cuentas para pagar</a>')
-      + '<a class="btn btn-wa" style="margin-top:10px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escribinos por WhatsApp</a>'
-      + '<a class="btn btn-ghost" style="margin-top:10px" href="/">Volver a la tienda</a>'
-      + '</div>';
-    wireCopy($("ck"));
-    dispararResenaGoogle(codigo);
+    return { confirmado:confirmado, pe:pe, estados: defs.map(function(d,i){
+      return { t:d.t, s:d.s, st: i<nivel ? "done" : (i===nivel ? (nivel===5?"done":"active") : "pending") };
+    }) };
+  }
+  function firmaConf(items){
+    var c = !!(items && items.length && items.every(function(s){ return s.estado==="confirmada"; }));
+    var pe=""; if(items){ items.forEach(function(s){ if(s.pedido_estado && !pe) pe=s.pedido_estado; }); }
+    return c+"|"+pe+"|"+(items?items.length:0);
+  }
+  async function renderConfirmacion(codigo){
+    progreso(3); clearInterval(pollInt); clearInterval(timerInt); clearInterval(confInt);
+    var ayuda="https://wa.me/"+WA+"?text="+encodeURIComponent("Hola, sobre mi pedido "+codigo+": ");
+    var firma=null;
+    function pintar(items){
+      var r=estadosConf(items); var confirmado=r.confirmado;
+      $("ck").innerHTML='<div class="conf">'
+        + '<div class="conf-check'+(confirmado?"":" pend")+'">'+ICON.check+'</div>'
+        + '<h1 class="conf-h">'+(confirmado?"¡Pago confirmado!":"¡Pedido recibido!")+'</h1>'
+        + '<p class="conf-p">'+(confirmado?"Tu pago fue confirmado y tu pedido ya está en proceso.":"Gracias por tu compra. Estamos verificando tu pago; te confirmamos por WhatsApp.")+'</p>'
+        + '<div class="conf-code"><span class="lb">Número de orden</span><b>'+esc(codigo)+'</b><button class="copy" data-copy="'+esc(codigo)+'" data-msg="¡Número copiado!">Copiar número</button></div>'
+        + '<div class="panel" style="margin-top:22px;text-align:left"><h3 class="panel-h" style="margin-bottom:14px">Estado de tu pedido</h3>'+timelineHTML(r.estados)+'</div>'
+        + '<p class="conf-hint">Guardá tu número de orden <b>'+esc(codigo)+'</b>: lo necesitás para consultar tu pedido.</p>'
+        + (confirmado ? '' : '<a class="btn" style="margin-top:8px" href="/checkout/?c='+encodeURIComponent(codigo)+'&paso=pago">Ver cuentas para pagar</a>')
+        + '<a class="btn btn-wa" style="margin-top:10px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escribinos por WhatsApp</a>'
+        + '<a class="btn btn-ghost" style="margin-top:10px" href="/">Volver a la tienda</a>'
+        + '</div>';
+      wireCopy($("ck"));
+      dispararResenaGoogle(codigo);
+    }
+    // Consulta el estado y repinta SOLO si cambió. Corre al entrar y cada 15s (polling) para
+    // que el seguimiento se refleje sin recargar. Se detiene al entregar o si la pestaña se oculta.
+    async function tick(silencioso){
+      var items=null; try{ items=await fetchGrupo(codigo); }catch(_){ items=null; }
+      var f=firmaConf(items);
+      if(silencioso && f===firma) return;
+      firma=f; pintar(items);
+      if(items && items.some(function(s){ return s.pedido_estado==="entregado"; })) clearInterval(confInt);
+    }
+    await tick(false);
+    confInt=setInterval(function(){ if(document.hidden) return; tick(true); }, 15000);
   }
 
   // ---- Estado / error ----
