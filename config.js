@@ -63,6 +63,24 @@ const HAUSLINE_CUENTAS = [
 ];
 
 // ============================================================
+//  BANNERS · AVISO EMERGENTE AL ABRIR LA WEB
+//  Muestra un aviso CHICO (no ocupa toda la pantalla) con la imagen de la
+//  promo y una X para cerrar. Aparece una vez por visita. Si tocan la imagen
+//  y pusiste "enlace", los lleva ahí (ej. la tienda con un cupón).
+//
+//  PARA AGREGAR UN BANNER:
+//   1) Subí la imagen a la carpeta  imgP/banners/  (ideal vertical, ~800x1000).
+//   2) Agregá una línea acá con su ruta. Ejemplos:
+//        { imagen: "imgP/banners/promo1.jpg", enlace: "" },
+//        { imagen: "imgP/banners/verano.jpg", enlace: "/?cupon=HAUS-VERANO" },
+//  Si ponés varias, se turnan solas con puntitos. Dejá la lista vacía [] para
+//  no mostrar ningún aviso.
+// ============================================================
+const HAUSLINE_BANNERS = [
+  // { imagen: "imgP/banners/promo1.jpg", enlace: "" },
+];
+
+// ============================================================
 //  SUPABASE  (para el contador REAL de visualizaciones)
 //  Pega aquí los datos de tu proyecto Supabase.
 //  Mientras estén vacíos, la web funciona igual pero sin contador.

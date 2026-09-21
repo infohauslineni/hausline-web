@@ -149,6 +149,29 @@
     var res=await fetch(SB_URL+"rpc/obtener_solicitud_publica",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigo})});
     if(!res.ok) throw new Error("HTTP "+res.status); var data=await res.json(); return (data&&data.codigo)?data:null;
   }
+
+  // Promociones automáticas: se aplican SOLAS (sin código) cuando el carrito cumple una
+  // condición y NO hay cupón. El servidor las aplica de forma autoritativa al crear el
+  // pedido; acá solo las usamos para PINTAR el descuento en el resumen. Se cargan una vez.
+  var PROMOS=[], promosCargadas=false;
+  async function cargarPromos(){
+    if(promosCargadas) return PROMOS;
+    promosCargadas=true;
+    try{ var r=await fetch(SB_URL+"rpc/promociones_activas",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:"{}"}); if(r.ok){ var d=await r.json(); if(Array.isArray(d)) PROMOS=d; } }catch(_){}
+    return PROMOS;
+  }
+  function descFuente(tipo, valor, base){ var d = tipo==="porcentaje" ? base*Number(valor)/100 : Math.min(Number(valor), base); return Math.round(d*100)/100; }
+  // La MEJOR promo que cumpla la condición (la que dé más descuento). null si ninguna.
+  function mejorPromo(base, cant){
+    var mejor=null, mejorDesc=0;
+    PROMOS.forEach(function(p){
+      var ok = p.condicion_tipo==="cantidad" ? (Number(cant)>=Number(p.condicion_valor)) : (Number(base)>=Number(p.condicion_valor));
+      if(!ok) return;
+      var d = descFuente(p.tipo, p.valor, base);
+      if(d>mejorDesc){ mejorDesc=d; mejor=p; }
+    });
+    return mejor;
+  }
   function calcular(items){
     var now=Date.now();
     var pagado=items.length>0 && items.every(function(s){ return s.estado==="confirmada"; });
@@ -243,10 +266,16 @@
       var bruto=0, items=[];
       if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; items.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp}); }); }
       else { var lp=(Number(pend.producto.precio)||0)*cant+recargoDe(pend.opts.envio,cant); bruto=lp; items.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:cant,lineTotal:lp}); }
-      bruto=Math.round(bruto*100)/100; var desc=descCupon(bruto); var total=Math.max(0,Math.round((bruto-desc)*100)/100);
-      return { items:items, subtotal:bruto, descuento:desc, total:total, ahora:pago==="50"?Math.round(total*50)/100:total };
+      bruto=Math.round(bruto*100)/100;
+      var totalCant=items.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0);
+      // Cupón (si lo escribió) tiene prioridad; si no, la mejor promo automática aplicable.
+      var desc=0, descLabel="";
+      if(cupon){ desc=descCupon(bruto); descLabel=cupon.codigo; }
+      else { var pr=mejorPromo(bruto, totalCant); if(pr){ desc=descFuente(pr.tipo, pr.valor, bruto); descLabel="Promo: "+pr.nombre; } }
+      var total=Math.max(0,Math.round((bruto-desc)*100)/100);
+      return { items:items, subtotal:bruto, descuento:desc, descLabel:descLabel, total:total, ahora:pago==="50"?Math.round(total*50)/100:total };
     }
-    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:cupon?cupon.codigo:"", total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:ENVCFG[envioFlag].dias, envioIntl:intlFlag }; }
+    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:ENVCFG[envioFlag].dias, envioIntl:intlFlag }; }
     function pintarResumen(){ var s=$("resumen"); if(s) s.innerHTML=resumenHTML(sumOpts()); }
 
     function cuponHTML(){
@@ -311,6 +340,8 @@
       }catch(_){ if(errB){ errB.textContent="No se pudo validar el código."; errB.hidden=false; } }
     }
     wireCupon();
+    // Carga las promos automáticas y re-pinta el resumen (para mostrar el descuento aplicado).
+    cargarPromos().then(function(){ pintarResumen(); });
     // Cupón que llega del link del correo (Brevo, ?cupon=CODIGO) o guardado desde la home
     // (localStorage hausline_cupon): lo autocompletamos y aplicamos solo, sin que el cliente
     // tenga que escribirlo. Si ya no es válido, aplicarCupon muestra el aviso y no lo aplica.
@@ -395,8 +426,9 @@
   // ============ PASO 2 · PAGO (PRE-ORDEN: el pedido aún NO existe) ============
   // Se muestra cuando el cliente viene del paso 1 (sin código). El pedido se crea recién
   // cuando reporta el pago (sube comprobante o toca "Ya realicé mi pago").
-  function renderPagoPreorden(){
+  async function renderPagoPreorden(){
     progreso(2);
+    await cargarPromos();
     var pend; try{ pend=JSON.parse(sessionStorage.getItem("hausline_encargo")||"null"); }catch(e){ pend=null; }
     if(!pend || !pend.contacto){ estado("Empezá tu pedido", "Elegí un producto en la tienda y completá tus datos para pagar."); return; }
     var esCarrito=pend.tipo==="carrito"; var ct=pend.contacto; var pago = ct.pago==="50"?"50":"total";
@@ -405,10 +437,13 @@
     if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; sumItems.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp}); }); }
     else { var c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1); var lp=(Number(pend.producto.precio)||0)*c2+recargoDe(pend.opts.envio,c2); bruto=lp; sumItems.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:c2,lineTotal:lp}); }
     bruto=Math.round(bruto*100)/100;
-    var desc=0; if(ct.cupon){ desc = ct.cupon.tipo==="porcentaje"?bruto*ct.cupon.valor/100:Math.min(ct.cupon.valor,bruto); desc=Math.round(desc*100)/100; }
+    var totalCant=sumItems.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0);
+    var desc=0, descLabel="";
+    if(ct.cupon){ desc=descFuente(ct.cupon.tipo, ct.cupon.valor, bruto); descLabel=ct.cupon.codigo; }
+    else { var pr=mejorPromo(bruto, totalCant); if(pr){ desc=descFuente(pr.tipo, pr.valor, bruto); descLabel="Promo: "+pr.nombre; } }
     var total=Math.max(0,Math.round((bruto-desc)*100)/100);
     var ahora = pago==="50"?Math.round(total*50)/100:total;
-    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:ct.cupon?ct.cupon.codigo:"", total:total, ahora:ahora, parcial:pago==="50", envioIntl: !!(ct.pais && ct.pais!=="Nicaragua") });
+    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:descLabel, total:total, ahora:ahora, parcial:pago==="50", envioIntl: !!(ct.pais && ct.pais!=="Nicaragua") });
 
     $("ck").innerHTML='<div class="grid"><div class="col-main">'
       + '<button class="back rv" data-volver>← Volver a mis datos</button>'
