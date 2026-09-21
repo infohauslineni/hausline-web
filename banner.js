@@ -64,6 +64,10 @@
         : '';
       card.innerHTML = inner + '<button type="button" class="bnr-x" aria-label="Cerrar">&times;</button>' + dots;
       card.querySelector(".bnr-x").addEventListener("click", function(e){ e.preventDefault(); cerrar(); });
+      // Al TOCAR el banner (su link) marcamos "visto" para que NO reaparezca en la página destino
+      // (el link suele ser del mismo sitio). No cancelamos la navegación: dejamos que el <a> abra el link.
+      var link = card.querySelector("a");
+      if(link) link.addEventListener("click", function(){ marcar(); if(rot){ clearInterval(rot); rot = null; } });
       card.querySelectorAll(".bnr-dots i").forEach(function(d){
         d.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); i = Number(d.getAttribute("data-k")) || 0; pintar(); });
       });
