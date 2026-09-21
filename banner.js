@@ -8,9 +8,13 @@
 (function(){
   "use strict";
 
-  var BANNERS = (typeof HAUSLINE_BANNERS !== "undefined" && Array.isArray(HAUSLINE_BANNERS))
+  // Los banners vienen de la BASE (tabla banners, editable desde admin.html). Si no hay ninguno
+  // o falla la red, se usa la lista HAUSLINE_BANNERS de config.js como respaldo.
+  var SB_URL = (typeof SUPABASE_URL !== "undefined") ? SUPABASE_URL : "";
+  var SB_KEY = (typeof SUPABASE_ANON_KEY !== "undefined") ? SUPABASE_ANON_KEY : "";
+  var CONFIG_BANNERS = (typeof HAUSLINE_BANNERS !== "undefined" && Array.isArray(HAUSLINE_BANNERS))
     ? HAUSLINE_BANNERS.filter(function(b){ return b && b.imagen; }) : [];
-  if(!BANNERS.length) return; // nada configurado → no molesta
+  var BANNERS = [];
 
   var KEY = "hausline_banner_visto";
   function visto(){ try{ return sessionStorage.getItem(KEY) === "1"; }catch(e){ return false; } }
@@ -70,8 +74,20 @@
     if(BANNERS.length > 1) rot = setInterval(function(){ i = (i + 1) % BANNERS.length; pintar(); }, 4500);
   }
 
-  // Aparece un poco después de cargar, para no encimarse con la carga inicial.
-  function arranque(){ setTimeout(mostrar, 1000); }
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", arranque);
-  else arranque();
+  // Carga los banners de la base; si no hay o falla, usa los de config.js. Luego muestra el aviso.
+  function cargarYMostrar(){
+    if(visto()) return;
+    function listo(lista){
+      BANNERS = (Array.isArray(lista) && lista.length ? lista : CONFIG_BANNERS).filter(function(b){ return b && b.imagen; });
+      if(BANNERS.length) setTimeout(mostrar, 1000); // aparece un poco después de cargar
+    }
+    if(SB_URL && SB_KEY){
+      fetch(SB_URL + "rpc/banners_activos", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY }, body: "{}" })
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(d){ listo(d); })
+        .catch(function(){ listo(null); });
+    } else { listo(null); }
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", cargarYMostrar);
+  else cargarYMostrar();
 })();

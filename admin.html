@@ -255,6 +255,7 @@
           <button class="nav-item activa" id="tabInicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg> Inicio</button>
           <button class="nav-item" id="tabLista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg> Productos</button>
           <button class="nav-item" id="tabForm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg> Subir producto nuevo</button>
+          <button class="nav-item" id="tabBanners"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="m3 14 5-4 4 3 3-2 6 5"/><circle cx="8.5" cy="8.5" r="1.5"/></svg> Banners</button>
         </nav>
         <div class="nav-spacer"></div>
         <div class="userbox">
@@ -435,6 +436,27 @@
               <div id="avisoForm" class="aviso"></div>
               <button id="btnLimpiar" class="btn btn-sec" style="margin-top:14px;">Limpiar formulario</button>
             </div>
+          </div>
+        </div>
+
+        <!-- ---------- BANNERS ---------- -->
+        <div id="viewBanners" class="hidden">
+          <div class="page-head"><div><h1>Banners</h1><p class="page-sub">El aviso emergente que sale al abrir la tienda. Subí la imagen y ponele el link.</p></div></div>
+          <div class="card">
+            <h2>Nuevo banner</h2>
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:2px 0 6px;">Imagen (ideal vertical, tipo historia · ~800×1000)</label>
+            <input id="bnrFile" type="file" accept="image/*">
+            <div id="bnrPrev" style="margin-top:12px;"></div>
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Nombre interno (opcional, para reconocerlo)</label>
+            <input id="bnrTitulo" placeholder="Ej. Promo verano">
+            <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Link al tocar la imagen (opcional)</label>
+            <input id="bnrEnlace" placeholder="Ej. /p/GG001/   o   /?cupon=HAUS10">
+            <button id="bnrAdd" class="btn" style="margin-top:14px;">Agregar banner</button>
+            <div id="bnrAviso" class="aviso"></div>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <h2>Banners actuales</h2>
+            <div id="bnrLista"><div class="cargando">Cargando…</div></div>
           </div>
         </div>
 
@@ -888,17 +910,20 @@
 
   // ============ Navegación ============
   function irA(tab){
-    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm" };
+    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm", banners:"viewBanners" };
     Object.values(vis).forEach(v=>$(v).classList.add("hidden"));
     $(vis[tab]).classList.remove("hidden");
     $("tabInicio").classList.toggle("activa",tab==="inicio");
     $("tabLista").classList.toggle("activa",tab==="lista");
     $("tabForm").classList.toggle("activa",tab==="form");
+    $("tabBanners").classList.toggle("activa",tab==="banners");
+    if(tab==="banners") cargarBanners();
     window.scrollTo({top:0,behavior:"instant" in window?"instant":"auto"});
   }
   $("tabInicio").addEventListener("click",()=>irA("inicio"));
   $("tabLista").addEventListener("click",()=>irA("lista"));
   $("tabForm").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
+  $("tabBanners").addEventListener("click",()=>irA("banners"));
   $("btnNuevoInicio").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
 
   // Comprueba el catálogo y recuerda cómo llega al tracking. El tracking es OTRO
@@ -916,6 +941,53 @@
     }catch(err){ aviso($("avisoSync"), "No se pudo actualizar: "+(err.message||err), "err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
   });
+
+  // ============ Banners (aviso emergente de la tienda) ============
+  let bnrBlob=null;
+  $("bnrFile").addEventListener("change", async e=>{
+    const file=(e.target.files||[])[0]; e.target.value="";
+    if(!file){ bnrBlob=null; $("bnrPrev").innerHTML=""; return; }
+    try{ bnrBlob=await comprimir(file); $("bnrPrev").innerHTML='<img src="'+URL.createObjectURL(bnrBlob)+'" style="max-width:180px;border-radius:12px;">'; }
+    catch(err){ aviso($("bnrAviso"),"No se pudo procesar la imagen.","err"); }
+  });
+  $("bnrAdd").addEventListener("click", async ()=>{
+    if(!bnrBlob){ aviso($("bnrAviso"),"Elegí una imagen primero.","err"); return; }
+    const btn=$("bnrAdd"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Subiendo…'; aviso($("bnrAviso"),"","");
+    if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
+    try{
+      const ruta="banners/"+Date.now()+".jpg";
+      const {error:upErr}=await supa.storage.from(BUCKET).upload(ruta,bnrBlob,{contentType:"image/jpeg",upsert:true}); if(upErr) throw upErr;
+      const url=supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
+      const {error}=await supa.from("banners").insert({ imagen_url:url, enlace:($("bnrEnlace").value||"").trim()||null, titulo:($("bnrTitulo").value||"").trim()||null });
+      if(error) throw error;
+      bnrBlob=null; $("bnrPrev").innerHTML=""; $("bnrEnlace").value=""; $("bnrTitulo").value="";
+      aviso($("bnrAviso"),"✓ Banner agregado. Ya sale en la tienda.","ok"); cargarBanners();
+    }catch(err){ aviso($("bnrAviso"),"Error: "+(err.message||err),"err"); }
+    finally{ btn.disabled=false; btn.innerHTML=t; }
+  });
+  async function cargarBanners(){
+    const cont=$("bnrLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
+    const {data,error}=await supa.from("banners").select("id,imagen_url,enlace,titulo,activo").order("orden",{ascending:true}).order("created_at",{ascending:false});
+    if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar los banners.</div>'; return; }
+    if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin banners todavía. Subí uno arriba 👆</div>'; return; }
+    cont.innerHTML=data.map(b=>(
+      '<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linea);">'
+      + '<img src="'+esc(b.imagen_url)+'" style="width:52px;height:66px;object-fit:cover;border-radius:8px;flex:none;background:#eee;">'
+      + '<div style="flex:1;min-width:0;">'+(b.activo?"":'<span style="font-size:10px;color:#e5484d;font-weight:700;">OCULTO · </span>')+'<b style="font-size:13px;">'+esc(b.titulo||"Banner")+'</b>'
+      + '<div style="font-size:11px;color:var(--texto2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(b.enlace||"(sin link)")+'</div></div>'
+      + '<button class="btn btn-sec" data-bnr-toggle="'+b.id+'" style="padding:6px 10px;font-size:12px;">'+(b.activo?"Ocultar":"Mostrar")+'</button>'
+      + '<button class="btn btn-sec" data-bnr-del="'+b.id+'" style="padding:6px 10px;font-size:12px;color:#e5484d;">Borrar</button>'
+      + '</div>'
+    )).join("");
+    cont.querySelectorAll("[data-bnr-toggle]").forEach(btn=>btn.addEventListener("click",async()=>{
+      const id=btn.dataset.bnrToggle, b=data.find(x=>x.id===id);
+      await supa.from("banners").update({activo:!b.activo}).eq("id",id); cargarBanners();
+    }));
+    cont.querySelectorAll("[data-bnr-del]").forEach(btn=>btn.addEventListener("click",async()=>{
+      if(!confirm("¿Borrar este banner? No se puede deshacer.")) return;
+      await supa.from("banners").delete().eq("id",btn.dataset.bnrDel); cargarBanners();
+    }));
+  }
 
   // ============ Sesión ============
   async function mostrarPanel(m){
