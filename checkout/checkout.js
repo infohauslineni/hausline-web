@@ -311,6 +311,19 @@
       }catch(_){ if(errB){ errB.textContent="No se pudo validar el código."; errB.hidden=false; } }
     }
     wireCupon();
+    // Cupón que llega del link del correo (Brevo, ?cupon=CODIGO) o guardado desde la home
+    // (localStorage hausline_cupon): lo autocompletamos y aplicamos solo, sin que el cliente
+    // tenga que escribirlo. Si ya no es válido, aplicarCupon muestra el aviso y no lo aplica.
+    (function(){
+      var code = "";
+      try{ code = new URLSearchParams(location.search).get("cupon") || ""; }catch(e){}
+      if(!code){ try{ code = localStorage.getItem("hausline_cupon") || ""; }catch(e){} }
+      code = (code || "").trim();
+      if(code && !cupon){
+        var inp = $("ck").querySelector("[data-cupc]"); if(inp) inp.value = code;
+        aplicarCupon(code);
+      }
+    })();
     $("ck").querySelector("[data-continuar]").addEventListener("click", function(){ enviarInfo(form, pend, esCarrito, calc, envioFlag, cupon, this, paisSel, dialSel); });
   }
 
@@ -335,31 +348,106 @@
     if(!ok) return;
     var optin=form.optin&&form.optin.checked;
     var pago=$("ck").querySelector("[data-pago] .sel").getAttribute("data-p");
-    var cupCod=cupon?cupon.codigo:null;
-    btn.disabled=true; btn.textContent="Creando tu pedido…";
-    mostrarCamion("Creando tu pedido…"); var t0cam=Date.now();
-    try{
-      var codigo;
-      if(esCarrito){
-        var payload=pend.items.map(function(it){ var c=Number(it.cantidad)||1; return { producto:it.nombre, producto_codigo:it.codigo||null, marca:it.marca||null, talla:it.talla||null, color:it.color||null, cantidad:c, precio_unitario:it.precioUnitario||0, recargo:(it.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0), envio:it.envio==="rapido"?"rapido":"estandar", imagen:it.imagen||null }; });
-        var r1=await fetch(SB_URL+"rpc/crear_solicitud_carrito",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_nombre:nombre,p_whatsapp:wa,p_correo:correo||null,p_ciudad:ub.ciudad||null,p_direccion:ub.direccion,p_envio:envioFlag,p_pago:pago,p_cupon_codigo:cupCod,p_items:payload})});
-        if(!r1.ok) throw 0; codigo=String(await r1.json());
-        try{ localStorage.removeItem("hausline_carrito"); }catch(_){}
-      } else {
-        var p=pend.producto, c2=Math.min(20,Math.max(1,parseInt(form.cantidad?form.cantidad.value:1,10)||1));
-        var rec=(pend.opts.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c2:0);
-        var r2=await fetch(SB_URL+"rpc/crear_solicitud_publica",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_nombre:nombre,p_whatsapp:wa,p_correo:correo||null,p_ciudad:ub.ciudad||null,p_direccion:ub.direccion,p_producto:p.nombre,p_producto_codigo:p.codigo||null,p_marca:p.marca||null,p_talla:(form.talla?form.talla.value.trim():null)||null,p_color:pend.opts.color||null,p_cantidad:c2,p_precio_unitario:p.precio,p_envio:pend.opts.envio==="rapido"?"rapido":"estandar",p_recargo:rec,p_pago:pago,p_imagen:p.imagen||null,p_cupon_codigo:cupCod})});
-        if(!r2.ok) throw 0; codigo=String(await r2.json());
-      }
-      suscribir(correo,nombre,optin); guardarGcr(codigo,correo,envioFlag); recordarPedido(codigo, esCarrito?"Tu carrito":pend.producto.nombre);
-      try{ sessionStorage.removeItem("hausline_encargo"); }catch(_){}
-      // Deja que el camión se vea al menos ~1.8s antes de pasar al pago.
-      var esperar=1800-(Date.now()-t0cam); if(esperar>0) await new Promise(function(r){ setTimeout(r,esperar); });
-      location.href="/checkout/?c="+encodeURIComponent(codigo)+"&paso=pago";
-    }catch(ex){ var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; } btn.disabled=false; btn.textContent="Continuar con el pago →"; showErr("No se pudo crear el pedido. Revisá tu internet e intentá de nuevo."); }
+    // Para el producto único, la cantidad puede haber cambiado en el form: la guardamos.
+    if(!esCarrito && form.cantidad){ pend.opts.cantidad = Math.min(20,Math.max(1,parseInt(form.cantidad.value,10)||1)); }
+    if(!esCarrito && form.talla){ pend.opts.talla = form.talla.value.trim(); }
+    // NO se crea el pedido todavía: guardamos TODO (con los datos de contacto) y pasamos al
+    // pago. El pedido se crea RECIÉN cuando el cliente reporta el pago (paso 2), así no se
+    // crean pedidos ni se manda correo por gente que se va sin pagar.
+    pend.contacto = { nombre:nombre, whatsapp:wa, correo:correo||null, ciudad:ub.ciudad||null, direccion:ub.direccion, pais:ub.pais, pago:pago, cupon: cupon ? { codigo:cupon.codigo, tipo:cupon.tipo, valor:cupon.valor } : null, optin:optin, envio:envioFlag };
+    try{ sessionStorage.setItem("hausline_encargo", JSON.stringify(pend)); }catch(_){}
+    location.href="/checkout/?paso=pago";
   }
 
-  // =========================== PASO 2 · PAGO ===========================
+  // ===================== CREAR EL PEDIDO (recién al reportar el pago) =====================
+  var codigoCreado = null;
+  async function crearPedido(pend){
+    if(codigoCreado) return codigoCreado;
+    var ct = pend.contacto || {};
+    var codigo;
+    if(pend.tipo==="carrito"){
+      var envioFlag = ct.envio || (pend.items.some(function(it){return it.envio==="rapido";})?"rapido":"estandar");
+      var payload = pend.items.map(function(it){ var c=Number(it.cantidad)||1; return { producto:it.nombre, producto_codigo:it.codigo||null, marca:it.marca||null, talla:it.talla||null, color:it.color||null, cantidad:c, precio_unitario:it.precioUnitario||0, recargo:(it.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0), envio:it.envio==="rapido"?"rapido":"estandar", imagen:it.imagen||null }; });
+      var r1=await fetch(SB_URL+"rpc/crear_solicitud_carrito",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_nombre:ct.nombre,p_whatsapp:ct.whatsapp,p_correo:ct.correo,p_ciudad:ct.ciudad,p_direccion:ct.direccion,p_envio:envioFlag,p_pago:ct.pago,p_cupon_codigo:ct.cupon?ct.cupon.codigo:null,p_items:payload})});
+      if(!r1.ok) throw new Error("crear"); codigo=String(await r1.json());
+      try{ localStorage.removeItem("hausline_carrito"); }catch(_){}
+    } else {
+      var p=pend.producto, c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1);
+      var rec=(pend.opts.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c2:0);
+      var r2=await fetch(SB_URL+"rpc/crear_solicitud_publica",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_nombre:ct.nombre,p_whatsapp:ct.whatsapp,p_correo:ct.correo,p_ciudad:ct.ciudad,p_direccion:ct.direccion,p_producto:p.nombre,p_producto_codigo:p.codigo||null,p_marca:p.marca||null,p_talla:pend.opts.talla||null,p_color:pend.opts.color||null,p_cantidad:c2,p_precio_unitario:p.precio,p_envio:pend.opts.envio==="rapido"?"rapido":"estandar",p_recargo:rec,p_pago:ct.pago,p_imagen:p.imagen||null,p_cupon_codigo:ct.cupon?ct.cupon.codigo:null})});
+      if(!r2.ok) throw new Error("crear"); codigo=String(await r2.json());
+    }
+    codigoCreado = codigo;
+    suscribir(ct.correo, ct.nombre, ct.optin); guardarGcr(codigo, ct.correo, ct.envio||"estandar"); recordarPedido(codigo, pend.tipo==="carrito"?"Tu carrito":pend.producto.nombre);
+    return codigo;
+  }
+  // Sube un archivo al bucket y registra la ruta (marca pago reportado). Devuelve/lanza.
+  async function subirArchivo(file, codigo){
+    var base=SB_URL.replace(/\/rest\/v1\/?$/,"");
+    var ext=String(file.name||"").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || (file.type.indexOf("pdf")>=0?"pdf":"jpg");
+    var ruta=String(codigo).replace(/[^A-Za-z0-9-]/g,"")+"/"+Date.now()+"."+ext;
+    var up=await fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":file.type||"application/octet-stream"},body:file});
+    if(!up.ok) throw new Error("upload");
+    var reg=await fetch(SB_URL+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})});
+    if(!(reg.ok && await reg.json())) throw new Error("reg");
+  }
+
+  // ============ PASO 2 · PAGO (PRE-ORDEN: el pedido aún NO existe) ============
+  // Se muestra cuando el cliente viene del paso 1 (sin código). El pedido se crea recién
+  // cuando reporta el pago (sube comprobante o toca "Ya realicé mi pago").
+  function renderPagoPreorden(){
+    progreso(2);
+    var pend; try{ pend=JSON.parse(sessionStorage.getItem("hausline_encargo")||"null"); }catch(e){ pend=null; }
+    if(!pend || !pend.contacto){ estado("Empezá tu pedido", "Elegí un producto en la tienda y completá tus datos para pagar."); return; }
+    var esCarrito=pend.tipo==="carrito"; var ct=pend.contacto; var pago = ct.pago==="50"?"50":"total";
+    function recargoDe(envio,c){ return envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
+    var bruto=0, sumItems=[];
+    if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; sumItems.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp}); }); }
+    else { var c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1); var lp=(Number(pend.producto.precio)||0)*c2+recargoDe(pend.opts.envio,c2); bruto=lp; sumItems.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:c2,lineTotal:lp}); }
+    bruto=Math.round(bruto*100)/100;
+    var desc=0; if(ct.cupon){ desc = ct.cupon.tipo==="porcentaje"?bruto*ct.cupon.valor/100:Math.min(ct.cupon.valor,bruto); desc=Math.round(desc*100)/100; }
+    var total=Math.max(0,Math.round((bruto-desc)*100)/100);
+    var ahora = pago==="50"?Math.round(total*50)/100:total;
+    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:ct.cupon?ct.cupon.codigo:"", total:total, ahora:ahora, parcial:pago==="50", envioIntl: !!(ct.pais && ct.pais!=="Nicaragua") });
+
+    $("ck").innerHTML='<div class="grid"><div class="col-main">'
+      + '<button class="back rv" data-volver>← Volver a mis datos</button>'
+      + '<div class="panel rv"><h1 class="panel-h">Elegí cómo pagar</h1><p class="panel-sub">Transferí el monto y confirmá. Tu pedido se crea al confirmar el pago.</p>'+metodosHTML(ahora)+'</div>'
+      + '<div class="panel rv"><h2 class="panel-h">Enviá tu comprobante</h2><p class="panel-sub">Subilo para agilizar la confirmación (opcional; también podés por WhatsApp luego).</p>'
+      +   '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Subí tu comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
+      +   '<div class="up-status" id="upStatus" hidden></div>'
+      + '</div>'
+      + '<div class="err" data-err hidden></div>'
+      + '<button class="btn" id="ckConfirmar" type="button" style="margin-top:16px">Ya realicé mi pago →</button>'
+      + '<p class="foot">No se cobra nada en línea. Al confirmar te damos tu número de orden.</p>'
+      + '</div><aside class="col-side">'+sumHTML+'</aside></div>';
+    anim(); wireMetodos($("ck"));
+    var bk=$("ck").querySelector("[data-volver]"); if(bk) bk.addEventListener("click", function(){ location.href="/checkout/?paso=info"; });
+    var err=$("ck").querySelector("[data-err]");
+    function showErr(m){ if(err){ err.textContent=m; err.hidden=false; } }
+    function setUp(t,m){ var st=$("upStatus"),drop=$("upDrop"); if(st){ st.hidden=false; st.className="up-status up-"+t; st.textContent=m; } if(drop) drop.style.display=(t==="load"||t==="done")?"none":""; }
+    async function finalizar(file){
+      if(err) err.hidden=true;
+      if(file){ if(!/^(image\/|application\/pdf)/.test(file.type||"")){ setUp("error","Formato no válido. Subí una imagen o PDF."); return; } if(file.size>6*1024*1024){ setUp("error","El archivo pesa demasiado (máx. 6 MB)."); return; } }
+      mostrarCamion("Creando tu pedido…"); var t0=Date.now();
+      try{
+        var cod=await crearPedido(pend);
+        if(file){ await subirArchivo(file, cod); }
+        else { await fetch(SB_URL+"rpc/reportar_pago_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:cod})}); }
+        try{ sessionStorage.removeItem("hausline_encargo"); }catch(_){}
+        var esperar=1600-(Date.now()-t0); if(esperar>0) await new Promise(function(r){ setTimeout(r,esperar); });
+        location.href="/checkout/?c="+encodeURIComponent(cod)+"&paso=confirmacion";
+      }catch(e){ var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; } showErr("No se pudo confirmar tu pedido. Revisá tu internet e intentá de nuevo."); }
+    }
+    var upInput=$("upInput"); if(upInput) upInput.addEventListener("change", function(){ if(this.files&&this.files[0]) finalizar(this.files[0]); });
+    var conf=$("ckConfirmar"); if(conf) conf.addEventListener("click", async function(){
+      var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya transferiste?", cuerpo:"Al confirmar creamos tu pedido y te damos tu número de orden. Si podés, <b>subí tu comprobante</b> para agilizar; si no, podés enviarlo por WhatsApp después.", okTxt:"Subir comprobante", cancelTxt:"Sí, ya transferí →" });
+      if(subir){ if(upInput) upInput.click(); return; }
+      finalizar(null);
+    });
+  }
+
+  // =========================== PASO 2 · PAGO (pedido YA creado: links de correo/mipedido) ===
   var timerInt=null, pollInt=null, ultimoEstado=null;
 
   function metodosHTML(monto){
@@ -468,7 +556,7 @@
     var base=SB_URL.replace(/\/rest\/v1\/?$/,"");
     var ext=String(file.name||"").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || (file.type.indexOf("pdf")>=0?"pdf":"jpg");
     var ruta=String(codigo).replace(/[^A-Za-z0-9-]/g,"")+"/"+Date.now()+"."+ext;
-    fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":file.type||"application/octet-stream","x-upsert":"true"},body:file})
+    fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":file.type||"application/octet-stream"},body:file})
       .then(function(r){ if(!r.ok) throw 0; return fetch(SB_URL+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})}); })
       .then(function(r){ return r.ok?r.json():false; })
       .then(function(ok){ if(!ok) throw 0; comprobanteSubido=true; set("done","¡Listo! Recibimos tu comprobante. Lo verificamos y te contactamos."); })
@@ -554,6 +642,7 @@
   if(!SB_URL||!SB_KEY){ estado("Configuración incompleta","No se pudo conectar con el servidor de pagos. Escribinos por WhatsApp."); }
   else if(PASO==="info" && !CODIGOS.length){ renderInfo(); }
   else if(PASO==="confirmacion" && CODIGOS.length){ renderConfirmacion(CODIGOS[0]); }
+  else if(PASO==="pago" && !CODIGOS.length){ renderPagoPreorden(); }
   else if(CODIGOS.length){ cargarPago(false); iniciarPolling(); }
   else { estado("Empezá tu pedido","Abrí esta página desde el enlace que te dimos, o elegí un producto en la tienda y tocá “Encargar”."); }
 })();
