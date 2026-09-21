@@ -2,16 +2,16 @@
 // Para enlazar una foto a Instagram, pega la URL en "instagramUrl".
 // Si se deja vacío (""), la foto se muestra igual pero NO es clicable (sin error).
 const clientes = [
-  { imagen: "imgP/clientes/1.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/2.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/3.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/4.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/5.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/6.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/7.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/8.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/9.jpeg",  instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" },
-  { imagen: "imgP/clientes/10.jpeg", instagramUrl: "https://www.instagram.com/stories/highlights/18101072263709598/" }
+  { imagen: "imgP/clientes/1.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/2.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/3.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/4.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/5.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/6.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/7.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/8.jpeg",  instagramUrl: "" },
+  { imagen: "imgP/clientes/9.jpeg",  instagramUrl: ""},
+  { imagen: "imgP/clientes/10.jpeg", instagramUrl: "" }
 ];
 
 // Fotos editoriales / publicitarias ("Estilo HAUSLINE").
