@@ -76,8 +76,8 @@ const HAUSLINE_CUENTAS = [
 //  Si ponés varias, se turnan solas con puntitos. Dejá la lista vacía [] para
 //  no mostrar ningún aviso.
 // ============================================================
-const HAUSLINE_BANNERS = [
-   { imagen: "imgP/banners/BANER PROM 1.jpg", enlace: "https://hauslineshopni.es/p/GG001/" },
+const HAUSLINE_BANNERS = [//
+   { imagen: "", enlace: "" },
 ];
 
 // ============================================================
