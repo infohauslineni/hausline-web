@@ -8,10 +8,10 @@
 (function(){
   "use strict";
 
-  // Los banners vienen de la BASE (tabla banners, editable desde admin.html). Si no hay ninguno
-  // o falla la red, se usa la lista HAUSLINE_BANNERS de config.js como respaldo.
-  var SB_URL = (typeof SUPABASE_URL !== "undefined") ? SUPABASE_URL : "";
-  var SB_KEY = (typeof SUPABASE_ANON_KEY !== "undefined") ? SUPABASE_ANON_KEY : "";
+  // Los banners vienen de la BASE (tabla banners del proyecto del CATÁLOGO, el mismo que edita
+  // admin.html — ver catalogo-remoto.js CATALOGO_PANEL). Si no hay ninguno o falla la red, se
+  // usa la lista HAUSLINE_BANNERS de config.js como respaldo.
+  var CAT = (typeof CATALOGO_PANEL !== "undefined" && CATALOGO_PANEL) ? CATALOGO_PANEL : null;
   var CONFIG_BANNERS = (typeof HAUSLINE_BANNERS !== "undefined" && Array.isArray(HAUSLINE_BANNERS))
     ? HAUSLINE_BANNERS.filter(function(b){ return b && b.imagen; }) : [];
   var BANNERS = [];
@@ -81,8 +81,8 @@
       BANNERS = (Array.isArray(lista) && lista.length ? lista : CONFIG_BANNERS).filter(function(b){ return b && b.imagen; });
       if(BANNERS.length) setTimeout(mostrar, 1000); // aparece un poco después de cargar
     }
-    if(SB_URL && SB_KEY){
-      fetch(SB_URL + "rpc/banners_activos", { method: "POST", headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY }, body: "{}" })
+    if(CAT && CAT.url && CAT.key){
+      fetch(CAT.url + "/rest/v1/rpc/banners_activos", { method: "POST", headers: { "Content-Type": "application/json", apikey: CAT.key, Authorization: "Bearer " + CAT.key }, body: "{}" })
         .then(function(r){ return r.ok ? r.json() : null; })
         .then(function(d){ listo(d); })
         .catch(function(){ listo(null); });
