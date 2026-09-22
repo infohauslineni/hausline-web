@@ -481,6 +481,17 @@
             <input id="bnrTitulo" placeholder="Ej. Promo verano">
             <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Link al tocar la imagen (opcional)</label>
             <input id="bnrEnlace" placeholder="Ej. /p/GG001/   o   /?cupon=HAUS10">
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
+              <div style="flex:1;min-width:150px;">
+                <label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Desde (opcional)</label>
+                <input id="bnrDesde" type="datetime-local" style="width:100%;">
+              </div>
+              <div style="flex:1;min-width:150px;">
+                <label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Hasta (opcional)</label>
+                <input id="bnrHasta" type="datetime-local" style="width:100%;">
+              </div>
+            </div>
+            <p style="font-size:11px;color:var(--texto2);margin:6px 0 0;">Dejá las fechas vacías para que salga siempre. Si ponés “Hasta”, el banner se apaga solo en esa fecha.</p>
             <button id="bnrAdd" class="btn" style="margin-top:14px;">Agregar banner</button>
             <div id="bnrAviso" class="aviso"></div>
           </div>
@@ -1101,6 +1112,18 @@
 
   // ============ Banners (aviso emergente de la tienda) ============
   let bnrBlob=null;
+  // datetime-local (hora local de Nicaragua) <-> ISO con zona (lo que guarda timestamptz).
+  function dtLocalToIso(v){ if(!v) return null; const d=new Date(v); return isNaN(d)?null:d.toISOString(); }
+  function isoToDtLocal(iso){ if(!iso) return ""; const d=new Date(iso); if(isNaN(d)) return ""; const p=n=>String(n).padStart(2,"0"); return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes()); }
+  function fmtFecha(iso){ if(!iso) return ""; const d=new Date(iso); if(isNaN(d)) return ""; return d.toLocaleString("es-NI",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
+  // Estado de un banner según fechas: oculto / programado (aún no) / finalizado / activo.
+  function estadoBanner(b){
+    if(!b.activo) return {txt:"OCULTO",color:"#e5484d"};
+    const ahora=Date.now();
+    if(b.inicia_at && new Date(b.inicia_at).getTime()>ahora) return {txt:"PROGRAMADO",color:"#c08a00"};
+    if(b.finaliza_at && new Date(b.finaliza_at).getTime()<ahora) return {txt:"FINALIZADO",color:"#e5484d"};
+    return {txt:"ACTIVO",color:"#3aa76d"};
+  }
   $("bnrFile").addEventListener("change", async e=>{
     const file=(e.target.files||[])[0]; e.target.value="";
     if(!file){ bnrBlob=null; $("bnrPrev").innerHTML=""; return; }
@@ -1115,30 +1138,54 @@
       const ruta="banners/"+Date.now()+".jpg";
       const {error:upErr}=await supa.storage.from(BUCKET).upload(ruta,bnrBlob,{contentType:"image/jpeg",upsert:true}); if(upErr) throw upErr;
       const url=supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
-      const {error}=await supa.from("banners").insert({ imagen_url:url, enlace:($("bnrEnlace").value||"").trim()||null, titulo:($("bnrTitulo").value||"").trim()||null });
+      const {error}=await supa.from("banners").insert({ imagen_url:url, enlace:($("bnrEnlace").value||"").trim()||null, titulo:($("bnrTitulo").value||"").trim()||null, inicia_at:dtLocalToIso($("bnrDesde").value), finaliza_at:dtLocalToIso($("bnrHasta").value) });
       if(error) throw error;
-      bnrBlob=null; $("bnrPrev").innerHTML=""; $("bnrEnlace").value=""; $("bnrTitulo").value="";
+      bnrBlob=null; $("bnrPrev").innerHTML=""; $("bnrEnlace").value=""; $("bnrTitulo").value=""; $("bnrDesde").value=""; $("bnrHasta").value="";
       aviso($("bnrAviso"),"✓ Banner agregado. Ya sale en la tienda.","ok"); cargarBanners();
     }catch(err){ aviso($("bnrAviso"),"Error: "+(err.message||err),"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
   });
   async function cargarBanners(){
     const cont=$("bnrLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
-    const {data,error}=await supa.from("banners").select("id,imagen_url,enlace,titulo,activo").order("orden",{ascending:true}).order("created_at",{ascending:false});
+    const {data,error}=await supa.from("banners").select("id,imagen_url,enlace,titulo,activo,inicia_at,finaliza_at").order("orden",{ascending:true}).order("created_at",{ascending:false});
     if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar los banners.</div>'; return; }
     if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin banners todavía. Subí uno arriba 👆</div>'; return; }
-    cont.innerHTML=data.map(b=>(
-      '<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--linea);">'
-      + '<img src="'+esc(b.imagen_url)+'" style="width:52px;height:66px;object-fit:cover;border-radius:8px;flex:none;background:#eee;">'
-      + '<div style="flex:1;min-width:0;">'+(b.activo?"":'<span style="font-size:10px;color:#e5484d;font-weight:700;">OCULTO · </span>')+'<b style="font-size:13px;">'+esc(b.titulo||"Banner")+'</b>'
-      + '<div style="font-size:11px;color:var(--texto2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(b.enlace||"(sin link)")+'</div></div>'
-      + '<button class="btn btn-sec" data-bnr-toggle="'+b.id+'" style="padding:6px 10px;font-size:12px;">'+(b.activo?"Ocultar":"Mostrar")+'</button>'
-      + '<button class="btn btn-sec" data-bnr-del="'+b.id+'" style="padding:6px 10px;font-size:12px;color:#e5484d;">Borrar</button>'
+    cont.innerHTML=data.map(b=>{
+      const st=estadoBanner(b);
+      const ventana = (b.inicia_at||b.finaliza_at)
+        ? '📅 '+(b.inicia_at?("Desde "+fmtFecha(b.inicia_at)):"Ya")+' · '+(b.finaliza_at?("hasta "+fmtFecha(b.finaliza_at)):"sin fin")
+        : 'Sin programar (sale siempre)';
+      return '<div style="padding:12px 0;border-bottom:1px solid var(--linea);">'
+      + '<div style="display:flex;gap:12px;align-items:center;">'
+      +   '<img src="'+esc(b.imagen_url)+'" style="width:52px;height:66px;object-fit:cover;border-radius:8px;flex:none;background:#eee;">'
+      +   '<div style="flex:1;min-width:0;">'
+      +     '<span style="font-size:10px;color:'+st.color+';font-weight:700;">'+st.txt+' · </span><b style="font-size:13px;">'+esc(b.titulo||"Banner")+'</b>'
+      +     '<div style="font-size:11px;color:var(--texto2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(b.enlace||"(sin link)")+'</div>'
+      +     '<div style="font-size:11px;color:var(--texto2);margin-top:2px;">'+esc(ventana)+'</div>'
+      +   '</div>'
+      +   '<button class="btn btn-sec" data-bnr-toggle="'+b.id+'" style="padding:6px 10px;font-size:12px;">'+(b.activo?"Ocultar":"Mostrar")+'</button>'
+      +   '<button class="btn btn-sec" data-bnr-del="'+b.id+'" style="padding:6px 10px;font-size:12px;color:#e5484d;">Borrar</button>'
       + '</div>'
-    )).join("");
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:8px;padding-left:64px;">'
+      +   '<div><label style="display:block;font-size:10px;color:var(--texto2);margin-bottom:3px;">Desde</label><input type="datetime-local" data-bnr-desde="'+b.id+'" value="'+isoToDtLocal(b.inicia_at)+'" style="font-size:12px;padding:5px 8px;"></div>'
+      +   '<div><label style="display:block;font-size:10px;color:var(--texto2);margin-bottom:3px;">Hasta</label><input type="datetime-local" data-bnr-hasta="'+b.id+'" value="'+isoToDtLocal(b.finaliza_at)+'" style="font-size:12px;padding:5px 8px;"></div>'
+      +   '<button class="btn btn-sec" data-bnr-fechas="'+b.id+'" style="padding:6px 10px;font-size:12px;">Guardar fechas</button>'
+      + '</div>'
+      + '</div>';
+    }).join("");
     cont.querySelectorAll("[data-bnr-toggle]").forEach(btn=>btn.addEventListener("click",async()=>{
       const id=btn.dataset.bnrToggle, b=data.find(x=>x.id===id);
       await supa.from("banners").update({activo:!b.activo}).eq("id",id); cargarBanners();
+    }));
+    cont.querySelectorAll("[data-bnr-fechas]").forEach(btn=>btn.addEventListener("click",async()=>{
+      const id=btn.dataset.bnrFechas;
+      const desde=cont.querySelector('[data-bnr-desde="'+id+'"]').value;
+      const hasta=cont.querySelector('[data-bnr-hasta="'+id+'"]').value;
+      const t=btn.textContent; btn.disabled=true; btn.textContent="Guardando…";
+      const {error}=await supa.from("banners").update({inicia_at:dtLocalToIso(desde),finaliza_at:dtLocalToIso(hasta)}).eq("id",id);
+      btn.disabled=false; btn.textContent=t;
+      if(error){ alert("No se pudieron guardar las fechas: "+(error.message||error)); return; }
+      cargarBanners();
     }));
     cont.querySelectorAll("[data-bnr-del]").forEach(btn=>btn.addEventListener("click",async()=>{
       if(!confirm("¿Borrar este banner? No se puede deshacer.")) return;
