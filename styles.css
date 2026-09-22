@@ -3219,14 +3219,15 @@ body.en-producto .vista-coleccion{ display:none; }
    la izquierda con un hueco a la derecha). En teléfono/tablet se mantienen chicas y
    deslizables (scroll horizontal). */
 @media(min-width:900px){
+  /* En PC también es un CARRUSEL horizontal (una sola fila deslizable) con TODAS
+     las marcas, igual que en teléfono. Antes se estiraban para llenar el ancho en
+     una fila; con muchas marcas eso quedaba en tiritas, así que ahora las marcas
+     mantienen su tamaño y se deslizan. */
   .hl-hero-marcas{
-    overflow-x:visible;
-    scroll-snap-type:none;
     gap:14px;
   }
   .hl-hero-marcas .hl-marca{
-    flex:1 1 0;
-    min-width:0;
+    flex:0 0 112px;
   }
 }
 .hl-marca:hover{

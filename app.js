@@ -568,6 +568,23 @@ function renderMarcas(limite){
   }).join("");
 }
 
+// Tira de marcas del hero (arriba, bajo el título). Antes eran 12 marcas fijas
+// en el HTML; ahora se arma con TODAS las marcas del catálogo (marcasCatalogo),
+// así aparecen todas y se mantienen al día solas. El HTML deja 12 como respaldo
+// por si el JS no corre.
+function renderHeroMarcas(){
+  const cont = $("#heroMarcas");
+  if(!cont || typeof marcasCatalogo === "undefined" || !marcasCatalogo.length) return;
+  cont.innerHTML = marcasCatalogo.map(m => {
+    const img = m.portada || m.tarjeta || m.logo || "";
+    return `
+      <button class="hl-marca" type="button" data-marca="${esc(m.nombre)}">
+        <span class="hl-marca-foto">${img ? `<img src="${esc(img)}" alt="${esc(m.nombre)}" loading="lazy">` : ""}</span>
+        <span class="hl-marca-nombre">${esc(m.nombre)}</span>
+      </button>`;
+  }).join("");
+}
+
 // ============================================================
 // EDITORIAL
 // ============================================================
@@ -909,6 +926,7 @@ function renderInicio(){
   pintarFila("#filaAccesorios", seleccionDestacados(productos.filter(p => p.categoria === "Accesorios"), 12, 2));
   pintarFila("#filaNuevos", productosNuevos(12));
 
+  renderHeroMarcas();
   renderMarcas(10);
   renderLookbook();
   renderClientes();
