@@ -576,13 +576,25 @@ function renderHeroMarcas(){
   const cont = $("#heroMarcas");
   if(!cont || typeof marcasCatalogo === "undefined" || !marcasCatalogo.length) return;
   cont.innerHTML = marcasCatalogo.map(m => {
-    const img = m.portada || m.tarjeta || m.logo || "";
+    const img = m.portada || m.logo || m.tarjeta || "";
+    // data-fb = logo de respaldo si la foto del producto falla (ej. Louis Vuitton con imagen rota).
+    const fb = (m.logo && m.logo !== img) ? esc(m.logo) : "";
     return `
       <button class="hl-marca" type="button" data-marca="${esc(m.nombre)}">
-        <span class="hl-marca-foto">${img ? `<img src="${esc(img)}" alt="${esc(m.nombre)}" loading="lazy">` : ""}</span>
+        <span class="hl-marca-foto">${img ? `<img src="${esc(img)}" alt="${esc(m.nombre)}" loading="lazy"${fb ? ` data-fb="${fb}"` : ""}>` : ""}</span>
         <span class="hl-marca-nombre">${esc(m.nombre)}</span>
       </button>`;
   }).join("");
+  // Fallback de imagen por JS (NO inline: la CSP bloquea onerror="..."). Si la foto falla,
+  // cae al logo; si el logo también falla, se oculta el <img> (queda el tile con el nombre,
+  // nunca el ícono de imagen rota).
+  cont.querySelectorAll(".hl-marca-foto img").forEach(img => {
+    img.addEventListener("error", function(){
+      const fb = this.getAttribute("data-fb");
+      if(fb){ this.removeAttribute("data-fb"); this.src = fb; }
+      else { this.style.display = "none"; }
+    });
+  });
 }
 
 // ============================================================
