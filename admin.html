@@ -1219,7 +1219,7 @@
     if(tipo==="porcentaje"&&valor>100){ aviso($("cupAviso"),"El porcentaje no puede pasar de 100.","err"); return; }
     const usosSel=$("cupUsos").value, usos_max = usosSel==="ilimitado"?null:(usosSel==="1"?1:Math.max(1,Number($("cupTope").value||1)));
     const btn=$("cupAdd"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Creando…'; aviso($("cupAviso"),"","");
-    if(!(await asegurarSesionTienda())){ aviso($("cupAviso"),"No se pudo entrar al proyecto de Cupones. Cerrá sesión y volvé a entrar con la MISMA contraseña de la app de tracking.","err"); btn.disabled=false; btn.innerHTML=t; return; }
+    if(!(await asegurarSesionTienda(true))){ aviso($("cupAviso"),"No se pudo entrar al proyecto de Cupones"+(ultimoErrorTienda?(": "+ultimoErrorTienda):". Revisá tus credenciales del sistema (app de tracking)."),"err"); btn.disabled=false; btn.innerHTML=t; return; }
     try{
       const {error}=await supaTienda.from("cupones").insert({ codigo, tipo, valor, usos_max, vence_el:$("cupVence").value||null, nota:($("cupNota").value||"").trim()||null, cliente_id:null });
       if(error) throw error;
@@ -1260,7 +1260,7 @@
     if(!(valor>0)){ aviso($("prmAviso"),"Indicá el valor del descuento.","err"); return; }
     if(tipo==="porcentaje"&&valor>100){ aviso($("prmAviso"),"El porcentaje no puede pasar de 100.","err"); return; }
     const btn=$("prmAdd"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Creando…'; aviso($("prmAviso"),"","");
-    if(!(await asegurarSesionTienda())){ aviso($("prmAviso"),"No se pudo entrar al proyecto de Promos. Cerrá sesión y volvé a entrar con la MISMA contraseña de la app de tracking.","err"); btn.disabled=false; btn.innerHTML=t; return; }
+    if(!(await asegurarSesionTienda(true))){ aviso($("prmAviso"),"No se pudo entrar al proyecto de Promos"+(ultimoErrorTienda?(": "+ultimoErrorTienda):". Revisá tus credenciales del sistema (app de tracking)."),"err"); btn.disabled=false; btn.innerHTML=t; return; }
     try{
       const {error}=await supaTienda.from("promociones").insert({ nombre, condicion_tipo:$("prmCondTipo").value, condicion_valor:condVal, tipo, valor, vence_el:$("prmVence").value||null, nota:($("prmNota").value||"").trim()||null });
       if(error) throw error;
@@ -1312,19 +1312,32 @@
   }
   // Guardamos las credenciales del login en memoria (solo mientras la pestaña está abierta)
   // para poder re-entrar al segundo proyecto (cupones/promos) si su sesión se cae.
+  // OJO: el catálogo y el tracking son proyectos Supabase DISTINTOS con usuarios DISTINTOS.
+  // Si tu cuenta de admin.html no existe (o tiene otra clave) en el tracking, hay que pedir
+  // esas credenciales aparte.
   let credsTienda = null;
+  let ultimoErrorTienda = "";
   async function loginTienda(email, password){
-    try{ const { error } = await supaTienda.auth.signInWithPassword({ email, password }); return !error; }
-    catch(_){ return false; }
+    try{ const { error } = await supaTienda.auth.signInWithPassword({ email, password }); ultimoErrorTienda = error ? (error.message||String(error)) : ""; return !error; }
+    catch(e){ ultimoErrorTienda = e.message||String(e); return false; }
   }
   // Garantiza sesión en el proyecto de la tienda (cupones/promos). Si no hay, re-entra con las
-  // credenciales guardadas. Devuelve false si no se pudo (hay que cerrar sesión y volver a entrar).
-  async function asegurarSesionTienda(){
+  // credenciales guardadas; si tampoco y interactivo=true, las pide (las del SISTEMA/tracking).
+  async function asegurarSesionTienda(interactivo){
     try{
       const { data } = await supaTienda.auth.getSession();
       if(data && data.session) return true;
     }catch(_){}
-    if(credsTienda) return await loginTienda(credsTienda.email, credsTienda.password);
+    if(credsTienda && await loginTienda(credsTienda.email, credsTienda.password)) return true;
+    if(interactivo){
+      const emailPrev = (credsTienda && credsTienda.email) || ($("loginEmail") ? $("loginEmail").value : "") || "";
+      const email = (window.prompt("CUPONES/PROMOS usan tu cuenta del SISTEMA (la app de tracking), que es distinta del catálogo.\n\nCorreo del sistema:", emailPrev) || "").trim();
+      if(!email) return false;
+      const password = window.prompt("Contraseña del sistema (la de la app de tracking):") || "";
+      if(!password) return false;
+      credsTienda = { email, password };
+      return await loginTienda(email, password);
+    }
     return false;
   }
   $("btnEntrar").addEventListener("click",async()=>{
