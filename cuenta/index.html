@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co https://epslwaxjemlysqtubbfu.supabase.co https://hauslineshopni.es; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co wss://epslwaxjemlysqtubbfu.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#FCFBF9">
+  <title>Mis pedidos · HAUSLINE</title>
+  <link rel="icon" href="/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="/cuenta/cuenta.css?v=20260924">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.4/dist/umd/supabase.min.js"></script>
+  <script defer src="/cuenta/cuenta.js?v=20260924"></script>
+  <script defer src="/cuenta/inicio.js?v=20260924"></script>
+</head>
+<body>
+<header class="cta-hd">
+  <div class="cta-hd-in">
+    <a class="cta-ico cta-hd-izq" href="/" aria-label="Volver a la tienda"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></a>
+    <a class="cta-logo" href="/">HAUSLINE</a>
+    <div class="cta-hd-der">
+      <button type="button" class="cta-ico" id="salir" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="cta-page">
+  <p class="cta-eyebrow">Mi cuenta</p>
+  <h1 class="cta-h1" id="hola">Hola</h1>
+  <p class="cta-sub" id="correo">&nbsp;</p>
+
+  <section class="cta-sec">
+    <h2 class="cta-sec-h">Mis pedidos</h2>
+    <div class="cta-chips" role="tablist" id="filtros">
+      <button type="button" class="cta-chip on" data-f="todos" role="tab">Todos</button>
+      <button type="button" class="cta-chip" data-f="proceso" role="tab">En proceso</button>
+      <button type="button" class="cta-chip" data-f="enviado" role="tab">Enviados</button>
+      <button type="button" class="cta-chip" data-f="entregado" role="tab">Entregados</button>
+    </div>
+    <div id="lista" style="margin-top:14px" aria-live="polite">
+      <div class="cta-skel"></div><div class="cta-skel"></div>
+    </div>
+  </section>
+
+  <section class="cta-sec cta-card cta-pad" id="ayuda">
+    <p style="margin:0;font-weight:600">¿No ves un pedido?</p>
+    <p class="cta-nota" style="font-size:13.5px">Aparecen aquí los pedidos hechos con el mismo correo de tu cuenta o comprados con tu sesión abierta. Si compraste con otro correo o por WhatsApp, escribinos y lo asociamos a tu cuenta.</p>
+    <a class="cta-btn linea" style="margin-top:14px" id="waAyuda" href="https://wa.me/50578995116" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
+  </section>
+</main>
+</body>
+</html>

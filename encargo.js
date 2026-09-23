@@ -742,9 +742,9 @@
       btn.disabled = true; btn.textContent = "Creando…";
       try{
         const url = (typeof SUPABASE_URL!=="undefined" ? SUPABASE_URL : "") + "rpc/crear_solicitud_publica";
-        const res = await fetch(url, {
+        const res = await (typeof hauslineFetchSolicitud==="function"?hauslineFetchSolicitud:fetch)(url, {
           method: "POST",
-          headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer "+SUPABASE_ANON_KEY },
+          headers: { "Content-Type":"application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": (typeof hauslineAuthHeader==="function"?hauslineAuthHeader():"Bearer "+SUPABASE_ANON_KEY) },
           body: JSON.stringify({
             p_nombre: nombreV, p_whatsapp: wa, p_correo: correo||null, p_ciudad: ub.ciudad||null, p_direccion: ub.direccion,
             p_producto: nombre, p_producto_codigo: producto.codigo||null, p_marca: marca||null,
@@ -891,7 +891,7 @@
             color: it.color||null, cantidad: it.cantidad||1, precio_unitario: it.precioUnitario||0,
             recargo: recargoItem(it), envio: it.envio==='rapido'?'rapido':'estandar', imagen: it.imagen||null };
         });
-        const res = await fetch(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY },
+        const res = await (typeof hauslineFetchSolicitud==="function"?hauslineFetchSolicitud:fetch)(url, { method:"POST", headers:{ "Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":(typeof hauslineAuthHeader==="function"?hauslineAuthHeader():"Bearer "+SUPABASE_ANON_KEY) },
           body: JSON.stringify({ p_nombre:nombre, p_whatsapp:wa, p_correo:correo||null, p_ciudad:ub.ciudad||null, p_direccion:ub.direccion,
             p_envio: envioCarrito, p_pago: pago, p_cupon_codigo: cupon ? cupon.codigo : null, p_items: payloadItems }) });
         if(!res.ok) throw new Error("HTTP "+res.status);
