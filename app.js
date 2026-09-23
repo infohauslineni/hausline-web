@@ -1412,6 +1412,9 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   const precio = precioVigente(producto, modoInmediataActual);
   const cotizar = necesitaCotizar(producto);
 
+  // Meta Pixel: registra la vista de ficha de producto (para remarketing y campañas).
+  if(typeof fbq==="function") fbq("track", "ViewContent", { content_ids:[producto.codigo], content_type:"product", content_name: nombreProducto(producto), value: cotizar ? 0 : precio, currency:"USD" });
+
   $("#modalMarca").textContent = marcaProducto(producto);
   $("#modalNombre").textContent = nombreProducto(producto);
   $("#modalCodigo").textContent = "Código: " + producto.codigo;

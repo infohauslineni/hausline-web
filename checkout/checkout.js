@@ -313,6 +313,16 @@
     function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:ENVCFG[envioFlag].dias, envioIntl:intlFlag }; }
     function pintarResumen(){ var s=$("resumen"); if(s) s.innerHTML=resumenHTML(sumOpts()); }
 
+    // Meta Pixel: entró al paso 1 del checkout (empezó a comprar).
+    if(typeof fbq==="function"){
+      var _ic=calc();
+      fbq("track", "InitiateCheckout", {
+        value:_ic.total, currency:"USD",
+        num_items:_ic.items.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0),
+        content_ids: esCarrito ? pend.items.map(function(it){ return it.codigo; }) : [pend.producto.codigo]
+      });
+    }
+
     function cuponHTML(){
       if(cupon){ var et=cupon.tipo==="porcentaje"?(cupon.valor+"%"):("US$ "+Number(cupon.valor).toFixed(2)); return '<div class="cup-on">🎟️ <b>'+esc(cupon.codigo)+'</b> · '+esc(et)+' <button type="button" class="cup-x" data-cupq>Quitar</button></div>'; }
       return '<div class="cup"><input class="input" type="text" data-cupc placeholder="Código (opcional)" autocomplete="off"><button type="button" class="cup-ap" data-cupap>Aplicar</button></div><div class="cup-err" data-cuperr hidden></div>';
@@ -705,6 +715,22 @@
         + '<a class="btn btn-ghost" style="margin-top:10px" href="/">Volver a la tienda</a>'
         + '</div>';
       wireCopy($("ck"));
+      // Meta Pixel: compra completada. Se dispara UNA sola vez por pedido (aunque esta
+      // pantalla haga polling o se recargue después), con un flag en localStorage.
+      if(typeof fbq==="function"){
+        try{
+          var _pixelKey="hausline_pixel_purchase_"+codigo;
+          if(!localStorage.getItem(_pixelKey)){
+            fbq("track","Purchase",{
+              value: items.reduce(function(t,s){ return t+(Number(s.total)||0); },0),
+              currency:"USD",
+              content_ids: items.map(function(s){ return s.producto_codigo||s.producto||""; }).filter(Boolean),
+              num_items: items.reduce(function(n,s){ return n+(Number(s.cantidad)||1); },0)
+            });
+            localStorage.setItem(_pixelKey,"1");
+          }
+        }catch(_){}
+      }
       dispararResenaGoogle(codigo);
     }
     // Consulta el estado y repinta SOLO si cambió. Corre al entrar y cada 15s (polling) para

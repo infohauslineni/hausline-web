@@ -58,6 +58,8 @@ function agregarAlCarrito(item, cantidad){
     });
   }
   guardarCarrito(items);
+  // Meta Pixel: agregó un producto al carrito (señal clave para remarketing).
+  if(typeof fbq==="function") fbq("track", "AddToCart", { content_ids:[item.codigo], content_type:"product", content_name:item.nombre||"", value:(Number(item.precioUnitario)||0)*cantidad, currency:"USD" });
   return { ok:true };
 }
 
