@@ -375,7 +375,24 @@
     };
   }
 
+  /* ---------------- Actualización automática ----------------
+     Vuelve a consultar cada `ms` (solo con la pestaña visible) y al volver a la pestaña, para
+     que un cambio de estado hecho en el panel aparezca sin recargar. `fn` debe repintar solo
+     si algo cambió. No corre mientras hay una hoja abierta (para no interrumpir al cliente). */
+  function autoActualizar(fn, ms) {
+    var ocupado = false;
+    async function correr() {
+      if (ocupado || document.visibilityState !== "visible" || document.querySelector(".cta-hoja")) return;
+      ocupado = true;
+      try { await fn(); } catch (e) { /* sin red: se reintenta en la próxima vuelta */ } finally { ocupado = false; }
+    }
+    setInterval(correr, ms || 20000);
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") correr(); });
+    window.addEventListener("focus", correr);
+  }
+
   window.HauslineCuenta = {
+    autoActualizar: autoActualizar,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
     mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,

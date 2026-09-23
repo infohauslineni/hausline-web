@@ -45,7 +45,14 @@
         pintarLista();
       });
     });
-    try { pedidos = await C.misPedidos(); pintarLista(); }
+    try {
+      pedidos = await C.misPedidos(); pintarLista();
+      // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
+      C.autoActualizar(async function () {
+        var nuevos = await C.misPedidos();
+        if (JSON.stringify(nuevos) !== JSON.stringify(pedidos)) { pedidos = nuevos; pintarLista(); }
+      });
+    }
     catch (err) { document.getElementById("lista").innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tus pedidos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
   }
   iniciar();

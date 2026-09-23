@@ -86,6 +86,11 @@
     if (r[1]) pedidos = r[1];
     pintar(nombre, pedidos);
     if (!r[1]) C.aviso("No pudimos cargar tus pedidos. Recargá la página.", "error");
+    // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
+    C.autoActualizar(async function () {
+      var nuevos = await C.misPedidos();
+      if (JSON.stringify(nuevos) !== JSON.stringify(pedidos)) { pedidos = nuevos; pintar(nombre, pedidos); }
+    });
     // Sube a la cuenta los favoritos que el cliente marcó en la tienda (en segundo plano).
     C.sincronizarFavoritos(null).catch(function () {});
   }

@@ -112,7 +112,7 @@
           (tray.length ? tray.map(function (t) {
             var url = linkSeguro(t.url_tracking);
             return '<div class="cta-kv"><span>Tracking' + (t.transportista ? " · " + esc(t.transportista) : "") + "</span><b>" + (url ? '<a class="cta-guia" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(t.tracking) + " ↗</a>" : '<span class="cta-guia">' + esc(t.tracking) + "</span>") + "</b></div>";
-          }).join("") : '<div class="cta-kv"><span>Tracking</span><b style="font-weight:500;color:var(--texto-3)">Disponible al despachar</b></div>') + "</div></section>";
+          }).join("") : "") + "</div></section>";
       }
       var hist = (p.historial || []).slice().reverse();
       if (hist.length) {
@@ -182,6 +182,25 @@
     }
   }
 
+  // Trae el pedido otra vez y repinta SOLO si cambió (estado, historial, fotos, entrega…).
+  async function refrescar() {
+    var p2 = await C.pedido(codigo);
+    if (!p2) return;
+    var ent2 = disponible(p2) ? await C.entrega(codigo) : null;
+    if (JSON.stringify(p2) === JSON.stringify(estado.p) && JSON.stringify(ent2) === JSON.stringify(estado.entrega)) return;
+    var fotosAntes = JSON.stringify(estado.p.fotos || []);
+    if (disponible(p2) && !disponible(estado.p)) {
+      var r = await Promise.all([C.direcciones().catch(function () { return []; }), C.tarifas()]);
+      estado.dirs = r[0]; estado.tarifas = r[1];
+      estado.elegida = estado.dirs.filter(function (d) { return d.predeterminada; })[0] || estado.dirs[0] || null;
+    }
+    if (JSON.stringify(p2.fotos || []) !== fotosAntes) {
+      estado.urls = await C.urlsFotos((p2.fotos || []).map(function (f) { return f.storage_path; })).catch(function () { return []; });
+    }
+    estado.p = p2; estado.entrega = ent2;
+    pintar();
+  }
+
   async function iniciar() {
     var s = await C.exigirSesion();
     if (!s) return;
@@ -203,6 +222,7 @@
       estado.elegida = estado.dirs.filter(function (d) { return d.id === pedida; })[0] || estado.dirs.filter(function (d) { return d.id === previa; })[0] ||
         estado.dirs.filter(function (d) { return d.predeterminada; })[0] || estado.dirs[0] || null;
       pintar();
+      C.autoActualizar(refrescar);
     } catch (err) {
       main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar el pedido</p><p class="cta-nota">' + esc(C.mensajeError(err)) + '</p><button class="cta-btn auto linea" style="margin-top:16px" type="button" id="reintentar">Reintentar</button></div>';
       document.getElementById("reintentar").addEventListener("click", function () { location.reload(); });
