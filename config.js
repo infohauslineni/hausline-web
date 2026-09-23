@@ -87,7 +87,29 @@ const HAUSLINE_BANNERS = [//
 //  NUNCA pegues la clave service_role, SOLO la anon (pública).
 // ============================================================
 const SUPABASE_URL      = "https://epslwaxjemlysqtubbfu.supabase.co/rest/v1/";  
-const SUPABASE_ANON_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";  
+const SUPABASE_ANON_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r";
+
+// "Mi cuenta": si el cliente tiene la sesión abierta (hauslineshopni.es/cuenta), las llamadas
+// que CREAN el encargo van con su token para que el pedido quede asociado a su cuenta. Sin
+// sesión (o si venció), se usa la llave pública y el checkout funciona exactamente igual.
+function hauslineAuthHeader(){
+  try{
+    var s = JSON.parse(localStorage.getItem("sb-epslwaxjemlysqtubbfu-auth-token") || "null");
+    if(s && s.access_token && s.expires_at && s.expires_at * 1000 > Date.now() + 60000) return "Bearer " + s.access_token;
+  }catch(e){}
+  return "Bearer " + SUPABASE_ANON_KEY;
+}
+// Crea el encargo con el token de la cuenta; si el servidor lo rechaza (sesión vencida, hora
+// del teléfono desfasada), reintenta con la llave pública para que la compra NUNCA falle.
+function hauslineFetchSolicitud(url, opts){
+  return fetch(url, opts).then(function(r){
+    var anon = "Bearer " + SUPABASE_ANON_KEY;
+    if(r.status === 401 && opts && opts.headers && opts.headers.Authorization && opts.headers.Authorization !== anon){
+      return fetch(url, Object.assign({}, opts, { headers: Object.assign({}, opts.headers, { Authorization: anon }) }));
+    }
+    return r;
+  });
+}  
 
 // ============================================================
 //  INSTAGRAM  —  @hausline.ni

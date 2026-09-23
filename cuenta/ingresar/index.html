@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co wss://epslwaxjemlysqtubbfu.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#FCFBF9">
+  <title>Mi cuenta · HAUSLINE</title>
+  <link rel="icon" href="/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="/cuenta/cuenta.css?v=20260924">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.4/dist/umd/supabase.min.js"></script>
+  <script defer src="/cuenta/cuenta.js?v=20260924"></script>
+  <script defer src="/cuenta/ingresar/ingresar.js?v=20260924"></script>
+</head>
+<body>
+<header class="cta-hd">
+  <div class="cta-hd-in">
+    <a class="cta-ico cta-hd-izq" href="/" aria-label="Volver a la tienda"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <a class="cta-logo" href="/">HAUSLINE</a>
+  </div>
+</header>
+
+<main class="cta-page" style="max-width:460px">
+  <p class="cta-eyebrow">Mi cuenta</p>
+  <h1 class="cta-h1" id="titulo">Bienvenido</h1>
+  <p class="cta-sub" id="subtitulo">Tus pedidos, su estado y su historial en un solo lugar.</p>
+
+  <div class="cta-card cta-pad" style="margin-top:22px">
+    <div id="mensaje" class="cta-msg" hidden></div>
+
+    <div class="cta-tabs" id="tabs" role="tablist">
+      <button type="button" class="cta-tab on" data-modo="ingresar" role="tab">Ingresar</button>
+      <button type="button" class="cta-tab" data-modo="crear" role="tab">Crear cuenta</button>
+    </div>
+
+    <form id="form" novalidate>
+      <label class="cta-field" data-en="crear"><span>Nombre completo</span><input class="cta-input" id="nombre" autocomplete="name" maxlength="160"></label>
+      <label class="cta-field" data-en="ingresar crear recuperar"><span>Correo electrónico</span><input class="cta-input" id="correo" type="email" autocomplete="email" inputmode="email" maxlength="200"></label>
+      <label class="cta-field" data-en="crear"><span>Teléfono / WhatsApp</span><input class="cta-input" id="telefono" type="tel" autocomplete="tel" placeholder="+505 8888 8888" maxlength="25"></label>
+      <label class="cta-field" data-en="ingresar crear nueva"><span id="lblClave">Contraseña</span>
+        <span class="cta-pass"><input class="cta-input" id="clave" type="password" autocomplete="current-password" maxlength="72">
+          <button type="button" class="cta-ico" id="verClave" aria-label="Mostrar contraseña"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </span>
+      </label>
+      <p class="cta-nota" data-en="crear">Mínimo 8 caracteres. Usá el mismo correo con el que comprás: tus pedidos aparecen solos. Al crear tu cuenta aceptás los <a href="/terminos.html">Términos</a> y la <a href="/privacidad.html">Privacidad</a>.</p>
+      <p style="margin:12px 0 0" data-en="ingresar"><button type="button" class="cta-link" id="irRecuperar">¿Olvidaste tu contraseña?</button></p>
+
+      <button class="cta-btn" id="enviar" type="submit" style="margin-top:22px">Ingresar</button>
+      <p style="margin:14px 0 0;text-align:center" data-en="recuperar nueva"><button type="button" class="cta-link" id="irIngresar">Volver a ingresar</button></p>
+    </form>
+  </div>
+
+  <p class="cta-nota" style="text-align:center;margin-top:22px">¿Solo querés ver el estado de un pedido? <a href="https://hausline-tracking.vercel.app/pedido">Seguilo con tu código</a></p>
+</main>
+</body>
+</html>
