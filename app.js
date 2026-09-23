@@ -1700,6 +1700,24 @@ function abrirGuiaTallas(){
   $("#guiaTitulo").textContent = guia.titulo;
   $("#guiaNota").textContent = guia.nota;
 
+  const guiaAviso = $("#guiaAviso");
+  if(guia.aviso){
+    guiaAviso.textContent = guia.aviso;
+    guiaAviso.hidden = false;
+  } else {
+    guiaAviso.hidden = true;
+  }
+
+  const guiaImagen = $("#guiaImagen");
+  if(guia.imagen){
+    $("#guiaImagenFoto").src = guia.imagen.src;
+    $("#guiaImagenFoto").alt = guia.imagen.alt;
+    $("#guiaImagenPie").textContent = guia.imagen.pie;
+    guiaImagen.hidden = false;
+  } else {
+    guiaImagen.hidden = true;
+  }
+
   // Se resalta la talla que el cliente tenga seleccionada.
   const filas = guia.filas.map(fila => {
     const coincide = tallaSeleccionada &&

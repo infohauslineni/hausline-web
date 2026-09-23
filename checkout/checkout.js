@@ -43,13 +43,48 @@
     clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
     upload:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>',
     mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
-    lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+    lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+    close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>'
   };
 
   var toastT;
   function toast(msg){ var t=$("toast"); if(!t) return; t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(function(){ t.classList.remove("show"); },1500); }
   function copiar(v){ if(navigator.clipboard) navigator.clipboard.writeText(v).catch(function(){}); }
   function wireCopy(root){ root.querySelectorAll("[data-copy]").forEach(function(b){ b.addEventListener("click", function(e){ e.stopPropagation(); copiar(b.getAttribute("data-copy")); toast(b.getAttribute("data-msg")||"Copiado"); var o=b.textContent; b.classList.add("ok"); b.textContent="✓ Copiado"; setTimeout(function(){ b.classList.remove("ok"); b.textContent=o; },1200); }); }); }
+
+  // Comprobante: al elegir la foto NO se sube ni se crea/confirma nada todavía — se muestra
+  // una miniatura con "Comprobante listo", y el cliente puede "Cambiar" (si se equivocó de
+  // imagen) o quitarla. El envío real ocurre recién cuando toca el botón de confirmar
+  // (onChange avisa para que ese botón cambie de texto cuando hay un archivo listo).
+  function wireComprobante(onChange){
+    var upInput=$("upInput"), upDrop=$("upDrop"), upPreview=$("upPreview"), upStatus=$("upStatus");
+    var staged=null;
+    function setStatus(t,m){ if(!upStatus) return; upStatus.hidden=false; upStatus.className="up-status up-"+t; upStatus.textContent=m; }
+    function clearStatus(){ if(upStatus){ upStatus.hidden=true; upStatus.textContent=""; } }
+    function mostrarDrop(){ if(upDrop) upDrop.style.display=""; if(upPreview){ upPreview.hidden=true; upPreview.innerHTML=""; } }
+    function quitar(){ staged=null; if(upInput) upInput.value=""; mostrarDrop(); if(onChange) onChange(null); }
+    function mostrarPreview(file){
+      if(!upPreview) return;
+      var esImg=/^image\//.test(file.type||"");
+      var thumb=esImg?'<img src="'+URL.createObjectURL(file)+'" alt="Comprobante">':'<span class="up-pdf">PDF</span>';
+      upPreview.innerHTML=thumb
+        +'<div class="up-preview-info"><b>'+ICON.check+' Comprobante listo</b><small>'+esc(file.name||"archivo")+'</small></div>'
+        +'<button type="button" class="up-preview-cambiar" id="upCambiar">Cambiar</button>'
+        +'<button type="button" class="up-preview-quitar" id="upQuitar" aria-label="Quitar comprobante">'+ICON.close+'</button>';
+      upPreview.hidden=false;
+      if(upDrop) upDrop.style.display="none";
+      var camb=$("upCambiar"); if(camb) camb.addEventListener("click", function(){ if(upInput) upInput.click(); });
+      var qui=$("upQuitar"); if(qui) qui.addEventListener("click", quitar);
+    }
+    if(upInput) upInput.addEventListener("change", function(){
+      clearStatus();
+      var file=this.files&&this.files[0]; if(!file) return;
+      if(!/^(image\/|application\/pdf)/.test(file.type||"")){ setStatus("error","Formato no válido. Subí una imagen o PDF."); this.value=""; return; }
+      if(file.size>6*1024*1024){ setStatus("error","El archivo pesa demasiado (máx. 6 MB)."); this.value=""; return; }
+      staged=file; mostrarPreview(file); if(onChange) onChange(file);
+    });
+    return { get file(){ return staged; }, quitar:quitar };
+  }
 
   // Animación del camión de HAUSLINE mientras se crea el pedido ("Creando tu pedido…").
   function inyectarCamionCSS(){
@@ -295,7 +330,10 @@
       +       '<div class="field"><label class="label">WhatsApp *</label><div class="tel"><button type="button" class="tel-code" data-dialbtn><span>'+flag(dialSel.i)+'</span><b data-dialtx>+'+dialSel.d+'</b>'+ICON.chev+'</button><input class="input tel-num" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="8890 1122" required></div></div>'
       +       '<div class="field"><label class="label">Correo electrónico *</label><input class="input" name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com" required></div>'
       +       '<div data-ubic>'+ubicNI()+'</div>'
-      +       (esCarrito?"":'<div class="row"><div class="field"><label class="label">Talla / detalle</label><input class="input" name="talla" placeholder="Talla o N/A" value="'+esc(pend.opts.talla||"")+'"></div><div class="field" style="max-width:120px"><label class="label">Cantidad</label><input class="input" name="cantidad" type="number" min="1" max="20" value="'+cant+'"></div></div>')
+      +       (esCarrito?"":'<div class="row">'
+      +         (pend.opts.talla?'<div class="field"><label class="label">Talla / detalle</label><input class="input" name="talla" placeholder="Talla o N/A" value="'+esc(pend.opts.talla)+'"></div>':"")
+      +         '<div class="field" style="max-width:120px"><label class="label">Cantidad</label><input class="input" name="cantidad" type="number" min="1" max="20" value="'+cant+'"></div>'
+      +       '</div>')
       +       '<label class="check"><input type="checkbox" name="optin" checked> Quiero recibir novedades y ofertas de HAUSLINE por correo.</label>'
       +     '</form>'
       +   '</div>'
@@ -450,6 +488,7 @@
       + '<div class="panel rv"><h1 class="panel-h">Elegí cómo pagar</h1><p class="panel-sub">Transferí el monto y confirmá. Tu pedido se crea al confirmar el pago.</p>'+metodosHTML(ahora)+'</div>'
       + '<div class="panel rv"><h2 class="panel-h">Enviá tu comprobante</h2><p class="panel-sub">Subilo para agilizar la confirmación (opcional; también podés por WhatsApp luego).</p>'
       +   '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Subí tu comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
+      +   '<div class="up-preview" id="upPreview" hidden></div>'
       +   '<div class="up-status" id="upStatus" hidden></div>'
       + '</div>'
       + '<div class="err" data-err hidden></div>'
@@ -460,10 +499,10 @@
     var bk=$("ck").querySelector("[data-volver]"); if(bk) bk.addEventListener("click", function(){ location.href="/checkout/?paso=info"; });
     var err=$("ck").querySelector("[data-err]");
     function showErr(m){ if(err){ err.textContent=m; err.hidden=false; } }
-    function setUp(t,m){ var st=$("upStatus"),drop=$("upDrop"); if(st){ st.hidden=false; st.className="up-status up-"+t; st.textContent=m; } if(drop) drop.style.display=(t==="load"||t==="done")?"none":""; }
+    var conf=$("ckConfirmar");
+    var comp=wireComprobante(function(file){ if(conf) conf.textContent = file ? "Enviar comprobante y confirmar pedido →" : "Ya realicé mi pago →"; });
     async function finalizar(file){
       if(err) err.hidden=true;
-      if(file){ if(!/^(image\/|application\/pdf)/.test(file.type||"")){ setUp("error","Formato no válido. Subí una imagen o PDF."); return; } if(file.size>6*1024*1024){ setUp("error","El archivo pesa demasiado (máx. 6 MB)."); return; } }
       mostrarCamion("Creando tu pedido…"); var t0=Date.now();
       try{
         var cod=await crearPedido(pend);
@@ -474,10 +513,10 @@
         location.href="/checkout/?c="+encodeURIComponent(cod)+"&paso=confirmacion";
       }catch(e){ var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; } showErr("No se pudo confirmar tu pedido. Revisá tu internet e intentá de nuevo."); }
     }
-    var upInput=$("upInput"); if(upInput) upInput.addEventListener("change", function(){ if(this.files&&this.files[0]) finalizar(this.files[0]); });
-    var conf=$("ckConfirmar"); if(conf) conf.addEventListener("click", async function(){
+    if(conf) conf.addEventListener("click", async function(){
+      if(comp.file){ finalizar(comp.file); return; }
       var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya transferiste?", cuerpo:"Al confirmar creamos tu pedido y te damos tu número de orden. Si podés, <b>subí tu comprobante</b> para agilizar; si no, podés enviarlo por WhatsApp después.", okTxt:"Subir comprobante", cancelTxt:"Sí, ya transferí →" });
-      if(subir){ if(upInput) upInput.click(); return; }
+      if(subir){ var inp=$("upInput"); if(inp) inp.click(); return; }
       finalizar(null);
     });
   }
@@ -545,7 +584,8 @@
       +   '<div class="divider-or">o subilo aquí</div>'
       +   (yaComp
           ? '<div class="up-status up-done">✓ Ya recibimos tu comprobante. Lo estamos verificando.</div>'
-          : '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Subí tu comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>')
+          : '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Subí tu comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
+            +'<div class="up-preview" id="upPreview" hidden></div>')
       +   '<div class="up-status" id="upStatus" hidden></div>'
       + '</div>'
       + '<button class="btn" id="ckConfirmar" type="button" style="margin-top:16px">Ya realicé mi pago →</button>'
@@ -555,20 +595,27 @@
     wireMetodos($("ck"));
     var bk=$("ck").querySelector("[data-volver]"); if(bk) bk.addEventListener("click", function(){ history.length>1?history.back():location.href="/"; });
     var codigoRef=grupo||(items[0]&&items[0].codigo)||codigo;
-    var upInput=$("upInput"); if(upInput) upInput.addEventListener("change", function(){ if(this.files&&this.files[0]) subirComprobante(this.files[0], codigoRef); });
-    var conf=$("ckConfirmar"); if(conf) conf.addEventListener("click", async function(){
-      // Si NO envió su comprobante, avisamos: sin comprobante no podemos confirmar el pedido.
-      var yaComp = items.some(function(s){ return s.comprobante; }) || comprobanteSubido;
-      if(!yaComp){
+    var conf=$("ckConfirmar");
+    var comp=yaComp?null:wireComprobante(function(file){ if(conf) conf.textContent = file ? "Enviar comprobante y confirmar pago →" : "Ya realicé mi pago →"; });
+    if(conf) conf.addEventListener("click", async function(){
+      var staged = comp && comp.file;
+      // Si NO envió su comprobante (ni ahora ni antes), avisamos: sin comprobante no podemos confirmar el pedido.
+      var yaTiene = items.some(function(s){ return s.comprobante; }) || comprobanteSubido;
+      if(!staged && !yaTiene){
         var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya enviaste tu comprobante?",
           cuerpo:"Sin tu <b>comprobante de pago</b> no podemos confirmar tu pedido. Subilo acá o enviálo por WhatsApp. Si ya lo mandaste por WhatsApp, continuá.",
           okTxt:"Subir comprobante", cancelTxt:"Ya lo envié →" });
         if(subir){ var inp=$("upInput"); if(inp) inp.click(); return; }
       }
-      // Reporta el pago → el admin recibe el correo (solo aquí, no al crear el encargo).
-      conf.disabled=true; conf.textContent="Un momento…";
-      try{ await fetch(SB_URL+"rpc/reportar_pago_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigoRef})}); }catch(_){}
-      location.href="/checkout/?c="+encodeURIComponent(codigoRef)+"&paso=confirmacion";
+      conf.disabled=true; conf.textContent = staged ? "Enviando comprobante…" : "Un momento…";
+      try{
+        if(staged){ await subirArchivo(staged, codigoRef); comprobanteSubido=true; }
+        try{ await fetch(SB_URL+"rpc/reportar_pago_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigoRef})}); }catch(_){}
+        location.href="/checkout/?c="+encodeURIComponent(codigoRef)+"&paso=confirmacion";
+      }catch(e){
+        conf.disabled=false; conf.textContent = staged ? "Enviar comprobante y confirmar pago →" : "Ya realicé mi pago →";
+        var st=$("upStatus"); if(st){ st.hidden=false; st.className="up-status up-error"; st.textContent="No se pudo subir el comprobante. Revisá tu internet e intentá de nuevo."; }
+      }
     });
     if(!vencido && c.vence) iniciarContador(c.vence);
   }
@@ -579,23 +626,6 @@
     clearInterval(timerInt);
     function tick(){ var t=$("timer"); if(!t) return; var diff=venceMs-Date.now(); if(diff<=0){ clearInterval(timerInt); var box=$("timerBox"); if(box){ box.className="timer exp"; box.innerHTML=ICON.alert+'<div><b>Tiempo agotado</b><small>El período de pago terminó.</small></div>'; } cargarPago(true); return; } var h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000); t.textContent=String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"); }
     tick(); timerInt=setInterval(tick,1000);
-  }
-
-  function subirComprobante(file, codigo){
-    var st=$("upStatus"), drop=$("upDrop");
-    function set(t,m){ if(!st)return; st.hidden=false; st.className="up-status up-"+t; st.textContent=m; if(drop) drop.style.display=(t==="load"||t==="done")?"none":""; }
-    if(!file) return;
-    if(!/^(image\/|application\/pdf)/.test(file.type||"")){ set("error","Formato no válido. Subí una imagen o PDF."); return; }
-    if(file.size>6*1024*1024){ set("error","El archivo pesa demasiado (máx. 6 MB)."); return; }
-    set("load","Subiendo tu comprobante…");
-    var base=SB_URL.replace(/\/rest\/v1\/?$/,"");
-    var ext=String(file.name||"").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || (file.type.indexOf("pdf")>=0?"pdf":"jpg");
-    var ruta=String(codigo).replace(/[^A-Za-z0-9-]/g,"")+"/"+Date.now()+"."+ext;
-    fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":file.type||"application/octet-stream"},body:file})
-      .then(function(r){ if(!r.ok) throw 0; return fetch(SB_URL+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})}); })
-      .then(function(r){ return r.ok?r.json():false; })
-      .then(function(ok){ if(!ok) throw 0; comprobanteSubido=true; set("done","¡Listo! Recibimos tu comprobante. Lo verificamos y te contactamos."); })
-      .catch(function(){ set("error","No se pudo subir. Probá de nuevo o enviálo por WhatsApp."); });
   }
 
   // =========================== PASO 3 · CONFIRMACIÓN ===========================

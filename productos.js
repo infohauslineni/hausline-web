@@ -6597,21 +6597,27 @@ const marcasCatalogo = [...new Set(productos.map(p => p.marca).filter(Boolean))]
 const guiaTallas = {
   calzado: {
     titulo: "Guía de tallas — Calzado",
-    nota: "Mide tu pie descalzo, del talón al dedo más largo, y busca la medida en CM. Es la equivalencia más confiable entre marcas.",
-    columnas: ["EUR", "US", "CM"],
+    nota: "Trabajamos con tallas EUR. Mide tu pie descalzo, del talón al dedo más largo, y busca la medida en CM para ubicar tu talla EUR.",
+    aviso: "En tallas EUR no existen medias tallas. Ej.: 42.5 ❌ → pide 43 EUR (la talla entera inmediata superior).",
+    columnas: ["EUR", "CM"],
     filas: [
-      ["36", "4",    "22.5"],
-      ["37", "4.5",  "23.0"],
-      ["38", "5.5",  "24.0"],
-      ["39", "6.5",  "24.5"],
-      ["40", "7",    "25.0"],
-      ["41", "8",    "26.0"],
-      ["42", "8.5",  "26.5"],
-      ["43", "9.5",  "27.5"],
-      ["44", "10",   "28.0"],
-      ["45", "11",   "29.0"],
-      ["46", "11.5", "29.5"]
-    ]
+      ["36", "22.5"],
+      ["37", "23.0"],
+      ["38", "24.0"],
+      ["39", "24.5"],
+      ["40", "25.0"],
+      ["41", "26.0"],
+      ["42", "26.5"],
+      ["43", "27.5"],
+      ["44", "28.0"],
+      ["45", "29.0"],
+      ["46", "29.5"]
+    ],
+    imagen: {
+      src: "/guia-talla-eur.jpg",
+      alt: "Etiqueta interior de un zapato Nike señalando dónde aparece la talla EUR",
+      pie: "¿Ya tienes un par de otra marca? Busca \"EUR\" en la etiqueta interior — esa es tu talla."
+    }
   },
   ropa: {
     titulo: "Guía de tallas — Ropa",
