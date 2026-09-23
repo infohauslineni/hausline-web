@@ -165,8 +165,11 @@
     var grand = '<div class="sum-grand"><span class="lb">'+(o.parcial?"Anticipo hoy":"Total a pagar")+'</span><span class="amt"><b>'+usd(o.ahora)+'</b><small>≈ '+nio(cordobas(o.ahora))+'</small></span></div>';
     var pill = o.parcial ? '<div style="text-align:right"><span class="sum-pill">Abono 50% · total '+usd(o.total)+'</span></div>' : '';
     var code = o.codigo ? '<div class="sum-code"><span>Código de pedido</span><b>'+esc(o.codigo)+'</b></div>' : '';
+    // Varios productos: se envían JUNTOS cuando todos estén listos.
+    var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
+    var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Tu pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
     var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>' : '';
-    return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+grand+pill+code
+    return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+juntos+grand+pill+code
       + '<div class="sum-trust"><span>'+ICON.shield+' Compra protegida</span><span>'+ICON.truck+' Seguimiento en vivo</span></div></div>';
   }
 

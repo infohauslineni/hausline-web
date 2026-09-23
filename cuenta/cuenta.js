@@ -375,6 +375,39 @@
     };
   }
 
+  /* ---------------- Visor de fotos (pantalla completa, anterior/siguiente) ---------------- */
+  function visor(fotos, inicio) {
+    if (!fotos.length) return;
+    var i = inicio || 0;
+    var v = document.createElement("div");
+    v.className = "cta-visor";
+    v.setAttribute("role", "dialog");
+    v.setAttribute("aria-modal", "true");
+    v.innerHTML = '<button type="button" class="cta-visor-x" aria-label="Cerrar">✕</button>' +
+      '<button type="button" class="cta-visor-n prev" aria-label="Anterior">‹</button><figure><img alt=""><figcaption></figcaption></figure>' +
+      '<button type="button" class="cta-visor-n next" aria-label="Siguiente">›</button>';
+    document.body.appendChild(v);
+    document.body.style.overflow = "hidden";
+    var imgEl = v.querySelector("img"), cap = v.querySelector("figcaption");
+    function mostrar() {
+      imgEl.src = fotos[i].url;
+      cap.textContent = (fotos[i].titulo ? fotos[i].titulo + " · " : "") + (i + 1) + " de " + fotos.length;
+      v.querySelector(".prev").hidden = v.querySelector(".next").hidden = fotos.length < 2;
+    }
+    function cerrar() { document.removeEventListener("keydown", tecla); document.body.style.overflow = ""; v.remove(); }
+    function mover(d) { i = (i + d + fotos.length) % fotos.length; mostrar(); }
+    function tecla(e) { if (e.key === "Escape") cerrar(); if (e.key === "ArrowLeft") mover(-1); if (e.key === "ArrowRight") mover(1); }
+    v.querySelector(".cta-visor-x").addEventListener("click", cerrar);
+    v.querySelector(".prev").addEventListener("click", function () { mover(-1); });
+    v.querySelector(".next").addEventListener("click", function () { mover(1); });
+    v.addEventListener("click", function (e) { if (e.target === v) cerrar(); });
+    var x0 = null;
+    v.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    v.addEventListener("touchend", function (e) { if (x0 == null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) mover(dx < 0 ? 1 : -1); x0 = null; });
+    document.addEventListener("keydown", tecla);
+    mostrar();
+  }
+
   /* ---------------- Actualización automática ----------------
      Vuelve a consultar cada `ms` (solo con la pestaña visible) y al volver a la pestaña, para
      que un cambio de estado hecho en el panel aparezca sin recargar. `fn` debe repintar solo
@@ -392,7 +425,7 @@
   }
 
   window.HauslineCuenta = {
-    autoActualizar: autoActualizar,
+    autoActualizar: autoActualizar, visor: visor,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
     mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,

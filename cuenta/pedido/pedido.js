@@ -22,6 +22,31 @@
       (/^HS\d{6}$/.test(codigo) ? '<p class="cta-nota" style="font-size:13.5px;margin-top:16px">También podés verlo sin iniciar sesión: <a href="https://hausline-tracking.vercel.app/pedido/' + encodeURIComponent(codigo) + '">seguimiento de ' + esc(codigo) + "</a></p>" : "") + "</div>";
   }
 
+  // Etapa de cada producto (seguimiento por producto del panel), en palabras del cliente.
+  var ESTADO_ITEM = {
+    pendiente: { label: "En fabricación", ok: false },
+    recibido: { label: "Listo · revisado en control de calidad", ok: true },
+    enviado: { label: "Enviado", ok: true },
+    entregado: { label: "Entregado", ok: true },
+  };
+  // Fotos del pedido con su URL firmada, en orden: control de calidad → recibido → empaque → entrega.
+  var TIPOS_FOTO = [
+    ["control_calidad", "Control de calidad", "Revisamos tu pedido antes de enviarlo. Estas son las fotos reales de tu producto."],
+    ["recibido_hausline", "Recibido en HAUSLINE", "Tu pedido ya llegó a nuestras manos en Nicaragua."],
+    ["empaque", "Empaquetado", "Así va empacado tu pedido."],
+    ["entrega", "Entrega", ""],
+  ];
+  function armarGaleria(p) {
+    var todas = (p.fotos || []).map(function (f, i) { return { tipo: f.tipo, item: f.pedido_item_id || null, url: estado.urls[i] }; }).filter(function (f) { return f.url; });
+    var g = [];
+    TIPOS_FOTO.forEach(function (t) { todas.forEach(function (f) { if (f.tipo === t[0]) g.push({ tipo: f.tipo, item: f.item, url: f.url, titulo: t[1] }); }); });
+    g.forEach(function (f, i) { f.indice = i; });
+    estado.galeria = g;
+  }
+  function fotosDe(itemId) {
+    return (estado.galeria || []).filter(function (f) { return f.tipo === "control_calidad" && itemId && f.item === itemId; });
+  }
+
   var disponible = function (p) { return p.estado_codigo === "disponible_entrega" || p.estado_codigo === "pagado"; };
   function linkSeguro(u) { return /^https?:\/\//i.test(String(u || "")) ? String(u) : null; }
 
@@ -48,14 +73,22 @@
     var it = items[0] || {};
     var foto = C.img(it.imagen);
     var det = [it.talla ? "Talla " + it.talla : null, it.color ? String(it.color).toUpperCase() : null].filter(Boolean).join(" · ");
-    // Pedido con varios productos: se listan TODOS (foto, talla, color, cantidad y precio).
+    // Pedido con varios productos: se listan TODOS (foto, talla, color, cantidad, precio), con la
+    // etapa de CADA producto y sus fotos de control de calidad. Se envían juntos cuando todos
+    // estén fabricados y revisados.
+    var enCamino = ["pendiente", "fabricacion", "calidad"].indexOf(e.id) !== -1;
     var otros = items.length > 1 ? '<p class="cta-eyebrow" style="margin:0 0 10px">' + items.length + " productos en este pedido</p>" + items.map(function (o) {
       var f = C.img(o.imagen);
       var detalle = [o.talla ? "Talla " + o.talla : null, o.color ? String(o.color).toUpperCase() : null, o.cantidad > 1 ? "×" + o.cantidad : null].filter(Boolean).join(" · ");
-      return '<div class="cta-item"><span class="cta-foto">' + (f ? '<img src="' + esc(f) + '" alt="" loading="lazy">' : CAJA) + '</span><div style="min-width:0;flex:1"><b style="display:block;font-weight:600">' + esc(o.marca || "") + '</b><span class="cta-prod" style="margin:0;white-space:normal">' + esc(o.producto || "") + "</span>" +
-        (detalle ? '<span class="cta-prod" style="margin:0;color:var(--texto-3)">' + esc(detalle) + "</span>" : "") + "</div>" +
+      var ei = ESTADO_ITEM[o.estado_item || "pendiente"] || ESTADO_ITEM.pendiente;
+      var qc = fotosDe(o.id);
+      return '<div class="cta-item" style="align-items:flex-start"><span class="cta-foto">' + (f ? '<img src="' + esc(f) + '" alt="" loading="lazy">' : CAJA) + '</span><div style="min-width:0;flex:1"><b style="display:block;font-weight:600">' + esc(o.marca || "") + '</b><span class="cta-prod" style="margin:0;white-space:normal">' + esc(o.producto || "") + "</span>" +
+        (detalle ? '<span class="cta-prod" style="margin:0;color:var(--texto-3)">' + esc(detalle) + "</span>" : "") +
+        (enCamino && e.id !== "cancelado" ? '<span class="cta-item-estado' + (ei.ok ? " ok" : "") + '">' + esc(ei.label) + "</span>" : "") +
+        (qc.length ? '<span class="cta-prod" style="margin:4px 0 0;color:var(--texto-2);white-space:normal">📷 ' + qc.length + (qc.length === 1 ? " foto" : " fotos") + " de control de calidad abajo</span>" : "") + "</div>" +
         (o.precio_unitario != null ? '<b style="font-weight:500;font-size:13px;white-space:nowrap">' + esc(C.monto(o.precio_unitario * (o.cantidad || 1), p.moneda)) + "</b>" : "") + "</div>";
-    }).join("") : "";
+    }).join("") +
+      (enCamino ? '<div class="cta-aviso-juntos">📦 <span>Tu pedido tiene ' + items.length + " productos: se envían <b>todos juntos una vez que estén fabricados y revisados</b>. Te avisamos cuando salgan.</span></div>" : "") : "";
     return '<div class="cta-card cta-pad"><div style="display:flex;gap:16px;align-items:center">' +
       '<span class="cta-foto" style="width:96px;height:96px">' + (foto ? '<img src="' + esc(foto) + '" alt="" loading="lazy">' : CAJA) + "</span>" +
       '<div style="min-width:0;flex:1">' + (items.length > 1
@@ -97,13 +130,14 @@
   function pintar() {
     var p = estado.p;
     var e = C.etapa(p.estado_codigo);
-    var fotos = (p.fotos || []).map(function (f, i) { return estado.urls[i]; }).filter(Boolean);
+    armarGaleria(p);
     var html = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:22px;margin:0 0 14px">Detalle del pedido</h1>' + tarjetaProducto(p);
 
     if (disponible(p)) {
-      html += bloqueEntrega();
+      html += bloqueEntrega() + seccionFotos(p);
     } else {
       if (p.notas_publicas && e.id !== "cancelado") html += '<p class="cta-sub" style="font-size:14px;margin-top:14px">' + esc(p.notas_publicas) + "</p>";
+      html += seccionFotos(p);
       html += '<section class="cta-sec"><h2 class="cta-sec-h">Progreso</h2><div class="cta-card cta-pad">' + progreso(p.estado_codigo) + "</div></section>";
       // El tracking de Everest (Miami → Nicaragua) no se le muestra al cliente.
       var tray = (p.trayectos || []).filter(function (t) { return t.tracking && !/everest/i.test(String(t.transportista || "")); });
@@ -121,10 +155,6 @@
         }).join("") + "</ol></div></section>";
       }
     }
-    if (fotos.length) {
-      html += '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de tu pedido</h2><div class="cta-card cta-pad"><div class="cta-fotos">' +
-        fotos.map(function (u) { return '<a href="' + esc(u) + '" target="_blank" rel="noopener noreferrer"><img src="' + esc(u) + '" alt="Foto de tu pedido" loading="lazy"></a>'; }).join("") + "</div></div></section>";
-    }
     if (p.total != null) {
       html += '<section class="cta-sec"><h2 class="cta-sec-h">Resumen de pago</h2><div class="cta-card cta-pad">' +
         '<div class="cta-kv"><span>Total del pedido</span><b>' + esc(C.monto(p.total, p.moneda)) + "</b></div>" +
@@ -139,6 +169,35 @@
     if (m && estado.elegida) C.mapa(m, { lat: estado.elegida.lat, lng: estado.elegida.lng });
     var bs = document.getElementById("solicitar"); if (bs) bs.addEventListener("click", solicitar);
     var bc = document.getElementById("cambiar"); if (bc) bc.addEventListener("click", cambiarDireccion);
+    main.querySelectorAll("[data-foto]").forEach(function (b) {
+      b.addEventListener("click", function () { C.visor(estado.galeria, Number(b.dataset.foto)); });
+    });
+  }
+
+  // Fotos agrupadas por tipo; las de control de calidad, además, por producto (pedidos de varios).
+  function seccionFotos(p) {
+    var g = estado.galeria || [];
+    if (!g.length) return "";
+    var items = p.productos || [];
+    var boton = function (f) { return '<button type="button" data-foto="' + f.indice + '" aria-label="Ver foto ampliada"><img src="' + esc(f.url) + '" alt="" loading="lazy"></button>'; };
+    var html = "";
+    TIPOS_FOTO.forEach(function (t) {
+      var del = g.filter(function (f) { return f.tipo === t[0]; });
+      if (!del.length) return;
+      var cuerpo;
+      if (t[0] === "control_calidad" && items.length > 1) {
+        var porItem = items.map(function (it) {
+          var fs = del.filter(function (f) { return f.item === it.id; });
+          return fs.length ? '<p style="margin:12px 0 8px;font-size:13px;font-weight:600">' + esc([it.marca, it.producto].filter(Boolean).join(" · ")) + '</p><div class="cta-fotos">' + fs.map(boton).join("") + "</div>" : "";
+        }).join("");
+        var generales = del.filter(function (f) { return !f.item || !items.some(function (it) { return it.id === f.item; }); });
+        cuerpo = porItem + (generales.length ? '<p style="margin:12px 0 8px;font-size:13px;font-weight:600">Pedido completo</p><div class="cta-fotos">' + generales.map(boton).join("") + "</div>" : "");
+      } else {
+        cuerpo = '<div class="cta-fotos" style="margin-top:10px">' + del.map(boton).join("") + "</div>";
+      }
+      html += '<div class="cta-grupo-fotos"><b style="display:block;font-weight:600">' + esc(t[1]) + "</b>" + (t[2] ? '<p class="cta-nota" style="margin:2px 0 0">' + esc(t[2]) + "</p>" : "") + cuerpo + "</div>";
+    });
+    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de tu pedido <span class="cta-nota" style="margin:0;font-weight:400">Tocá para ampliar</span></h2><div class="cta-card cta-pad">' + html + "</div></section>";
   }
 
   function cambiarDireccion() {

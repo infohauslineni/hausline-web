@@ -2078,6 +2078,9 @@ function renderCarrito(){
   } else {
     nota = "Productos disponibles ahora. Se pagan al momento de la entrega, sin abono previo.";
   }
+  // Varios productos por encargo: se envían JUNTOS cuando todos estén listos.
+  const unidadesEncargo = items.filter(i => !i.entregaInmediata).reduce((s, i) => s + (Number(i.cantidad) || 1), 0);
+  if(unidadesEncargo > 1) nota += " Al pedir varios productos, se envían todos juntos una vez que estén fabricados y revisados.";
   $("#carritoNota").textContent = nota;
   pie.hidden = false;
 }
