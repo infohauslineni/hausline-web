@@ -88,7 +88,7 @@
         (qc.length ? '<span class="cta-prod" style="margin:4px 0 0;color:var(--texto-2);white-space:normal">📷 ' + qc.length + (qc.length === 1 ? " foto" : " fotos") + " de control de calidad abajo</span>" : "") + "</div>" +
         (o.precio_unitario != null ? '<b style="font-weight:500;font-size:13px;white-space:nowrap">' + esc(C.monto(o.precio_unitario * (o.cantidad || 1), p.moneda)) + "</b>" : "") + "</div>";
     }).join("") +
-      (enCamino ? '<div class="cta-aviso-juntos">📦 <span>Tu pedido tiene ' + items.length + " productos: se envían <b>todos juntos una vez que estén fabricados y revisados</b>. Te avisamos cuando salgan.</span></div>" : "") : "";
+      (enCamino ? '<div class="cta-aviso-juntos">📦 <span>Tu pedido tiene ' + items.length + " productos: se envían <b>todos juntos una vez que estén fabricados y revisados</b>. Te avisaremos una vez despachados.</span></div>" : "") : "";
     return '<div class="cta-card cta-pad"><div style="display:flex;gap:16px;align-items:center">' +
       '<span class="cta-foto" style="width:96px;height:96px">' + (foto ? '<img src="' + esc(foto) + '" alt="" loading="lazy">' : CAJA) + "</span>" +
       '<div style="min-width:0;flex:1">' + (items.length > 1
