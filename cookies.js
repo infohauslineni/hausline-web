@@ -3,7 +3,7 @@
    (todo por encargo salvo lo marcado "Entrega inmediata", el cambio de moneda, y
    que el número solo es para consultas). El botón "Entendido, entrar" cierra el
    aviso y deja registrado el consentimiento de cookies (solo las necesarias:
-   NO activa rastreo). Se muestra CENTRADO y en CADA carga de la página.
+   NO activa rastreo). Se muestra CENTRADO y UNA sola vez por navegador.
 
    localStorage:
    - "hausline_cookie_consent": "essential" (solo necesarias) | "all" (con rastreo)
@@ -24,9 +24,9 @@
   // Puerta para analítica futura: solo activarla si devuelve true.
   window.hauslineTrackingAllowed = function () { return leer(KEY_CONSENT) === "all"; };
 
-  // El aviso se muestra UNA sola vez por visita (al entrar a la web). Al navegar
-  // entre productos o volver del detalle NO reaparece, porque el flag vive en
-  // sessionStorage. Una visita nueva (otra pestaña o más tarde) sí lo vuelve a ver.
+  // El aviso se muestra UNA sola vez por navegador: al tocar "Entendido, entrar" queda
+  // guardado el consentimiento y no vuelve a salir. El flag de sesión solo evita que
+  // reaparezca dentro de la misma visita si el navegador no deja guardar (modo privado).
 
   function inyectarEstilos() {
     if (document.getElementById("hl-aviso-style")) return;
@@ -59,8 +59,8 @@
   }
 
   function mostrar() {
-    // Ya se mostró en esta visita: no reaparecer al cerrar un producto ni al navegar.
-    if (leerSesion(KEY_SESION) === "1") return;
+    // Ya lo aceptó antes (en cualquier visita) o ya se mostró en esta: no reaparecer.
+    if (leer(KEY_CONSENT) != null || leerSesion(KEY_SESION) === "1") return;
     guardarSesion(KEY_SESION, "1");
     inyectarEstilos();
     var wrap = document.createElement("div");
