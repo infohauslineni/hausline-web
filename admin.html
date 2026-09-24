@@ -616,10 +616,26 @@
     if(end<0) return [];
     try{ const a=Function('"use strict";return ('+l.slice(start,end+1)+")")(); return Array.isArray(a)?a:[]; }catch(e){ console.warn(e); return []; }
   }
-  async function cargarBase(){ try{ const r=await fetch("productos.js?_="+Date.now(),{cache:"no-store"}); if(!r.ok) return []; return extraerArreglo(await r.text(),"productosBase"); }catch(e){ return []; } }
+  // Mapa nombresReales de productos.js (código → {nombre,...}): es el nombre que la web
+  // muestra al cliente, así que el panel lista y edita ese mismo nombre.
+  function extraerObjeto(src, nombre){
+    const l = limpiarComentarios(src); const k = l.indexOf("const " + nombre); if(k<0) return {};
+    const start = l.indexOf("{", k); if(start<0) return {};
+    let depth=0,inStr=false,ch="",end=-1;
+    for(let i=start;i<l.length;i++){ const c=l[i];
+      if(inStr){ if(c==="\\"){i++;} else if(c===ch){inStr=false;} continue; }
+      if(c==='"'||c==="'"||c==="`"){ inStr=true; ch=c; continue; }
+      if(c==="{")depth++; else if(c==="}"){ depth--; if(depth===0){ end=i; break; } }
+    }
+    if(end<0) return {};
+    try{ const o=Function('"use strict";return ('+l.slice(start,end+1)+")")(); return o&&typeof o==="object"?o:{}; }catch(e){ console.warn(e); return {}; }
+  }
+  let nombresVisibles = {};
+  function nombreVisible(codigo, datos){ const r=nombresVisibles[String(codigo||"").trim()]; return (datos&&datos.nombreReal)||(r&&r.nombre)||(datos&&datos.nombre)||""; }
+  async function cargarBase(){ try{ const r=await fetch("productos.js?_="+Date.now(),{cache:"no-store"}); if(!r.ok) return []; const src=await r.text(); nombresVisibles=extraerObjeto(src,"nombresReales"); return extraerArreglo(src,"productosBase"); }catch(e){ return []; } }
   function datosDeBase(p){
     const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
-    return { codigo:p.codigo, nombre:p.nombreReal||p.nombre||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
+    return { codigo:p.codigo, nombre:nombreVisible(p.codigo,p)||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
       precio:Number(p.precio||0), cotizar:p.cotizar===true, precioOferta:Number(p.precioOferta||0), promocionHasta:p.promocionHasta||"",
       descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], colores:p.colores||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true,
       // Etiquetas opcionales del producto base (para que al editar un producto que ya las trae
@@ -814,7 +830,9 @@
     if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
     try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
       const ofertaHasta=$("fOfertaHasta").value?($("fOfertaHasta").value+"T23:59:59"):"";
-      const datos={ codigo, nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
+      // nombreReal: lo que se escribe acá es lo que ve el cliente (tiene prioridad sobre
+      // el mapa nombresReales de productos.js en la web).
+      const datos={ codigo, nombre, nombreReal:nombre, marca:$("fMarca").value.trim(), categoria, subcategoria:$("fSubcategoria").value,
         tipoPrenda:(modoTallas()==="ropa"?($("fTipoRopa").value||""):""),
         precio:cotizar?0:Number($("fPrecio").value||0), cotizar, precioOferta:oferta>0?oferta:0, promocionHasta:oferta>0?ofertaHasta:"",
         descripcion:$("fDescripcion").value.trim(), tallas:$("fTallas").value.split(",").map(s=>s.trim()).filter(Boolean),
@@ -879,14 +897,16 @@
     }
     remotos=data||[]; construirLista();
   }
+  // Copia de los datos del panel con el nombre que ve el cliente (sin tocar la fila original).
+  function conNombreVisible(codigo, datos){ if(!datos) return null; const n=nombreVisible(codigo,datos); return n&&n!==datos.nombre?{...datos,nombre:n}:datos; }
   function construirLista(){
     const map=new Map(); remotos.forEach(r=>map.set(String(r.codigo).toUpperCase(),r));
     const items=[],usados=new Set();
     baseProductos.forEach(p=>{ const c=String(p.codigo||"").toUpperCase(); if(!c) return; usados.add(c); const r=map.get(c);
-      if(r) items.push({codigo:p.codigo,datos:r.datos||datosDeBase(p),origen:"editado",remoteId:r.id,activo:r.activo});
+      if(r) items.push({codigo:p.codigo,datos:conNombreVisible(r.codigo,r.datos)||datosDeBase(p),origen:"editado",remoteId:r.id,activo:r.activo});
       else items.push({codigo:p.codigo,datos:datosDeBase(p),origen:"original",remoteId:null,activo:true}); });
     remotos.forEach(r=>{ const c=String(r.codigo||"").toUpperCase(); if(usados.has(c)) return;
-      items.push({codigo:r.codigo,datos:r.datos||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
+      items.push({codigo:r.codigo,datos:conNombreVisible(r.codigo,r.datos)||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
     itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas();
   }
   // Autocompletado de marcas: junta las marcas ya usadas (catálogo base + panel) para que
