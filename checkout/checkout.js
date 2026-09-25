@@ -15,6 +15,19 @@
   var RATE    = (typeof HAUSLINE_EXCHANGE_RATE !== "undefined") ? Number(HAUSLINE_EXCHANGE_RATE) : 37;
   var ENVCFG  = (typeof HAUSLINE_ENVIO !== "undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} };
   var WA      = (typeof WHATSAPP_NUMERO !== "undefined" && WHATSAPP_NUMERO) || (typeof WHATSAPP !== "undefined" && WHATSAPP) || "50578995116";
+  // Demora extendida (config.js): el mayor retraso entre los productos del pedido en curso.
+  function demoraPend(pend){
+    if(!pend) return null;
+    var ds=(pend.tipo==="carrito" ? (pend.items||[]).map(function(it){ return it.demora; }) : [pend.producto && pend.producto.demora]).filter(Boolean);
+    if(!ds.length) return null;
+    var extra=Math.max.apply(null, ds.map(function(d){ return Number(d.extra)||0; }));
+    var conNota=ds.filter(function(d){ return d.nota; })[0];
+    return { extra:extra, nota:conNota ? conNota.nota : "" };
+  }
+  function diasEnvio(flag, pend){
+    var m=ENVCFG[flag], d=demoraPend(pend);
+    return (d && m && m.diasMin != null && typeof diasConDemora==="function") ? diasConDemora(m, d.extra) : m.dias;
+  }
   function cordobas(usdv){ return (typeof cordobasCerrados === "function") ? cordobasCerrados(usdv) : Math.ceil((Number(usdv)||0)*RATE/10)*10; }
 
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
@@ -169,7 +182,9 @@
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
     var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Tu pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
     var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>' : '';
-    return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+juntos+grand+pill+code
+    // Aviso de demora extendida (producto de un proveedor que tarda más).
+    var demora = (o.demora && typeof textoAvisoDemora==="function") ? '<div class="sum-row" style="margin-top:8px;display:block;padding:10px 12px;border:1px solid #f0c36d;background:#fff7e6;border-radius:10px;font-size:12.5px;line-height:1.5;color:#6b4a0c">⏳ '+esc(textoAvisoDemora(o.demora))+'</div>' : '';
+    return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+demora+juntos+grand+pill+code
       + '<div class="sum-trust"><span>'+ICON.shield+' Compra protegida</span><span>'+ICON.truck+' Seguimiento en vivo</span></div></div>';
   }
 
@@ -313,7 +328,7 @@
       var total=Math.max(0,Math.round((bruto-desc)*100)/100);
       return { items:items, subtotal:bruto, descuento:desc, descLabel:descLabel, total:total, ahora:pago==="50"?Math.round(total*50)/100:total };
     }
-    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:ENVCFG[envioFlag].dias, envioIntl:intlFlag }; }
+    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:diasEnvio(envioFlag,pend), demora:demoraPend(pend), envioIntl:intlFlag }; }
     function pintarResumen(){ var s=$("resumen"); if(s) s.innerHTML=resumenHTML(sumOpts()); }
 
     // Meta Pixel: entró al paso 1 del checkout (empezó a comprar).
@@ -494,7 +509,7 @@
     else { var pr=mejorPromo(bruto, totalCant); if(pr){ desc=descFuente(pr.tipo, pr.valor, bruto); descLabel="Promo: "+pr.nombre; } }
     var total=Math.max(0,Math.round((bruto-desc)*100)/100);
     var ahora = pago==="50"?Math.round(total*50)/100:total;
-    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:descLabel, total:total, ahora:ahora, parcial:pago==="50", envioIntl: !!(ct.pais && ct.pais!=="Nicaragua") });
+    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:descLabel, total:total, ahora:ahora, parcial:pago==="50", envioIntl: !!(ct.pais && ct.pais!=="Nicaragua"), demora:demoraPend(pend) });
 
     $("ck").innerHTML='<div class="grid"><div class="col-main">'
       + '<button class="back rv" data-volver>← Volver a mis datos</button>'

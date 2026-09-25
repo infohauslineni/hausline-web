@@ -602,7 +602,7 @@
       var _cot = (typeof necesitaCotizar==="function") ? !!necesitaCotizar(producto) : !(_p > 0);
       sessionStorage.setItem("hausline_encargo", JSON.stringify({
         tipo:"producto",
-        producto:{ codigo:producto.codigo, nombre:_n, marca:_m, imagen:_img, precio:_p, cotizar:_cot },
+        producto:{ codigo:producto.codigo, nombre:_n, marca:_m, imagen:_img, precio:_p, cotizar:_cot, demora:(typeof demoraDe==="function" ? demoraDe(producto) : null) },
         opts:{ talla:opts.talla||"", color:opts.color||"", cantidad:Math.max(1,parseInt(opts.cantidad,10)||1), envio:opts.envio||"estandar", precio:_p }
       }));
     }catch(e){}
@@ -777,7 +777,7 @@
     try{
       sessionStorage.setItem("hausline_encargo", JSON.stringify({
         tipo:"carrito",
-        items: items.map(function(it){ return { codigo:it.codigo, nombre:it.nombre, marca:it.marca, imagen:it.imagen, precioUnitario:it.precioUnitario, cantidad:it.cantidad, talla:it.talla, color:it.color, envio:it.envio }; })
+        items: items.map(function(it){ var _pr=(typeof buscarProducto==="function") ? buscarProducto(it.codigo) : null; return { codigo:it.codigo, nombre:it.nombre, marca:it.marca, imagen:it.imagen, precioUnitario:it.precioUnitario, cantidad:it.cantidad, talla:it.talla, color:it.color, envio:it.envio, demora:(_pr && typeof demoraDe==="function") ? demoraDe(_pr) : null }; })
       }));
     }catch(e){}
     location.href = "/checkout/?paso=info";

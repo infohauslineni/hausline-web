@@ -60,7 +60,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       descripcion:p.descripcionReal||p.descripcion||"", tallas:p.tallas||[], colores:p.colores||[], imagen:p.imagen||imagenes[0]||"", imagenes, imagenFit:p.imagenFit||"", posicionImagen:p.posicionImagen||"", escalaImagen:p.escalaImagen||null, destacadoNuevo:p.destacadoNuevo===true,
       // Etiquetas opcionales del producto base (para que al editar un producto que ya las trae
       // del código —ej. los Birkenstock con 100% OG— salgan pre-marcadas y no se pierdan al guardar).
-      og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true };
+      og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true,
+      demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"" };
   }
 
   // ============ Fotos ============
@@ -172,6 +173,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("preReset").addEventListener("click", ()=>{ prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; updatePreview(); });
   ["fNombre","fPrecio"].forEach(id=>$(id).addEventListener("input", updatePreview));
   $("fCotizar").addEventListener("change", updatePreview);
+  $("fDemora").addEventListener("change", ()=>{ $("rowDemora").style.display = $("fDemora").checked ? "block" : "none"; });
   $("fEntregaInmediata").addEventListener("change", ()=>{ const v = $("fEntregaInmediata").checked ? "block" : "none"; $("rowTallasEI").style.display = v; $("rowColoresEI").style.display = v; });
   $("fAjuste").addEventListener("change", updatePreview);
   $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
@@ -246,6 +248,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("btnGuardar").addEventListener("click",async()=>{
     const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
     if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
+    // Producto NUEVO (el código no estaba en el catálogo): al guardar se abre la imagen para Instagram.
+    const esNuevo=!itemsMerged.some(i=>String(i.codigo||"").toUpperCase()===codigo);
     const btn=$("btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
     if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
     try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
@@ -260,7 +264,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
         posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
         escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
-        destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), fecha:new Date().toISOString().slice(0,10) };
+        destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean),
+        // Demora extendida (config.js → demoraDe): aviso al cliente + días extra en la entrega estimada.
+        demoraExtendida:$("fDemora").checked, diasExtra:$("fDemora").checked ? Math.max(0, Math.round(Number($("fDiasExtra").value)||0)) : 0, notaDemora:$("fDemora").checked ? $("fNotaDemora").value.trim() : "",
+        fecha:new Date().toISOString().slice(0,10) };
       // Etiquetas opcionales elegidas en el formulario.
       ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
@@ -271,6 +278,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       // acá basta con guardar en catalogo_web; no hay que —ni se puede— empujar nada.
       aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web. El tracking lo toma solo.", "ok");
       limpiarForm(); await cargarRemotos(); irA("lista");
+      if(esNuevo && window.HLInstagram) window.HLInstagram.abrir(datos);
     }catch(err){ aviso($("avisoForm"),"Error al guardar: "+(err.message||err),"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
   });
@@ -280,6 +288,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fTipoRopa").value="";
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
+    $("fDemora").checked=false; $("fDiasExtra").value=""; $("fNotaDemora").value=""; $("rowDemora").style.display="none";
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos();
@@ -297,6 +306,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale; $("prePosY").value=Math.round(prePos.y); activePhoto=0;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
+    $("fDemora").checked=datos.demoraExtendida===true; $("fDiasExtra").value=datos.diasExtra||""; $("fNotaDemora").value=datos.notaDemora||""; $("rowDemora").style.display=datos.demoraExtendida===true?"block":"none";
     ETQ_ADMIN.forEach(([id,prop])=>{ $(id).checked=datos[prop]===true; });
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
@@ -410,13 +420,14 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       <div class="c-cat">${esc(d.categoria||"")}</div>
       <div class="c-precio">${precioTxt(d)}</div>
       <div class="c-estado">${bOc}${bOf}${pill}</div>
-      <div class="c-acc"><span class="badges-movil">${bOc}${bOf}${pill}</span><button class="icon-btn" data-editar>✎</button>${acc}</div>
+      <div class="c-acc"><span class="badges-movil">${bOc}${bOf}${pill}</span><button class="icon-btn" data-editar>✎</button><button class="icon-btn" data-ig title="Imagen para Instagram">📸</button>${acc}</div>
     </div>`;
   }
   function activarAcciones(cont, lista){
     cont.querySelectorAll(".tr").forEach((row,idx)=>{
       const it=lista[idx]; if(!it) return;
       const e=row.querySelector("[data-editar]"); if(e) e.addEventListener("click",()=>cargarEnForm(it.datos,{activo:it.activo}));
+      const g=row.querySelector("[data-ig]"); if(g) g.addEventListener("click",()=>{ if(window.HLInstagram) window.HLInstagram.abrir({...it.datos, codigo:it.codigo}); });
       const p=row.querySelector("[data-pausa]"); if(p) p.addEventListener("click",async()=>{ await supa.from("catalogo_web").update({activo:!it.activo}).eq("id",it.remoteId); cargarRemotos(); });
       const b=row.querySelector("[data-borrar]"); if(b) b.addEventListener("click",async()=>{
         if(!(await asegurarSesion())) return;

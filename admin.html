@@ -6,7 +6,8 @@
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.supabase.co https://hauslineshopni.es; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://hauslineshopni.es; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://hauslineshopni.es; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://hauslineshopni.es; font-src 'self' data: https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
 <title>Panel · HAUSLINE</title>
 <style>
   :root{
@@ -449,6 +450,14 @@
                 </div>
                 <div id="rowTallasEI" style="display:none;margin-top:10px"><label>Tallas disponibles ahora (entrega inmediata)</label><input id="fTallasEntregaInmediata" placeholder="Ej: 40, 41, 42"><small class="hint">Separadas por coma. Son las tallas que ya tenés físicamente.</small></div>
                 <div id="rowColoresEI" style="display:none;margin-top:10px"><label>Colores disponibles ahora (entrega inmediata)</label><input id="fColoresEntregaInmediata" placeholder="Ej: Negro, Blanco"><small class="hint">Separados por coma. Solo si el producto tiene colores. Dejalo vacío si no aplica.</small></div>
+                <div class="toggle-row">
+                  <div><b>¿Puede tardar más de lo esperado?</b><small>Proveedor con más demora: se le avisa al cliente en el producto, el carrito y el checkout</small></div>
+                  <label class="switch"><input id="fDemora" type="checkbox"><span></span></label>
+                </div>
+                <div id="rowDemora" style="display:none;margin-top:10px">
+                  <label>Días extra aproximados</label><input id="fDiasExtra" type="number" min="0" max="90" step="1" placeholder="Ej: 10"><small class="hint">Se suman a la entrega estimada (ej. 20 a 25 días → 30 a 35 días). Dejalo en 0 si solo querés el aviso.</small>
+                  <label style="margin-top:10px">Nota para el cliente (opcional)</label><input id="fNotaDemora" maxlength="140" placeholder="Ej: este proveedor fabrica bajo pedido"><small class="hint">Sale en el aviso junto a “Este producto puede tardar más de lo esperado”.</small>
+                </div>
               </div>
 
               <div class="card">
@@ -564,6 +573,7 @@
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
-<script src="admin.js?v=20260924b"></script>
+<script src="ig-imagen.js?v=20260927"></script>
+<script src="admin.js?v=20260927"></script>
 </body>
 </html>

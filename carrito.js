@@ -136,7 +136,10 @@ function mensajeCarritoWhatsApp(){
     if(!it.entregaInmediata){
       const m = (typeof HAUSLINE_ENVIO !== "undefined") ? HAUSLINE_ENVIO[it.envio || "estandar"] : null;
       if(m){
-        msg += `Tipo de envío: ${m.etiqueta} (${m.dias})\n`;
+        const pr = (typeof buscarProducto === "function") ? buscarProducto(it.codigo) : null;
+        const dem = (pr && typeof demoraDe === "function") ? demoraDe(pr) : null;
+        msg += `Tipo de envío: ${m.etiqueta} (${dem ? diasConDemora(m, dem.extra) : m.dias})\n`;
+        if(dem) msg += `⏳ ${textoAvisoDemora(dem)}\n`;
         const rec = recargoEnvioItem(it);
         if(rec > 0) msg += `Cargo de envío rápido: ${precioUSD(rec)}\n`;
       }

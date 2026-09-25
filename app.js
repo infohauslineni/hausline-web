@@ -828,11 +828,14 @@ function textoEntregaEstimada(metodo){
     : { etiqueta:"Envío estándar", dias:"20 a 25 días", diasMin:20, diasMax:25 });
   const meses = ["enero","febrero","marzo","abril","mayo","junio",
                  "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  // Producto con demora extendida (proveedor que tarda más): suma sus días extra.
+  const dem = (typeof demoraDe === "function") ? demoraDe(productoActual) : null;
+  const extra = dem ? dem.extra : 0;
   const hoy = new Date();
-  const desde = new Date(hoy); desde.setDate(desde.getDate() + metodo.diasMin);
-  const hasta = new Date(hoy); hasta.setDate(hasta.getDate() + metodo.diasMax);
+  const desde = new Date(hoy); desde.setDate(desde.getDate() + metodo.diasMin + extra);
+  const hasta = new Date(hoy); hasta.setDate(hasta.getDate() + metodo.diasMax + extra);
   const fmt = f => `${f.getDate()} de ${meses[f.getMonth()]}`;
-  return `Con ${metodo.etiqueta.toLowerCase()} (${metodo.dias}), encargando hoy recibirías aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
+  return `Con ${metodo.etiqueta.toLowerCase()} (${extra ? diasConDemora(metodo, extra) : metodo.dias}), encargando hoy recibirías aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
 }
 
 // Pinta el selector de tipo de envío (solo para pedidos por encargo con precio).
@@ -862,7 +865,7 @@ function renderSelectorEnvio(producto){
         <span class="envio-icono">${iconos[id] || ""}</span>
         <span class="envio-txt">
           <span class="envio-nombre">${esc(m.etiqueta)}${badge}</span>
-          <span class="envio-detalle">${esc(m.dias)}</span>
+          <span class="envio-detalle">${esc(typeof demoraDe === "function" && demoraDe(producto) ? diasConDemora(m, demoraDe(producto).extra) : m.dias)}</span>
         </span>
         <span class="envio-derecha">${precio}<span class="envio-radio"></span></span>
       </button>`;
@@ -911,7 +914,10 @@ function actualizarEnvioUI(){
     entrega.innerHTML = `<div class="entrega-estim">
          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
          <span>${textoEntregaEstimada(metodo)}</span>
-       </div>`;
+       </div>${(typeof demoraDe === "function" && demoraDe(productoActual)) ? `<div class="entrega-demora" role="note">
+         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+         <span>${esc(textoAvisoDemora(demoraDe(productoActual)))}</span>
+       </div>` : ""}`;
   }
 
   // El precio grande y el abono (50%) incluyen el cargo del envío rápido.

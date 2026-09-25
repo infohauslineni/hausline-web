@@ -44,6 +44,28 @@ const HAUSLINE_ENVIO = {
 };
 const HAUSLINE_ENVIO_DEFECTO = "estandar";
 
+// ---------- DEMORA EXTENDIDA POR PRODUCTO ----------
+// Algunos proveedores tardan más. En el panel (admin.html) se marca el producto con
+// "¿Puede tardar más de lo esperado?" → datos.demoraExtendida + diasExtra + notaDemora.
+// Se avisa en la página del producto, en el carrito y en el checkout, y los días extra
+// se suman a la entrega estimada.
+function demoraDe(producto){
+  if(!producto || producto.demoraExtendida !== true) return null;
+  return { extra: Math.max(0, Math.round(Number(producto.diasExtra) || 0)), nota: String(producto.notaDemora || "").trim() };
+}
+// "20 a 25 días" + 10 extra → "30 a 35 días".
+function diasConDemora(metodo, extra){
+  if(!metodo) return "";
+  return extra > 0 ? `${metodo.diasMin + extra} a ${metodo.diasMax + extra} días` : metodo.dias;
+}
+function textoAvisoDemora(demora){
+  if(!demora) return "";
+  return "Este producto puede tardar más de lo esperado"
+    + (demora.extra > 0 ? ` (unos ${demora.extra} días más)` : "")
+    + (demora.nota ? `: ${demora.nota.replace(/[.\s]+$/, "")}.` : ".")
+    + " Te avisamos por WhatsApp o correo cualquier novedad.";
+}
+
 // ---------- CÓRDOBAS "CERRADOS" ----------
 // Convierte USD a córdobas y REDONDEA HACIA ARRIBA al múltiplo de 10
 // (ej. 2964 → 2970). Se usa en el encargo para que el total quede redondo.
