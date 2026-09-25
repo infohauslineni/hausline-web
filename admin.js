@@ -33,46 +33,26 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     return `<b>$${d.precio || 0}</b>`;
   }
 
-  // ============ Parser productos.js ============
-  function limpiarComentarios(s){
-    let out="",i=0,n=s.length,inStr=false,ch="";
-    while(i<n){ const c=s[i];
-      if(inStr){ out+=c; if(c==="\\"){ out+=(s[i+1]||""); i+=2; continue; } if(c===ch) inStr=false; i++; continue; }
-      if(c==='"'||c==="'"||c==="`"){ inStr=true; ch=c; out+=c; i++; continue; }
-      if(c==="/"&&s[i+1]==="/"){ i+=2; while(i<n&&s[i]!=="\n")i++; continue; }
-      if(c==="/"&&s[i+1]==="*"){ i+=2; while(i<n&&!(s[i]==="*"&&s[i+1]==="/"))i++; i+=2; continue; }
-      out+=c; i++;
-    } return out;
-  }
-  function extraerArreglo(src, nombre){
-    const l = limpiarComentarios(src); const k = l.indexOf("const " + nombre); if(k<0) return [];
-    const start = l.indexOf("[", k); if(start<0) return [];
-    let depth=0,inStr=false,ch="",end=-1;
-    for(let i=start;i<l.length;i++){ const c=l[i];
-      if(inStr){ if(c==="\\"){i++;} else if(c===ch){inStr=false;} continue; }
-      if(c==='"'||c==="'"||c==="`"){ inStr=true; ch=c; continue; }
-      if(c==="[")depth++; else if(c==="]"){ depth--; if(depth===0){ end=i; break; } }
-    }
-    if(end<0) return [];
-    try{ const a=Function('"use strict";return ('+l.slice(start,end+1)+")")(); return Array.isArray(a)?a:[]; }catch(e){ console.warn(e); return []; }
-  }
-  // Mapa nombresReales de productos.js (código → {nombre,...}): es el nombre que la web
-  // muestra al cliente, así que el panel lista y edita ese mismo nombre.
-  function extraerObjeto(src, nombre){
-    const l = limpiarComentarios(src); const k = l.indexOf("const " + nombre); if(k<0) return {};
-    const start = l.indexOf("{", k); if(start<0) return {};
-    let depth=0,inStr=false,ch="",end=-1;
-    for(let i=start;i<l.length;i++){ const c=l[i];
-      if(inStr){ if(c==="\\"){i++;} else if(c===ch){inStr=false;} continue; }
-      if(c==='"'||c==="'"||c==="`"){ inStr=true; ch=c; continue; }
-      if(c==="{")depth++; else if(c==="}"){ depth--; if(depth===0){ end=i; break; } }
-    }
-    if(end<0) return {};
-    try{ const o=Function('"use strict";return ('+l.slice(start,end+1)+")")(); return o&&typeof o==="object"?o:{}; }catch(e){ console.warn(e); return {}; }
-  }
   let nombresVisibles = {};
   function nombreVisible(codigo, datos){ const r=nombresVisibles[String(codigo||"").trim()]; return (datos&&datos.nombreReal)||(r&&r.nombre)||(datos&&datos.nombre)||""; }
-  async function cargarBase(){ try{ const r=await fetch("productos.js?_="+Date.now(),{cache:"no-store"}); if(!r.ok) return []; const src=await r.text(); nombresVisibles=extraerObjeto(src,"nombresReales"); return extraerArreglo(src,"productosBase"); }catch(e){ return []; } }
+  // productos.js se carga como <script> normal (lo permite la CSP: script-src 'self') y se
+  // leen sus globales productosBase / nombresReales. Antes se bajaba como texto y se
+  // evaluaba con Function(), pero la CSP del panel (sin 'unsafe-eval') lo bloquea y el
+  // catálogo base salía vacío: el Inicio mostraba solo los productos del panel, todos
+  // como "nuevos". Se carga una sola vez por página (volver a declarar sus const fallaría).
+  let basePromesa = null;
+  function cargarBase(){
+    if(!basePromesa) basePromesa = new Promise(res=>{
+      const leer=()=>{ try{
+        nombresVisibles = (typeof nombresReales!=="undefined" && nombresReales) || {};
+        res(typeof productosBase!=="undefined" && Array.isArray(productosBase) ? productosBase : []);
+      }catch(e){ console.warn("cargarBase:", e); res([]); } };
+      const s=document.createElement("script"); s.src="productos.js?_="+Date.now();
+      s.onload=leer; s.onerror=()=>{ console.warn("cargarBase: no se pudo cargar productos.js"); basePromesa=null; res([]); };
+      document.head.appendChild(s);
+    });
+    return basePromesa;
+  }
   function datosDeBase(p){
     const imagenes=(p.imagenes&&p.imagenes.length)?p.imagenes.filter(Boolean):(p.imagen?[p.imagen]:[]);
     return { codigo:p.codigo, nombre:nombreVisible(p.codigo,p)||p.codigo, marca:p.marca||"", categoria:p.categoria||"", subcategoria:p.subcategoria||"",
