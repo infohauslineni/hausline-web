@@ -61,7 +61,6 @@ function diasConDemora(metodo, extra){
 function textoAvisoDemora(demora){
   if(!demora) return "";
   return "Este producto puede tardar más de lo esperado"
-    + (demora.extra > 0 ? ` (unos ${demora.extra} días más)` : "")
     + (demora.nota ? `: ${demora.nota.replace(/[.\s]+$/, "")}.` : ".")
     + " Te avisamos por WhatsApp o correo cualquier novedad.";
 }
