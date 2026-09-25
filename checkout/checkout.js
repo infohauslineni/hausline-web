@@ -320,7 +320,7 @@
     if(typeof fbq==="function"){
       var _ic=calc();
       fbq("track", "InitiateCheckout", {
-        value:_ic.total, currency:"USD",
+        value:_ic.total, currency:"USD", content_type:"product",
         num_items:_ic.items.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0),
         content_ids: esCarrito ? pend.items.map(function(it){ return it.codigo; }) : [pend.producto.codigo]
       });
@@ -726,7 +726,7 @@
           if(!localStorage.getItem(_pixelKey)){
             fbq("track","Purchase",{
               value: items.reduce(function(t,s){ return t+(Number(s.total)||0); },0),
-              currency:"USD",
+              currency:"USD", content_type:"product",
               content_ids: items.map(function(s){ return s.producto_codigo||s.producto||""; }).filter(Boolean),
               num_items: items.reduce(function(n,s){ return n+(Number(s.cantidad)||1); },0)
             });
