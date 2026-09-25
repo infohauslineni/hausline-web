@@ -96,6 +96,34 @@ let envioSeleccionado = "";  // tipo de envío elegido para el encargo (OBLIGATO
 function $(sel){ return document.querySelector(sel); }
 function $$(sel){ return Array.from(document.querySelectorAll(sel)); }
 
+// Miniatura para tarjetas/carrito/favoritos/buscador: imgP/…/1.jpeg → imgM/…/1.webp
+// (640px, ~30KB; las genera scripts/gen-miniaturas.mjs). La vista del producto sigue
+// con la foto completa. Si la mini no existe, el listener de abajo vuelve a la original.
+// Fotos del panel (Supabase Storage, bucket catalogo) → imgM/panel/<ruta>.webp.
+const STORAGE_CATALOGO = "https://xgdijumnmaqfirmckugw.supabase.co/storage/v1/object/public/catalogo/";
+function miniatura(src){
+  const s = String(src || "");
+  if(s.startsWith(STORAGE_CATALOGO)){
+    const rel = s.slice(STORAGE_CATALOGO.length).split("?")[0];
+    return rel && !rel.startsWith("banners/") ? "imgM/panel/" + decodeURIComponent(rel).replace(/\.[^./]+$/, ".webp") : s;
+  }
+  const r = s.replace(/^\.?\//, "");
+  return /^imgP\//.test(r) ? r.replace(/^imgP\//, "imgM/").replace(/\.[^./]+$/, ".webp") : s;
+}
+function imgMini(src){ const m = miniatura(src); return m !== String(src || "") ? `src="${esc(m)}" data-orig="${esc(src)}"` : `src="${esc(src)}"`; }
+// Fotos que no cargan: 1) mini inexistente → foto original; 2) la original también
+// falla → la tarjeta muestra el recuadro "sin imagen". (Reemplaza el onerror inline,
+// que la CSP del sitio bloquea.)
+document.addEventListener("error", function(e){
+  const img = e.target;
+  if(!img || img.tagName !== "IMG") return;
+  // stopPropagation: que los respaldos propios del <img> (ej. logo en los mosaicos de marca)
+  // solo actúen si la ORIGINAL también falla, no por la mini.
+  if(img.dataset && img.dataset.orig){ const o = img.dataset.orig; delete img.dataset.orig; e.stopPropagation(); img.src = o; return; }
+  const caja = img.closest && img.closest(".card-img");
+  if(caja) caja.classList.add("sin-imagen");
+}, true);
+
 function esc(texto){
   return String(texto == null ? "" : texto)
     .replace(/&/g, "&amp;")
@@ -198,8 +226,7 @@ function crearCard(producto, modoInmediata){
   return `
     <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : ""}>
       <div class="card-img">
-        <img class="${claseAjuste}" src="${esc(producto.imagen)}" alt="${esc(nombreProducto(producto))}" loading="lazy" decoding="async"${estiloEscala}
-             onerror="this.closest('.card-img').classList.add('sin-imagen')">
+        <img class="${claseAjuste}" ${imgMini(producto.imagen)} alt="${esc(nombreProducto(producto))}" loading="lazy" decoding="async"${estiloEscala}>
         <div class="etiquetas"><div class="card-rating" data-rating="${esc(producto.codigo)}"></div>${etiquetas}</div>
         <span class="foto-marca" aria-hidden="true">HAUSLINE</span>
         <button class="btn-fav ${fav ? "activo" : ""}" type="button"
@@ -581,7 +608,7 @@ function renderHeroMarcas(){
     const fb = (m.logo && m.logo !== img) ? esc(m.logo) : "";
     return `
       <button class="hl-marca" type="button" data-marca="${esc(m.nombre)}">
-        <span class="hl-marca-foto">${img ? `<img src="${esc(img)}" alt="${esc(m.nombre)}" loading="lazy"${fb ? ` data-fb="${fb}"` : ""}>` : ""}</span>
+        <span class="hl-marca-foto">${img ? `<img ${imgMini(img)} alt="${esc(m.nombre)}" loading="lazy"${fb ? ` data-fb="${fb}"` : ""}>` : ""}</span>
         <span class="hl-marca-nombre">${esc(m.nombre)}</span>
       </button>`;
   }).join("");
@@ -691,7 +718,7 @@ function renderClientes(){
   if(!cont || typeof clientes === "undefined") return;
 
   cont.innerHTML = clientes.map(c => {
-    const img = `<img src="${esc(c.imagen)}" alt="${esc(c.alt || "Entrega a cliente HAUSLINE")}" loading="lazy">`;
+    const img = `<img ${imgMini(c.imagen)} alt="${esc(c.alt || "Entrega a cliente HAUSLINE")}" loading="lazy">`;
     // Solo se vuelve enlace si realmente hay URL de Instagram.
     if(c.instagramUrl){
       return `
@@ -2048,7 +2075,7 @@ function renderCarrito(){
       .filter(Boolean).join(" · ");
     return `
       <div class="linea">
-        <div class="linea-img"><img src="${esc(it.imagen)}" alt="" loading="lazy"></div>
+        <div class="linea-img"><img ${imgMini(it.imagen)} alt="" loading="lazy"></div>
         <div class="linea-info">
           <div class="linea-nombre">${esc(it.nombre)}</div>
           <div class="linea-meta">${esc(meta)}</div>
@@ -2100,7 +2127,7 @@ function renderFavoritos(){
 
   cuerpo.innerHTML = favs.map(p => `
     <div class="linea">
-      <div class="linea-img"><img src="${esc(p.imagen)}" alt="" loading="lazy"></div>
+      <div class="linea-img"><img ${imgMini(p.imagen)} alt="" loading="lazy"></div>
       <div class="linea-info">
         <div class="linea-nombre">${esc(nombreProducto(p))}</div>
         <div class="linea-meta">${esc(p.codigo)} · ${esc(marcaProducto(p))}</div>

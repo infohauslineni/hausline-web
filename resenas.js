@@ -91,7 +91,7 @@
     const prod = (mostrarProducto && typeof buscarProducto === "function" && r.producto_codigo) ? buscarProducto(r.producto_codigo) : null;
     const nombre = prod ? (typeof nombreProducto === "function" ? nombreProducto(prod) : (prod.nombre || prod.codigo)) : "";
     const producto = (prod && prod.imagen) ? `<div class="resena-producto" data-codigo="${esc(prod.codigo)}" role="button" tabindex="0" title="Ver ${esc(nombre)}">
-        <img src="${esc(prod.imagen)}" alt="${esc(nombre)}" loading="lazy">
+        <img ${typeof imgMini === "function" ? imgMini(prod.imagen) : `src="${esc(prod.imagen)}"`} alt="${esc(nombre)}" loading="lazy">
         <span class="resena-producto-nombre">${esc(nombre)}</span>
       </div>` : "";
     return `<div class="resena-card">

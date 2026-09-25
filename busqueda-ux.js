@@ -124,7 +124,7 @@
     const img = escapar(p.imagen || (p.imagenes && p.imagenes[0]) || "");
     const meta = [marca(p), p.codigo].filter(Boolean).map(escapar).join(" · ");
     return '<button type="button" class="suge-item" data-suge="' + escapar(p.codigo) + '">' +
-      '<span class="suge-img"><img src="' + img + '" alt="" loading="lazy"></span>' +
+      '<span class="suge-img"><img ' + (typeof imgMini === "function" ? imgMini(p.imagen || (p.imagenes && p.imagenes[0]) || "") : 'src="' + img + '"') + ' alt="" loading="lazy"></span>' +
       '<span class="suge-info"><span class="suge-nom">' + escapar(nombre(p)) + '</span>' +
       '<span class="suge-meta">' + meta + '</span></span>' +
       '<span class="suge-precio">' + escapar(precio(p)) + '</span>' +

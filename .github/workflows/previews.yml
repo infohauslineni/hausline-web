@@ -20,7 +20,7 @@ name: Generar previews /p
 #      usa; el cron de cada 15 min ya lo cubre.
 #
 # Repo público ⇒ minutos de Actions gratis, por eso el cron corto no cuesta.
-# El commit del bot solo toca /p/** y sitemap.xml, que NO están en "paths", por
+# El commit del bot solo toca /p/**, imgM/** y sitemap.xml, que NO están en "paths", por
 # lo que no se vuelve a disparar a sí mismo (sin bucles).
 
 on:
@@ -29,6 +29,9 @@ on:
     paths:
       - 'productos.js'
       - 'scripts/gen-og.mjs'
+      - 'scripts/gen-miniaturas.mjs'
+      - 'index.html'
+      - 'imgP/**'
   schedule:
     - cron: '*/15 * * * *'   # cada 15 minutos (UTC)
   workflow_dispatch:
@@ -52,6 +55,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Instalar dependencias (sharp, para las miniaturas)
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Miniaturas de tarjetas (imgM)
+        run: node scripts/gen-miniaturas.mjs
+
       - name: Generar páginas /p
         run: node scripts/gen-og.mjs
 
@@ -59,7 +68,7 @@ jobs:
         run: |
           git config user.name "hausline-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add p sitemap.xml
+          git add p sitemap.xml imgM
           if git diff --cached --quiet; then
             echo "Sin cambios en /p ni sitemap — nada que subir."
           else
