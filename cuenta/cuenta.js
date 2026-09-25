@@ -231,6 +231,25 @@
   async function entrega(codigo) { try { return await rpc("entrega_pedido_cliente", { p_codigo: codigo }); } catch (e) { return null; } }
   async function solicitarEntrega(codigo, direccionId) { return rpc("solicitar_entrega_pedido", { p_codigo: codigo, p_direccion_id: direccionId }); }
   var WHATSAPP = "50578995116";
+  // Cancelación = SOLICITUD de reembolso que revisa HAUSLINE (la base valida etapa y motivo).
+  async function reembolso(codigo) { try { return await rpc("reembolso_pedido_cliente", { p_codigo: codigo }); } catch (e) { return null; } }
+  async function solicitarReembolso(codigo, d) {
+    var r = await rpc("solicitar_reembolso_pedido", { p_codigo: codigo, p_motivo: d.motivo, p_detalle: d.detalle, p_banco: d.banco, p_numero_cuenta: d.numero, p_titular: d.titular });
+    // Aviso por correo al admin (best-effort: la solicitud ya quedó guardada y el panel la muestra igual).
+    try {
+      var s = await sesion();
+      if (s && r && r.id) {
+        fetch("https://hausline-tracking.vercel.app/api/notificar-estado", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + s.access_token },
+          body: JSON.stringify({ reembolso: "nuevo", id: r.id }),
+        }).catch(function () {});
+      }
+    } catch (e) {}
+    return r;
+  }
+  async function decidirReembolso(codigo, decision) { return rpc("decidir_reembolso_pedido", { p_codigo: codigo, p_decision: decision }); }
+
   function mensajeEnvio(codigo, d, costo) {
     var mapa = d.lat != null && d.lng != null ? "\nUbicación: https://maps.google.com/?q=" + Number(d.lat).toFixed(6) + "," + Number(d.lng).toFixed(6) : "";
     return "Hola, quiero solicitar el envío de mi pedido #" + codigo + " a la dirección registrada. ¿Podrían confirmar la entrega?\n\n📍 " + d.nombre + "\n" +
@@ -433,6 +452,7 @@
     actualizarCuenta: actualizarCuenta, urlAvatar: urlAvatar, subirAvatar: subirAvatar, quitarAvatar: quitarAvatar, eliminarCuenta: eliminarCuenta,
     direcciones: direcciones, guardarDireccion: guardarDireccion, eliminarDireccion: eliminarDireccion, hacerPredeterminada: hacerPredeterminada,
     tarifas: tarifas, costoDelivery: costoDelivery, lineasDireccion: lineasDireccion, entrega: entrega, solicitarEntrega: solicitarEntrega,
+    reembolso: reembolso, solicitarReembolso: solicitarReembolso, decidirReembolso: decidirReembolso,
     mensajeEnvio: mensajeEnvio, linkWhatsApp: linkWhatsApp,
     favLocales: favLocales, sincronizarFavoritos: sincronizarFavoritos, quitarFavorito: quitarFavorito,
     navInferior: navInferior, hoja: hoja, mapa: mapa,

@@ -315,7 +315,7 @@
   function cordobas(usd){ return (typeof cordobasCerrados==="function") ? cordobasCerrados(usd) : Math.ceil((Number(usd)||0)*(typeof HAUSLINE_EXCHANGE_RATE!=="undefined"?HAUSLINE_EXCHANGE_RATE:37)/10)*10; }
   function esc(v){ return String(v==null?"":v).replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
   function waNumero(){ return (typeof WHATSAPP_NUMERO!=="undefined"&&WHATSAPP_NUMERO) || (typeof WHATSAPP!=="undefined"&&WHATSAPP) || "50578995116"; }
-  function envioCfg(){ return (typeof HAUSLINE_ENVIO!=="undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} }; }
+  function envioCfg(){ return (typeof HAUSLINE_ENVIO!=="undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"15 a 20 días",recargo:15} }; }
   // "Compra con confianza": tira breve de seguridad cerca del botón de confirmar.
   function trustHTML(){
     return `

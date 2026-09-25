@@ -13,7 +13,7 @@
   var SB_KEY  = (typeof SUPABASE_ANON_KEY !== "undefined") ? SUPABASE_ANON_KEY : "";
   var CUENTAS = (typeof HAUSLINE_CUENTAS !== "undefined") ? HAUSLINE_CUENTAS : [];
   var RATE    = (typeof HAUSLINE_EXCHANGE_RATE !== "undefined") ? Number(HAUSLINE_EXCHANGE_RATE) : 37;
-  var ENVCFG  = (typeof HAUSLINE_ENVIO !== "undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"14 a 17 días",recargo:15} };
+  var ENVCFG  = (typeof HAUSLINE_ENVIO !== "undefined") ? HAUSLINE_ENVIO : { estandar:{dias:"20 a 25 días",recargo:0}, rapido:{dias:"15 a 20 días",recargo:15} };
   var WA      = (typeof WHATSAPP_NUMERO !== "undefined" && WHATSAPP_NUMERO) || (typeof WHATSAPP !== "undefined" && WHATSAPP) || "50578995116";
   // Demora extendida (config.js): el mayor retraso entre los productos del pedido en curso.
   function demoraPend(pend){
@@ -181,7 +181,8 @@
     // Varios productos: se envían JUNTOS cuando todos estén listos.
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
     var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Tu pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
-    var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>' : '';
+    var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>'
+      + (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar))+'</div>' : '') : '';
     // Aviso de demora extendida (producto de un proveedor que tarda más).
     var demora = (o.demora && typeof textoAvisoDemora==="function") ? '<div class="sum-row" style="margin-top:8px;display:block;padding:10px 12px;border:1px solid #f0c36d;background:#fff7e6;border-radius:10px;font-size:12.5px;line-height:1.5;color:#6b4a0c">⏳ '+esc(textoAvisoDemora(o.demora))+'</div>' : '';
     return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+demora+juntos+grand+pill+code
@@ -300,7 +301,7 @@
   }
   function recordarPedido(codigo, producto){ try{ var a=JSON.parse(localStorage.getItem("hausline_pedidos")||"[]"); a.push({codigo:String(codigo),producto:producto||"",ts:Date.now()}); localStorage.setItem("hausline_pedidos",JSON.stringify(a.slice(-6))); }catch(e){} }
   function suscribir(correo,nombre,optin){ if(!optin||!correo) return; try{ fetch(SB_URL+"rpc/suscribir_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_correo:correo,p_nombre:nombre||null,p_fuente:"checkout"})}).catch(function(){}); }catch(e){} }
-  function guardarGcr(codigo,correo,envio){ try{ if(!codigo||!correo) return; var dias=envio==="rapido"?17:25; var f=new Date(Date.now()+dias*86400000); var fecha=f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0"); sessionStorage.setItem("hausline_gcr",JSON.stringify({order_id:String(codigo),email:String(correo),estimated_delivery_date:fecha})); }catch(e){} }
+  function guardarGcr(codigo,correo,envio){ try{ if(!codigo||!correo) return; var dias=envio==="rapido"?20:25; var f=new Date(Date.now()+dias*86400000); var fecha=f.getFullYear()+"-"+String(f.getMonth()+1).padStart(2,"0")+"-"+String(f.getDate()).padStart(2,"0"); sessionStorage.setItem("hausline_gcr",JSON.stringify({order_id:String(codigo),email:String(correo),estimated_delivery_date:fecha})); }catch(e){} }
 
   function renderInfo(){
     progreso(1);
@@ -328,7 +329,7 @@
       var total=Math.max(0,Math.round((bruto-desc)*100)/100);
       return { items:items, subtotal:bruto, descuento:desc, descLabel:descLabel, total:total, ahora:pago==="50"?Math.round(total*50)/100:total };
     }
-    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:diasEnvio(envioFlag,pend), demora:demoraPend(pend), envioIntl:intlFlag }; }
+    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:diasEnvio(envioFlag,pend), envioFlag:envioFlag, demora:demoraPend(pend), envioIntl:intlFlag }; }
     function pintarResumen(){ var s=$("resumen"); if(s) s.innerHTML=resumenHTML(sumOpts()); }
 
     // Meta Pixel: entró al paso 1 del checkout (empezó a comprar).
@@ -552,7 +553,17 @@
   // =========================== PASO 2 · PAGO (pedido YA creado: links de correo/mipedido) ===
   var timerInt=null, pollInt=null, confInt=null, ultimoEstado=null;
 
-  function metodosHTML(monto){
+  // Envuelto en [data-metodos] para poder repintarlo si llegan las cuentas del panel.
+  function metodosHTML(monto){ return '<div data-metodos="'+esc(Number(monto)||0)+'">'+metodosInner(monto)+'</div>'; }
+  // Las cuentas "Visible a clientes" del panel llegan después de cargar (config.js): si la
+  // lista cambió mientras el cliente ya está en el paso de pago, se repinta con las nuevas.
+  document.addEventListener("hausline:cuentas", function(){
+    document.querySelectorAll("[data-metodos]").forEach(function(el){
+      el.innerHTML = metodosInner(Number(el.getAttribute("data-metodos"))||0);
+      wireMetodos(el);
+    });
+  });
+  function metodosInner(monto){
     if(!CUENTAS.length) return '<div class="note"><b>Escríbenos por WhatsApp</b> y te damos los datos de pago.</div>';
     return '<div class="methods">'+CUENTAS.map(function(cu,i){
       var b=badge(cu), cord=esCordoba(cu);

@@ -38,11 +38,22 @@ function precioNIO(usd){
 //   • Rápido   → llega antes por un cargo adicional (se cobra por producto).
 // Aplica a TODOS los productos por encargo (los de ahora y los futuros).
 // Para cambiar los días o el cargo, edita solo estos números.
+// "preparacion" = días aprox. que tarda el proveedor en preparar el pedido; el resto del
+// rango es tiempo de tránsito, que empieza a contar cuando el pedido sale en camino.
 const HAUSLINE_ENVIO = {
-  estandar: { id:"estandar", etiqueta:"Envío estándar", dias:"20 a 25 días", diasMin:20, diasMax:25, recargo:0 },
-  rapido:   { id:"rapido",   etiqueta:"Envío rápido",   dias:"14 a 17 días", diasMin:14, diasMax:17, recargo:15 }
+  estandar: { id:"estandar", etiqueta:"Envío estándar", dias:"20 a 25 días", diasMin:20, diasMax:25, preparacion:"4 a 5 días", recargo:0 },
+  rapido:   { id:"rapido",   etiqueta:"Envío rápido",   dias:"15 a 20 días", diasMin:15, diasMax:20, preparacion:"3 a 4 días", recargo:15 }
 };
 const HAUSLINE_ENVIO_DEFECTO = "estandar";
+
+// Aclaración de tiempos que acompaña la entrega estimada (producto, checkout, Mi cuenta).
+// Las fechas NUNCA son exactas: las paqueterías a veces retrasan los envíos.
+function textoTiemposEnvio(metodo){
+  var prep = metodo && metodo.preparacion ? metodo.preparacion : "unos días";
+  return "Incluye aprox. " + prep + " de preparación (algunos productos tardan más en prepararse); "
+    + "el resto es tiempo de tránsito, que empieza a contar cuando tu pedido sale en camino. "
+    + "Las fechas de entrega son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
+}
 
 // ---------- DEMORA EXTENDIDA POR PRODUCTO ----------
 // Algunos proveedores tardan más. En el panel (admin.html) se marca el producto con
@@ -161,3 +172,25 @@ const tiktokVideos = [
 // ---------- Redes (perfiles) ----------
 const HAUSLINE_INSTAGRAM = "https://instagram.com/hausline.ni";
 const HAUSLINE_TIKTOK    = "https://tiktok.com/@hausline.niof";
+
+// ---------- CUENTAS DE PAGO DESDE EL PANEL ----------
+// En el panel (Mi cuenta → tarjetas) cada cuenta tiene el botón "Visible a clientes". Si hay
+// alguna encendida, esas REEMPLAZAN la lista HAUSLINE_CUENTAS de arriba en toda la tienda
+// (checkout, pago del encargo). Si falla la red o no hay ninguna encendida, queda la de arriba.
+(function cargarCuentasDelPanel(){
+  if(typeof fetch !== "function" || !SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+  try{
+    fetch(SUPABASE_URL + "rpc/cuentas_pago_publicas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + SUPABASE_ANON_KEY },
+      body: "{}"
+    }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if(!d || !d.configurado || !Array.isArray(d.cuentas)) return;
+      var nuevas = d.cuentas.filter(function(c){ return c && c.numero; }).map(function(c){
+        return { banco: String(c.banco || ""), moneda: String(c.moneda || ""), numero: String(c.numero), titular: String(c.titular || "") };
+      });
+      HAUSLINE_CUENTAS.splice.apply(HAUSLINE_CUENTAS, [0, HAUSLINE_CUENTAS.length].concat(nuevas));
+      try{ document.dispatchEvent(new CustomEvent("hausline:cuentas")); }catch(e){}
+    }).catch(function(){});
+  }catch(e){}
+})();

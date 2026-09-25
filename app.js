@@ -59,8 +59,8 @@ const POLITICAS = {
   ],
   entrega: [
     "Envío estándar: 20 a 25 días, sin costo adicional.",
-    "Envío rápido: 14 a 17 días por $15 adicionales.",
-    "El tiempo puede variar por logística internacional.",
+    "Envío rápido: 15 a 20 días por $15 adicionales.",
+    "Los días incluyen la preparación (aprox. 4-5 días en estándar y 3-4 en rápido); el resto es tránsito, que cuenta desde que el pedido sale en camino. Las fechas son aproximadas: las paqueterías a veces retrasan los envíos.",
     "Los productos de entrega inmediata se entregan sin espera."
   ],
   garantia: [
@@ -913,7 +913,7 @@ function actualizarEnvioUI(){
   if(entrega){
     entrega.innerHTML = `<div class="entrega-estim">
          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
-         <span>${textoEntregaEstimada(metodo)}</span>
+         <span>${textoEntregaEstimada(metodo)}${typeof textoTiemposEnvio === "function" ? `<small class="entrega-aclara">${esc(textoTiemposEnvio(metodo))}</small>` : ""}</span>
        </div>${(typeof demoraDe === "function" && demoraDe(productoActual)) ? `<div class="entrega-demora" role="note">
          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
          <span>${esc(textoAvisoDemora(demoraDe(productoActual)))}</span>

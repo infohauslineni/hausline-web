@@ -16,7 +16,7 @@ Publicamos un catálogo con precios en dólares y su equivalente en córdobas. V
 
 ## Tiempos y cobertura
 
-Envío estándar de 20 a 25 días y envío rápido de 14 a 17 días (con un costo adicional por producto). Servimos a **toda Nicaragua**. No cobramos nada en línea: el pago siempre se coordina y se confirma por WhatsApp.
+Envío estándar de 20 a 25 días y envío rápido de 15 a 20 días (con un costo adicional por producto). Servimos a **toda Nicaragua**. No cobramos nada en línea: el pago siempre se coordina y se confirma por WhatsApp.
 
 ## Contacto
 

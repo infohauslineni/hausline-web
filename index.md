@@ -13,7 +13,7 @@ HAUSLINE (hauslineshopni.es) es un catálogo y tienda. El cliente elige producto
 
 ## Tiempos y pago
 
-- Envío estándar: 20 a 25 días. Envío rápido: 14 a 17 días (costo adicional por producto).
+- Envío estándar: 20 a 25 días. Envío rápido: 15 a 20 días (costo adicional por producto).
 - Podés confirmar con un anticipo del 50% o pagar completo. El saldo se paga cuando el producto llega, antes de la entrega.
 - Entrega: delivery en Managua; bus o Cargotrans al resto de Nicaragua.
 

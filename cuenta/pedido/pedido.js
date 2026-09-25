@@ -13,7 +13,7 @@
   var PIN = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;flex:none;margin-top:2px" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
   var WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5a9.4 9.4 0 0 1-4.8-1.31l-.34-.2-3.57.93.95-3.48-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.24-9.43 9.44-9.43a9.4 9.4 0 0 1 9.43 9.44c0 5.2-4.24 9.43-9.44 9.43m8.03-17.46A11.3 11.3 0 0 0 12.05.7C5.8.7.7 5.8.7 12.05c0 2 .52 3.95 1.52 5.66L.6 23.6l6.03-1.58a11.3 11.3 0 0 0 5.42 1.38c6.25 0 11.34-5.09 11.35-11.35 0-3.03-1.18-5.88-3.33-8.02"/></svg>';
 
-  var estado = { p: null, dirs: [], tarifas: [], entrega: null, elegida: null, urls: [] };
+  var estado = { p: null, dirs: [], tarifas: [], entrega: null, elegida: null, urls: [], rb: null };
 
   function noEncontrado() {
     main.innerHTML = '<div class="cta-card cta-vacio" style="margin-top:6px"><p style="font-weight:600;font-size:17px">No encontramos el pedido ' + esc(codigo) + " en tu cuenta</p>" +
@@ -64,7 +64,13 @@
     if (e.id === "cancelado") return "—";
     if (e.id === "disponible") return "Ya está en Nicaragua";
     if (p.fecha_estimada) return C.fecha(p.fecha_estimada);
-    return p.envio_rapido ? "14–17 días" : "20–25 días";
+    return p.envio_rapido ? "15–20 días" : "20–25 días";
+  }
+
+  // Misma aclaración que en la tienda (config.js → textoTiemposEnvio).
+  function aclaracionTiempos(p) {
+    return "El tiempo de entrega incluye aprox. " + (p.envio_rapido ? "3 a 4" : "4 a 5") + " días de preparación (algunos productos tardan más); " +
+      "el resto es tránsito, que empieza a contar cuando tu pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
   }
 
   function tarjetaProducto(p) {
@@ -146,7 +152,7 @@
           (tray.length ? tray.map(function (t) {
             var url = linkSeguro(t.url_tracking);
             return '<div class="cta-kv"><span>Tracking' + (t.transportista ? " · " + esc(t.transportista) : "") + "</span><b>" + (url ? '<a class="cta-guia" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + esc(t.tracking) + " ↗</a>" : '<span class="cta-guia">' + esc(t.tracking) + "</span>") + "</b></div>";
-          }).join("") : "") + "</div></section>";
+          }).join("") : "") + '<p class="cta-nota" style="font-size:12.5px;line-height:1.5;margin:10px 0 0">' + esc(aclaracionTiempos(p)) + "</p></div></section>";
       }
       var hist = (p.historial || []).slice().reverse();
       if (hist.length) {
@@ -162,7 +168,9 @@
         '<div class="cta-kv"><span>Saldo pendiente</span><b>' + esc(C.monto(p.saldo, p.moneda)) + "</b></div></div></section>";
     }
     html += '<section class="cta-sec"><a class="cta-btn linea" href="' + C.linkWhatsApp("Hola, tengo una consulta sobre mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">¿Dudas? Escribinos por WhatsApp</a></section>';
+    html += seccionCancelacion(p);
     main.innerHTML = html;
+    main.querySelectorAll("[data-rb]").forEach(function (b) { b.addEventListener("click", function () { accionReembolso(b.dataset.rb); }); });
     document.title = "Pedido " + p.codigo + " · HAUSLINE";
 
     var m = document.getElementById("mapaEntrega");
@@ -198,6 +206,134 @@
       html += '<div class="cta-grupo-fotos"><b style="display:block;font-weight:600">' + esc(t[1]) + "</b>" + (t[2] ? '<p class="cta-nota" style="margin:2px 0 0">' + esc(t[2]) + "</p>" : "") + cuerpo + "</div>";
     });
     return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de tu pedido <span class="cta-nota" style="margin:0;font-weight:400">Tocá para ampliar</span></h2><div class="cta-card cta-pad">' + html + "</div></section>";
+  }
+
+  /* ---------------- Cancelar pedido = SOLICITUD de reembolso ----------------
+     El cliente no cancela directo: deja el motivo + la cuenta para el reembolso y HAUSLINE lo
+     revisa. Los motivos dependen de la etapa (los da la base, que también los valida): el de
+     calidad solo en las 24 h tras las fotos de control de calidad; en tránsito, solo motivos
+     comprobables. Si se rechaza, el cliente elige: seguir con el pedido o cancelar sin reembolso. */
+  var MOTIVOS = {
+    error_pedido: "Elegí por error la talla, el color o el modelo",
+    pedido_duplicado: "Hice el mismo pedido dos veces por error",
+    demora_preparacion: "La preparación superó el tiempo que me indicaron",
+    calidad_no_coincide: "Las fotos de control de calidad muestran otro modelo, talla o color",
+    calidad_defecto: "Las fotos de control de calidad muestran un defecto, daño o mancha",
+    calidad_expectativas: "La calidad que se ve en las fotos no corresponde a lo ofrecido",
+    retraso_excesivo: "El pedido superó ampliamente el tiempo de entrega estimado",
+    paquete_perdido: "La paquetería reportó el paquete como perdido o dañado",
+    llego_danado: "Las fotos de recibido muestran el producto dañado",
+    no_coincide: "El producto recibido no es el que pedí",
+    otro: "Otro motivo (escribilo vos)",
+  };
+  function introEtapa(rb) {
+    if (rb.etapa === "calidad") return "Estás dentro de las <b>24 horas</b> para revisar las fotos de control de calidad" + (rb.qc_vence ? " (hasta el " + esc(C.fecha(rb.qc_vence, true)) + ")" : "") + ". Si el producto no es lo que pediste o no cumple tus expectativas, contanos qué viste en las fotos.";
+    if (rb.etapa === "transito") return "Tu pedido ya pasó el control de calidad y va en camino. En esta etapa solo se aceptan motivos que se puedan <b>comprobar</b>.";
+    if (rb.etapa === "disponible") return "Tu pedido ya está en Nicaragua. Solo se aceptan motivos que se puedan comprobar con las fotos de recibido.";
+    return "Tu pedido todavía se está preparando.";
+  }
+  function avisoRevision(rb) {
+    var pagado = Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "";
+    return '<div class="cta-aviso-juntos" style="margin-top:14px;background:#fff7e6;color:#6b4a0c">⚠️ <span>Esto es una <b style="color:inherit">solicitud de reembolso</b>, no una cancelación inmediata. HAUSLINE la revisa y el reembolso <b style="color:inherit">solo se aprueba si el motivo es real y se puede verificar</b> (por ejemplo, con las fotos de control de calidad). Si no se aprueba, vas a poder elegir entre <b style="color:inherit">seguir con tu pedido</b> o <b style="color:inherit">cancelarlo sin reembolso</b>, perdiendo lo pagado' + pagado + ".</span></div>";
+  }
+
+  function seccionCancelacion(p) {
+    var rb = estado.rb;
+    if (!rb) return "";
+    var s = rb.solicitud;
+    var tarjeta = function (titulo, cuerpo) { return '<section class="cta-sec"><h2 class="cta-sec-h">Cancelación</h2><div class="cta-card cta-pad"><b style="display:block;font-weight:600;font-size:15px">' + titulo + "</b>" + cuerpo + "</div></section>"; };
+    var datos = s ? '<div class="cta-kv" style="margin-top:10px"><span>Motivo</span><b style="white-space:normal;text-align:right">' + esc(s.motivo_label) + "</b></div>" +
+      '<div class="cta-kv"><span>Reembolso a</span><b>' + esc(s.banco) + " · ****" + esc(String(s.numero_cuenta || "").slice(-4)) + "</b></div>" : "";
+    if (s && s.estado === "pendiente") {
+      return tarjeta("Solicitud de cancelación en revisión",
+        '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">La enviaste el ' + esc(C.fecha(s.created_at)) + ". HAUSLINE la está revisando y te avisamos por aquí y por correo. Mientras tanto, tu pedido sigue su curso.</p>" + datos +
+        '<button type="button" class="cta-btn linea" style="margin-top:14px" data-rb="seguir">Retirar solicitud y seguir con mi pedido</button>');
+    }
+    if (s && s.estado === "rechazada") {
+      return tarjeta("Tu solicitud de cancelación no fue aprobada",
+        (s.respuesta ? '<p class="cta-sub" style="font-size:14px;margin-top:6px">“' + esc(s.respuesta) + "”</p>" : "") + datos +
+        '<p style="margin:16px 0 8px;font-weight:600;font-size:14px">¿Qué querés hacer?</p>' +
+        '<div class="cta-botones"><button type="button" class="cta-btn chico" data-rb="seguir">Seguir con mi pedido</button><button type="button" class="cta-btn linea chico" data-rb="perder">Cancelar sin reembolso</button></div>' +
+        '<p class="cta-nota" style="font-size:12.5px;margin-top:10px">Si cancelás sin reembolso, perdés lo pagado' + (Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "") + ".</p>");
+    }
+    if (s && s.estado === "aprobada") {
+      return tarjeta("Cancelación aprobada",
+        '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Aprobamos tu solicitud' + (s.monto_reembolso != null ? " y te reembolsamos " + esc(C.monto(s.monto_reembolso, rb.moneda)) : "") + " a la cuenta que indicaste." + (s.respuesta ? " " + esc(s.respuesta) : "") + "</p>" + datos);
+    }
+    if (s && s.estado === "cancelada_sin_reembolso") {
+      return tarjeta("Elegiste cancelar sin reembolso", '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Registramos tu decisión. HAUSLINE cancelará tu pedido en breve.</p>');
+    }
+    if (rb.etapa === "no_permitida" || !(rb.motivos || []).length || Number(rb.intentos || 0) >= 3) return "";
+    return '<section class="cta-sec" style="text-align:center"><button type="button" class="cta-link" data-rb="abrir" style="font-size:13.5px">¿Necesitás cancelar tu pedido?</button>' +
+      (rb.etapa === "calidad" && rb.qc_vence ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tenés hasta el ' + esc(C.fecha(rb.qc_vence, true)) + " para reportar un problema con las fotos de control de calidad.</p>" : "") + "</section>";
+  }
+
+  async function accionReembolso(accion) {
+    if (accion === "abrir") return formularioCancelacion();
+    if (accion === "perder") {
+      var h = C.hoja('<p class="cta-sub" style="font-size:14px;margin:0">Vas a cancelar tu pedido <b>sin reembolso</b>: perdés lo pagado' + (Number(estado.rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(estado.rb.monto_pagado, estado.rb.moneda)) + ")" : "") + ". Esto no se puede deshacer.</p>" +
+        '<div class="cta-botones" style="margin-top:18px"><button type="button" class="cta-btn linea chico" id="rbNo">Volver</button><button type="button" class="cta-btn chico" id="rbSi">Sí, cancelar</button></div>', "¿Cancelar sin reembolso?");
+      h.panel.querySelector("#rbNo").addEventListener("click", h.cerrar);
+      h.panel.querySelector("#rbSi").addEventListener("click", async function () {
+        this.disabled = true;
+        try { await C.decidirReembolso(estado.p.codigo, "cancelar_sin_reembolso"); h.cerrar(); C.aviso("Registramos tu decisión."); await recargarReembolso(); }
+        catch (err) { this.disabled = false; C.aviso(C.mensajeError(err), "error"); }
+      });
+      return;
+    }
+    if (accion === "seguir") {
+      try { await C.decidirReembolso(estado.p.codigo, "seguir"); C.aviso("¡Listo! Tu pedido sigue su curso."); await recargarReembolso(); }
+      catch (err) { C.aviso(C.mensajeError(err), "error"); }
+    }
+  }
+  async function recargarReembolso() { estado.rb = await C.reembolso(codigo); pintar(); }
+
+  function formularioCancelacion() {
+    var rb = estado.rb;
+    var elegido = null;
+    var html = '<p class="cta-sub" style="font-size:14px;margin:0">' + introEtapa(rb) + "</p>" +
+      '<p class="cta-eyebrow" style="margin:18px 0 8px">¿Por qué querés cancelar?</p>' +
+      rb.motivos.filter(function (m) { return MOTIVOS[m]; }).map(function (m) { return '<button type="button" class="cta-opcion" data-motivo="' + esc(m) + '"><span class="radio"></span><span>' + esc(MOTIVOS[m]) + "</span></button>"; }).join("") +
+      '<label class="cta-field" style="margin-top:16px"><span id="rbDetalleLbl">Contanos qué pasó</span><textarea class="cta-input" id="rbDetalle" rows="3" maxlength="1000" style="resize:vertical" placeholder="Explicá con detalle. Si es por las fotos, decinos qué viste."></textarea></label>' +
+      '<p class="cta-eyebrow" style="margin:18px 0 0">Cuenta para el reembolso</p>' +
+      '<label class="cta-field" style="margin-top:8px"><span>Banco</span><input class="cta-input" id="rbBanco" maxlength="60" placeholder="Ej. LAFISE, BAC, Banpro"></label>' +
+      '<label class="cta-field"><span>Número de cuenta</span><input class="cta-input" id="rbNumero" inputmode="numeric" maxlength="40" placeholder="Solo números"></label>' +
+      '<label class="cta-field"><span>Nombre del titular de la cuenta</span><input class="cta-input" id="rbTitular" maxlength="120" placeholder="Nombre completo de la persona a quien se le reembolsa" autocomplete="name"></label>' +
+      avisoRevision(rb) +
+      '<label class="cta-check"><input type="checkbox" id="rbEntiendo"> Entiendo que el reembolso depende de la revisión de HAUSLINE.</label>' +
+      '<p class="cta-nota" id="rbError" style="color:#b42318;font-size:13px;margin-top:10px" hidden></p>' +
+      '<div class="cta-botones" style="margin-top:16px"><button type="button" class="cta-btn linea chico" id="rbSeguir">Seguir con mi pedido</button><button type="button" class="cta-btn chico" id="rbEnviar">Enviar solicitud</button></div>';
+    var h = C.hoja(html, "Cancelar pedido " + estado.p.codigo);
+    var q = function (sel) { return h.panel.querySelector(sel); };
+    h.panel.querySelectorAll("[data-motivo]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        elegido = b.dataset.motivo;
+        h.panel.querySelectorAll("[data-motivo]").forEach(function (x) { x.classList.toggle("on", x === b); });
+        q("#rbDetalleLbl").textContent = elegido === "otro" ? "Escribí tu motivo" : "Contanos qué pasó";
+        q("#rbDetalle").placeholder = elegido === "otro" ? "Explicá con detalle por qué querés cancelar. Revisamos que sea un motivo real y comprobable." : "Explicá con detalle. Si es por las fotos, decinos qué viste.";
+        if (elegido === "otro") q("#rbDetalle").focus();
+      });
+    });
+    q("#rbSeguir").addEventListener("click", h.cerrar);
+    q("#rbEnviar").addEventListener("click", async function () {
+      var btn = this, err = q("#rbError");
+      var d = { motivo: elegido, detalle: q("#rbDetalle").value.trim(), banco: q("#rbBanco").value.trim(), numero: q("#rbNumero").value.replace(/[^0-9]/g, ""), titular: q("#rbTitular").value.trim() };
+      var falta = !d.motivo ? "Elegí el motivo." : d.detalle.length < 15 ? "Contanos con más detalle qué pasó (mínimo 15 caracteres)." :
+        d.banco.length < 2 ? "Indicá el banco." : d.numero.length < 6 ? "Revisá el número de cuenta." : d.titular.length < 5 ? "Escribí el nombre completo del titular." :
+        !q("#rbEntiendo").checked ? "Marcá que entendés que el reembolso depende de la revisión." : "";
+      if (falta) { err.textContent = falta; err.hidden = false; return; }
+      err.hidden = true; btn.disabled = true; btn.textContent = "Enviando…";
+      try {
+        await C.solicitarReembolso(estado.p.codigo, d);
+        h.panel.innerHTML = '<div style="text-align:center;padding:10px 0"><p style="font-weight:600;font-size:18px;margin:0 0 6px">Solicitud enviada</p><p class="cta-nota" style="font-size:14px;max-width:320px;margin:0 auto">HAUSLINE va a revisar tu solicitud y te avisamos por aquí y por correo. Mientras tanto, tu pedido sigue su curso.</p>' +
+          '<button type="button" class="cta-btn" style="margin-top:18px" id="rbOk">Entendido</button></div>';
+        h.panel.querySelector("#rbOk").addEventListener("click", function () { h.cerrar(); });
+        await recargarReembolso();
+      } catch (e) {
+        btn.disabled = false; btn.textContent = "Enviar solicitud";
+        err.textContent = C.mensajeError(e); err.hidden = false;
+      }
+    });
   }
 
   function cambiarDireccion() {
@@ -246,7 +382,9 @@
     var p2 = await C.pedido(codigo);
     if (!p2) return;
     var ent2 = disponible(p2) ? await C.entrega(codigo) : null;
-    if (JSON.stringify(p2) === JSON.stringify(estado.p) && JSON.stringify(ent2) === JSON.stringify(estado.entrega)) return;
+    var rb2 = await C.reembolso(codigo);
+    if (JSON.stringify(p2) === JSON.stringify(estado.p) && JSON.stringify(ent2) === JSON.stringify(estado.entrega) && JSON.stringify(rb2) === JSON.stringify(estado.rb)) return;
+    estado.rb = rb2;
     var fotosAntes = JSON.stringify(estado.p.fotos || []);
     if (disponible(p2) && !disponible(estado.p)) {
       var r = await Promise.all([C.direcciones().catch(function () { return []; }), C.tarifas()]);
@@ -274,7 +412,9 @@
         disponible(p) ? C.direcciones().catch(function () { return []; }) : Promise.resolve([]),
         disponible(p) ? C.tarifas() : Promise.resolve([]),
         disponible(p) ? C.entrega(codigo) : Promise.resolve(null),
+        C.reembolso(codigo),
       ]);
+      estado.rb = extra[4];
       estado.urls = extra[0]; estado.dirs = extra[1]; estado.tarifas = extra[2]; estado.entrega = extra[3];
       var pedida = C.param("direccion");
       var previa = estado.entrega && estado.entrega.direccion ? estado.entrega.direccion.id : null;
