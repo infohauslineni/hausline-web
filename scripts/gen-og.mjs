@@ -68,6 +68,36 @@ try {
   console.log(`⚠ Panel (Supabase) no disponible (${e.message}); se generan solo los de productos.js`)
 }
 
+// --- Reseñas aprobadas (Supabase · proyecto de pedidos, tabla resenas) ---
+// Solo las aprobadas son visibles con la llave pública (RLS). Se agrupan por producto
+// para poner aggregateRating + review en el JSON-LD: son las estrellas que Google
+// puede mostrar debajo del producto en los resultados de búsqueda.
+const RESENAS = {
+  url: 'https://epslwaxjemlysqtubbfu.supabase.co',
+  key: 'sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r'
+}
+const resenasPorProducto = new Map()
+try {
+  const r = await fetch(
+    `${RESENAS.url}/rest/v1/resenas?select=producto_codigo,cliente_nombre,estrellas,comentario,created_at&aprobada=eq.true&producto_codigo=not.is.null&order=created_at.desc`,
+    { headers: { apikey: RESENAS.key, Authorization: 'Bearer ' + RESENAS.key } }
+  )
+  if (r.ok) {
+    const filas = await r.json()
+    for (const f of Array.isArray(filas) ? filas : []) {
+      const c = String(f.producto_codigo || '').trim().toUpperCase()
+      if (!c || !(f.estrellas >= 1 && f.estrellas <= 5)) continue
+      if (!resenasPorProducto.has(c)) resenasPorProducto.set(c, [])
+      resenasPorProducto.get(c).push(f)
+    }
+    console.log(`✓ Reseñas: ${resenasPorProducto.size} producto(s) con reseñas aprobadas`)
+  } else {
+    console.log(`⚠ Reseñas respondió ${r.status}; páginas sin estrellas`)
+  }
+} catch (e) {
+  console.log(`⚠ Reseñas no disponibles (${e.message}); páginas sin estrellas`)
+}
+
 // --- Utilidades ---
 const escaparHtml = (texto) => String(texto ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -154,6 +184,24 @@ const paginaProducto = (producto) => {
       url: canonica,
       seller: { '@type': 'Organization', name: 'HAUSLINE' },
     }
+  }
+  const resenas = resenasPorProducto.get(codigo.trim().toUpperCase()) || []
+  if (resenas.length) {
+    const promedio = resenas.reduce((t, r) => t + Number(r.estrellas), 0) / resenas.length
+    productoLd.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: promedio.toFixed(1),
+      reviewCount: resenas.length,
+      bestRating: '5',
+      worstRating: '1',
+    }
+    productoLd.review = resenas.slice(0, 5).map((r) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: String(r.cliente_nombre || 'Cliente HAUSLINE').trim() },
+      datePublished: String(r.created_at || '').slice(0, 10),
+      reviewRating: { '@type': 'Rating', ratingValue: String(r.estrellas), bestRating: '5', worstRating: '1' },
+      ...(r.comentario ? { reviewBody: String(r.comentario).trim() } : {}),
+    }))
   }
   const jsonLd = JSON.stringify(productoLd).replace(/</g, '\\u003c')
 
