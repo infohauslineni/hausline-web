@@ -90,7 +90,7 @@
     "mainEntity": [
       { "@type": "Question", "name": "¿Cómo puedo comprar?", "acceptedAnswer": { "@type": "Answer", "text": "Elegí tu producto, la talla y la cantidad, tocá Encargar y completá tus datos. Te contactamos por WhatsApp para coordinar el pago. También podés escribirnos directo por WhatsApp." } },
       { "@type": "Question", "name": "¿Cómo funcionan los pedidos bajo pedido?", "acceptedAnswer": { "@type": "Answer", "text": "La mayoría de los productos se traen por encargo desde el exterior: al confirmar tu pedido lo importamos para vos. Los marcados como Entrega inmediata ya están en Nicaragua y se entregan de una vez." } },
-      { "@type": "Question", "name": "¿Cuánto tarda mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Envío estándar: 20 a 25 días. Envío rápido: 14 a 17 días, con un costo adicional por producto. Los de entrega inmediata se entregan enseguida." } },
+      { "@type": "Question", "name": "¿Cuánto tarda mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Envío estándar: 20 a 25 días (aprox. 4-5 de preparación y el resto de tránsito). Envío rápido: 15 a 20 días (aprox. 3-4 de preparación), con un costo adicional por producto. El tránsito empieza a contar cuando el pedido sale en camino; las fechas son aproximadas y las paqueterías a veces retrasan los envíos. Los de entrega inmediata se entregan enseguida." } },
       { "@type": "Question", "name": "¿Qué métodos de pago aceptan?", "acceptedAnswer": { "@type": "Answer", "text": "Transferencia bancaria (LAFISE, en córdobas o dólares). Al confirmar tu pedido te damos las cuentas y enviás tu comprobante por WhatsApp. No se cobra nada en línea." } },
       { "@type": "Question", "name": "¿Cuánto debo pagar para confirmar mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Podés dejar un anticipo del 50% para confirmar tu encargo o pagarlo completo. El saldo restante se paga cuando el producto llega, antes de la entrega." } },
       { "@type": "Question", "name": "¿Cómo puedo rastrear mi pedido?", "acceptedAnswer": { "@type": "Answer", "text": "Con tu código de pedido en el rastreador de HAUSLINE. Además te avisamos por correo en cada etapa, desde la confirmación hasta la entrega." } },
@@ -103,20 +103,20 @@
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=20260927">
+  <link rel="stylesheet" href="styles.css?v=20260929">
 
   <!-- Scripts con defer en el <head>: se descargan EN PARALELO mientras el
        navegador arma la página (más rápido en móvil), pero se ejecutan en
        orden y solo cuando el DOM está listo. app.js llama iniciar() al final
        y ningún script usa document.write, así que defer es seguro. -->
   <script defer src="meta-pixel.js?v=20260923"></script>
-  <script defer src="config.js?v=20260927b"></script>
+  <script defer src="config.js?v=20260929"></script>
   <script defer src="productos.js?v=20260724"></script>
   <script defer src="clientes.js?v=20260724"></script>
   <script defer src="favoritos.js?v=20260724"></script>
   <script defer src="carrito.js?v=20260927"></script>
   <script defer src="supabase-views.js?v=20260724"></script>
-  <script defer src="app.js?v=20260927b"></script>
+  <script defer src="app.js?v=20260929"></script>
   <script defer src="busqueda-ux.js?v=20260927"></script>
   <script defer src="encargo.js?v=20260927"></script>
   <script defer src="catalogo-remoto.js?v=20260816"></script>
@@ -497,7 +497,7 @@
       <div class="faq">
         <details class="faq-item"><summary>¿Cómo puedo comprar?</summary><div class="faq-a">Elegí tu producto, la talla y la cantidad, tocá <strong>Encargar</strong> y completá tus datos. Te contactamos por WhatsApp para coordinar el pago. También podés escribirnos directo por WhatsApp con el botón verde.</div></details>
         <details class="faq-item"><summary>¿Cómo funcionan los pedidos bajo pedido?</summary><div class="faq-a">La mayoría de los productos se traen por encargo desde el exterior: al confirmar tu pedido lo importamos para vos. Los marcados como <strong>Entrega inmediata</strong> ya están en Nicaragua y se entregan de una vez.</div></details>
-        <details class="faq-item"><summary>¿Cuánto tarda mi pedido?</summary><div class="faq-a">Envío <strong>estándar: 20 a 25 días</strong>. Envío <strong>rápido: 14 a 17 días</strong> (con un costo adicional por producto). Los de entrega inmediata se entregan enseguida.</div></details>
+        <details class="faq-item"><summary>¿Cuánto tarda mi pedido?</summary><div class="faq-a">Envío <strong>estándar: 20 a 25 días</strong>. Envío <strong>rápido: 15 a 20 días</strong> (con un costo adicional por producto). Esos días incluyen la preparación (aprox. 4-5 días en estándar y 3-4 en rápido; algunos productos tardan más) y el resto es tránsito, que empieza a contar cuando tu pedido sale en camino. Las fechas son aproximadas, no exactas: a veces las paqueterías retrasan los envíos. Los de entrega inmediata se entregan enseguida.</div></details>
         <details class="faq-item"><summary>¿Qué métodos de pago aceptan?</summary><div class="faq-a">Transferencia bancaria (LAFISE, en córdobas o dólares). Al confirmar tu pedido te damos las cuentas y enviás tu comprobante por WhatsApp. No se cobra nada en línea.</div></details>
         <details class="faq-item"><summary>¿Cuánto debo pagar para confirmar mi pedido?</summary><div class="faq-a">Podés dejar un <strong>anticipo del 50%</strong> para confirmar tu encargo o pagarlo completo. El saldo restante se paga cuando el producto llega, antes de la entrega.</div></details>
         <details class="faq-item"><summary>¿Cómo puedo rastrear mi pedido?</summary><div class="faq-a">Con tu código de pedido en <a href="https://hausline-tracking.vercel.app/tracking" target="_blank" rel="noopener noreferrer">nuestro rastreador</a>. Además te avisamos por correo en cada etapa, desde la confirmación hasta la entrega.</div></details>
