@@ -401,10 +401,10 @@
     }
     async function aplicarCupon(code){ code=(code||"").trim(); if(!code) return; var errB=$("ck").querySelector("[data-cuperr]");
       try{ var t=calc(); var res=await fetch(SB_URL+"rpc/validar_cupon",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:code,p_total:t.subtotal})});
-        if(!res.ok) throw 0; var r=await res.json();
+        if(!res.ok) throw await errorHttp(res, "cupon"); var r=await res.json();
         if(!r||!r.valido){ if(errB){ errB.textContent=(r&&r.motivo)||"Código no válido."; errB.hidden=false; } return; }
         cupon={id:r.id,codigo:r.codigo,tipo:r.tipo,valor:Number(r.valor)}; var box=$("ck").querySelector("[data-cupon]"); box.innerHTML=cuponHTML(); wireCupon(); pintarResumen();
-      }catch(_){ if(errB){ errB.textContent="No se pudo validar el código."; errB.hidden=false; } }
+      }catch(e){ falla("cupon_error", "No se pudo validar el cupón "+code+": "+((e&&e.message)||"error")); if(errB){ errB.textContent="No pudimos validar el cupón. "+explicarError(e, "cupon").texto; errB.hidden=false; } }
     }
     wireCupon();
     // Carga las promos automáticas y re-pinta el resumen (para mostrar el descuento aplicado).
@@ -527,20 +527,38 @@
     anim(); wireMetodos($("ck"));
     var bk=$("ck").querySelector("[data-volver]"); if(bk) bk.addEventListener("click", function(){ location.href="/checkout/?paso=info"; });
     var err=$("ck").querySelector("[data-err]");
-    function showErr(m){ if(err){ err.textContent=m; err.hidden=false; } }
+    function showErr(m, accion, codigo){ if(err){ err.innerHTML=esc(m)+accionError(accion, m, codigo); err.hidden=false; err.scrollIntoView({block:"center",behavior:"smooth"}); } }
     var conf=$("ckConfirmar");
     var comp=wireComprobante(function(file){ if(conf) conf.textContent = file ? "Enviar comprobante y confirmar pedido →" : "Ya realicé mi pago →"; });
     async function finalizar(file){
       if(err) err.hidden=true;
-      mostrarCamion("Creando tu pedido…"); var t0=Date.now();
+      mostrarCamion("Creando tu pedido…"); var t0=Date.now(); var etapa="crear";
       try{
         var cod=await crearPedido(pend);
+        etapa = file ? "comprobante" : "reportar";
         if(file){ await subirArchivo(file, cod); }
         else { await fetch(SB_URL+"rpc/reportar_pago_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:cod})}); }
         try{ sessionStorage.removeItem("hausline_encargo"); }catch(_){}
         var esperar=1600-(Date.now()-t0); if(esperar>0) await new Promise(function(r){ setTimeout(r,esperar); });
         location.href="/checkout/?c="+encodeURIComponent(cod)+"&paso=confirmacion";
-      }catch(e){ falla("checkout_error", "No se pudo confirmar el pedido: "+((e&&e.message)||"error"), {paso:"pago", con_comprobante:!!file}); var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; } showErr("No se pudo confirmar tu pedido. Revisá tu internet e intentá de nuevo."); }
+      }catch(e){
+        falla("checkout_error", "No se pudo confirmar el pedido ("+etapa+"): "+((e&&e.message)||"error"), {paso:"pago", etapa:etapa, con_comprobante:!!file, codigo:codigoCreado});
+        var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; }
+        var ex=explicarError(e, e&&e.etapa==="upload" ? "upload" : etapa);
+        if(etapa!=="crear" && codigoCreado){
+          // El pedido YA quedó creado: no decir que no se confirmó. Al volver a tocar el botón se
+          // reintenta solo lo que faltó (crearPedido reusa el mismo código, no duplica).
+          var queFalto = etapa==="comprobante" ? "no pudimos subir tu comprobante" : "no pudimos avisar tu pago";
+          if(err){
+            err.innerHTML=esc("Tu pedido ya quedó registrado (código "+codigoCreado+"), pero "+queFalto+". "+ex.texto+" Si preferís, envialo por WhatsApp con tu código.")+
+              accionError("whatsapp", etapa==="comprobante" ? "no se pudo subir mi comprobante, te lo envío por aquí." : "ya transferí pero no se pudo avisar el pago.", codigoCreado);
+            err.hidden=false; err.scrollIntoView({block:"center",behavior:"smooth"});
+          }
+          if(conf) conf.textContent = file ? "Reintentar enviar comprobante →" : "Reintentar →";
+        } else {
+          showErr(ex.texto, ex.accion);
+        }
+      }
     }
     if(conf) conf.addEventListener("click", async function(){
       if(comp.file){ finalizar(comp.file); return; }
@@ -654,7 +672,8 @@
       }catch(e){
         falla("comprobante_error", "No se pudo subir el comprobante: "+((e&&e.message)||"error"), {codigo:codigoRef||null});
         conf.disabled=false; conf.textContent = staged ? "Enviar comprobante y confirmar pago →" : "Ya realicé mi pago →";
-        var st=$("upStatus"); if(st){ st.hidden=false; st.className="up-status up-error"; st.textContent="No se pudo subir el comprobante. Revisá tu internet e intentá de nuevo."; }
+        var exU=explicarError(e, e&&e.etapa==="upload" ? "upload" : "reg");
+        var st=$("upStatus"); if(st){ st.hidden=false; st.className="up-status up-error"; st.innerHTML=esc("No se pudo enviar el comprobante. "+exU.texto)+accionError(exU.accion==="volver"||exU.accion==="tienda" ? "whatsapp" : exU.accion, exU.texto, codigoRef); }
       }
     });
     if(!vencido && c.vence) iniciarContador(c.vence);
@@ -779,7 +798,42 @@
   // ---- Estado / error ----
   // Aviso silencioso al panel ("Salud de clientes"): así nos enteramos si el checkout le falla a alguien.
   function falla(nombre, mensaje, detalle){ try{ if(window.HauslineSalud) window.HauslineSalud.error(nombre, mensaje, detalle||null); }catch(_){} }
-  async function errorHttp(r, etapa){ var t=""; try{ t=(await r.text()).slice(0,300); }catch(_){} return new Error(etapa+" HTTP "+r.status+(t?": "+t:"")); }
+  // Error del servidor con su mensaje REAL (Supabase devuelve JSON {message}): así el cliente
+  // ve qué pasó de verdad y no siempre "revisá tu internet".
+  async function errorHttp(r, etapa){
+    var t=""; try{ t=(await r.text()).slice(0,300); }catch(_){}
+    var e=new Error(etapa+" HTTP "+r.status+(t?": "+t:""));
+    var m=t; try{ var j=JSON.parse(t); m=j.message||j.error||j.msg||t; }catch(_){}
+    e.status=r.status; e.servidor=String(m||""); e.etapa=etapa;
+    return e;
+  }
+  // Traduce cualquier falla a un mensaje claro para el cliente.
+  // accion: "whatsapp" (botón para escribirnos), "volver" (a sus datos), "tienda" o null.
+  function explicarError(e, etapa){
+    var srv=(e&&e.servidor)||"", msg=(e&&e.message)||"", st=e&&e.status;
+    if(!st && (/failed to fetch|load failed|networkerror|network request failed|abort|timeout|timed out/i.test(msg) || (e&&e.name)==="TypeError"))
+      return { texto:"No pudimos conectarnos con el servidor. Revisá tu conexión a internet e intentá de nuevo.", accion:null };
+    if(/demasiados pedidos seguidos/i.test(srv)) return { texto:"Registramos varios pedidos seguidos con este WhatsApp. Para continuar, escribinos por WhatsApp y lo terminamos juntos.", accion:"whatsapp" };
+    if(/demasiados pedidos/i.test(srv)) return { texto:"Estamos recibiendo muchos pedidos en este momento. Esperá unos minutos e intentá de nuevo.", accion:null };
+    if(/whatsapp inv/i.test(srv)) return { texto:"Tu número de WhatsApp no es válido. Volvé a tus datos y revisalo.", accion:"volver" };
+    if(/nombre inv/i.test(srv)) return { texto:"Falta tu nombre completo. Volvé a tus datos y revisalo.", accion:"volver" };
+    if(/carrito vac/i.test(srv)) return { texto:"Tu carrito está vacío. Volvé a la tienda y agregá los productos de nuevo.", accion:"tienda" };
+    if(/demasiados productos/i.test(srv)) return { texto:"Tu pedido tiene más de 30 productos. Dividilo en dos pedidos o escribinos por WhatsApp.", accion:"whatsapp" };
+    if(/producto inv/i.test(srv)) return { texto:"Hubo un problema con el producto. Volvé a la tienda y agregalo de nuevo.", accion:"tienda" };
+    if(etapa==="upload"){
+      if(st===413 || /too large|maximum allowed size|exceeded/i.test(srv)) return { texto:"El comprobante pesa demasiado. Subí una captura de pantalla (es más liviana) o envialo por WhatsApp.", accion:"whatsapp" };
+      if(/mime|content.?type|invalid.*type/i.test(srv)) return { texto:"Ese formato no se puede subir. Usá una foto (JPG o PNG) o un PDF.", accion:null };
+    }
+    if(st>=500) return { texto:"Nuestro sistema tuvo un problema momentáneo. Intentá de nuevo en un minuto; si sigue, escribinos por WhatsApp.", accion:"whatsapp" };
+    return { texto:"Algo falló de nuestro lado. Intentá de nuevo; si sigue pasando, escribinos por WhatsApp y lo resolvemos por ahí.", accion:"whatsapp" };
+  }
+  // Botón de ayuda debajo del mensaje de error.
+  function accionError(accion, texto, codigo){
+    if(accion==="whatsapp") return '<a class="err-accion" href="https://wa.me/'+WA+'?text='+encodeURIComponent("Hola, quiero terminar mi pedido en la web"+(codigo?" (código "+codigo+")":"")+" y me salió este aviso: "+texto)+'" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>';
+    if(accion==="volver") return '<a class="err-accion" href="/checkout/?paso=info">Revisar mis datos</a>';
+    if(accion==="tienda") return '<a class="err-accion" href="/">Ir a la tienda</a>';
+    return "";
+  }
   function estado(titulo, detalle){
     $("prog").innerHTML="";
     $("ck").innerHTML='<div class="state"><div style="color:var(--ink-3);margin-bottom:12px">'+ICON.alert+'</div>'
@@ -809,7 +863,7 @@
       if(!items.length){ if(!silencioso) estado("No encontramos ese pedido","Verificá el código (ej. SOL-1234). Si acabás de crearlo, esperá unos segundos y recargá."); return; }
       if(silencioso && ultimoEstado!==null && calcular(items).estado===ultimoEstado) return;
       renderPago(items);
-    }catch(ex){ if(!silencioso){ falla("checkout_error", "No se pudo cargar el pedido: "+((ex&&ex.message)||"error"), {paso:"confirmacion"}); estado("No pudimos cargar tu pedido","Revisá tu conexión e intentá de nuevo."); } }
+    }catch(ex){ if(!silencioso){ falla("checkout_error", "No se pudo cargar el pedido: "+((ex&&ex.message)||"error"), {paso:"confirmacion"}); estado("No pudimos cargar tu pedido", explicarError(ex, "cargar").texto); } }
   }
   function iniciarPolling(){ clearInterval(pollInt); pollInt=setInterval(function(){ if(document.hidden) return; cargarPago(true); },20000); }
 

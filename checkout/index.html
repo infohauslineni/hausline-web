@@ -202,7 +202,9 @@
     .tl.grand{ font-size:16px; padding-top:10px; } .tl.grand .v{ font-size:20px; font-weight:800; }
     .tl .nio{ display:block; font-size:11px; color:var(--blue); font-weight:600; text-align:right; }
     .tl.accent .v{ color:var(--accent); }
-    .err{ margin-top:12px; color:var(--err); font-size:13px; }
+    .err{ margin-top:12px; color:var(--err); font-size:13px; line-height:1.5; }
+    .err-accion{ display:inline-flex; align-items:center; margin-top:8px; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid var(--err-line); background:#fff; color:var(--ink); font-weight:700; font-size:12.5px; text-decoration:none; }
+    .err .err-accion, .up-status .err-accion{ display:flex; width:max-content; }
     .note{ margin-top:10px; padding:12px 13px; font-size:12.5px; color:var(--ink-2); line-height:1.5; background:var(--accent-soft);
       border:1px solid var(--accent-line); border-radius:var(--radius-sm); }
     .note b{ color:var(--ink); }
@@ -319,6 +321,6 @@
   <script src="../meta-pixel.js"></script>
   <script src="../salud.js?v=20260926"></script>
   <script src="../config.js?v=20260929"></script>
-  <script src="./checkout.js?v=20261001"></script>
+  <script src="./checkout.js?v=20261002"></script>
 </body>
 </html>
