@@ -7,6 +7,7 @@
   var CAJA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>';
   var pedidos = [];
   var filtro = "todos";
+  var encargos = [];
 
   function tarjeta(p) {
     var e = C.etapa(p.estado_codigo);
@@ -24,10 +25,18 @@
 
   function pintarLista() {
     var vis = pedidos.filter(function (p) { return filtro === "todos" || C.grupo(p.estado_codigo) === filtro; });
+    // Solo tiene encargos esperando confirmación: no le decimos "no hay pedidos" como si faltara algo.
+    if (!vis.length && filtro === "todos" && encargos.length) {
+      document.getElementById("lista").innerHTML = '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos tu encargo, aparece aquí como pedido con su código HS y podés seguirlo paso a paso.</p>';
+      return;
+    }
     document.getElementById("lista").innerHTML = vis.length ? vis.map(tarjeta).join("") :
       '<div class="cta-card cta-vacio"><p style="font-weight:600">' + (filtro === "todos" ? "Todavía no hay pedidos en tu cuenta" : "No hay pedidos en esta etapa") + "</p>" +
       (filtro === "todos" ? '<p class="cta-nota" style="font-size:13.5px;margin-top:6px">Aparecen los pedidos hechos con el mismo correo de tu cuenta o comprados con tu sesión abierta. ¿Compraste con otro correo? Escribinos y lo asociamos.</p><a class="cta-btn auto linea" style="margin-top:16px" href="' + C.linkWhatsApp("Hola, quiero asociar mis pedidos a mi cuenta de HAUSLINE.") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>' : "") + "</div>";
   }
+
+  // Encargos web todavía sin confirmar: van arriba de la lista (no dependen del filtro).
+  function pintarEncargos() { var el = document.getElementById("encargos"); if (el) el.innerHTML = C.seccionEncargos(encargos); }
 
   async function iniciar() {
     var s = await C.exigirSesion();
@@ -37,7 +46,7 @@
       '<div class="cta-chips" role="tablist">' + [["todos", "Todos"], ["proceso", "En proceso"], ["enviado", "Enviados"], ["entregado", "Entregados"]].map(function (f, i) {
         return '<button type="button" class="cta-chip' + (i === 0 ? " on" : "") + '" data-f="' + f[0] + '" role="tab">' + f[1] + "</button>";
       }).join("") + "</div>" +
-      '<div id="lista" style="margin-top:14px" aria-live="polite"><div class="cta-skel"></div><div class="cta-skel"></div></div>';
+      '<div id="encargos"></div><div id="lista" style="margin-top:14px" aria-live="polite"><div class="cta-skel"></div><div class="cta-skel"></div></div>';
     main.querySelectorAll(".cta-chip").forEach(function (b) {
       b.addEventListener("click", function () {
         filtro = b.dataset.f;
@@ -46,12 +55,15 @@
       });
     });
     try {
-      pedidos = await C.misPedidos(); pintarLista();
+      var rr = await Promise.all([C.misPedidos(), C.misEncargos()]);
+      pedidos = rr[0]; encargos = rr[1]; pintarLista(); pintarEncargos();
       C.salud.registrar("vio_mis_pedidos", { detalle: { pedidos: pedidos.length } });
       // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
       C.autoActualizar(async function () {
         var nuevos = await C.misPedidos();
+        var nuevosEnc = await C.misEncargos();
         if (JSON.stringify(nuevos) !== JSON.stringify(pedidos)) { pedidos = nuevos; pintarLista(); }
+        if (JSON.stringify(nuevosEnc) !== JSON.stringify(encargos)) { encargos = nuevosEnc; pintarEncargos(); }
       });
     }
     catch (err) { document.getElementById("lista").innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tus pedidos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }

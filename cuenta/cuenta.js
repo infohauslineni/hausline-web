@@ -145,6 +145,54 @@
   async function cuenta() { return rpc("mi_cuenta_cliente"); }
   async function misPedidos() { var d = await rpc("mis_pedidos_cliente"); return Array.isArray(d) ? d : []; }
   async function pedido(codigo) { return rpc("pedido_cliente", { p_codigo: codigo }); }
+  // Encargos web todavía sin confirmar (esperando pago / pago en revisión / vencidos recientes).
+  // Si falla, no rompe la página: la cuenta sigue mostrando los pedidos igual.
+  async function misEncargos() {
+    try {
+      var r = await sb.rpc("mis_encargos_cliente");
+      // PGRST202 = la función todavía no existe en la base (migración sin aplicar): no es falla del cliente.
+      if (r.error) { if (r.error.code !== "PGRST202") S.error("rpc_error", (r.error.message || "Error") + " · mis_encargos_cliente", { funcion: "mis_encargos_cliente", codigo: r.error.code || null }); return []; }
+      return Array.isArray(r.data) ? r.data : [];
+    } catch (e) { return []; }
+  }
+
+  /* ---------------- Tarjetas de encargos por confirmar ---------------- */
+  var CAJA_ENC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>';
+  function tarjetaEncargo(e) {
+    var prods = e.productos || [];
+    var p0 = prods[0] || {};
+    var foto = img(p0.imagen);
+    var nombre = (prods.length > 1 ? prods.length + " productos · " : "") + [p0.marca, p0.producto].filter(Boolean).join(" · ");
+    var enRevision = !!e.pago_reportado;
+    var vencida = e.estado === "vencida" && !enRevision;
+    var mitad = e.pago_tipo === "50" && Number(e.abono) > 0 && Number(e.abono) < Number(e.total);
+    var estadoHtml = enRevision ? '<span class="cta-estado revision"><i></i>Pago en revisión</span>'
+      : vencida ? '<span class="cta-estado cancelado"><i></i>Venció el plazo de pago</span>'
+      : '<span class="cta-estado espera"><i></i>Esperando tu pago</span>';
+    // Últimas 3 horas sin pago: aviso en rojo con el tiempo que le queda.
+    var minutos = e.vence ? Math.max(0, Math.round((new Date(e.vence).getTime() - Date.now()) / 60000)) : null;
+    var porVencer = !enRevision && !vencida && minutos != null && minutos <= 180;
+    var queda = minutos == null ? "" : minutos >= 60 ? Math.floor(minutos / 60) + " h" + (minutos % 60 ? " " + (minutos % 60) + " min" : "") : minutos + " min";
+    var alerta = porVencer ? '<div class="cta-alerta-vence">⚠️ Tu encargo vence en ' + esc(queda) + ". Pagá y enviá tu comprobante antes, o se cancela solo.</div>" : "";
+    var detalle = enRevision
+      ? "Recibimos tu aviso de pago" + (e.comprobante ? " y tu comprobante" : "") + ". Lo estamos revisando: cuando lo confirmemos, tu pedido pasa a “Mis pedidos” con su código HS y te avisamos por correo."
+      : vencida ? "El plazo para pagar venció y el encargo se canceló. Si ya pagaste o querés retomarlo, escribinos por WhatsApp."
+      : "Tenés hasta el " + fecha(e.vence, true) + " para pagar y enviar tu comprobante. Si no, el encargo se cancela solo.";
+    var boton = enRevision ? ""
+      : vencida ? '<a class="cta-btn linea" style="margin-top:12px" href="' + linkWhatsApp("Hola, mi encargo " + e.codigo + " venció. ¿Me ayudan a retomarlo?") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>'
+      : '<a class="cta-btn" style="margin-top:12px" href="/checkout/?c=' + encodeURIComponent(e.codigo) + '">Pagar y enviar comprobante</a>';
+    return '<div class="cta-card cta-pad cta-encargo">' +
+      '<div style="display:flex;gap:14px;align-items:center"><span class="cta-foto">' + (foto ? '<img src="' + esc(foto) + '" alt="" loading="lazy">' : CAJA_ENC) + "</span>" +
+      '<div class="cta-pedido-info"><span class="cta-cod">Encargo #' + esc(e.codigo) + "</span>" +
+      '<span class="cta-prod">' + esc(nombre || "Tu encargo") + "</span>" +
+      '<span class="cta-prod" style="color:var(--texto-3);white-space:normal">' + esc(fecha(e.creado)) + " · Total " + esc(monto(e.total)) + (mitad ? " · pagás 50%: " + esc(monto(e.abono)) : "") + "</span>" +
+      estadoHtml + "</div></div>" + alerta +
+      (porVencer ? "" : '<p class="cta-nota" style="font-size:13px;line-height:1.5;margin:12px 0 0">' + esc(detalle) + "</p>") + boton + "</div>";
+  }
+  function seccionEncargos(lista) {
+    if (!lista || !lista.length) return "";
+    return '<section class="cta-sec"><div class="cta-sec-h"><span>Esperando confirmación</span></div>' + lista.map(tarjetaEncargo).join("") + "</section>";
+  }
   async function urlsFotos(rutas) {
     if (!rutas.length) return [];
     var r = await sb.storage.from("pedidos").createSignedUrls(rutas, 3600);
@@ -486,7 +534,7 @@
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
     salud: S, errorCliente: errorCliente, mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,
-    cuenta: cuenta, misPedidos: misPedidos, pedido: pedido, urlsFotos: urlsFotos, aviso: aviso,
+    cuenta: cuenta, misPedidos: misPedidos, misEncargos: misEncargos, seccionEncargos: seccionEncargos, pedido: pedido, urlsFotos: urlsFotos, aviso: aviso,
     actualizarCuenta: actualizarCuenta, urlAvatar: urlAvatar, subirAvatar: subirAvatar, quitarAvatar: quitarAvatar, eliminarCuenta: eliminarCuenta,
     direcciones: direcciones, guardarDireccion: guardarDireccion, eliminarDireccion: eliminarDireccion, hacerPredeterminada: hacerPredeterminada,
     tarifas: tarifas, costoDelivery: costoDelivery, lineasDireccion: lineasDireccion, entrega: entrega, solicitarEntrega: solicitarEntrega,

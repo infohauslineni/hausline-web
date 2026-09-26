@@ -20,7 +20,8 @@
     return Math.max(1, Math.ceil(ms / 86400000));
   }
 
-  function hero(pedidos) {
+  function hero(pedidos, encargos) {
+    var pendientesEnc = (encargos || []).filter(function (e) { return e.estado === "pendiente" || e.pago_reportado; });
     var activos = pedidos.filter(function (p) { var g = C.grupo(p.estado_codigo); return g === "proceso" || g === "enviado"; });
     var disponibles = activos.filter(function (p) { return (p.estado_codigo === "disponible_entrega" || p.estado_codigo === "pagado") && !p.entrega_solicitada_at; });
     var t, s, verde = false, href = "/cuenta/pedidos/", btn = "Ver detalles";
@@ -34,6 +35,12 @@
       var d = diasHasta(prox && prox.fecha_estimada);
       s = d ? "Llegará en aprox. " + d + (d === 1 ? " día" : " días") : "Te avisamos en cada etapa";
       if (activos.length === 1) href = "/cuenta/pedido/?id=" + encodeURIComponent(activos[0].codigo);
+    } else if (pendientesEnc.length) {
+      // Todavía no hay pedidos, pero sí un encargo esperando confirmación.
+      var porPagar = pendientesEnc.filter(function (e) { return !e.pago_reportado; });
+      t = pendientesEnc.length === 1 ? "1 encargo esperando confirmación" : pendientesEnc.length + " encargos esperando confirmación";
+      s = porPagar.length ? "Falta tu pago para confirmarlo" : "Estamos revisando tu pago";
+      if (porPagar.length) { href = "/checkout/?c=" + encodeURIComponent(porPagar[0].codigo); btn = "Pagar"; }
     } else {
       t = "No tenés pedidos en camino"; s = "Descubrí lo nuevo en la tienda."; href = "/"; btn = "Ir a la tienda";
     }
@@ -56,12 +63,13 @@
       '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:var(--texto-3);stroke-width:1.6;flex:none" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></a>';
   }
 
-  function pintar(nombre, pedidos) {
+  function pintar(nombre, pedidos, encargos) {
     var recientes = pedidos.slice(0, 2);
     main.innerHTML =
       '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:28px;margin-top:4px">Hola, ' + esc(nombre) + "</h1>" +
       '<p class="cta-sub" style="margin-top:4px;font-size:14px">Gracias por confiar en HAUSLINE.</p>' +
-      '<div style="margin-top:20px">' + hero(pedidos) + "</div>" +
+      '<div style="margin-top:20px">' + hero(pedidos, encargos) + "</div>" +
+      C.seccionEncargos(encargos) +
       '<nav class="cta-tiles" aria-label="Accesos">' +
         '<a class="cta-tile" href="/cuenta/pedidos/">' + ICON.pedidos + "Mis pedidos</a>" +
         '<a class="cta-tile" href="/cuenta/favoritos/">' + ICON.deseos + "Lista de deseos</a>" +
@@ -69,7 +77,8 @@
         '<a class="cta-tile" href="/cuenta/direcciones/">' + ICON.direcciones + "Direcciones</a>" +
       "</nav>" +
       '<section class="cta-sec" style="margin-top:28px"><div class="cta-sec-h"><span>Pedidos recientes</span><a class="cta-link" style="text-decoration:none" href="/cuenta/pedidos/">Ver todos ›</a></div>' +
-      (recientes.length ? recientes.map(reciente).join("") :
+      (recientes.length ? recientes.map(reciente).join("") : (encargos && encargos.length)
+        ? '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos tu encargo, aparece aquí como pedido con su código HS.</p>' :
         '<div class="cta-card cta-vacio"><p style="font-weight:600">Todavía no hay pedidos en tu cuenta</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Cuando compres con este correo, tus pedidos aparecen aquí.</p></div>') +
       "</section>" +
       '<a class="cta-club" href="/">' + ICON.corona + '<span style="flex:1"><span class="cta-eyebrow" style="display:block">HAUSLINE Club</span><b style="display:block;font-weight:600;font-size:15px;margin-top:3px">Sé el primero en descubrir</b><span class="cta-nota" style="display:block;margin:2px 0 0;font-size:12.5px">Nuevas colecciones, lanzamientos y más.</span></span>' + FLECHA + "</a>";
@@ -81,16 +90,18 @@
     C.navInferior("cuenta");
     var nombre = ((s.user.user_metadata && s.user.user_metadata.nombre) || "Cliente").split(/\s+/)[0];
     var pedidos = [];
-    var r = await Promise.all([C.cuenta().catch(function () { return null; }), C.misPedidos().catch(function () { return null; })]);
+    var r = await Promise.all([C.cuenta().catch(function () { return null; }), C.misPedidos().catch(function () { return null; }), C.misEncargos()]);
+    var encargos = r[2];
     if (r[0] && r[0].nombre) nombre = r[0].nombre.split(/\s+/)[0];
     if (r[1]) pedidos = r[1];
-    pintar(nombre, pedidos);
+    pintar(nombre, pedidos, encargos);
     if (r[1]) C.salud.registrar("vio_cuenta", { detalle: { pedidos: pedidos.length } });
     if (!r[1]) C.aviso("No pudimos cargar tus pedidos. Recargá la página.", "error");
     // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
     C.autoActualizar(async function () {
       var nuevos = await C.misPedidos();
-      if (JSON.stringify(nuevos) !== JSON.stringify(pedidos)) { pedidos = nuevos; pintar(nombre, pedidos); }
+      var nuevosEnc = await C.misEncargos();
+      if (JSON.stringify(nuevos) !== JSON.stringify(pedidos) || JSON.stringify(nuevosEnc) !== JSON.stringify(encargos)) { pedidos = nuevos; encargos = nuevosEnc; pintar(nombre, pedidos, encargos); }
     });
     // Sube a la cuenta los favoritos que el cliente marcó en la tienda (en segundo plano).
     C.sincronizarFavoritos(null).catch(function () {});

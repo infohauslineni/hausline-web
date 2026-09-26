@@ -92,6 +92,10 @@ button{ font-family:inherit; }
 .cta-estado{ display:inline-flex; align-items:center; gap:7px; margin-top:7px; font-size:12.5px; font-weight:600; color:var(--verde); }
 .cta-estado i{ width:8px; height:8px; border-radius:999px; background:currentColor; }
 .cta-estado.cancelado{ color:var(--rojo); }
+.cta-estado.espera{ color:#B26A00; }
+.cta-estado.revision{ color:#2458C6; }
+.cta-encargo{ margin-bottom:10px; border-left:3px solid #E9B44C; }
+.cta-alerta-vence{ margin-top:12px; padding:10px 12px; border-radius:var(--radio-sm); background:var(--rojo-bg); border:1px solid #F0C9C3; color:var(--rojo); font-size:13px; font-weight:600; line-height:1.45; }
 .cta-vacio{ text-align:center; padding:34px 20px; }
 .cta-vacio p{ margin:0; }
 .cta-skel{ height:106px; border-radius:var(--radio); background:linear-gradient(90deg,var(--card-2),#fff,var(--card-2)); background-size:200% 100%; animation:cta-skel 1.2s linear infinite; }
