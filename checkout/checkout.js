@@ -487,7 +487,9 @@
     var up=await fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":file.type||"application/octet-stream"},body:file});
     if(!up.ok) throw await errorHttp(up,"upload");
     var reg=await fetch(SB_URL+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})});
-    if(!(reg.ok && await reg.json())) throw new Error("reg");
+    if(!reg.ok) throw await errorHttp(reg,"reg");
+    // false = el pedido ya no está esperando pago (ya confirmado o vencido): la foto sí se subió.
+    if(!(await reg.json())){ var np=new Error("reg: pedido no pendiente"); np.noPendiente=true; np.etapa="reg"; throw np; }
   }
 
   // ============ PASO 2 · PAGO (PRE-ORDEN: el pedido aún NO existe) ============
@@ -673,7 +675,7 @@
         falla("comprobante_error", "No se pudo subir el comprobante: "+((e&&e.message)||"error"), {codigo:codigoRef||null});
         conf.disabled=false; conf.textContent = staged ? "Enviar comprobante y confirmar pago →" : "Ya realicé mi pago →";
         var exU=explicarError(e, e&&e.etapa==="upload" ? "upload" : "reg");
-        var st=$("upStatus"); if(st){ st.hidden=false; st.className="up-status up-error"; st.innerHTML=esc("No se pudo enviar el comprobante. "+exU.texto)+accionError(exU.accion==="volver"||exU.accion==="tienda" ? "whatsapp" : exU.accion, exU.texto, codigoRef); }
+        var st=$("upStatus"); if(st){ st.hidden=false; st.className="up-status up-error"; st.innerHTML=esc((e&&e.noPendiente ? "" : "No se pudo enviar el comprobante. ")+exU.texto)+accionError(exU.accion==="volver"||exU.accion==="tienda" ? "whatsapp" : exU.accion, exU.texto, codigoRef); }
       }
     });
     if(!vencido && c.vence) iniciarContador(c.vence);
@@ -813,6 +815,7 @@
     var srv=(e&&e.servidor)||"", msg=(e&&e.message)||"", st=e&&e.status;
     if(!st && (/failed to fetch|load failed|networkerror|network request failed|abort|timeout|timed out/i.test(msg) || (e&&e.name)==="TypeError"))
       return { texto:"No pudimos conectarnos con el servidor. Revisá tu conexión a internet e intentá de nuevo.", accion:null };
+    if(e && e.noPendiente) return { texto:"Recibimos tu comprobante, pero este pedido ya no está esperando pago (puede que ya lo hayamos confirmado o que haya vencido). Envianos el comprobante por WhatsApp con tu código y lo revisamos.", accion:"whatsapp" };
     if(/demasiados pedidos seguidos/i.test(srv)) return { texto:"Registramos varios pedidos seguidos con este WhatsApp. Para continuar, escribinos por WhatsApp y lo terminamos juntos.", accion:"whatsapp" };
     if(/demasiados pedidos/i.test(srv)) return { texto:"Estamos recibiendo muchos pedidos en este momento. Esperá unos minutos e intentá de nuevo.", accion:null };
     if(/whatsapp inv/i.test(srv)) return { texto:"Tu número de WhatsApp no es válido. Volvé a tus datos y revisalo.", accion:"volver" };
