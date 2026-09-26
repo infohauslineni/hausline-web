@@ -63,7 +63,16 @@ function hlMarcarConto(codigo){
 }
 
 // Registra una visualización al ABRIR el producto. Devuelve el total.
-async function hlRegistrarVista(codigo){
+// Si se pide dos veces seguidas para el mismo producto, comparte la misma llamada
+// (nunca cuenta doble mientras la primera está en camino).
+const hlVistasEnCurso = {};
+function hlRegistrarVista(codigo){
+  if(!hlVistasEnCurso[codigo]){
+    hlVistasEnCurso[codigo] = hlRegistrarVistaUnaVez(codigo).finally(() => { delete hlVistasEnCurso[codigo]; });
+  }
+  return hlVistasEnCurso[codigo];
+}
+async function hlRegistrarVistaUnaVez(codigo){
   if(!HL_VIEWS.activo) return null;
 
   // Si ya contó en 24h, solo devuelve el valor cacheado (no incrementa).
