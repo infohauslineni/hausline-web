@@ -15,7 +15,10 @@
 <script>
 (function(){
   var m = location.pathname.match(/\/p\/([^\/?#]+)/);
-  if (m && m[1]) { location.replace("/?producto=" + encodeURIComponent(m[1])); }
+  if (m && m[1]) { location.replace("/?producto=" + encodeURIComponent(m[1])); return; }
+  // Seguimiento: /pedido/HS000123 (links compartidos o escritos a mano) → /pedido/?c=HS000123
+  var s = location.pathname.match(/^\/pedido\/([A-Za-z0-9]{2,12})\/?$/);
+  if (s) { location.replace("/pedido/?c=" + encodeURIComponent(s[1].toUpperCase())); }
 })();
 </script>
 <style>

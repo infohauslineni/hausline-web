@@ -19,7 +19,7 @@
     main.innerHTML = '<div class="cta-card cta-vacio" style="margin-top:6px"><p style="font-weight:600;font-size:17px">No encontramos el pedido ' + esc(codigo) + " en tu cuenta</p>" +
       '<p class="cta-nota" style="font-size:13.5px;margin-top:8px">Solo ves los pedidos hechos con el mismo correo de tu cuenta (ya verificado) o comprados con tu sesión abierta. Si es tuyo y usaste otro correo, escribinos y lo asociamos.</p>' +
       '<a class="cta-btn auto" style="margin-top:18px" href="' + C.linkWhatsApp("Hola, quiero asociar mi pedido " + codigo + " a mi cuenta de HAUSLINE.") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>' +
-      (/^HS\d{6}$/.test(codigo) ? '<p class="cta-nota" style="font-size:13.5px;margin-top:16px">También podés verlo sin iniciar sesión: <a href="https://hausline-tracking.vercel.app/pedido/' + encodeURIComponent(codigo) + '">seguimiento de ' + esc(codigo) + "</a></p>" : "") + "</div>";
+      (/^HS\d{6}$/.test(codigo) ? '<p class="cta-nota" style="font-size:13.5px;margin-top:16px">También podés verlo sin iniciar sesión: <a href="/pedido/?c=' + encodeURIComponent(codigo) + '">seguimiento de ' + esc(codigo) + "</a></p>" : "") + "</div>";
   }
 
   // Etapa de cada producto (seguimiento por producto del panel), en palabras del cliente.

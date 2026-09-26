@@ -15,7 +15,7 @@
   var KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r"; // llave PÚBLICA (anon)
   var SESION_KEY = "sb-epslwaxjemlysqtubbfu-auth-token";
   var ruta = location.pathname;
-  var origen = /^\/cuenta(\/|$)/.test(ruta) ? "cuenta" : /^\/checkout(\/|$)/.test(ruta) ? "checkout" : "tienda";
+  var origen = /^\/cuenta(\/|$)/.test(ruta) ? "cuenta" : /^\/checkout(\/|$)/.test(ruta) ? "checkout" : /^\/pedido(\/|$)/.test(ruta) ? "seguimiento" : "tienda";
   var MAX_POR_PAGINA = 25;
   var enviados = {};
   var total = 0;
