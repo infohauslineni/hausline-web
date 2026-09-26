@@ -782,7 +782,8 @@ function renderTendencias(){
 
   // Sin Supabase configurado, o sin vistas aún: la sección se oculta.
   const top = (typeof hlTopVistos === "function") ? hlTopVistos(productos, 12) : [];
-  if(!top.length){ sec.hidden = true; return; }
+  // Recién activado hay pocas vistas: con menos de 4 productos la fila se vería vacía.
+  if(top.length < 4){ sec.hidden = true; return; }
   sec.hidden = false;
   cont.innerHTML = top.map(crearCard).join("");
 }

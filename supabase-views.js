@@ -21,7 +21,11 @@ function hlInitSupabase(){
   s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js";
   s.onload = () => {
     try{
-      HL_VIEWS.cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // config.js trae la URL con "/rest/v1/" (la usan los fetch directos); supabase-js
+      // necesita la base sola o arma /rest/v1/rest/v1/... y todo da 404.
+      HL_VIEWS.cliente = window.supabase.createClient(SUPABASE_URL.replace(/\/rest\/v1\/?$/, ""), SUPABASE_ANON_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: "hausline-vistas" },
+      });
       HL_VIEWS.activo = true;
       hlCargarTodasLasVistas().then(() => {
         document.dispatchEvent(new CustomEvent("vistas:listas"));
