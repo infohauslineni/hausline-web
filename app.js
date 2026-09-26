@@ -1565,7 +1565,15 @@ function mostrarVistas(codigo){
   const cont = $("#modalVistas");
   if(!cont) return;
   cont.textContent = "";
-  if(typeof hlRegistrarVista !== "function" || !HL_VIEWS.activo){ return; }
+  if(typeof hlRegistrarVista !== "function") return;
+  // Abierto por link directo (/p/CODIGO): el producto se abre antes de que cargue el
+  // contador. Esperamos a que esté listo y contamos si sigue abierto ese producto.
+  if(!HL_VIEWS.activo){
+    document.addEventListener("vistas:listas", () => {
+      if(productoActual && productoActual.codigo === codigo) mostrarVistas(codigo);
+    }, { once: true });
+    return;
+  }
   hlRegistrarVista(codigo).then(total => {
     if(total != null && productoActual && productoActual.codigo === codigo){
       cont.innerHTML = `<span class="ojo">👁</span> ${Number(total).toLocaleString("en-US")} visualizaciones`;
