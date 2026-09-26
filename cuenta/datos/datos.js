@@ -60,7 +60,7 @@
       var f = input.files && input.files[0];
       input.value = "";
       if (!f) return;
-      if (!/^image\//.test(f.type)) { C.aviso("Elegí una imagen (JPG, PNG o WebP).", "error"); return; }
+      if (!/^image\//.test(f.type)) { C.aviso("Elegí una imagen (JPG, PNG o WebP).", "error", true); return; }
       editorFoto(URL.createObjectURL(f), false);
     });
     main.querySelector("#fNombre").addEventListener("click", function () { editarTexto("Nombre completo", "Nombre y apellido", cuenta.nombre || "", "text", "name", guardarNombre); });
@@ -137,7 +137,7 @@
     h.panel.querySelector("#fBorrar").addEventListener("submit", async function (e) {
       e.preventDefault();
       var pw = h.panel.querySelector("#pwBorrar").value;
-      if (!pw) return C.aviso("Escribí tu contraseña.", "error");
+      if (!pw) return C.aviso("Escribí tu contraseña.", "error", true);
       var b = h.panel.querySelector("#btnBorrar"); b.disabled = true; b.textContent = "Eliminando…";
       try {
         await C.eliminarCuenta(pw);
@@ -158,17 +158,17 @@
       catch (err) { C.aviso(C.mensajeError(err), "error"); btn.disabled = false; btn.textContent = "Guardar"; }
     });
   }
-  async function guardarNombre(v) { if (v.length < 2) throw new Error("Escribí tu nombre completo."); await C.actualizarCuenta({ nombre: v }); C.aviso("Guardado."); }
-  async function guardarTel(v) { if (!/^[0-9+ ()-]{7,25}$/.test(v)) throw new Error("Revisá el número (ej. +505 8888 8888)."); await C.actualizarCuenta({ telefono: v }); C.aviso("Guardado."); }
+  async function guardarNombre(v) { if (v.length < 2) throw C.errorCliente("Escribí tu nombre completo."); await C.actualizarCuenta({ nombre: v }); C.aviso("Guardado."); }
+  async function guardarTel(v) { if (!/^[0-9+ ()-]{7,25}$/.test(v)) throw C.errorCliente("Revisá el número (ej. +505 8888 8888)."); await C.actualizarCuenta({ telefono: v }); C.aviso("Guardado."); }
   async function guardarCorreo(v) {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) throw new Error("Correo inválido.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) throw C.errorCliente("Correo inválido.");
     if (v.toLowerCase() === String(sesion.user.email).toLowerCase()) return;
     var r = await C.sb.auth.updateUser({ email: v.toLowerCase() }, { emailRedirectTo: C.SITIO + "/cuenta/datos/" });
     if (r.error) throw r.error;
     C.aviso("Te enviamos un enlace al correo nuevo para confirmar el cambio.");
   }
   async function guardarClave(v) {
-    if (v.length < 8) throw new Error("La contraseña debe tener al menos 8 caracteres.");
+    if (v.length < 8) throw C.errorCliente("La contraseña debe tener al menos 8 caracteres.");
     var r = await C.sb.auth.updateUser({ password: v });
     if (r.error) throw r.error;
     C.aviso("Contraseña actualizada.");

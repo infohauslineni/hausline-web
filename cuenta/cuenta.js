@@ -88,13 +88,15 @@
   var ultimoMostrado = "";
   function mensajeError(error) {
     var m = (error && (error.message || error.error_description)) || "";
-    if (error && !error.__registrado && !ERROR_DEL_CLIENTE.test(m)) {
+    if (error && !error.__registrado && !error.validacion && !ERROR_DEL_CLIENTE.test(m)) {
       try { error.__registrado = true; } catch (e) {}
       S.error("error_visto", m || "Error sin mensaje", error.code ? { codigo: String(error.code) } : null);
     }
     ultimoMostrado = textoError(m);
     return ultimoMostrado;
   }
+  // Error de validación (lo causó el cliente, no el sistema): mensajeError no lo anota.
+  function errorCliente(m) { var e = new Error(m); e.validacion = true; return e; }
   function textoError(m) {
     if (/invalid login|invalid credentials/i.test(m)) return "Correo o contraseña incorrectos.";
     if (/email not confirmed/i.test(m)) return "Primero confirmá tu correo: te enviamos un enlace al registrarte.";
@@ -150,9 +152,11 @@
   }
 
   /* ---------------- Aviso breve (toast) ---------------- */
-  function aviso(texto, tipo) {
+  // sinRegistro = true para errores del CLIENTE (campo vacío, formato de foto, permiso de
+  // ubicación): se muestran en rojo pero no se anotan como falla del sistema en el panel.
+  function aviso(texto, tipo, sinRegistro) {
     // Errores que ve el cliente y que no vinieron de mensajeError (esos ya se anotaron allí).
-    if (tipo === "error" && texto !== ultimoMostrado) S.error("aviso_error", texto);
+    if (tipo === "error" && !sinRegistro && texto !== ultimoMostrado) S.error("aviso_error", texto);
     var t = document.createElement("div");
     t.className = "cta-toast" + (tipo === "error" ? " es-error" : "");
     t.setAttribute("role", "status");
@@ -178,8 +182,8 @@
   }
   // Recibe la foto YA recortada (Blob JPEG del editor de encuadre).
   async function subirAvatar(file) {
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Usá una foto JPG, PNG o WebP.");
-    if (file.size > 3 * 1024 * 1024) throw new Error("La foto pesa más de 3 MB.");
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw errorCliente("Usá una foto JPG, PNG o WebP.");
+    if (file.size > 3 * 1024 * 1024) throw errorCliente("La foto pesa más de 3 MB.");
     var anterior = null;
     try { var c = await cuenta(); anterior = c && c.avatar_path; } catch (e) {}
     var id = await uid();
@@ -481,7 +485,7 @@
     autoActualizar: autoActualizar, visor: visor,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
-    salud: S, mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,
+    salud: S, errorCliente: errorCliente, mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,
     cuenta: cuenta, misPedidos: misPedidos, pedido: pedido, urlsFotos: urlsFotos, aviso: aviso,
     actualizarCuenta: actualizarCuenta, urlAvatar: urlAvatar, subirAvatar: subirAvatar, quitarAvatar: quitarAvatar, eliminarCuenta: eliminarCuenta,
     direcciones: direcciones, guardarDireccion: guardarDireccion, eliminarDireccion: eliminarDireccion, hacerPredeterminada: hacerPredeterminada,

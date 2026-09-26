@@ -46,14 +46,14 @@
     var $ = function (s) { return main.querySelector(s); };
     var m = C.mapa($("#mapa"), { lat: f.lat, lng: f.lng, interactivo: true, onCambio: function (p) { f.lat = p.lat; f.lng = p.lng; $("#ayudaMapa").textContent = "Arrastrá el mapa para ajustar el pin."; } });
     $("#gps").addEventListener("click", function () {
-      if (!navigator.geolocation) return C.aviso("Tu navegador no permite usar la ubicación.", "error");
+      if (!navigator.geolocation) return C.aviso("Tu navegador no permite usar la ubicación.", "error", true);
       $("#gps").textContent = "Buscando…";
       navigator.geolocation.getCurrentPosition(function (pos) {
         $("#gps").textContent = "Usar mi ubicación";
         m.poner(pos.coords.latitude, pos.coords.longitude, 17);
       }, function () {
         $("#gps").textContent = "Usar mi ubicación";
-        C.aviso("No pudimos obtener tu ubicación. Revisá el permiso o mové el mapa a mano.", "error");
+        C.aviso("No pudimos obtener tu ubicación. Revisá el permiso o mové el mapa a mano.", "error", true);
       }, { enableHighAccuracy: true, timeout: 12000 });
     });
     main.querySelectorAll("[data-rapido]").forEach(function (b) {
@@ -89,7 +89,7 @@
     leer();
     var err = !f.nombre ? "Poné un nombre (ej. Casa, Trabajo)." : f.direccion.length < 3 ? "Escribí la dirección completa." :
       esNica() && !f.departamento ? "Elegí el departamento." : !f.ciudad ? "Escribí la ciudad." : null;
-    if (err) return C.aviso(err, "error");
+    if (err) return C.aviso(err, "error", true);
     var btn = main.querySelector("#guardar"); btn.disabled = true; btn.textContent = "Guardando…";
     try {
       await C.guardarDireccion({

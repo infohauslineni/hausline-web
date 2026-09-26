@@ -80,7 +80,9 @@
 
   // Carga los banners de la base; si no hay o falla, usa los de config.js. Luego muestra el aviso.
   function cargarYMostrar(){
-    if(visto()) return;
+    // Si llegó para BUSCAR (botón "Buscar" de Mi cuenta → /#buscadorMovil), no le tapamos el
+    // buscador con el aviso. No se marca como visto: le sale en la próxima página de la visita.
+    if(visto() || /buscador/i.test(location.hash)) return;
     function listo(lista){
       BANNERS = (Array.isArray(lista) && lista.length ? lista : CONFIG_BANNERS).filter(function(b){ return b && b.imagen; });
       if(BANNERS.length) setTimeout(mostrar, 1000); // aparece un poco después de cargar
