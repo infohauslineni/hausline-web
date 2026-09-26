@@ -47,6 +47,7 @@
     });
     try {
       pedidos = await C.misPedidos(); pintarLista();
+      C.salud.registrar("vio_mis_pedidos", { detalle: { pedidos: pedidos.length } });
       // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
       C.autoActualizar(async function () {
         var nuevos = await C.misPedidos();

@@ -14,8 +14,11 @@
   var SB_KEY = "sb_publishable_bASR2lpLTORx-1pWbwvgiQ_fsjAuX2r"; // llave PÚBLICA (anon)
   var SITIO = location.origin && /^https?:/.test(location.origin) ? location.origin : "https://hauslineshopni.es";
 
+  // Aviso silencioso al panel ("Salud de clientes") de lo que le falla al cliente.
+  var S = window.HauslineSalud || { registrar: function () {}, error: function () {} };
   if (!window.supabase || !window.supabase.createClient) {
     document.documentElement.classList.add("cta-sin-sb");
+    S.error("supabase_no_cargo", "No cargó el sistema de cuentas (supabase-js)");
   }
   var sb = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -80,8 +83,19 @@
   // Solo rutas internas de /cuenta (evita redirecciones abiertas a otros sitios).
   function destinoSeguro(v, porDefecto) { return v && /^\/cuenta\//.test(v) && !/^\/\//.test(v) ? v : porDefecto; }
 
+  // Errores que son del cliente (no del sistema): no se anotan como falla.
+  var ERROR_DEL_CLIENTE = /invalid login|invalid credentials|email not confirmed|already registered|already exists|user already|characters|weak|rate limit|too many|security purposes/i;
+  var ultimoMostrado = "";
   function mensajeError(error) {
     var m = (error && (error.message || error.error_description)) || "";
+    if (error && !error.__registrado && !ERROR_DEL_CLIENTE.test(m)) {
+      try { error.__registrado = true; } catch (e) {}
+      S.error("error_visto", m || "Error sin mensaje", error.code ? { codigo: String(error.code) } : null);
+    }
+    ultimoMostrado = textoError(m);
+    return ultimoMostrado;
+  }
+  function textoError(m) {
     if (/invalid login|invalid credentials/i.test(m)) return "Correo o contraseña incorrectos.";
     if (/email not confirmed/i.test(m)) return "Primero confirmá tu correo: te enviamos un enlace al registrarte.";
     if (/already registered|already exists|user already/i.test(m)) return "Ya existe una cuenta con ese correo. Ingresá o recuperá tu contraseña.";
@@ -119,7 +133,11 @@
   /* ---------------- Datos (RPCs con RLS) ---------------- */
   async function rpc(nombre, args) {
     var r = await sb.rpc(nombre, args || {});
-    if (r.error) throw r.error;
+    if (r.error) {
+      S.error("rpc_error", (r.error.message || "Error") + " · " + nombre, { funcion: nombre, codigo: r.error.code || null });
+      try { r.error.__registrado = true; } catch (e) {}
+      throw r.error;
+    }
     return r.data;
   }
   async function cuenta() { return rpc("mi_cuenta_cliente"); }
@@ -133,6 +151,8 @@
 
   /* ---------------- Aviso breve (toast) ---------------- */
   function aviso(texto, tipo) {
+    // Errores que ve el cliente y que no vinieron de mensajeError (esos ya se anotaron allí).
+    if (tipo === "error" && texto !== ultimoMostrado) S.error("aviso_error", texto);
     var t = document.createElement("div");
     t.className = "cta-toast" + (tipo === "error" ? " es-error" : "");
     t.setAttribute("role", "status");
@@ -461,7 +481,7 @@
     autoActualizar: autoActualizar, visor: visor,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
-    mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,
+    salud: S, mensajeError: mensajeError, sesion: sesion, exigirSesion: exigirSesion, salir: salir,
     cuenta: cuenta, misPedidos: misPedidos, pedido: pedido, urlsFotos: urlsFotos, aviso: aviso,
     actualizarCuenta: actualizarCuenta, urlAvatar: urlAvatar, subirAvatar: subirAvatar, quitarAvatar: quitarAvatar, eliminarCuenta: eliminarCuenta,
     direcciones: direcciones, guardarDireccion: guardarDireccion, eliminarDireccion: eliminarDireccion, hacerPredeterminada: hacerPredeterminada,

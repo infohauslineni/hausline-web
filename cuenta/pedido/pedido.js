@@ -404,10 +404,11 @@
     var s = await C.exigirSesion();
     if (!s) return;
     C.navInferior("cuenta");
-    if (!/^HS\d{6}$/.test(codigo)) { noEncontrado(); return; }
+    if (!/^HS\d{6}$/.test(codigo)) { C.salud.registrar("pedido_no_encontrado", { mensaje: codigo || "(sin código)" }); noEncontrado(); return; }
     try {
       var p = await C.pedido(codigo);
-      if (!p) { noEncontrado(); return; }
+      if (!p) { C.salud.registrar("pedido_no_encontrado", { mensaje: codigo }); noEncontrado(); return; }
+      C.salud.registrar("vio_pedido", { mensaje: codigo });
       estado.p = p;
       var extra = await Promise.all([
         C.urlsFotos((p.fotos || []).map(function (f) { return f.storage_path; })).catch(function () { return []; }),

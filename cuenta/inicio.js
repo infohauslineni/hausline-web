@@ -85,6 +85,7 @@
     if (r[0] && r[0].nombre) nombre = r[0].nombre.split(/\s+/)[0];
     if (r[1]) pedidos = r[1];
     pintar(nombre, pedidos);
+    if (r[1]) C.salud.registrar("vio_cuenta", { detalle: { pedidos: pedidos.length } });
     if (!r[1]) C.aviso("No pudimos cargar tus pedidos. Recargá la página.", "error");
     // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
     C.autoActualizar(async function () {

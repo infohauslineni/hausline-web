@@ -467,13 +467,13 @@
       var envioFlag = ct.envio || (pend.items.some(function(it){return it.envio==="rapido";})?"rapido":"estandar");
       var payload = pend.items.map(function(it){ var c=Number(it.cantidad)||1; return { producto:it.nombre, producto_codigo:it.codigo||null, marca:it.marca||null, talla:it.talla||null, color:it.color||null, cantidad:c, precio_unitario:it.precioUnitario||0, recargo:(it.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0), envio:it.envio==="rapido"?"rapido":"estandar", imagen:it.imagen||null }; });
       var r1=await (typeof hauslineFetchSolicitud==="function"?hauslineFetchSolicitud:fetch)(SB_URL+"rpc/crear_solicitud_carrito",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:(typeof hauslineAuthHeader==="function"?hauslineAuthHeader():"Bearer "+SB_KEY)},body:JSON.stringify({p_nombre:ct.nombre,p_whatsapp:ct.whatsapp,p_correo:ct.correo,p_ciudad:ct.ciudad,p_direccion:ct.direccion,p_envio:envioFlag,p_pago:ct.pago,p_cupon_codigo:ct.cupon?ct.cupon.codigo:null,p_items:payload})});
-      if(!r1.ok) throw new Error("crear"); codigo=String(await r1.json());
+      if(!r1.ok) throw await errorHttp(r1,"crear"); codigo=String(await r1.json());
       try{ localStorage.removeItem("hausline_carrito"); }catch(_){}
     } else {
       var p=pend.producto, c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1);
       var rec=(pend.opts.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c2:0);
       var r2=await (typeof hauslineFetchSolicitud==="function"?hauslineFetchSolicitud:fetch)(SB_URL+"rpc/crear_solicitud_publica",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:(typeof hauslineAuthHeader==="function"?hauslineAuthHeader():"Bearer "+SB_KEY)},body:JSON.stringify({p_nombre:ct.nombre,p_whatsapp:ct.whatsapp,p_correo:ct.correo,p_ciudad:ct.ciudad,p_direccion:ct.direccion,p_producto:p.nombre,p_producto_codigo:p.codigo||null,p_marca:p.marca||null,p_talla:pend.opts.talla||null,p_color:pend.opts.color||null,p_cantidad:c2,p_precio_unitario:p.precio,p_envio:pend.opts.envio==="rapido"?"rapido":"estandar",p_recargo:rec,p_pago:ct.pago,p_imagen:p.imagen||null,p_cupon_codigo:ct.cupon?ct.cupon.codigo:null})});
-      if(!r2.ok) throw new Error("crear"); codigo=String(await r2.json());
+      if(!r2.ok) throw await errorHttp(r2,"crear"); codigo=String(await r2.json());
     }
     codigoCreado = codigo;
     suscribir(ct.correo, ct.nombre, ct.optin); guardarGcr(codigo, ct.correo, ct.envio||"estandar"); recordarPedido(codigo, pend.tipo==="carrito"?"Tu carrito":pend.producto.nombre);
@@ -485,7 +485,7 @@
     var ext=String(file.name||"").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || (file.type.indexOf("pdf")>=0?"pdf":"jpg");
     var ruta=String(codigo).replace(/[^A-Za-z0-9-]/g,"")+"/"+Date.now()+"."+ext;
     var up=await fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":file.type||"application/octet-stream"},body:file});
-    if(!up.ok) throw new Error("upload");
+    if(!up.ok) throw await errorHttp(up,"upload");
     var reg=await fetch(SB_URL+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})});
     if(!(reg.ok && await reg.json())) throw new Error("reg");
   }
@@ -540,7 +540,7 @@
         try{ sessionStorage.removeItem("hausline_encargo"); }catch(_){}
         var esperar=1600-(Date.now()-t0); if(esperar>0) await new Promise(function(r){ setTimeout(r,esperar); });
         location.href="/checkout/?c="+encodeURIComponent(cod)+"&paso=confirmacion";
-      }catch(e){ var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; } showErr("No se pudo confirmar tu pedido. Revisá tu internet e intentá de nuevo."); }
+      }catch(e){ falla("checkout_error", "No se pudo confirmar el pedido: "+((e&&e.message)||"error"), {paso:"pago", con_comprobante:!!file}); var ov=$("camOv"); if(ov){ try{ov.remove();}catch(_){} document.body.style.overflow=""; } showErr("No se pudo confirmar tu pedido. Revisá tu internet e intentá de nuevo."); }
     }
     if(conf) conf.addEventListener("click", async function(){
       if(comp.file){ finalizar(comp.file); return; }
@@ -652,6 +652,7 @@
         try{ await fetch(SB_URL+"rpc/reportar_pago_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:codigoRef})}); }catch(_){}
         location.href="/checkout/?c="+encodeURIComponent(codigoRef)+"&paso=confirmacion";
       }catch(e){
+        falla("comprobante_error", "No se pudo subir el comprobante: "+((e&&e.message)||"error"), {codigo:codigoRef||null});
         conf.disabled=false; conf.textContent = staged ? "Enviar comprobante y confirmar pago →" : "Ya realicé mi pago →";
         var st=$("upStatus"); if(st){ st.hidden=false; st.className="up-status up-error"; st.textContent="No se pudo subir el comprobante. Revisá tu internet e intentá de nuevo."; }
       }
@@ -776,6 +777,9 @@
   }
 
   // ---- Estado / error ----
+  // Aviso silencioso al panel ("Salud de clientes"): así nos enteramos si el checkout le falla a alguien.
+  function falla(nombre, mensaje, detalle){ try{ if(window.HauslineSalud) window.HauslineSalud.error(nombre, mensaje, detalle||null); }catch(_){} }
+  async function errorHttp(r, etapa){ var t=""; try{ t=(await r.text()).slice(0,300); }catch(_){} return new Error(etapa+" HTTP "+r.status+(t?": "+t:"")); }
   function estado(titulo, detalle){
     $("prog").innerHTML="";
     $("ck").innerHTML='<div class="state"><div style="color:var(--ink-3);margin-bottom:12px">'+ICON.alert+'</div>'
@@ -805,14 +809,14 @@
       if(!items.length){ if(!silencioso) estado("No encontramos ese pedido","Verificá el código (ej. SOL-1234). Si acabás de crearlo, esperá unos segundos y recargá."); return; }
       if(silencioso && ultimoEstado!==null && calcular(items).estado===ultimoEstado) return;
       renderPago(items);
-    }catch(ex){ if(!silencioso) estado("No pudimos cargar tu pedido","Revisá tu conexión e intentá de nuevo."); }
+    }catch(ex){ if(!silencioso){ falla("checkout_error", "No se pudo cargar el pedido: "+((ex&&ex.message)||"error"), {paso:"confirmacion"}); estado("No pudimos cargar tu pedido","Revisá tu conexión e intentá de nuevo."); } }
   }
   function iniciarPolling(){ clearInterval(pollInt); pollInt=setInterval(function(){ if(document.hidden) return; cargarPago(true); },20000); }
 
   // ---- Router ----
   var PASO=new URLSearchParams(location.search).get("paso");
   CODIGOS=leerCodigos();
-  if(!SB_URL||!SB_KEY){ estado("Configuración incompleta","No se pudo conectar con el servidor de pagos. Escribinos por WhatsApp."); }
+  if(!SB_URL||!SB_KEY){ falla("checkout_error", "Configuración incompleta (sin SB_URL/SB_KEY)"); estado("Configuración incompleta","No se pudo conectar con el servidor de pagos. Escribinos por WhatsApp."); }
   else if(PASO==="info" && !CODIGOS.length){ renderInfo(); }
   else if(PASO==="confirmacion" && CODIGOS.length){ renderConfirmacion(CODIGOS[0]); }
   else if(PASO==="pago" && !CODIGOS.length){ renderPagoPreorden(); }
