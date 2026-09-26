@@ -254,7 +254,8 @@
         (s.respuesta ? '<p class="cta-sub" style="font-size:14px;margin-top:6px">“' + esc(s.respuesta) + "”</p>" : "") + datos +
         '<p style="margin:16px 0 8px;font-weight:600;font-size:14px">¿Qué querés hacer?</p>' +
         '<div class="cta-botones"><button type="button" class="cta-btn chico" data-rb="seguir">Seguir con mi pedido</button><button type="button" class="cta-btn linea chico" data-rb="perder">Cancelar sin reembolso</button></div>' +
-        '<p class="cta-nota" style="font-size:12.5px;margin-top:10px">Si cancelás sin reembolso, perdés lo pagado' + (Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "") + ".</p>");
+        '<p class="cta-nota" style="font-size:12.5px;margin-top:10px">Si cancelás sin reembolso, perdés lo pagado' + (Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "") + ".</p>" +
+        (s.plazo_decision_at ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tenés hasta el <b>' + esc(C.fecha(s.plazo_decision_at, true)) + "</b> para elegir. Si no elegís, tu pedido sigue su curso.</p>" : ""));
     }
     if (s && s.estado === "aprobada") {
       return tarjeta("Cancelación aprobada",
@@ -263,8 +264,9 @@
     if (s && s.estado === "cancelada_sin_reembolso") {
       return tarjeta("Elegiste cancelar sin reembolso", '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Registramos tu decisión. HAUSLINE cancelará tu pedido en breve.</p>');
     }
-    if (rb.etapa === "no_permitida" || !(rb.motivos || []).length || Number(rb.intentos || 0) >= 3) return "";
-    return '<section class="cta-sec" style="text-align:center"><button type="button" class="cta-link" data-rb="abrir" style="font-size:13.5px">¿Necesitás cancelar tu pedido?</button>' +
+    var vencio = s && s.estado === "retirada" && s.vencida ? '<div class="cta-nota-ok" style="margin:0 0 12px;text-align:left">✓ <span>Venció el plazo de 48 horas para elegir: tu pedido sigue su curso.</span></div>' : "";
+    if (rb.etapa === "no_permitida" || !(rb.motivos || []).length || Number(rb.intentos || 0) >= 3) return vencio ? '<section class="cta-sec">' + vencio + "</section>" : "";
+    return '<section class="cta-sec" style="text-align:center">' + vencio + '<button type="button" class="cta-link" data-rb="abrir" style="font-size:13.5px">¿Necesitás cancelar tu pedido?</button>' +
       (rb.etapa === "calidad" && rb.qc_vence ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tenés hasta el ' + esc(C.fecha(rb.qc_vence, true)) + " para reportar un problema con las fotos de control de calidad.</p>" : "") + "</section>";
   }
 
@@ -276,7 +278,7 @@
       h.panel.querySelector("#rbNo").addEventListener("click", h.cerrar);
       h.panel.querySelector("#rbSi").addEventListener("click", async function () {
         this.disabled = true;
-        try { await C.decidirReembolso(estado.p.codigo, "cancelar_sin_reembolso"); h.cerrar(); C.aviso("Registramos tu decisión."); await recargarReembolso(); }
+        try { var r = await C.decidirReembolso(estado.p.codigo, "cancelar_sin_reembolso"); h.cerrar(); C.aviso(r && r.vencido ? "Venció el plazo para elegir: tu pedido sigue su curso." : "Registramos tu decisión."); await recargarReembolso(); }
         catch (err) { this.disabled = false; C.aviso(C.mensajeError(err), "error"); }
       });
       return;

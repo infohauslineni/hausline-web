@@ -248,7 +248,21 @@
     } catch (e) {}
     return r;
   }
-  async function decidirReembolso(codigo, decision) { return rpc("decidir_reembolso_pedido", { p_codigo: codigo, p_decision: decision }); }
+  async function decidirReembolso(codigo, decision) {
+    var r = await rpc("decidir_reembolso_pedido", { p_codigo: codigo, p_decision: decision });
+    // Eligió cancelar SIN reembolso: aviso por correo al admin para que cancele el pedido (best-effort).
+    try {
+      var s = await sesion();
+      if (decision === "cancelar_sin_reembolso" && r && r.id && !r.vencido && s) {
+        fetch("https://hausline-tracking.vercel.app/api/notificar-estado", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + s.access_token },
+          body: JSON.stringify({ reembolso: "decision", id: r.id }),
+        }).catch(function () {});
+      }
+    } catch (e) {}
+    return r;
+  }
 
   function mensajeEnvio(codigo, d, costo) {
     var mapa = d.lat != null && d.lng != null ? "\nUbicación: https://maps.google.com/?q=" + Number(d.lat).toFixed(6) + "," + Number(d.lng).toFixed(6) : "";
