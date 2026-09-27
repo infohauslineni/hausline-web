@@ -803,7 +803,7 @@ async function renderMasVendidos(){
 
   const items = data
     .map(r => ({ p: buscarProducto(r.codigo), total: r.total }))
-    .filter(x => x.p);
+    .filter(x => x.p && !x.p.ventaLibre);
 
   sec.hidden = false;
 

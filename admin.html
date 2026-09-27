@@ -205,6 +205,25 @@
   .pill.original{background:var(--panel2);color:var(--texto2)}
   .pill.oferta{background:rgba(242,114,106,.16);color:var(--rojo)}
   .pill.oculto{background:var(--panel2);color:var(--texto3)}
+  .pill.vlibre{background:rgba(242,190,60,.16);color:#f2c14e}
+
+  /* Venta libre */
+  .vl-switch{border-color:rgba(242,190,60,.35)}
+  .vl-switch.on{background:rgba(242,190,60,.07)}
+  .vl-switch .toggle-row{padding:0;border:0}
+  .vl-listo{border-color:rgba(182,241,60,.35);background:rgba(182,241,60,.05);margin-bottom:18px}
+  .vl-listo h2{margin:0 0 4px}
+  .vl-link{display:flex;gap:8px;margin-top:12px}
+  .vl-link input{font-family:ui-monospace,Consolas,monospace;font-size:13px}
+  .vl-link .btn,.vl-acc .btn{width:auto;white-space:nowrap}
+  .vl-item{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--linea);align-items:center}
+  .vl-item:last-child{border-bottom:0}
+  .vl-item img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--foto-bg)}
+  .vl-item b{display:block;font-size:14px}
+  .vl-item small{color:var(--texto2);font-size:12px}
+  .vl-acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .vl-acc .btn{padding:8px 12px;font-size:12px}
+  @media(max-width:560px){ .vl-link{flex-wrap:wrap} .vl-link .btn{flex:1} }
   .badges-movil{display:none}
   .movil-meta{display:none}
   .paginacion{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px;font-size:13px;color:var(--texto2)}
@@ -275,6 +294,7 @@
           <button class="nav-item activa" id="tabInicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg> Inicio</button>
           <button class="nav-item" id="tabLista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg> Productos</button>
           <button class="nav-item" id="tabForm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg> Subir producto nuevo</button>
+          <button class="nav-item" id="tabVentaLibre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg> Venta libre</button>
           <button class="nav-item" id="tabBanners"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="m3 14 5-4 4 3 3-2 6 5"/><circle cx="8.5" cy="8.5" r="1.5"/></svg> Banners</button>
           <button class="nav-item" id="tabCupones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"/><path d="M10 6v12"/></svg> Cupones</button>
           <button class="nav-item" id="tabPromos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 9h.01M15 15h.01M8 16 16 8"/><circle cx="12" cy="12" r="9"/></svg> Promociones</button>
@@ -338,6 +358,19 @@
           <div class="paginacion" id="paginacion"></div>
         </div>
 
+        <!-- ---------- VENTA LIBRE ---------- -->
+        <div id="viewVentaLibre" class="hidden">
+          <div class="page-head">
+            <div><h1>Venta libre</h1><p class="page-sub">Un cliente pide algo que no está en la tienda: subís la foto, le mandás el link y lo encarga igual que en la web. No sale en la tienda hasta que vos lo publiqués.</p></div>
+            <div class="head-actions"><button id="btnNuevaVL" class="btn">＋ Crear venta libre</button></div>
+          </div>
+          <div id="vlListo" class="card vl-listo hidden"></div>
+          <div class="card">
+            <h2>Tus ventas libres</h2>
+            <div id="vlLista"><div class="cargando">Cargando…</div></div>
+          </div>
+        </div>
+
         <!-- ---------- SUBIR / EDITAR PRODUCTO ---------- -->
         <div id="viewForm" class="hidden">
           <div class="page-head">
@@ -351,6 +384,12 @@
           <div class="form-2col">
             <!-- Columna izquierda -->
             <div class="col">
+              <div class="card vl-switch" id="cardVentaLibre">
+                <div class="toggle-row">
+                  <div><b>🔗 Venta libre (solo por link)</b><small>Para un cliente puntual: NO sale en la tienda, la búsqueda ni “Nuevo”. Al guardar te da el link para mandárselo; lo encarga igual que en la web.</small></div>
+                  <label class="switch"><input id="fVentaLibre" type="checkbox"><span></span></label>
+                </div>
+              </div>
               <div class="card">
                 <h2 class="card-h">Información básica</h2>
                 <div class="fila">
@@ -574,6 +613,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20260927"></script>
+<script src="admin.js?v=20260927vl"></script>
 </body>
 </html>

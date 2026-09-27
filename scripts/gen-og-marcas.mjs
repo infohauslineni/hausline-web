@@ -46,6 +46,7 @@ try {
       for (const fila of filas) {
         const datos = fila && fila.datos ? fila.datos : null
         if (!datos || !datos.codigo) continue
+        if (datos.ventaLibre === true) continue // venta libre: no sale en las páginas de marca
         const existente = buscarProducto(datos.codigo)
         if (existente) {
           const i = productos.indexOf(existente)

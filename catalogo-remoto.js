@@ -42,6 +42,12 @@ async function cargarProductosDelPanel(){
       return;
     }
     if(!datos || !datos.codigo) return;
+    // Venta libre: se guarda aparte (solo se abre por su link, no se lista en la tienda).
+    if(datos.ventaLibre === true){
+      if(existente){ const i = productos.indexOf(existente); if(i >= 0) productos.splice(i, 1); }
+      if(typeof productosPrivados !== "undefined"){ productosPrivados.push(normalizarProducto(datos, productos.length)); agregados++; }
+      return;
+    }
     if(existente){
       // Ya existe en productos.js: es una EDICIÓN hecha desde el panel.
       // Se reemplaza conservando su posición original (orden) en el catálogo.

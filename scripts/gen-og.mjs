@@ -233,6 +233,8 @@ const paginaProducto = (producto) => {
   html = html.replace(/<h1 class="solo-lectores">[\s\S]*?<\/h1>/, seoBloque)
   // JSON-LD Product justo antes de cerrar el <head>.
   html = html.replace(/<\/head>/, `<script type="application/ld+json">${jsonLd}</script>\n</head>`)
+  // Venta libre: la página existe (preview con foto en WhatsApp) pero Google no la indexa.
+  if (producto.ventaLibre === true) html = html.replace(/<meta name="robots"[^>]*>/, '<meta name="robots" content="noindex,nofollow">')
   return html
 }
 
@@ -250,11 +252,11 @@ for (const producto of productos) {
   fs.mkdirSync(carpeta, { recursive: true })
   fs.writeFileSync(path.join(carpeta, 'index.html'), paginaProducto(producto), 'utf8')
   if (!imagenParaPreview(producto.imagen)) respaldoLogo++
-  codigosGenerados.push(String(producto.codigo))
+  if (producto.ventaLibre !== true) codigosGenerados.push(String(producto.codigo)) // sitemap: sin ventas libres
   generadas++
 }
 
-console.log(`✓ ${generadas} páginas generadas en /p/`)
+console.log(`✓ ${generadas} páginas generadas en /p/ (${generadas - codigosGenerados.length} de venta libre, fuera del sitemap)`)
 if (respaldoLogo) console.log(`⚠ ${respaldoLogo} producto(s) con foto en webp/avif/jfif usan el logo como respaldo (WhatsApp no previsualiza esos formatos).`)
 
 // --- Sitemap: apunta a las páginas REALES /p/CODIGO (no a ?producto=) ---

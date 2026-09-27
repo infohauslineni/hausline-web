@@ -248,6 +248,11 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("btnGuardar").addEventListener("click",async()=>{
     const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
     if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
+    const ventaLibre=$("fVentaLibre").checked;
+    // Una venta libre con el código de un producto de la tienda lo sacaría del catálogo.
+    if(ventaLibre&&itemsMerged.some(i=>String(i.codigo||"").toUpperCase()===codigo&&i.origen!=="nuevo")){
+      aviso($("avisoForm"),"Ese código ya es un producto de la tienda. Usá otro para la venta libre (ej: "+siguienteCodigoVL()+").","err"); return; }
+    if(!fotos.length&&ventaLibre){ aviso($("avisoForm"),"Subí al menos una foto: es lo que ve el cliente en el link.","err"); return; }
     // Producto NUEVO (el código no estaba en el catálogo): al guardar se abre la imagen para Instagram.
     const esNuevo=!itemsMerged.some(i=>String(i.codigo||"").toUpperCase()===codigo);
     const btn=$("btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
@@ -264,7 +269,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         imagen:urls[0]||"", imagenes:urls, imagenFit:$("fAjuste").value==="contain"?"contain":"",
         posicionImagen:(prePos.x!==50||prePos.y!==50)?(prePos.x+"% "+prePos.y+"%"):"",
         escalaImagen:preScale>1?Number(preScale.toFixed(2)):null,
-        destacadoNuevo:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean),
+        // Venta libre: solo por link (la tienda no lo lista; ver catalogo-remoto.js).
+        ventaLibre, destacadoNuevo:ventaLibre?false:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean),
         // Demora extendida (config.js → demoraDe): aviso al cliente + días extra en la entrega estimada.
         demoraExtendida:$("fDemora").checked, diasExtra:$("fDemora").checked ? Math.max(0, Math.round(Number($("fDiasExtra").value)||0)) : 0, notaDemora:$("fDemora").checked ? $("fNotaDemora").value.trim() : "",
         fecha:new Date().toISOString().slice(0,10) };
@@ -276,6 +282,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       // Se sincroniza SOLO desde el servidor del tracking, que lee este catálogo_web
       // (una vez al día por cron y cada vez que se abre la app del tracking). Por eso
       // acá basta con guardar en catalogo_web; no hay que —ni se puede— empujar nada.
+      if(ventaLibre){
+        limpiarForm(); aviso($("avisoForm"),"",""); await cargarRemotos(); irA("ventalibre"); mostrarListo(datos);
+        return;
+      }
       aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web. El tracking lo toma solo.", "ok");
       limpiarForm(); await cargarRemotos(); irA("lista");
       if(esNuevo && window.HLInstagram) window.HLInstagram.abrir(datos);
@@ -289,6 +299,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     $("fDemora").checked=false; $("fDiasExtra").value=""; $("fNotaDemora").value=""; $("rowDemora").style.display="none";
+    $("fVentaLibre").checked=false; $("cardVentaLibre").classList.remove("on");
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
     fotos.forEach(f=>{ if(!f.remota) URL.revokeObjectURL(f.url); }); fotos=[]; pintarFotos();
@@ -306,6 +317,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale; $("prePosY").value=Math.round(prePos.y); activePhoto=0;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
+    $("fVentaLibre").checked=datos.ventaLibre===true; $("cardVentaLibre").classList.toggle("on",datos.ventaLibre===true);
     $("fDemora").checked=datos.demoraExtendida===true; $("fDiasExtra").value=datos.diasExtra||""; $("fNotaDemora").value=datos.notaDemora||""; $("rowDemora").style.display=datos.demoraExtendida===true?"block":"none";
     ETQ_ADMIN.forEach(([id,prop])=>{ $(id).checked=datos[prop]===true; });
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
@@ -337,7 +349,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       else items.push({codigo:p.codigo,datos:datosDeBase(p),origen:"original",remoteId:null,activo:true}); });
     remotos.forEach(r=>{ const c=String(r.codigo||"").toUpperCase(); if(usados.has(c)) return;
       items.push({codigo:r.codigo,datos:conNombreVisible(r.codigo,r.datos)||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
-    itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas();
+    itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas(); renderVentaLibre();
   }
   // Autocompletado de marcas: junta las marcas ya usadas (catálogo base + panel) para que
   // al subir un producto elijas la marca EXACTA y no la reescribas mal (mayúsculas/erratas),
@@ -359,7 +371,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     const peso={nuevo:0,editado:1,original:2};
     return itemsMerged.filter(i=>{ const d=i.datos||{};
       if(filtroCategoria!=="todas"&&d.categoria!==filtroCategoria) return false;
-      if(filtroEstado==="nuevos"&&i.origen!=="nuevo") return false;
+      if(filtroEstado==="nuevos"&&(i.origen!=="nuevo"||esVL(i))) return false;
+      if(filtroEstado==="ventalibre"&&!esVL(i)) return false;
       if(filtroEstado==="editados"&&i.origen!=="editado") return false;
       if(filtroEstado==="oferta"&&!enOferta(d)) return false;
       if(q&&![i.codigo,d.nombre,d.marca,d.categoria].some(v=>String(v||"").toLowerCase().includes(q))) return false;
@@ -370,7 +383,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   // ============ Dashboard de inicio ============
   function renderInicio(){
     const total=itemsMerged.length;
-    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo").length;
+    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo"&&!esVL(i)).length;
     const editados=itemsMerged.filter(i=>i.origen==="editado").length;
     const ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length;
     const cards=[
@@ -395,8 +408,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
 
   // ============ Chips + Tabla ============
   function renderChips(){
-    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo").length, editados=itemsMerged.filter(i=>i.origen==="editado").length, ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length;
-    const estados=[["todos","Todos"],["nuevos","Nuevos ("+nuevos+")"],["editados","Editados ("+editados+")"],["oferta","En oferta ("+ofertas+")"]];
+    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo"&&!esVL(i)).length, editados=itemsMerged.filter(i=>i.origen==="editado").length, ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length, vls=itemsMerged.filter(esVL).length;
+    const estados=[["todos","Todos"],["nuevos","Nuevos ("+nuevos+")"],["editados","Editados ("+editados+")"],["oferta","En oferta ("+ofertas+")"]].concat(vls?[["ventalibre","Venta libre ("+vls+")"]]:[]);
     $("chipsEstado").innerHTML=estados.map(([v,t])=>`<button class="chip ${filtroEstado===v?"activa":""}" data-estado="${v}">${t}</button>`).join("");
     const cats=[["todas","Todas"]].concat(CATEGORIAS.map(c=>[c,c]));
     $("chipsCategoria").innerHTML=cats.map(([v,t])=>`<button class="chip ${filtroCategoria===v?"activa":""}" data-cat="${v}">${t}</button>`).join("");
@@ -406,7 +419,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   function filaHTML(i, sel){
     const d=i.datos||{}; const oferta=enOferta(d);
     const chk=sel?`<label class="chk"><input type="checkbox" class="rowchk" data-cod="${esc(i.codigo)}" ${seleccion.has(i.codigo)?"checked":""}></label>`:"";
-    const pill=i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
+    const pill=esVL(i)?'<span class="pill vlibre">Venta libre</span>':i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
     const bOf=oferta?'<span class="pill oferta">Oferta</span>':"";
     const bOc=i.remoteId&&!i.activo?'<span class="pill oculto">Oculto</span>':"";
     const pausaBtn=i.remoteId?`<button class="icon-btn" data-pausa title="${i.activo?"Ocultar":"Mostrar"}">${i.activo?"⏸":"▶"}</button>`:"";
@@ -521,14 +534,87 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     cargarRemotos();
   }
 
+  // ============ Venta libre ============
+  // Producto armado para UN cliente que pidió algo fuera del catálogo. Se guarda en
+  // catalogo_web con datos.ventaLibre=true: la tienda no lo lista (productos.js →
+  // productosPrivados) pero su link /p/CODIGO/ abre el producto y se encarga normal.
+  // Después se decide: "Publicar en la tienda" (pasa al catálogo) o dejarlo solo para esa venta.
+  const SITIO="https://hauslineshopni.es";
+  function esVL(it){ return !!(it&&it.datos&&it.datos.ventaLibre===true); }
+  function linkVL(codigo){ return SITIO+"/p/"+encodeURIComponent(codigo)+"/"; }
+  function siguienteCodigoVL(){ let max=0; itemsMerged.forEach(i=>{ const m=/^VL(\d+)$/i.exec(String(i.codigo||"")); if(m) max=Math.max(max,Number(m[1])); }); return "VL"+String(max+1).padStart(3,"0"); }
+  function precioVL(d){ return d.cotizar||!(Number(d.precio)>0)?"":"$"+(enOferta(d)?d.precioOferta:d.precio); }
+  function mensajeVL(d){ const p=precioVL(d); return "Hola 👋 Te dejo el link de tu pedido en HAUSLINE: "+(d.nombre||d.codigo)+(p?" — "+p:"")+".\nAhí elegís tu talla y lo encargás directo:\n"+linkVL(d.codigo); }
+  async function copiar(texto, btn){
+    try{ await navigator.clipboard.writeText(texto); }
+    catch(_){ const t=document.createElement("textarea"); t.value=texto; document.body.appendChild(t); t.select(); try{ document.execCommand("copy"); }catch(e){} t.remove(); }
+    if(btn){ const o=btn.textContent; btn.textContent="✓ Copiado"; setTimeout(()=>{ btn.textContent=o; },1600); }
+  }
+  function abrirWhatsApp(d){ window.open("https://wa.me/?text="+encodeURIComponent(mensajeVL(d)),"_blank","noopener"); }
+  function mostrarListo(d){
+    const box=$("vlListo"); box.classList.remove("hidden");
+    box.innerHTML=`<h2>✓ Link listo para ${esc(d.nombre||d.codigo)}</h2>
+      <p class="hint">Mandáselo al cliente: abre el producto, elige talla y lo encarga igual que en la web (te cae en Encargos como siempre).</p>
+      <div class="vl-link"><input readonly value="${esc(linkVL(d.codigo))}"><button class="btn btn-sec" data-copiar>Copiar link</button><button class="btn" data-wa>Enviar por WhatsApp</button></div>
+      <p class="hint">El link funciona desde ya. La vista previa con foto al pegarlo en WhatsApp aparece en unos 15 minutos.</p>`;
+    box.querySelector("[data-copiar]").addEventListener("click",e=>copiar(linkVL(d.codigo),e.currentTarget));
+    box.querySelector("[data-wa]").addEventListener("click",()=>abrirWhatsApp(d));
+    box.querySelector("input").addEventListener("focus",e=>e.target.select());
+    box.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+  function renderVentaLibre(){
+    const cont=$("vlLista"); if(!cont) return;
+    const lista=itemsMerged.filter(esVL);
+    if(!lista.length){ cont.innerHTML='<div class="cargando">Todavía no creaste ventas libres. Tocá “＋ Crear venta libre”.</div>'; return; }
+    cont.innerHTML=lista.map(it=>{ const d=it.datos||{}; const p=precioVL(d)||"A consultar";
+      return `<div class="vl-item" data-cod="${esc(it.codigo)}"><img ${d.imagen?`src="${esc(d.imagen)}"`:""} alt="" loading="lazy">
+        <div><b>${esc(d.nombre||it.codigo)}</b><small>${esc(it.codigo)} · ${esc(p)} · ${it.activo?"Link activo":"Link pausado"}${d.fecha?" · creado "+esc(d.fecha):""}</small>
+          <div class="vl-acc">
+            <button class="btn btn-sec" data-copiar>Copiar link</button>
+            <button class="btn btn-sec" data-wa>WhatsApp</button>
+            <button class="btn btn-sec" data-editar>Editar</button>
+            <button class="btn btn-sec" data-pausa>${it.activo?"Pausar link":"Activar link"}</button>
+            <button class="btn" data-publicar>Publicar en la tienda</button>
+            <button class="btn btn-sec" data-borrar>Borrar</button>
+          </div></div></div>`; }).join("");
+    cont.querySelectorAll(".vl-item").forEach((row,idx)=>{ const it=lista[idx], d={...it.datos,codigo:it.codigo};
+      row.querySelector("[data-copiar]").addEventListener("click",e=>copiar(linkVL(it.codigo),e.currentTarget));
+      row.querySelector("[data-wa]").addEventListener("click",()=>abrirWhatsApp(d));
+      row.querySelector("[data-editar]").addEventListener("click",()=>cargarEnForm(it.datos,{activo:it.activo}));
+      row.querySelector("[data-pausa]").addEventListener("click",async()=>{
+        if(!(await asegurarSesion())) return;
+        const {error}=await supa.from("catalogo_web").update({activo:!it.activo}).eq("id",it.remoteId);
+        if(error){ alert("No se pudo cambiar: "+error.message); return; } cargarRemotos(); });
+      row.querySelector("[data-publicar]").addEventListener("click",async()=>{
+        if(!confirm(`¿Publicar ${d.nombre||it.codigo} en la tienda? Va a salir en el catálogo, la búsqueda y “Nuevo” como cualquier producto. El link que ya mandaste sigue funcionando.`)) return;
+        if(!(await asegurarSesion())) return;
+        const fila=remotos.find(r=>r.id===it.remoteId); const base=(fila&&fila.datos)||it.datos;
+        const {error}=await supa.from("catalogo_web").update({activo:true,datos:{...base,ventaLibre:false,destacadoNuevo:true,fecha:new Date().toISOString().slice(0,10)}}).eq("id",it.remoteId);
+        if(error){ alert("No se pudo publicar: "+error.message); return; }
+        await cargarRemotos(); alert("✓ Publicado. Ya sale en la tienda. Si querés cambiarle el código o la categoría, editalo en Productos."); });
+      row.querySelector("[data-borrar]").addEventListener("click",async()=>{
+        if(!confirm(`¿Borrar la venta libre ${it.codigo}? El link deja de funcionar. Los encargos que ya hizo el cliente no se tocan.`)) return;
+        if(!(await asegurarSesion())) return;
+        const {error}=await supa.from("catalogo_web").delete().eq("id",it.remoteId);
+        if(error){ alert("No se pudo borrar: "+error.message); return; } cargarRemotos(); });
+    });
+  }
+  $("fVentaLibre").addEventListener("change",()=>{ const on=$("fVentaLibre").checked; $("cardVentaLibre").classList.toggle("on",on);
+    if(on){ $("fNuevo").checked=false; if(!$("fCodigo").value.trim()) $("fCodigo").value=siguienteCodigoVL(); } });
+  $("btnNuevaVL").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); $("fNuevo").checked=false;
+    $("fVentaLibre").checked=true; $("cardVentaLibre").classList.add("on"); $("fCodigo").value=siguienteCodigoVL();
+    $("tituloForm").textContent="Nueva venta libre"; irA("form"); });
+
   // ============ Navegación ============
   function irA(tab){
-    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm", banners:"viewBanners", cupones:"viewCupones", promos:"viewPromos" };
+    const vis={ inicio:"viewInicio", lista:"viewLista", form:"viewForm", ventalibre:"viewVentaLibre", banners:"viewBanners", cupones:"viewCupones", promos:"viewPromos" };
     Object.values(vis).forEach(v=>$(v).classList.add("hidden"));
     $(vis[tab]).classList.remove("hidden");
     $("tabInicio").classList.toggle("activa",tab==="inicio");
     $("tabLista").classList.toggle("activa",tab==="lista");
     $("tabForm").classList.toggle("activa",tab==="form");
+    $("tabVentaLibre").classList.toggle("activa",tab==="ventalibre");
+    if(tab!=="ventalibre") $("vlListo").classList.add("hidden");
     $("tabBanners").classList.toggle("activa",tab==="banners");
     $("tabCupones").classList.toggle("activa",tab==="cupones");
     $("tabPromos").classList.toggle("activa",tab==="promos");
@@ -540,6 +626,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("tabInicio").addEventListener("click",()=>irA("inicio"));
   $("tabLista").addEventListener("click",()=>irA("lista"));
   $("tabForm").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("form"); });
+  $("tabVentaLibre").addEventListener("click",()=>irA("ventalibre"));
   $("tabBanners").addEventListener("click",()=>irA("banners"));
   $("tabCupones").addEventListener("click",()=>irA("cupones"));
   $("tabPromos").addEventListener("click",()=>irA("promos"));

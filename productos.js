@@ -6380,6 +6380,11 @@ function normalizarProducto(producto, indice){
 
 let productos = productosBase.map(normalizarProducto);
 
+// VENTAS LIBRES (admin.html → "Venta libre"): producto armado para UN cliente que pidió algo
+// que no está en el catálogo. Vive aparte: no sale en listados, búsqueda, marcas ni "Nuevo";
+// solo se abre por su link /p/CODIGO/ y se encarga igual que cualquier producto.
+const productosPrivados = [];
+
 // ============================================================
 // PROMOCIONES  ←  AQUÍ PONES LAS PROMOS
 // ------------------------------------------------------------
@@ -6489,7 +6494,8 @@ function necesitaCotizar(producto){
 
 function buscarProducto(codigo){
   const c = String(codigo || "").trim().toUpperCase();
-  return productos.find(p => String(p.codigo).trim().toUpperCase() === c) || null;
+  return productos.find(p => String(p.codigo).trim().toUpperCase() === c)
+    || productosPrivados.find(p => String(p.codigo).trim().toUpperCase() === c) || null;
 }
 
 // Nombre que se muestra al cliente: el real si existe, si no el original.
