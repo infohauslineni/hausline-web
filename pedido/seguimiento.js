@@ -122,21 +122,45 @@
   }
 
   /* ---------------- Datos ---------------- */
-  async function buscar(cod) {
+  // "Load failed" (iPhone), "Failed to fetch" (Chrome), "NetworkError" (Firefox): se cortó la conexión.
+  function esDeRed(e) { return /load failed|failed to fetch|networkerror|network request failed|fetch failed/i.test(String((e && e.message) || e || "")); }
+  function esperar(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  // Un corte breve (teléfono recién desbloqueado, cambio de wifi a datos) no debe verse como error:
+  // se reintenta solo antes de rendirse.
+  async function conReintento(fn, esperas) {
+    for (var i = 0; ; i++) {
+      try { return await fn(); }
+      catch (e) { if (!esDeRed(e) || i >= esperas.length) throw e; await esperar(esperas[i]); }
+    }
+  }
+
+  async function buscar(cod, silencioso) {
     if (!C.sb) throw new Error("No cargó el sistema de seguimiento");
-    var r = await Promise.all([C.sb.rpc("obtener_pedido_publico", { p_codigo: cod }), fotos(cod)]);
-    if (r[0].error) throw r[0].error;
+    var esperas = silencioso ? [] : [1500, 4000];
+    var r = await Promise.all([
+      conReintento(async function () { var x = await C.sb.rpc("obtener_pedido_publico", { p_codigo: cod }); if (x.error) throw x.error; return x; }, esperas),
+      fotos(cod, silencioso, esperas),
+    ]);
     if (!r[0].data) return null;
+    // En la actualización automática, si las fotos no cargaron se deja la pantalla como está
+    // (si no, se repintaría el pedido sin sus fotos).
+    if (r[1] === null) { if (silencioso) throw new Error("Load failed (fotos)"); r[1] = []; }
     return Object.assign(ocultarInterno(r[0].data), { imagenes: r[1] });
   }
-  // Si el servidor de fotos no responde, el seguimiento se muestra igual (sin fotos).
-  async function fotos(cod) {
+  // Si el servidor de fotos no responde, el seguimiento se muestra igual (sin fotos). null = no cargaron.
+  async function fotos(cod, silencioso, esperas) {
     try {
-      var res = await fetch(API_FOTOS, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fotosPublicas: true, codigo: cod }) });
-      if (!res.ok) { S.error("fotos_error", cod + " · HTTP " + res.status); return []; }
+      var res = await conReintento(function () {
+        return fetch(API_FOTOS, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fotosPublicas: true, codigo: cod }) });
+      }, esperas);
+      if (!res.ok) { S.error("fotos_error", cod + " · HTTP " + res.status); return null; }
       var j = await res.json();
       return Array.isArray(j.imagenes) ? j.imagenes : [];
-    } catch (e) { S.error("fotos_error", cod + " · " + ((e && e.message) || "sin conexión")); return []; }
+    } catch (e) {
+      // En segundo plano un corte de red no se anota: el cliente no vio nada y se reintenta en un minuto.
+      if (!(silencioso && esDeRed(e))) S.error("fotos_error", cod + " · " + ((e && e.message) || "sin conexión"));
+      return null;
+    }
   }
 
   /* ---------------- Vistas ---------------- */
@@ -274,7 +298,7 @@
 
   async function cargar(silencioso) {
     try {
-      var p = await buscar(codigo);
+      var p = await buscar(codigo, silencioso);
       if (!p) {
         if (!silencioso) { S.registrar("seguimiento_no_encontrado", { mensaje: codigo }); inicio(noEncontrado(codigo)); }
         return;
@@ -287,6 +311,7 @@
       if (!silencioso) S.registrar("vio_seguimiento", { mensaje: codigo });
       if (!document.querySelector(".cta-visor")) pintar(p);
     } catch (err) {
+      if (silencioso && esDeRed(err)) return; // actualización en segundo plano: el cliente no vio nada
       S.error("seguimiento_error", codigo + " · " + ((err && err.message) || "Error"), { silencioso: !!silencioso });
       if (!silencioso) {
         main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tu pedido</p><p class="cta-nota">Puede ser tu conexión o un problema nuestro. Intentá de nuevo en un momento.</p>' +
