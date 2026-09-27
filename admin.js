@@ -542,7 +542,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   const SITIO="https://hauslineshopni.es";
   function esVL(it){ return !!(it&&it.datos&&it.datos.ventaLibre===true); }
   function linkVL(codigo){ return SITIO+"/p/"+encodeURIComponent(codigo)+"/"; }
-  function siguienteCodigoVL(){ let max=0; itemsMerged.forEach(i=>{ const m=/^VL(\d+)$/i.exec(String(i.codigo||"")); if(m) max=Math.max(max,Number(m[1])); }); return "VL"+String(max+1).padStart(3,"0"); }
+  function siguienteCodigoVL(){ let max=0; itemsMerged.forEach(i=>{ const m=/^LIB(\d+)$/i.exec(String(i.codigo||"")); if(m) max=Math.max(max,Number(m[1])); }); return "LIB"+String(max+1).padStart(3,"0"); }
   function precioVL(d){ return d.cotizar||!(Number(d.precio)>0)?"":"$"+(enOferta(d)?d.precioOferta:d.precio); }
   function mensajeVL(d){ const p=precioVL(d); return "Hola 👋 Te dejo el link de tu pedido en HAUSLINE: "+(d.nombre||d.codigo)+(p?" — "+p:"")+".\nAhí elegís tu talla y lo encargás directo:\n"+linkVL(d.codigo); }
   async function copiar(texto, btn){
