@@ -68,15 +68,18 @@
   function error(nombre, mensaje, detalle) { registrar(nombre, { tipo: "error", mensaje: mensaje, detalle: detalle }); }
 
   // Fallas de JavaScript de NUESTROS archivos (se ignoran extensiones y scripts de terceros).
-  function nuestro(archivo) { return !archivo || archivo.indexOf(location.origin) === 0 || /cdn\.jsdelivr\.net\/npm\/@supabase/.test(archivo); }
+  // Sin archivo = código inyectado por el navegador o una app (la CSP no deja correr scripts
+  // inline nuestros), p. ej. el puente de Instagram/Facebook en iPhone (window.webkit.messageHandlers).
+  function nuestro(archivo) { return !!archivo && (archivo.indexOf(location.origin) === 0 || /cdn\.jsdelivr\.net\/npm\/@supabase/.test(archivo)); }
+  var RUIDO = /webkit\.messageHandlers|_AutofillCallbackHandler|__gCrWeb|instantSearchSDKJSBridgeClearHighlight|Java object is gone|ResizeObserver loop/i;
   window.addEventListener("error", function (e) {
-    if (!e || !e.message || e.message === "Script error." || !nuestro(e.filename)) return;
+    if (!e || !e.message || e.message === "Script error." || RUIDO.test(e.message) || !nuestro(e.filename)) return;
     error("js_error", e.message, { archivo: String(e.filename || "").replace(location.origin, "").split("?")[0], linea: e.lineno || null });
   });
   window.addEventListener("unhandledrejection", function (e) {
     var r = e && e.reason;
     var m = r && (r.message || r.error_description) || (typeof r === "string" ? r : "");
-    if (!m || /extension|chrome-extension|moz-extension/i.test(m + (r && r.stack || ""))) return;
+    if (!m || RUIDO.test(m) || /extension|chrome-extension|moz-extension/i.test(m + (r && r.stack || ""))) return;
     error("promesa_error", m);
   });
 
