@@ -61,7 +61,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       // Etiquetas opcionales del producto base (para que al editar un producto que ya las trae
       // del código —ej. los Birkenstock con 100% OG— salgan pre-marcadas y no se pierdan al guardar).
       og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true,
-      demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"" };
+      demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"",
+      prepMin:Number(p.prepMin)||0, prepMax:Number(p.prepMax)||0 };
   }
 
   // ============ Fotos ============
@@ -245,6 +246,12 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   // Etiquetas opcionales del producto: [idDelCheckbox, propiedadEnDatos]. Deben coincidir con
   // ETIQUETAS_OPCIONALES de productos.js (el sitio lee esa propiedad y muestra el badge).
   const ETQ_ADMIN=[["fEtqOg100","og100"],["fEtqMasVendido","masVendido"],["fEtqUltimasUnidades","ultimasUnidades"],["fEtqExclusivo","exclusivo"],["fEtqPreventa","preventa"],["fEtqEdicionLimitada","edicionLimitada"],["fEtqRestock","restock"],["fEtqRecomendado","recomendado"]];
+  // "Desde" solo = ese número exacto; "Hasta" menor que "Desde" se corrige.
+  function leerPreparacion(){
+    const a=Math.round(Number($("fPrepMin").value)||0), b=Math.round(Number($("fPrepMax").value)||0);
+    const min=a>0?a:(b>0?b:0);
+    return { prepMin:min, prepMax:min?Math.max(min,b):0 };
+  }
   $("btnGuardar").addEventListener("click",async()=>{
     const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
     if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
@@ -273,6 +280,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         ventaLibre, destacadoNuevo:ventaLibre?false:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean),
         // Demora extendida (config.js → demoraDe): aviso al cliente + días extra en la entrega estimada.
         demoraExtendida:$("fDemora").checked, diasExtra:$("fDemora").checked ? Math.max(0, Math.round(Number($("fDiasExtra").value)||0)) : 0, notaDemora:$("fDemora").checked ? $("fNotaDemora").value.trim() : "",
+        // Preparación propia (config.js → preparacionDe): vacío = el tiempo general.
+        ...leerPreparacion(),
         fecha:new Date().toISOString().slice(0,10) };
       // Etiquetas opcionales elegidas en el formulario.
       ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
@@ -299,6 +308,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     $("fDemora").checked=false; $("fDiasExtra").value=""; $("fNotaDemora").value=""; $("rowDemora").style.display="none";
+    $("fPrepMin").value=""; $("fPrepMax").value="";
     $("fVentaLibre").checked=false; $("cardVentaLibre").classList.remove("on");
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
@@ -318,6 +328,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale; $("prePosY").value=Math.round(prePos.y); activePhoto=0;
     $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
     $("fVentaLibre").checked=datos.ventaLibre===true; $("cardVentaLibre").classList.toggle("on",datos.ventaLibre===true);
+    $("fPrepMin").value=Number(datos.prepMin)>0?datos.prepMin:""; $("fPrepMax").value=Number(datos.prepMin)>0&&Number(datos.prepMax)>0?datos.prepMax:"";
     $("fDemora").checked=datos.demoraExtendida===true; $("fDiasExtra").value=datos.diasExtra||""; $("fNotaDemora").value=datos.notaDemora||""; $("rowDemora").style.display=datos.demoraExtendida===true?"block":"none";
     ETQ_ADMIN.forEach(([id,prop])=>{ $(id).checked=datos[prop]===true; });
     fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }

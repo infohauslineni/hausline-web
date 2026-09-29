@@ -489,6 +489,14 @@
                 </div>
                 <div id="rowTallasEI" style="display:none;margin-top:10px"><label>Tallas disponibles ahora (entrega inmediata)</label><input id="fTallasEntregaInmediata" placeholder="Ej: 40, 41, 42"><small class="hint">Separadas por coma. Son las tallas que ya tenés físicamente.</small></div>
                 <div id="rowColoresEI" style="display:none;margin-top:10px"><label>Colores disponibles ahora (entrega inmediata)</label><input id="fColoresEntregaInmediata" placeholder="Ej: Negro, Blanco"><small class="hint">Separados por coma. Solo si el producto tiene colores. Dejalo vacío si no aplica.</small></div>
+                <div style="margin-top:10px">
+                  <label>Preparación aprox. (días)</label>
+                  <div class="fila">
+                    <div><input id="fPrepMin" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="Desde (general: 4)"></div>
+                    <div><input id="fPrepMax" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="Hasta (general: 5)"></div>
+                  </div>
+                  <small class="hint">Lo que tarda el proveedor en preparar ESTE producto (envío estándar; en el rápido se cuenta 1 día menos). Vacío = el general de 4 a 5 días. El cliente lo ve en el producto y la entrega estimada se ajusta sola (ej. 2 a 3 días → 18 a 23 días en vez de 20 a 25).</small>
+                </div>
                 <div class="toggle-row">
                   <div><b>¿Puede tardar más de lo esperado?</b><small>Proveedor con más demora: se le avisa al cliente en el producto, el carrito y el checkout</small></div>
                   <label class="switch"><input id="fDemora" type="checkbox"><span></span></label>
@@ -613,6 +621,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20260927lib"></script>
+<script src="admin.js?v=20261006p"></script>
 </body>
 </html>

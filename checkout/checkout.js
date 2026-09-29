@@ -24,9 +24,20 @@
     var conNota=ds.filter(function(d){ return d.nota; })[0];
     return { extra:extra, nota:conNota ? conNota.nota : "" };
   }
+  // Productos del pedido en curso con su demora extendida y su preparación propia (config.js).
+  function itemsPend(pend){ return !pend ? [] : pend.tipo==="carrito" ? (pend.items||[]) : (pend.producto ? [pend.producto] : []); }
+  // Preparación propia para la aclaración de tiempos: solo si el pedido es de UN producto.
+  function prepPend(pend){ var its=itemsPend(pend); return its.length===1 ? (its[0].prep||null) : null; }
+  // Entrega estimada: todo se envía junto, así que manda el producto más lento (un producto
+  // sin preparación propia ni demora cuenta con el tiempo general).
   function diasEnvio(flag, pend){
-    var m=ENVCFG[flag], d=demoraPend(pend);
-    return (d && m && m.diasMin != null && typeof diasConDemora==="function") ? diasConDemora(m, d.extra) : m.dias;
+    var m=ENVCFG[flag], its=itemsPend(pend);
+    if(!m) return "";
+    var ajusta=its.some(function(it){ return it.prep || (it.demora && it.demora.extra > 0); });
+    if(!ajusta || m.diasMin == null || typeof rangoEntrega!=="function") return m.dias;
+    var min=0, max=0;
+    its.forEach(function(it){ var r=rangoEntrega(m, it.demora ? it.demora.extra : 0, it.prep||null); min=Math.max(min,r.min); max=Math.max(max,r.max); });
+    return min + " a " + max + " días";
   }
   function cordobas(usdv){ return (typeof cordobasCerrados === "function") ? cordobasCerrados(usdv) : Math.ceil((Number(usdv)||0)*RATE/10)*10; }
 
@@ -182,7 +193,7 @@
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
     var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Tu pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
     var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>'
-      + (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar))+'</div>' : '') : '';
+      + (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar, o.prep||null))+'</div>' : '') : '';
     // Aviso de demora extendida (producto de un proveedor que tarda más).
     var demora = (o.demora && typeof textoAvisoDemora==="function") ? '<div class="sum-row" style="margin-top:8px;display:block;padding:10px 12px;border:1px solid #f0c36d;background:#fff7e6;border-radius:10px;font-size:12.5px;line-height:1.5;color:#6b4a0c">⏳ '+esc(textoAvisoDemora(o.demora))+'</div>' : '';
     return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+demora+juntos+grand+pill+code
@@ -329,7 +340,7 @@
       var total=Math.max(0,Math.round((bruto-desc)*100)/100);
       return { items:items, subtotal:bruto, descuento:desc, descLabel:descLabel, total:total, ahora:pago==="50"?Math.round(total*50)/100:total };
     }
-    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:diasEnvio(envioFlag,pend), envioFlag:envioFlag, demora:demoraPend(pend), envioIntl:intlFlag }; }
+    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:diasEnvio(envioFlag,pend), envioFlag:envioFlag, prep:prepPend(pend), demora:demoraPend(pend), envioIntl:intlFlag }; }
     function pintarResumen(){ var s=$("resumen"); if(s) s.innerHTML=resumenHTML(sumOpts()); }
 
     // Meta Pixel: entró al paso 1 del checkout (empezó a comprar).

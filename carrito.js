@@ -138,7 +138,8 @@ function mensajeCarritoWhatsApp(){
       if(m){
         const pr = (typeof buscarProducto === "function") ? buscarProducto(it.codigo) : null;
         const dem = (pr && typeof demoraDe === "function") ? demoraDe(pr) : null;
-        msg += `Tipo de envío: ${m.etiqueta} (${dem ? diasConDemora(m, dem.extra) : m.dias})\n`;
+        const prep = (pr && typeof preparacionDe === "function") ? preparacionDe(pr) : null;
+        msg += `Tipo de envío: ${m.etiqueta} (${(dem || prep) ? diasConDemora(m, dem ? dem.extra : 0, prep) : m.dias})\n`;
         if(dem) msg += `⏳ ${textoAvisoDemora(dem)}\n`;
         const rec = recargoEnvioItem(it);
         if(rec > 0) msg += `Cargo de envío rápido: ${precioUSD(rec)}\n`;
