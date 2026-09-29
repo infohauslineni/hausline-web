@@ -147,29 +147,43 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     const cat=$("fCategoria").value, m=modoTallas();
     const todos=itemsMerged.filter(i=>!esVL(i)&&!esBorrador(i)).map(i=>i.datos||{}).filter(d=>d.nombre);
     const mismos=todos.filter(d=> cat==="Accesorios"||cat==="Decoración" ? d.categoria===cat : m==="otro" ? true : String(d.subcategoria||"").toLowerCase().includes(m));
-    return (mismos.length>=5?mismos:todos).map(d=>String(d.nombre).replace(/\s+/g," ").trim());
+    // Cada palabra con mayúscula inicial: "negra"/"Negra" o "cruz"/"Cruz" cuentan como una sola.
+    return (mismos.length>=5?mismos:todos).map(d=>String(d.nombre).replace(/\s+/g," ").trim().split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" "));
   }
+  // Palabras de relleno de los nombres escritos como frase ("… con logotipo pequeño"): no son opciones.
+  const VACIA=/^(con|de|del|la|el|los|las|y|e|o|en|para|por|sin|un|una|al|a|su|sus)$/i;
   function renderSugNombre(){
     const cont=$("nombreSug"); if(!cont) return;
     const nombres=nombresParaSugerir();
     // Tipo: comienzos de 1 a 3 palabras que se repiten; si uno más largo cubre casi todos, queda el largo.
-    const pref=contar(nombres.flatMap(n=>{ const [w]=partirColor(n); const out=[]; for(let k=1;k<=Math.min(3,w.length);k++) out.push(w.slice(0,k).join(" ")); return out; }));
+    // El comienzo se corta en el primer color o palabra de relleno ("Camiseta Negra con…" → "Camiseta").
+    const pref=contar(nombres.flatMap(n=>{ const [w]=partirColor(n); const out=[]; for(let k=1;k<=Math.min(3,w.length);k++){ if(esColorNombre(w[k-1])||VACIA.test(w[k-1])) break; out.push(w.slice(0,k).join(" ")); } return out; }));
     const lista=[...pref.entries()];
-    const bases=lista.filter(([p,k])=>k>=2&&!lista.some(([q,kq])=>q.startsWith(p+" ")&&kq>=k*0.8)).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([p])=>p);
+    const bases=lista.filter(([p,k])=>k>=2&&!lista.some(([q,kq])=>q.startsWith(p+" ")&&kq>=k*0.8)).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([p])=>p);
     sugBases=bases.slice().sort((a,b)=>b.length-a.length);
     const enBase=new Set(bases.flatMap(b=>b.split(" ")));
-    const detalles=top(contar(nombres.flatMap(n=>partirColor(n)[0].filter(w=>!enBase.has(w)&&!esColorNombre(w)&&w.length>2&&!/\d/.test(w)))),12,2);
-    const colores=top(contar(nombres.map(n=>partirColor(n)[1].join(" ")).filter(Boolean)),10,2);
+    const detalles=top(contar(nombres.flatMap(n=>partirColor(n)[0].filter(w=>!enBase.has(w)&&!esColorNombre(w)&&!VACIA.test(w)&&w.length>2&&!/\d/.test(w)))),10,2);
+    // Colores del final con cada parte en mayúscula ("negro/blanco" → "Negro/Blanco").
+    const colores=top(contar(nombres.map(n=>partirColor(n)[1].join(" ").replace(/\/(\S)/g,(_,c)=>"/"+c.toUpperCase())).filter(Boolean)),8,2);
     const fila=(t,tipo,vals)=>vals.length?`<div class="sug-fila"><b>${t}</b>${vals.map(v=>`<button type="button" class="sug-chip" data-sug="${tipo}" data-v="${esc(v)}">${esc(v)}</button>`).join("")}</div>`:"";
     cont.innerHTML=fila("Tipo","base",bases)+fila("Detalle","det",detalles)+fila("Color","color",colores);
     cont.querySelectorAll("[data-sug]").forEach(b=>b.addEventListener("click",()=>aplicarSug(b.dataset.sug,b.dataset.v)));
+  }
+  // "negra" + Blanco → "blanca" (mismo género y mismas minúsculas que el nombre).
+  function concordarColor(orig,nuevo){
+    if(/a$/i.test(orig)&&/^(negro|blanco|rojo|amarillo|morado|dorado|oscuro|claro)$/i.test(nuevo)) nuevo=nuevo.slice(0,-1)+"a";
+    return orig===orig.toLowerCase()?nuevo.toLowerCase():nuevo;
   }
   function aplicarSug(tipo,v){
     const campo=$("fNombre"); let [w,col]=partirColor(campo.value);
     let resto=w.join(" ");
     if(tipo==="base"){ const b=sugBases.find(x=>resto===x||resto.startsWith(x+" ")); resto=[v,b?resto.slice(b.length).trim():resto].filter(Boolean).join(" "); }
     else if(tipo==="det"){ if(!w.includes(v)) resto=[resto,v].filter(Boolean).join(" "); }
-    else col=[v];
+    else{
+      // Sin color al final pero con uno en el medio ("Camiseta negra con logo"): se cambia ahí.
+      const i=col.length?-1:w.map(x=>esColorNombre(x)).lastIndexOf(true);
+      if(i>=0){ w[i]=concordarColor(w[i],v); resto=w.join(" "); col=[]; } else col=[v];
+    }
     campo.value=[resto,col.join(" ")].filter(Boolean).join(" ")+(tipo==="color"?"":" ");
     campo.focus(); const n=campo.value.length; try{ campo.setSelectionRange(n,n); }catch(e){}
     campo.dispatchEvent(new Event("input"));

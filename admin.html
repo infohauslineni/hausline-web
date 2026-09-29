@@ -42,11 +42,10 @@
   .btn-sec{background:transparent;color:var(--texto);border-color:var(--linea2)}
   .btn-sec:hover{border-color:var(--texto);filter:none}
   .btn-mini{padding:9px 14px;font-size:12px}
-  .nombre-sug{margin-top:8px;display:grid;gap:6px}
+  .nombre-sug{margin-top:10px;display:grid;gap:8px}
   .nombre-sug:empty{display:none}
-  .sug-fila{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-  .sug-fila::-webkit-scrollbar{display:none}
-  .sug-fila b{flex:0 0 auto;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--texto3);min-width:46px}
+  .sug-fila{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .sug-fila b{flex:0 0 100%;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--texto3)}
   .sug-chip{flex:0 0 auto;border:1px solid var(--linea2);background:transparent;color:var(--texto2);border-radius:16px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
   .sug-chip:hover{border-color:var(--verde);color:var(--texto)}
   .pill.borrador{background:rgba(242,190,60,.16);color:#f2c14e}
@@ -405,9 +404,10 @@
               <div class="card">
                 <h2 class="card-h">Información básica</h2>
                 <div class="fila">
-                  <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro" autocomplete="off"><div id="nombreSug" class="nombre-sug"></div></div>
+                  <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro" autocomplete="off"></div>
                   <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: GGW010 (o subí la carpeta de fotos)" autocapitalize="characters"><small class="hint" id="codigoEstado"></small></div>
                 </div>
+                <div id="nombreSug" class="nombre-sug"></div>
                 <div class="fila">
                   <div><label>Categoría *</label><select id="fCategoria"></select></div>
                   <div><label>Subcategoría</label><select id="fSubcategoria"></select></div>
@@ -636,6 +636,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20261006c"></script>
+<script src="admin.js?v=20261006d"></script>
 </body>
 </html>
