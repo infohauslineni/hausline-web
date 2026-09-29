@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://hauslineshopni.es; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://hauslineshopni.es; font-src 'self' data: https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://hauslineshopni.es; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://hauslineshopni.es https://hausline-tracking.vercel.app; font-src 'self' data: https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
 <title>Panel · HAUSLINE</title>
 <style>
@@ -42,6 +42,11 @@
   .btn-sec{background:transparent;color:var(--texto);border-color:var(--linea2)}
   .btn-sec:hover{border-color:var(--texto);filter:none}
   .btn-mini{padding:9px 14px;font-size:12px}
+  .prep-rango{display:flex;align-items:center;gap:10px}
+  .prep-rango input{width:84px;flex:0 0 auto;text-align:center}
+  .prep-rango span{color:var(--texto2);font-size:13px}
+  .lbl-accion{float:right;border:0;background:none;color:var(--verde);font:inherit;font-size:11px;letter-spacing:0;text-transform:none;cursor:pointer;padding:0}
+  .lbl-accion:disabled{opacity:.5;cursor:default}
   .spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:currentColor;border-radius:50%;display:inline-block;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -393,7 +398,7 @@
               <div class="card">
                 <h2 class="card-h">Información básica</h2>
                 <div class="fila">
-                  <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Air Jordan 1 Retro High OG"></div>
+                  <div><label>Nombre del producto <button type="button" id="btnNombreIA" class="lbl-accion" title="La IA mira la foto principal y sugiere un nombre neutro (sin marcas)">✨ Desde la foto</button></label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro"><small class="hint" id="nombreEstado"></small></div>
                   <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: AJ1-RETRO-001" autocapitalize="characters"></div>
                 </div>
                 <div class="fila">
@@ -491,9 +496,11 @@
                 <div id="rowColoresEI" style="display:none;margin-top:10px"><label>Colores disponibles ahora (entrega inmediata)</label><input id="fColoresEntregaInmediata" placeholder="Ej: Negro, Blanco"><small class="hint">Separados por coma. Solo si el producto tiene colores. Dejalo vacío si no aplica.</small></div>
                 <div style="margin-top:10px">
                   <label>Preparación aprox. (días)</label>
-                  <div class="fila">
-                    <div><input id="fPrepMin" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="Desde (general: 4)"></div>
-                    <div><input id="fPrepMax" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="Hasta (general: 5)"></div>
+                  <div class="prep-rango">
+                    <input id="fPrepMin" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="4" aria-label="Preparación desde (días)">
+                    <span>a</span>
+                    <input id="fPrepMax" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="5" aria-label="Preparación hasta (días)">
+                    <span>días</span>
                   </div>
                   <small class="hint">Lo que tarda el proveedor en preparar ESTE producto (envío estándar; en el rápido se cuenta 1 día menos). Vacío = el general de 4 a 5 días. El cliente lo ve en el producto y la entrega estimada se ajusta sola (ej. 2 a 3 días → 18 a 23 días en vez de 20 a 25).</small>
                 </div>
@@ -621,6 +628,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20261006p"></script>
+<script src="admin.js?v=20261006ia"></script>
 </body>
 </html>

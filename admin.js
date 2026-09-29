@@ -129,6 +129,41 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     }
   }
 
+  // ---------- Nombre NEUTRO desde la foto (IA) ----------
+  // Al subir la primera foto, si el nombre está vacío, la IA lo llena mirando la foto
+  // (api/nombre-producto del tracking, con Claude). Siempre neutro: sin marcas, modelos ni
+  // logos (derechos de marca), con el estilo del catálogo ("Sneaker Low Top Gamuza Negro").
+  // ✨ lo vuelve a sugerir sobre la foto principal. Entra con la sesión del SISTEMA (supaTienda).
+  const API_NOMBRE = "https://hausline-tracking.vercel.app/api/nombre-producto";
+  let nombrando = false;
+  // La foto va achicada (lado mayor 768 px): alcanza para reconocerla y sube rápido.
+  function fotoParaIA(foto){ return new Promise((res,rej)=>{ const img=new Image();
+    if(foto.remota) img.crossOrigin="anonymous";
+    img.onload=()=>{ const f=Math.min(1,768/Math.max(img.naturalWidth,img.naturalHeight)); const c=document.createElement("canvas");
+      c.width=Math.round(img.naturalWidth*f); c.height=Math.round(img.naturalHeight*f); c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      try{ res(c.toDataURL("image/jpeg",0.85).split(",")[1]); }catch(e){ rej(e); } };
+    img.onerror=()=>rej(new Error("No se pudo leer la foto")); img.src=foto.url; }); }
+  async function sugerirNombre(forzar){
+    const foto=fotos[0], est=$("nombreEstado"), campo=$("fNombre");
+    if(!foto||nombrando||(!forzar&&campo.value.trim())) return;
+    nombrando=true; const antes=campo.value; est.style.color=""; est.textContent="✨ Mirando la foto para ponerle nombre…"; $("btnNombreIA").disabled=true;
+    try{
+      if(!(await asegurarSesionTienda(forzar))) throw new Error("Entrá con tu cuenta del sistema (la del tracking) para usar la IA.");
+      const { data } = await supaTienda.auth.getSession(); const token=data&&data.session&&data.session.access_token;
+      if(!token) throw new Error("Tu sesión del sistema venció. Volvé a entrar.");
+      const r=await fetch(API_NOMBRE,{ method:"POST", headers:{ "Content-Type":"application/json", Authorization:"Bearer "+token },
+        body:JSON.stringify({ imageBase64:await fotoParaIA(foto), mime:"image/jpeg", subcategoria:[$("fCategoria").value,$("fSubcategoria").value].filter(Boolean).join(" · ") }) });
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok||!j.ok||!j.nombre) throw new Error(j.error||(r.status===401?"Tu cuenta no tiene permiso para usar la IA.":"La IA no respondió. Probá de nuevo."));
+      // Si mientras tanto escribiste un nombre a mano, no se pisa (salvo que tocaras ✨).
+      if(!forzar&&campo.value!==antes){ est.textContent=""; return; }
+      campo.value=j.nombre; campo.dispatchEvent(new Event("input"));
+      est.style.color="var(--verde)"; est.textContent="✓ Nombre sugerido por la IA (sin marcas). Revisalo y cambialo si hace falta.";
+    }catch(err){ est.style.color="var(--rojo, #e5484d)"; est.textContent=(err&&err.message)||"No se pudo sugerir el nombre."; }
+    finally{ nombrando=false; $("btnNombreIA").disabled=false; }
+  }
+  $("btnNombreIA").addEventListener("click",()=>{ if(!fotos.length){ $("nombreEstado").style.color=""; $("nombreEstado").textContent="Primero subí una foto del producto."; return; } sugerirNombre(true); });
+
   // ---------- Arrastrar y soltar fotos sobre la grilla ----------
   (function(){
     const g=$("fotosGrid");
@@ -137,7 +172,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     g.addEventListener("drop",async e=>{ e.preventDefault(); g.classList.remove("drag");
       const files=Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith("image/"));
       for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } }
-      pintarFotos(); });
+      pintarFotos(); sugerirNombre(false); });
   })();
 
   // ---------- Vista previa interactiva (encuadre con el dedo) ----------
@@ -178,7 +213,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("fEntregaInmediata").addEventListener("change", ()=>{ const v = $("fEntregaInmediata").checked ? "block" : "none"; $("rowTallasEI").style.display = v; $("rowColoresEI").style.display = v; });
   $("fAjuste").addEventListener("change", updatePreview);
   $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
-    for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
+    for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); sugerirNombre(false); });
   $("fCategoria").addEventListener("change",()=>{ llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true); aplicarModoTallas(); tallasUIaCampo(); });
 
   // ---------- Tallas: calzado (34-47) o ropa (S,M,L,XL) según la subcategoría ----------
@@ -308,7 +343,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     $("fDemora").checked=false; $("fDiasExtra").value=""; $("fNotaDemora").value=""; $("rowDemora").style.display="none";
-    $("fPrepMin").value=""; $("fPrepMax").value="";
+    $("fPrepMin").value=""; $("fPrepMax").value=""; $("nombreEstado").textContent="";
     $("fVentaLibre").checked=false; $("cardVentaLibre").classList.remove("on");
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
