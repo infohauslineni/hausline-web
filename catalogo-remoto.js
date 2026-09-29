@@ -37,7 +37,8 @@ async function cargarProductosDelPanel(){
     const existente = typeof buscarProducto === "function" ? buscarProducto(codigo) : null;
     // Oculto desde el panel (activo=false): si el producto viene del catálogo base,
     // se QUITA para que deje de mostrarse. Si era solo del panel, no se agrega.
-    if(fila && fila.activo === false){
+    // Un borrador del panel (datos.borrador) tampoco se muestra, aunque figure activo.
+    if(fila && (fila.activo === false || (datos && datos.borrador === true))){
       if(existente){ const i = productos.indexOf(existente); if(i >= 0){ productos.splice(i, 1); agregados++; } }
       return;
     }

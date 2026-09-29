@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://hauslineshopni.es; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://hauslineshopni.es https://hausline-tracking.vercel.app; font-src 'self' data: https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://hauslineshopni.es; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://hauslineshopni.es; font-src 'self' data: https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap">
 <title>Panel · HAUSLINE</title>
 <style>
@@ -42,11 +42,17 @@
   .btn-sec{background:transparent;color:var(--texto);border-color:var(--linea2)}
   .btn-sec:hover{border-color:var(--texto);filter:none}
   .btn-mini{padding:9px 14px;font-size:12px}
+  .nombre-sug{margin-top:8px;display:grid;gap:6px}
+  .nombre-sug:empty{display:none}
+  .sug-fila{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .sug-fila::-webkit-scrollbar{display:none}
+  .sug-fila b{flex:0 0 auto;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--texto3);min-width:46px}
+  .sug-chip{flex:0 0 auto;border:1px solid var(--linea2);background:transparent;color:var(--texto2);border-radius:16px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+  .sug-chip:hover{border-color:var(--verde);color:var(--texto)}
+  .pill.borrador{background:rgba(242,190,60,.16);color:#f2c14e}
   .prep-rango{display:flex;align-items:center;gap:10px}
   .prep-rango input{width:84px;flex:0 0 auto;text-align:center}
   .prep-rango span{color:var(--texto2);font-size:13px}
-  .lbl-accion{float:right;border:0;background:none;color:var(--verde);font:inherit;font-size:11px;letter-spacing:0;text-transform:none;cursor:pointer;padding:0}
-  .lbl-accion:disabled{opacity:.5;cursor:default}
   .spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:currentColor;border-radius:50%;display:inline-block;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -382,6 +388,7 @@
             <div><h1 id="tituloForm">Subir producto nuevo</h1><p class="page-sub">Complete la información del producto</p></div>
             <div class="head-actions">
               <button id="btnCancelar" class="btn btn-sec">Cancelar</button>
+              <button id="btnBorrador" class="btn btn-sec" title="Lo guarda sin publicarlo: no sale en la tienda hasta que toques Guardar producto">Guardar borrador</button>
               <button id="btnGuardar" class="btn">Guardar producto</button>
             </div>
           </div>
@@ -398,7 +405,7 @@
               <div class="card">
                 <h2 class="card-h">Información básica</h2>
                 <div class="fila">
-                  <div><label>Nombre del producto <button type="button" id="btnNombreIA" class="lbl-accion" title="La IA mira la foto principal y sugiere un nombre neutro (sin marcas)">✨ Desde la foto</button></label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro"><small class="hint" id="nombreEstado"></small></div>
+                  <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro" autocomplete="off"><div id="nombreSug" class="nombre-sug"></div></div>
                   <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: AJ1-RETRO-001" autocapitalize="characters"></div>
                 </div>
                 <div class="fila">
@@ -628,6 +635,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20261006ia"></script>
+<script src="admin.js?v=20261006b"></script>
 </body>
 </html>
