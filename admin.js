@@ -61,7 +61,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       // Etiquetas opcionales del producto base (para que al editar un producto que ya las trae
       // del código —ej. los Birkenstock con 100% OG— salgan pre-marcadas y no se pierdan al guardar).
       og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true,
-      demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"" };
+      demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"",
+      prepMin:Number(p.prepMin)||0, prepMax:Number(p.prepMax)||0 };
   }
 
   // ============ Fotos ============
@@ -79,8 +80,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         <button type="button" class="quitar" data-quitar="${i}">×</button>
         ${f.sinFondo ? "" : `<button type="button" class="cortar" data-fondo="${i}" title="Quitar fondo (dejar sobre el fondo del catálogo)">✂️ Fondo</button>`}
       </div>`).join("")+
-      `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
+      `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`+
+      `<button type="button" class="foto-add" id="btnAddCarpeta" title="Elegí la carpeta del producto: su nombre (ej. GGW010) se pone como código"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Carpeta</button>`;
     $("btnAddFoto").addEventListener("click",()=>$("fFotos").click());
+    $("btnAddCarpeta").addEventListener("click",()=>$("fCarpeta").click());
     g.querySelectorAll("[data-quitar]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.quitar; if(fotos[i]&&!fotos[i].remota)URL.revokeObjectURL(fotos[i].url); fotos.splice(i,1); pintarFotos(); }));
     // ★ = poner esa foto como principal (la mueve al primer lugar = vista previa)
     g.querySelectorAll("[data-principal]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.principal; const m=fotos.splice(i,1)[0]; fotos.unshift(m); pintarFotos(); }));
@@ -128,15 +131,90 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     }
   }
 
+  // ---------- Nombres sugeridos ----------
+  // Salen de los nombres NEUTROS que ya tiene el catálogo (sin marcas), los que más se
+  // repiten para el tipo de producto elegido. Tocás uno y queda en el campo para agregarle
+  // o borrarle lo que haga falta: Tipo reemplaza el comienzo, Detalle se suma antes del
+  // color y Color reemplaza el color del final.
+  const COLOR_NOMBRE=/^(negro|negra|blanco|blanca|azul|marino|gris|rojo|roja|rosa|verde|beige|crema|marrón|marron|café|dorado|dorada|plata|amarillo|naranja|morado|lila|turquesa|celeste|fucsia|vino|multicolor|tonal|total|metalizado|claro|oscuro|degradado)$/i;
+  const esColorNombre=w=>!!w&&w.split("/").every(x=>COLOR_NOMBRE.test(x));
+  // Separa el nombre en [palabras, colores del final] ("… Gamuza Azul Marino" → [[…, Gamuza], [Azul, Marino]]).
+  function partirColor(nombre){ const w=String(nombre||"").trim().split(/\s+/).filter(Boolean); let i=w.length; while(i>1&&esColorNombre(w[i-1])) i--; return [w.slice(0,i),w.slice(i)]; }
+  let sugBases=[];
+  function contar(lista){ const c=new Map(); lista.forEach(v=>c.set(v,(c.get(v)||0)+1)); return c; }
+  function top(c,n,min){ return [...c.entries()].filter(([,k])=>k>=min).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,n).map(([v])=>v); }
+  function nombresParaSugerir(){
+    const cat=$("fCategoria").value, m=modoTallas();
+    const todos=itemsMerged.filter(i=>!esVL(i)&&!esBorrador(i)).map(i=>i.datos||{}).filter(d=>d.nombre);
+    const mismos=todos.filter(d=> cat==="Accesorios"||cat==="Decoración" ? d.categoria===cat : m==="otro" ? true : String(d.subcategoria||"").toLowerCase().includes(m));
+    return (mismos.length>=5?mismos:todos).map(d=>String(d.nombre).replace(/\s+/g," ").trim());
+  }
+  function renderSugNombre(){
+    const cont=$("nombreSug"); if(!cont) return;
+    const nombres=nombresParaSugerir();
+    // Tipo: comienzos de 1 a 3 palabras que se repiten; si uno más largo cubre casi todos, queda el largo.
+    const pref=contar(nombres.flatMap(n=>{ const [w]=partirColor(n); const out=[]; for(let k=1;k<=Math.min(3,w.length);k++) out.push(w.slice(0,k).join(" ")); return out; }));
+    const lista=[...pref.entries()];
+    const bases=lista.filter(([p,k])=>k>=2&&!lista.some(([q,kq])=>q.startsWith(p+" ")&&kq>=k*0.8)).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([p])=>p);
+    sugBases=bases.slice().sort((a,b)=>b.length-a.length);
+    const enBase=new Set(bases.flatMap(b=>b.split(" ")));
+    const detalles=top(contar(nombres.flatMap(n=>partirColor(n)[0].filter(w=>!enBase.has(w)&&!esColorNombre(w)&&w.length>2&&!/\d/.test(w)))),12,2);
+    const colores=top(contar(nombres.map(n=>partirColor(n)[1].join(" ")).filter(Boolean)),10,2);
+    const fila=(t,tipo,vals)=>vals.length?`<div class="sug-fila"><b>${t}</b>${vals.map(v=>`<button type="button" class="sug-chip" data-sug="${tipo}" data-v="${esc(v)}">${esc(v)}</button>`).join("")}</div>`:"";
+    cont.innerHTML=fila("Tipo","base",bases)+fila("Detalle","det",detalles)+fila("Color","color",colores);
+    cont.querySelectorAll("[data-sug]").forEach(b=>b.addEventListener("click",()=>aplicarSug(b.dataset.sug,b.dataset.v)));
+  }
+  function aplicarSug(tipo,v){
+    const campo=$("fNombre"); let [w,col]=partirColor(campo.value);
+    let resto=w.join(" ");
+    if(tipo==="base"){ const b=sugBases.find(x=>resto===x||resto.startsWith(x+" ")); resto=[v,b?resto.slice(b.length).trim():resto].filter(Boolean).join(" "); }
+    else if(tipo==="det"){ if(!w.includes(v)) resto=[resto,v].filter(Boolean).join(" "); }
+    else col=[v];
+    campo.value=[resto,col.join(" ")].filter(Boolean).join(" ")+(tipo==="color"?"":" ");
+    campo.focus(); const n=campo.value.length; try{ campo.setSelectionRange(n,n); }catch(e){}
+    campo.dispatchEvent(new Event("input"));
+  }
+
+  // ---------- Fotos desde una carpeta: el nombre de la carpeta es el código ----------
+  // Las fotos de cada producto vienen en una carpeta con su código (ej. GGW010). Al subir la
+  // carpeta (botón 📁 o arrastrándola) el código se llena solo, si el campo estaba vacío.
+  async function agregarFotos(files){
+    for(const file of files.filter(f=>/^image\//.test(f.type))){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } }
+    pintarFotos();
+  }
+  function codigoDesdeCarpeta(nombre){
+    const c=String(nombre||"").trim().toUpperCase().replace(/\s+/g,"-");
+    const campo=$("fCodigo"), est=$("codigoEstado");
+    est.style.color="";
+    if(!/^[A-Z0-9][A-Z0-9_-]{1,39}$/.test(c)){ est.textContent="La carpeta “"+nombre+"” no parece un código: escribilo a mano."; return; }
+    if(campo.value.trim()&&campo.value.trim().toUpperCase()!==c){ est.textContent="La carpeta se llama "+c+", pero dejé el código que ya tenías."; return; }
+    campo.value=c; revisarCodigo(true);
+  }
+  // Aviso si el código ya es de otro producto (al guardar se actualizaría ese).
+  function revisarCodigo(deCarpeta){
+    const c=$("fCodigo").value.trim().toUpperCase(), est=$("codigoEstado");
+    const existe=c&&$("tituloForm").textContent==="Subir producto nuevo"&&itemsMerged.find(i=>String(i.codigo||"").toUpperCase()===c);
+    est.style.color=existe?"var(--rojo)":"var(--verde)";
+    est.textContent=existe?"⚠️ "+c+" ya existe en el catálogo ("+((existe.datos&&existe.datos.nombre)||"sin nombre")+"): al guardar se reemplaza ese producto.":deCarpeta?"✓ Código tomado de la carpeta.":"";
+  }
+  function archivosDeCarpeta(dir){ return new Promise(res=>{ const lector=dir.createReader(), entradas=[];
+    const leer=()=>lector.readEntries(async lote=>{ if(lote.length){ entradas.push(...lote); leer(); return; }
+      const archivos=entradas.filter(en=>en.isFile).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+      res((await Promise.all(archivos.map(en=>new Promise(r=>en.file(r,()=>r(null)))))).filter(Boolean)); },()=>res([]));
+    leer(); }); }
+
   // ---------- Arrastrar y soltar fotos sobre la grilla ----------
   (function(){
     const g=$("fotosGrid");
     ["dragover","dragenter"].forEach(ev=>g.addEventListener(ev,e=>{ e.preventDefault(); g.classList.add("drag"); }));
     ["dragleave","dragend"].forEach(ev=>g.addEventListener(ev,e=>{ e.preventDefault(); g.classList.remove("drag"); }));
     g.addEventListener("drop",async e=>{ e.preventDefault(); g.classList.remove("drag");
-      const files=Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith("image/"));
-      for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } }
-      pintarFotos(); });
+      // Las entradas se leen ANTES de cualquier await (después el navegador vacía dataTransfer).
+      const entradas=Array.from(e.dataTransfer.items||[]).map(it=>it.webkitGetAsEntry?it.webkitGetAsEntry():null).filter(Boolean);
+      const sueltos=Array.from(e.dataTransfer.files||[]);
+      const carpeta=entradas.find(en=>en.isDirectory);
+      if(carpeta){ codigoDesdeCarpeta(carpeta.name); await agregarFotos(await archivosDeCarpeta(carpeta)); }
+      else await agregarFotos(sueltos); });
   })();
 
   // ---------- Vista previa interactiva (encuadre con el dedo) ----------
@@ -176,9 +254,14 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("fDemora").addEventListener("change", ()=>{ $("rowDemora").style.display = $("fDemora").checked ? "block" : "none"; });
   $("fEntregaInmediata").addEventListener("change", ()=>{ const v = $("fEntregaInmediata").checked ? "block" : "none"; $("rowTallasEI").style.display = v; $("rowColoresEI").style.display = v; });
   $("fAjuste").addEventListener("change", updatePreview);
-  $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
-    for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
-  $("fCategoria").addEventListener("change",()=>{ llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true); aplicarModoTallas(); tallasUIaCampo(); });
+  $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value=""; await agregarFotos(files); });
+  // Carpeta elegida con el botón 📁: cada archivo trae "GGW010/foto.jpg" en webkitRelativePath.
+  $("fCarpeta").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
+    const ruta=files.length?String(files[0].webkitRelativePath||""):"";
+    if(ruta.includes("/")) codigoDesdeCarpeta(ruta.split("/")[0]);
+    // Solo las fotos de la carpeta misma (no las de subcarpetas), en orden de nombre.
+    await agregarFotos(files.filter(f=>String(f.webkitRelativePath||"").split("/").length<=2).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}))); });
+  $("fCategoria").addEventListener("change",()=>{ llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true); aplicarModoTallas(); tallasUIaCampo(); renderSugNombre(); });
 
   // ---------- Tallas: calzado (34-47) o ropa (S,M,L,XL) según la subcategoría ----------
   const ROPA_TALLAS=["S","M","L","XL"];
@@ -217,7 +300,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     // Letras fuera de S/M/L/XL (raras): se conservan ocultas para no perderlas al editar.
     $("fTallasOtras").value=letras.filter(v=>!ROPA_TALLAS.includes(v.toUpperCase())).join(", ");
   }
-  $("fSubcategoria").addEventListener("change",()=>{ aplicarModoTallas(); tallasUIaCampo(); });
+  $("fSubcategoria").addEventListener("change",()=>{ aplicarModoTallas(); tallasUIaCampo(); renderSugNombre(); });
+  $("fCodigo").addEventListener("change",()=>revisarCodigo(false));
+  // Al salir del campo, el nombre queda sin espacios de más.
+  $("fNombre").addEventListener("blur",()=>{ $("fNombre").value=$("fNombre").value.replace(/\s+/g," ").trim(); });
 
   // ---------- Colores (chips + "Agregar color") ----------
   let coloresArr=[];
@@ -245,17 +331,35 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   // Etiquetas opcionales del producto: [idDelCheckbox, propiedadEnDatos]. Deben coincidir con
   // ETIQUETAS_OPCIONALES de productos.js (el sitio lee esa propiedad y muestra el badge).
   const ETQ_ADMIN=[["fEtqOg100","og100"],["fEtqMasVendido","masVendido"],["fEtqUltimasUnidades","ultimasUnidades"],["fEtqExclusivo","exclusivo"],["fEtqPreventa","preventa"],["fEtqEdicionLimitada","edicionLimitada"],["fEtqRestock","restock"],["fEtqRecomendado","recomendado"]];
-  $("btnGuardar").addEventListener("click",async()=>{
-    const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.trim(), categoria=$("fCategoria").value;
-    if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
+  // "Desde" solo = ese número exacto; "Hasta" menor que "Desde" se corrige.
+  function leerPreparacion(){
+    const a=Math.round(Number($("fPrepMin").value)||0), b=Math.round(Number($("fPrepMax").value)||0);
+    const min=a>0?a:(b>0?b:0);
+    return { prepMin:min, prepMax:min?Math.max(min,b):0 };
+  }
+  // Borrador: se guarda en catalogo_web oculto (activo=false) y con datos.borrador=true. La
+  // tienda, las páginas /p y el tracking solo leen activos, así que no sale en ningún lado
+  // hasta que se abre y se toca "Guardar producto". Solo para productos que NO están
+  // publicados (guardar uno publicado como borrador lo sacaría de la tienda).
+  $("btnGuardar").addEventListener("click",()=>guardarProducto(false));
+  $("btnBorrador").addEventListener("click",()=>guardarProducto(true));
+  async function guardarProducto(borrador){
+    const codigo=$("fCodigo").value.trim().toUpperCase(), nombre=$("fNombre").value.replace(/\s+/g," ").trim(), categoria=$("fCategoria").value;
+    if(borrador){
+      if(!codigo){ aviso($("avisoForm"),"Para guardar el borrador poné al menos el código del producto.","err"); return; }
+      const pub=itemsMerged.find(i=>String(i.codigo||"").toUpperCase()===codigo);
+      if(pub&&!esBorrador(pub)){ aviso($("avisoForm"),"Ese código ya está publicado en la tienda: guardarlo como borrador lo sacaría de la tienda. Usá Guardar producto.","err"); return; }
+    }
+    else if(!codigo||!nombre||!categoria){ aviso($("avisoForm"),"Completá código, nombre y categoría.","err"); return; }
     const ventaLibre=$("fVentaLibre").checked;
     // Una venta libre con el código de un producto de la tienda lo sacaría del catálogo.
-    if(ventaLibre&&itemsMerged.some(i=>String(i.codigo||"").toUpperCase()===codigo&&i.origen!=="nuevo")){
+    if(!borrador&&ventaLibre&&itemsMerged.some(i=>String(i.codigo||"").toUpperCase()===codigo&&i.origen!=="nuevo")){
       aviso($("avisoForm"),"Ese código ya es un producto de la tienda. Usá otro para la venta libre (ej: "+siguienteCodigoVL()+").","err"); return; }
-    if(!fotos.length&&ventaLibre){ aviso($("avisoForm"),"Subí al menos una foto: es lo que ve el cliente en el link.","err"); return; }
+    if(!borrador&&!fotos.length&&ventaLibre){ aviso($("avisoForm"),"Subí al menos una foto: es lo que ve el cliente en el link.","err"); return; }
     // Producto NUEVO (el código no estaba en el catálogo): al guardar se abre la imagen para Instagram.
-    const esNuevo=!itemsMerged.some(i=>String(i.codigo||"").toUpperCase()===codigo);
-    const btn=$("btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
+    const previo=itemsMerged.find(i=>String(i.codigo||"").toUpperCase()===codigo);
+    const esNuevo=!previo||esBorrador(previo);
+    const btn=$(borrador?"btnBorrador":"btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
     if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
     try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
       const ofertaHasta=$("fOfertaHasta").value?($("fOfertaHasta").value+"T23:59:59"):"";
@@ -273,10 +377,18 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         ventaLibre, destacadoNuevo:ventaLibre?false:$("fNuevo").checked, entregaInmediata:$("fEntregaInmediata").checked, tallasEntregaInmediata:$("fTallasEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean), coloresEntregaInmediata:$("fColoresEntregaInmediata").value.split(",").map(s=>s.trim()).filter(Boolean),
         // Demora extendida (config.js → demoraDe): aviso al cliente + días extra en la entrega estimada.
         demoraExtendida:$("fDemora").checked, diasExtra:$("fDemora").checked ? Math.max(0, Math.round(Number($("fDiasExtra").value)||0)) : 0, notaDemora:$("fDemora").checked ? $("fNotaDemora").value.trim() : "",
+        // Preparación propia (config.js → preparacionDe): vacío = el tiempo general.
+        ...leerPreparacion(),
+        borrador,
         fecha:new Date().toISOString().slice(0,10) };
       // Etiquetas opcionales elegidas en el formulario.
       ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
-      const {error}=await supa.from("catalogo_web").upsert({codigo,activo:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
+      const {error}=await supa.from("catalogo_web").upsert({codigo,activo:borrador?false:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
+      if(borrador){
+        limpiarForm(); await cargarRemotos(); filtroEstado="borradores"; pagina=1; renderChips(); renderTabla(); irA("lista");
+        alert("✓ Guardado como borrador. No se ve en la tienda: abrilo desde Borradores y tocá Guardar producto cuando esté listo.");
+        return;
+      }
 
       // El tracking es OTRO proyecto Supabase (el panel no tiene acceso a escribirle).
       // Se sincroniza SOLO desde el servidor del tracking, que lee este catálogo_web
@@ -291,7 +403,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       if(esNuevo && window.HLInstagram) window.HLInstagram.abrir(datos);
     }catch(err){ aviso($("avisoForm"),"Error al guardar: "+(err.message||err),"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
-  });
+  }
   function limpiarForm(){ $("tituloForm").textContent="Subir producto nuevo";
     ["fCodigo","fNombre","fMarca","fPrecio","fTallas","fTallasOtras","fColores","fColorNuevo","fDescripcion","fOferta","fOfertaHasta"].forEach(id=>$(id).value="");
     document.querySelectorAll("#tallasGrid input, #tallasRopa input").forEach(c=>c.checked=false);
@@ -299,6 +411,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     $("fDemora").checked=false; $("fDiasExtra").value=""; $("fNotaDemora").value=""; $("rowDemora").style.display="none";
+    $("fPrepMin").value=""; $("fPrepMax").value=""; $("btnBorrador").hidden=false; $("codigoEstado").textContent="";
     $("fVentaLibre").checked=false; $("cardVentaLibre").classList.remove("on");
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
@@ -307,7 +420,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("btnLimpiar").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); });
   $("btnCancelar").addEventListener("click",()=>{ limpiarForm(); aviso($("avisoForm"),"",""); irA("inicio"); });
   function cargarEnForm(datos,opts){ opts=opts||{};
-    $("tituloForm").textContent="Editar: "+(datos.nombre||datos.codigo);
+    const esBorr=datos.borrador===true;
+    $("tituloForm").textContent=(esBorr?"Borrador: ":"Editar: ")+(datos.nombre||datos.codigo);
+    // Solo un borrador (o un producto nuevo) se puede volver a guardar como borrador.
+    $("btnBorrador").hidden=!esBorr; $("codigoEstado").textContent="";
     $("fCodigo").value=datos.codigo||""; $("fNombre").value=datos.nombre||""; $("fMarca").value=datos.marca||"";
     $("fCategoria").value=datos.categoria||CATEGORIAS[0]; $("fCategoria").dispatchEvent(new Event("change"));
     $("fSubcategoria").value=datos.subcategoria||""; $("fTipoRopa").value=datos.tipoPrenda||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;
@@ -316,11 +432,12 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     campoATallasUI(); aplicarModoTallas(); campoAColoresUI();
     $("fAjuste").value=datos.imagenFit==="contain"?"contain":"cover";
     prePos=parsePos(datos.posicionImagen); preScale=Number(datos.escalaImagen)||1; $("preZoom").value=preScale; $("prePosY").value=Math.round(prePos.y); activePhoto=0;
-    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
+    $("fNuevo").checked=datos.destacadoNuevo!==false; $("fActivo").checked=esBorr||opts.activo!==false; $("fEntregaInmediata").checked=datos.entregaInmediata===true; $("fTallasEntregaInmediata").value=(datos.tallasEntregaInmediata||[]).join(", "); $("rowTallasEI").style.display=datos.entregaInmediata===true?"block":"none"; $("fColoresEntregaInmediata").value=(datos.coloresEntregaInmediata||[]).join(", "); $("rowColoresEI").style.display=datos.entregaInmediata===true?"block":"none";
     $("fVentaLibre").checked=datos.ventaLibre===true; $("cardVentaLibre").classList.toggle("on",datos.ventaLibre===true);
+    $("fPrepMin").value=Number(datos.prepMin)>0?datos.prepMin:""; $("fPrepMax").value=Number(datos.prepMin)>0&&Number(datos.prepMax)>0?datos.prepMax:"";
     $("fDemora").checked=datos.demoraExtendida===true; $("fDiasExtra").value=datos.diasExtra||""; $("fNotaDemora").value=datos.notaDemora||""; $("rowDemora").style.display=datos.demoraExtendida===true?"block":"none";
     ETQ_ADMIN.forEach(([id,prop])=>{ $(id).checked=datos[prop]===true; });
-    fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
+    fotos=(datos.imagenes||[]).filter(Boolean).map(u=>({remota:u,url:u})); pintarFotos(); renderSugNombre(); irA("form"); window.scrollTo({top:0,behavior:"smooth"}); }
 
   // ============ Datos ============
   async function cargarRemotos(){
@@ -349,7 +466,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       else items.push({codigo:p.codigo,datos:datosDeBase(p),origen:"original",remoteId:null,activo:true}); });
     remotos.forEach(r=>{ const c=String(r.codigo||"").toUpperCase(); if(usados.has(c)) return;
       items.push({codigo:r.codigo,datos:conNombreVisible(r.codigo,r.datos)||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
-    itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas(); renderVentaLibre();
+    itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas(); renderVentaLibre(); renderSugNombre();
   }
   // Autocompletado de marcas: junta las marcas ya usadas (catálogo base + panel) para que
   // al subir un producto elijas la marca EXACTA y no la reescribas mal (mayúsculas/erratas),
@@ -371,7 +488,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     const peso={nuevo:0,editado:1,original:2};
     return itemsMerged.filter(i=>{ const d=i.datos||{};
       if(filtroCategoria!=="todas"&&d.categoria!==filtroCategoria) return false;
-      if(filtroEstado==="nuevos"&&(i.origen!=="nuevo"||esVL(i))) return false;
+      if(filtroEstado==="borradores"&&!esBorrador(i)) return false;
+      if(filtroEstado==="nuevos"&&(i.origen!=="nuevo"||esVL(i)||esBorrador(i))) return false;
       if(filtroEstado==="ventalibre"&&!esVL(i)) return false;
       if(filtroEstado==="editados"&&i.origen!=="editado") return false;
       if(filtroEstado==="oferta"&&!enOferta(d)) return false;
@@ -383,7 +501,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   // ============ Dashboard de inicio ============
   function renderInicio(){
     const total=itemsMerged.length;
-    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo"&&!esVL(i)).length;
+    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo"&&!esVL(i)&&!esBorrador(i)).length;
     const editados=itemsMerged.filter(i=>i.origen==="editado").length;
     const ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length;
     const cards=[
@@ -408,8 +526,9 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
 
   // ============ Chips + Tabla ============
   function renderChips(){
-    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo"&&!esVL(i)).length, editados=itemsMerged.filter(i=>i.origen==="editado").length, ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length, vls=itemsMerged.filter(esVL).length;
-    const estados=[["todos","Todos"],["nuevos","Nuevos ("+nuevos+")"],["editados","Editados ("+editados+")"],["oferta","En oferta ("+ofertas+")"]].concat(vls?[["ventalibre","Venta libre ("+vls+")"]]:[]);
+    const nuevos=itemsMerged.filter(i=>i.origen==="nuevo"&&!esVL(i)&&!esBorrador(i)).length, editados=itemsMerged.filter(i=>i.origen==="editado").length, ofertas=itemsMerged.filter(i=>enOferta(i.datos)).length, vls=itemsMerged.filter(esVL).length;
+    const borrs=itemsMerged.filter(esBorrador).length;
+    const estados=[["todos","Todos"],["nuevos","Nuevos ("+nuevos+")"],["editados","Editados ("+editados+")"],["oferta","En oferta ("+ofertas+")"]].concat(vls?[["ventalibre","Venta libre ("+vls+")"]]:[]).concat(borrs||filtroEstado==="borradores"?[["borradores","Borradores ("+borrs+")"]]:[]);
     $("chipsEstado").innerHTML=estados.map(([v,t])=>`<button class="chip ${filtroEstado===v?"activa":""}" data-estado="${v}">${t}</button>`).join("");
     const cats=[["todas","Todas"]].concat(CATEGORIAS.map(c=>[c,c]));
     $("chipsCategoria").innerHTML=cats.map(([v,t])=>`<button class="chip ${filtroCategoria===v?"activa":""}" data-cat="${v}">${t}</button>`).join("");
@@ -419,10 +538,11 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   function filaHTML(i, sel){
     const d=i.datos||{}; const oferta=enOferta(d);
     const chk=sel?`<label class="chk"><input type="checkbox" class="rowchk" data-cod="${esc(i.codigo)}" ${seleccion.has(i.codigo)?"checked":""}></label>`:"";
-    const pill=esVL(i)?'<span class="pill vlibre">Venta libre</span>':i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
+    const pill=esBorrador(i)?'<span class="pill borrador">Borrador</span>':esVL(i)?'<span class="pill vlibre">Venta libre</span>':i.origen==="nuevo"?'<span class="pill nuevo">Nuevo</span>':i.origen==="editado"?'<span class="pill editado">Editado</span>':'<span class="pill original">Original</span>';
     const bOf=oferta?'<span class="pill oferta">Oferta</span>':"";
-    const bOc=i.remoteId&&!i.activo?'<span class="pill oculto">Oculto</span>':"";
-    const pausaBtn=i.remoteId?`<button class="icon-btn" data-pausa title="${i.activo?"Ocultar":"Mostrar"}">${i.activo?"⏸":"▶"}</button>`:"";
+    const bOc=i.remoteId&&!i.activo&&!esBorrador(i)?'<span class="pill oculto">Oculto</span>':"";
+    // Un borrador no se muestra con ▶: se publica abriéndolo y tocando Guardar producto.
+    const pausaBtn=i.remoteId&&!esBorrador(i)?`<button class="icon-btn" data-pausa title="${i.activo?"Ocultar":"Mostrar"}">${i.activo?"⏸":"▶"}</button>`:"";
     const acc=`${pausaBtn}<button class="icon-btn" data-borrar title="Eliminar del catalogo">🗑</button>`;
     return `<div class="tr" data-cod="${esc(i.codigo)}">
       <div class="c-prod">
@@ -540,6 +660,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   // productosPrivados) pero su link /p/CODIGO/ abre el producto y se encarga normal.
   // Después se decide: "Publicar en la tienda" (pasa al catálogo) o dejarlo solo para esa venta.
   const SITIO="https://hauslineshopni.es";
+  function esBorrador(it){ return !!(it&&it.datos&&it.datos.borrador===true); }
   function esVL(it){ return !!(it&&it.datos&&it.datos.ventaLibre===true); }
   function linkVL(codigo){ return SITIO+"/p/"+encodeURIComponent(codigo)+"/"; }
   function siguienteCodigoVL(){ let max=0; itemsMerged.forEach(i=>{ const m=/^LIB(\d+)$/i.exec(String(i.codigo||"")); if(m) max=Math.max(max,Number(m[1])); }); return "LIB"+String(max+1).padStart(3,"0"); }

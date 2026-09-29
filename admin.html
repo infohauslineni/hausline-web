@@ -42,6 +42,17 @@
   .btn-sec{background:transparent;color:var(--texto);border-color:var(--linea2)}
   .btn-sec:hover{border-color:var(--texto);filter:none}
   .btn-mini{padding:9px 14px;font-size:12px}
+  .nombre-sug{margin-top:8px;display:grid;gap:6px}
+  .nombre-sug:empty{display:none}
+  .sug-fila{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .sug-fila::-webkit-scrollbar{display:none}
+  .sug-fila b{flex:0 0 auto;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--texto3);min-width:46px}
+  .sug-chip{flex:0 0 auto;border:1px solid var(--linea2);background:transparent;color:var(--texto2);border-radius:16px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+  .sug-chip:hover{border-color:var(--verde);color:var(--texto)}
+  .pill.borrador{background:rgba(242,190,60,.16);color:#f2c14e}
+  .prep-rango{display:flex;align-items:center;gap:10px}
+  .prep-rango input{width:84px;flex:0 0 auto;text-align:center}
+  .prep-rango span{color:var(--texto2);font-size:13px}
   .spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:currentColor;border-radius:50%;display:inline-block;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -377,6 +388,7 @@
             <div><h1 id="tituloForm">Subir producto nuevo</h1><p class="page-sub">Complete la información del producto</p></div>
             <div class="head-actions">
               <button id="btnCancelar" class="btn btn-sec">Cancelar</button>
+              <button id="btnBorrador" class="btn btn-sec" title="Lo guarda sin publicarlo: no sale en la tienda hasta que toques Guardar producto">Guardar borrador</button>
               <button id="btnGuardar" class="btn">Guardar producto</button>
             </div>
           </div>
@@ -393,8 +405,8 @@
               <div class="card">
                 <h2 class="card-h">Información básica</h2>
                 <div class="fila">
-                  <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Air Jordan 1 Retro High OG"></div>
-                  <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: AJ1-RETRO-001" autocapitalize="characters"></div>
+                  <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro" autocomplete="off"><div id="nombreSug" class="nombre-sug"></div></div>
+                  <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: GGW010 (o subí la carpeta de fotos)" autocapitalize="characters"><small class="hint" id="codigoEstado"></small></div>
                 </div>
                 <div class="fila">
                   <div><label>Categoría *</label><select id="fCategoria"></select></div>
@@ -418,7 +430,8 @@
                 <label>Imágenes del producto</label>
                 <div id="fotosGrid" class="fotos-grid"></div>
                 <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
-                <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre el fondo del catálogo (opcional).</p>
+                <input id="fCarpeta" type="file" webkitdirectory multiple class="hidden">
+                <p class="hint">Se comprimen solas antes de subir. <b>📁 Carpeta</b> (o arrastrar la carpeta acá) = sube todas sus fotos y el nombre de la carpeta queda como código. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre el fondo del catálogo (opcional).</p>
                 <p class="hint" id="fondoEstado" style="color:var(--verde);"></p>
               </div>
 
@@ -489,6 +502,16 @@
                 </div>
                 <div id="rowTallasEI" style="display:none;margin-top:10px"><label>Tallas disponibles ahora (entrega inmediata)</label><input id="fTallasEntregaInmediata" placeholder="Ej: 40, 41, 42"><small class="hint">Separadas por coma. Son las tallas que ya tenés físicamente.</small></div>
                 <div id="rowColoresEI" style="display:none;margin-top:10px"><label>Colores disponibles ahora (entrega inmediata)</label><input id="fColoresEntregaInmediata" placeholder="Ej: Negro, Blanco"><small class="hint">Separados por coma. Solo si el producto tiene colores. Dejalo vacío si no aplica.</small></div>
+                <div style="margin-top:10px">
+                  <label>Preparación aprox. (días)</label>
+                  <div class="prep-rango">
+                    <input id="fPrepMin" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="4" aria-label="Preparación desde (días)">
+                    <span>a</span>
+                    <input id="fPrepMax" type="number" inputmode="numeric" min="1" max="60" step="1" placeholder="5" aria-label="Preparación hasta (días)">
+                    <span>días</span>
+                  </div>
+                  <small class="hint">Lo que tarda el proveedor en preparar ESTE producto (envío estándar; en el rápido se cuenta 1 día menos). Vacío = el general de 4 a 5 días. El cliente lo ve en el producto y la entrega estimada se ajusta sola (ej. 2 a 3 días → 18 a 23 días en vez de 20 a 25).</small>
+                </div>
                 <div class="toggle-row">
                   <div><b>¿Puede tardar más de lo esperado?</b><small>Proveedor con más demora: se le avisa al cliente en el producto, el carrito y el checkout</small></div>
                   <label class="switch"><input id="fDemora" type="checkbox"><span></span></label>
@@ -613,6 +636,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20260927lib"></script>
+<script src="admin.js?v=20261006c"></script>
 </body>
 </html>
