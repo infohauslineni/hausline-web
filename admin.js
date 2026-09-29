@@ -80,8 +80,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         <button type="button" class="quitar" data-quitar="${i}">×</button>
         ${f.sinFondo ? "" : `<button type="button" class="cortar" data-fondo="${i}" title="Quitar fondo (dejar sobre el fondo del catálogo)">✂️ Fondo</button>`}
       </div>`).join("")+
-      `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
+      `<button type="button" class="foto-add" id="btnAddFoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`+
+      `<button type="button" class="foto-add" id="btnAddCarpeta" title="Elegí la carpeta del producto: su nombre (ej. GGW010) se pone como código"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Carpeta</button>`;
     $("btnAddFoto").addEventListener("click",()=>$("fFotos").click());
+    $("btnAddCarpeta").addEventListener("click",()=>$("fCarpeta").click());
     g.querySelectorAll("[data-quitar]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.quitar; if(fotos[i]&&!fotos[i].remota)URL.revokeObjectURL(fotos[i].url); fotos.splice(i,1); pintarFotos(); }));
     // ★ = poner esa foto como principal (la mueve al primer lugar = vista previa)
     g.querySelectorAll("[data-principal]").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.principal; const m=fotos.splice(i,1)[0]; fotos.unshift(m); pintarFotos(); }));
@@ -173,15 +175,46 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     campo.dispatchEvent(new Event("input"));
   }
 
+  // ---------- Fotos desde una carpeta: el nombre de la carpeta es el código ----------
+  // Las fotos de cada producto vienen en una carpeta con su código (ej. GGW010). Al subir la
+  // carpeta (botón 📁 o arrastrándola) el código se llena solo, si el campo estaba vacío.
+  async function agregarFotos(files){
+    for(const file of files.filter(f=>/^image\//.test(f.type))){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } }
+    pintarFotos();
+  }
+  function codigoDesdeCarpeta(nombre){
+    const c=String(nombre||"").trim().toUpperCase().replace(/\s+/g,"-");
+    const campo=$("fCodigo"), est=$("codigoEstado");
+    est.style.color="";
+    if(!/^[A-Z0-9][A-Z0-9_-]{1,39}$/.test(c)){ est.textContent="La carpeta “"+nombre+"” no parece un código: escribilo a mano."; return; }
+    if(campo.value.trim()&&campo.value.trim().toUpperCase()!==c){ est.textContent="La carpeta se llama "+c+", pero dejé el código que ya tenías."; return; }
+    campo.value=c; revisarCodigo(true);
+  }
+  // Aviso si el código ya es de otro producto (al guardar se actualizaría ese).
+  function revisarCodigo(deCarpeta){
+    const c=$("fCodigo").value.trim().toUpperCase(), est=$("codigoEstado");
+    const existe=c&&$("tituloForm").textContent==="Subir producto nuevo"&&itemsMerged.find(i=>String(i.codigo||"").toUpperCase()===c);
+    est.style.color=existe?"var(--rojo)":"var(--verde)";
+    est.textContent=existe?"⚠️ "+c+" ya existe en el catálogo ("+((existe.datos&&existe.datos.nombre)||"sin nombre")+"): al guardar se reemplaza ese producto.":deCarpeta?"✓ Código tomado de la carpeta.":"";
+  }
+  function archivosDeCarpeta(dir){ return new Promise(res=>{ const lector=dir.createReader(), entradas=[];
+    const leer=()=>lector.readEntries(async lote=>{ if(lote.length){ entradas.push(...lote); leer(); return; }
+      const archivos=entradas.filter(en=>en.isFile).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+      res((await Promise.all(archivos.map(en=>new Promise(r=>en.file(r,()=>r(null)))))).filter(Boolean)); },()=>res([]));
+    leer(); }); }
+
   // ---------- Arrastrar y soltar fotos sobre la grilla ----------
   (function(){
     const g=$("fotosGrid");
     ["dragover","dragenter"].forEach(ev=>g.addEventListener(ev,e=>{ e.preventDefault(); g.classList.add("drag"); }));
     ["dragleave","dragend"].forEach(ev=>g.addEventListener(ev,e=>{ e.preventDefault(); g.classList.remove("drag"); }));
     g.addEventListener("drop",async e=>{ e.preventDefault(); g.classList.remove("drag");
-      const files=Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith("image/"));
-      for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } }
-      pintarFotos(); });
+      // Las entradas se leen ANTES de cualquier await (después el navegador vacía dataTransfer).
+      const entradas=Array.from(e.dataTransfer.items||[]).map(it=>it.webkitGetAsEntry?it.webkitGetAsEntry():null).filter(Boolean);
+      const sueltos=Array.from(e.dataTransfer.files||[]);
+      const carpeta=entradas.find(en=>en.isDirectory);
+      if(carpeta){ codigoDesdeCarpeta(carpeta.name); await agregarFotos(await archivosDeCarpeta(carpeta)); }
+      else await agregarFotos(sueltos); });
   })();
 
   // ---------- Vista previa interactiva (encuadre con el dedo) ----------
@@ -221,8 +254,13 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   $("fDemora").addEventListener("change", ()=>{ $("rowDemora").style.display = $("fDemora").checked ? "block" : "none"; });
   $("fEntregaInmediata").addEventListener("change", ()=>{ const v = $("fEntregaInmediata").checked ? "block" : "none"; $("rowTallasEI").style.display = v; $("rowColoresEI").style.display = v; });
   $("fAjuste").addEventListener("change", updatePreview);
-  $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
-    for(const file of files){ try{ const b=await comprimir(file); fotos.push({blob:b,url:URL.createObjectURL(b)}); }catch(err){ console.warn(err); } } pintarFotos(); });
+  $("fFotos").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value=""; await agregarFotos(files); });
+  // Carpeta elegida con el botón 📁: cada archivo trae "GGW010/foto.jpg" en webkitRelativePath.
+  $("fCarpeta").addEventListener("change",async e=>{ const files=Array.from(e.target.files||[]); e.target.value="";
+    const ruta=files.length?String(files[0].webkitRelativePath||""):"";
+    if(ruta.includes("/")) codigoDesdeCarpeta(ruta.split("/")[0]);
+    // Solo las fotos de la carpeta misma (no las de subcarpetas), en orden de nombre.
+    await agregarFotos(files.filter(f=>String(f.webkitRelativePath||"").split("/").length<=2).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}))); });
   $("fCategoria").addEventListener("change",()=>{ llenarSelect($("fSubcategoria"),SUBCATEGORIAS[$("fCategoria").value]||[],true); aplicarModoTallas(); tallasUIaCampo(); renderSugNombre(); });
 
   // ---------- Tallas: calzado (34-47) o ropa (S,M,L,XL) según la subcategoría ----------
@@ -263,6 +301,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fTallasOtras").value=letras.filter(v=>!ROPA_TALLAS.includes(v.toUpperCase())).join(", ");
   }
   $("fSubcategoria").addEventListener("change",()=>{ aplicarModoTallas(); tallasUIaCampo(); renderSugNombre(); });
+  $("fCodigo").addEventListener("change",()=>revisarCodigo(false));
   // Al salir del campo, el nombre queda sin espacios de más.
   $("fNombre").addEventListener("blur",()=>{ $("fNombre").value=$("fNombre").value.replace(/\s+/g," ").trim(); });
 
@@ -372,7 +411,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     $("fCategoria").selectedIndex=0; $("fCategoria").dispatchEvent(new Event("change"));
     $("fCotizar").checked=false; $("fNuevo").checked=true; $("fActivo").checked=true; $("fEntregaInmediata").checked=false; $("fTallasEntregaInmediata").value=""; $("rowTallasEI").style.display="none"; $("fColoresEntregaInmediata").value=""; $("rowColoresEI").style.display="none"; $("fAjuste").value="cover";
     $("fDemora").checked=false; $("fDiasExtra").value=""; $("fNotaDemora").value=""; $("rowDemora").style.display="none";
-    $("fPrepMin").value=""; $("fPrepMax").value=""; $("btnBorrador").hidden=false;
+    $("fPrepMin").value=""; $("fPrepMax").value=""; $("btnBorrador").hidden=false; $("codigoEstado").textContent="";
     $("fVentaLibre").checked=false; $("cardVentaLibre").classList.remove("on");
     ETQ_ADMIN.forEach(([id])=>{ const el=$(id); if(el) el.checked=false; });
     prePos={x:50,y:50}; preScale=1; $("preZoom").value=1; $("prePosY").value=50; activePhoto=0;
@@ -384,7 +423,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     const esBorr=datos.borrador===true;
     $("tituloForm").textContent=(esBorr?"Borrador: ":"Editar: ")+(datos.nombre||datos.codigo);
     // Solo un borrador (o un producto nuevo) se puede volver a guardar como borrador.
-    $("btnBorrador").hidden=!esBorr;
+    $("btnBorrador").hidden=!esBorr; $("codigoEstado").textContent="";
     $("fCodigo").value=datos.codigo||""; $("fNombre").value=datos.nombre||""; $("fMarca").value=datos.marca||"";
     $("fCategoria").value=datos.categoria||CATEGORIAS[0]; $("fCategoria").dispatchEvent(new Event("change"));
     $("fSubcategoria").value=datos.subcategoria||""; $("fTipoRopa").value=datos.tipoPrenda||""; $("fPrecio").value=datos.precio||""; $("fCotizar").checked=!!datos.cotizar;

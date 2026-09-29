@@ -406,7 +406,7 @@
                 <h2 class="card-h">Información básica</h2>
                 <div class="fila">
                   <div><label>Nombre del producto</label><input id="fNombre" placeholder="Ej: Sneaker High Top Cuero Negro" autocomplete="off"><div id="nombreSug" class="nombre-sug"></div></div>
-                  <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: AJ1-RETRO-001" autocapitalize="characters"></div>
+                  <div><label>Código del producto *</label><input id="fCodigo" placeholder="Ej: GGW010 (o subí la carpeta de fotos)" autocapitalize="characters"><small class="hint" id="codigoEstado"></small></div>
                 </div>
                 <div class="fila">
                   <div><label>Categoría *</label><select id="fCategoria"></select></div>
@@ -430,7 +430,8 @@
                 <label>Imágenes del producto</label>
                 <div id="fotosGrid" class="fotos-grid"></div>
                 <input id="fFotos" type="file" accept="image/*" multiple class="hidden">
-                <p class="hint">Se comprimen solas antes de subir. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre el fondo del catálogo (opcional).</p>
+                <input id="fCarpeta" type="file" webkitdirectory multiple class="hidden">
+                <p class="hint">Se comprimen solas antes de subir. <b>📁 Carpeta</b> (o arrastrar la carpeta acá) = sube todas sus fotos y el nombre de la carpeta queda como código. La ★ elige la principal. <b>✂️ Fondo</b> = deja el producto sobre el fondo del catálogo (opcional).</p>
                 <p class="hint" id="fondoEstado" style="color:var(--verde);"></p>
               </div>
 
@@ -635,6 +636,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260927"></script>
-<script src="admin.js?v=20261006b"></script>
+<script src="admin.js?v=20261006c"></script>
 </body>
 </html>
