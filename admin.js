@@ -200,7 +200,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     const c=String(nombre||"").trim().toUpperCase().replace(/\s+/g,"-");
     const campo=$("fCodigo"), est=$("codigoEstado");
     est.style.color="";
-    if(!/^[A-Z0-9][A-Z0-9_-]{1,39}$/.test(c)){ est.textContent="La carpeta “"+nombre+"” no parece un código: escribilo a mano."; return; }
+    if(!/^[A-Z0-9][A-Z0-9_&.+-]{1,39}$/.test(c)){ est.textContent="La carpeta “"+nombre+"” no parece un código: escribilo a mano."; return; }
     if(campo.value.trim()&&campo.value.trim().toUpperCase()!==c){ est.textContent="La carpeta se llama "+c+", pero dejé el código que ya tenías."; return; }
     campo.value=c; revisarCodigo(true);
   }
