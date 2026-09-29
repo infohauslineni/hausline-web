@@ -133,9 +133,40 @@
   }
 
   /* ---------------- Datos (RPCs con RLS) ---------------- */
-  async function rpc(nombre, args) {
+  // Si el token venció y supabase-js no lo pudo renovar (típico al volver a la pestaña en el
+  // teléfono, sin red todavía), la llamada sale como visitante y la base responde "permission
+  // denied" (42501) o JWT vencido (PGRST301/PGRST303). No es falla del sistema: se renueva la
+  // sesión y se reintenta una vez; si la sesión ya no existe, se vuelve a ingresar.
+  function esErrorDeSesion(e) {
+    return !!e && (e.code === "42501" || e.code === "PGRST301" || e.code === "PGRST303" || /jwt expired|permission denied for function/i.test(e.message || ""));
+  }
+  var yendoAIngresar = false;
+  function irAIngresar() {
+    if (yendoAIngresar) return;
+    yendoAIngresar = true;
+    S.registrar("sesion_vencida");
+    location.replace("/cuenta/ingresar/?volver=" + encodeURIComponent(location.pathname + location.search));
+  }
+  async function llamar(nombre, args) {
     var r = await sb.rpc(nombre, args || {});
+    if (!r.error || !esErrorDeSesion(r.error)) return r;
+    var s = await sb.auth.getSession();
+    if (s && s.data && s.data.session) return sb.rpc(nombre, args || {});
+    var e;
+    if (s && s.error && s.error.name === "AuthRetryableFetchError") {
+      // No se pudo renovar por falta de red: la sesión sigue guardada y se renueva sola después.
+      e = new Error("network: no se pudo renovar la sesión");
+    } else {
+      irAIngresar();
+      e = new Error("Tu sesión expiró. Volvé a ingresar.");
+    }
+    e.__registrado = true; e.sesion = true;
+    return { data: null, error: e };
+  }
+  async function rpc(nombre, args) {
+    var r = await llamar(nombre, args);
     if (r.error) {
+      if (r.error.sesion) throw r.error;
       S.error("rpc_error", (r.error.message || "Error") + " · " + nombre, { funcion: nombre, codigo: r.error.code || null });
       try { r.error.__registrado = true; } catch (e) {}
       throw r.error;
@@ -149,9 +180,9 @@
   // Si falla, no rompe la página: la cuenta sigue mostrando los pedidos igual.
   async function misEncargos() {
     try {
-      var r = await sb.rpc("mis_encargos_cliente");
+      var r = await llamar("mis_encargos_cliente");
       // PGRST202 = la función todavía no existe en la base (migración sin aplicar): no es falla del cliente.
-      if (r.error) { if (r.error.code !== "PGRST202") S.error("rpc_error", (r.error.message || "Error") + " · mis_encargos_cliente", { funcion: "mis_encargos_cliente", codigo: r.error.code || null }); return []; }
+      if (r.error) { if (r.error.code !== "PGRST202" && !r.error.sesion) S.error("rpc_error", (r.error.message || "Error") + " · mis_encargos_cliente", { funcion: "mis_encargos_cliente", codigo: r.error.code || null }); return []; }
       return Array.isArray(r.data) ? r.data : [];
     } catch (e) { return []; }
   }
