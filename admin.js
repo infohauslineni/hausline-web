@@ -901,9 +901,16 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     }catch(err){ const m=err.message||String(err); aviso($("cupAviso"), /duplicate/i.test(m)?"Ese código ya existe.": /row-level security|violates|permission|not allowed/i.test(m)?"Tu usuario no tiene permiso en el proyecto de Cupones (perfil inactivo o distinto). Debe ser el mismo admin de la app de tracking.":"Error: "+m,"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
   });
+  // Sin sesión en el proyecto del sistema: en vez de mostrar la lista vacía (parecía que no había
+  // datos), se explica y se ofrece conectar con la cuenta del sistema (la del panel de tracking).
+  function pedirConexion(cont, recargar, que){
+    cont.innerHTML='<div class="cargando">Para ver '+que+' hay que conectar tu cuenta del sistema (la misma del panel de tracking).<br><button type="button" class="btn" id="btnConectarTienda" style="margin-top:10px">Conectar</button></div>';
+    const b=cont.querySelector("#btnConectarTienda");
+    b.addEventListener("click", async()=>{ b.disabled=true; b.textContent="Conectando…"; if(await asegurarSesionTienda(true)) recargar(); else { b.disabled=false; b.textContent="Conectar"; alert("No se pudo conectar"+(ultimoErrorTienda?": "+ultimoErrorTienda:". Revisá el correo y la contraseña del sistema.")); } });
+  }
   async function cargarCupones(){
     const cont=$("cupLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
-    await asegurarSesionTienda();
+    if(!(await asegurarSesionTienda())){ pedirConexion(cont, cargarCupones, "los cupones"); return; }
     const {data,error}=await supaTienda.from("cupones").select("id,codigo,tipo,valor,usos_max,usos_confirmados,vence_el,activo").order("created_at",{ascending:false});
     if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar. Cerrá sesión y volvé a entrar (para el login del segundo proyecto).</div>'; return; }
     if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin cupones todavía.</div>'; return; }
@@ -944,7 +951,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   });
   async function cargarPromos(){
     const cont=$("prmLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
-    await asegurarSesionTienda();
+    if(!(await asegurarSesionTienda())){ pedirConexion(cont, cargarPromos, "las promociones"); return; }
     const {data,error}=await supaTienda.from("promociones").select("id,nombre,condicion_tipo,condicion_valor,tipo,valor,vence_el,activo").order("created_at",{ascending:false});
     if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar. ¿Aplicaste la migración de promociones (202609200005)?</div>'; return; }
     if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin promociones todavía.</div>'; return; }
@@ -978,7 +985,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   async function asegurarSesion(){
     try{ const { data, error } = await supa.auth.refreshSession(); if(!error && data && data.session) return true; }
     catch(e){}
-    try{ await supa.auth.signOut(); }catch(e){}
+    try{ await supa.auth.signOut({ scope:"local" }); }catch(e){}
     mostrarPanel(false);
     aviso($("avisoLogin"), "Tu sesion expiro. Volve a iniciar sesion para guardar.", "err");
     return false;
@@ -999,7 +1006,13 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   async function asegurarSesionTienda(interactivo){
     try{
       const { data } = await supaTienda.auth.getSession();
-      if(data && data.session) return true;
+      if(data && data.session){
+        // La sesión guardada puede estar muerta (se cerró desde otra app, o el usuario se volvió a
+        // crear): se confirma con el servidor. Si no sirve, se descarta y se pide conectar.
+        const u = await supaTienda.auth.getUser();
+        if(!u.error && u.data && u.data.user) return true;
+        try{ await supaTienda.auth.signOut({ scope:"local" }); }catch(_){}
+      }
     }catch(_){}
     if(credsTienda && await loginTienda(credsTienda.email, credsTienda.password)) return true;
     if(interactivo){
@@ -1029,7 +1042,9 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   });
   $("loginPass").addEventListener("keydown",e=>{ if(e.key==="Enter") $("btnEntrar").click(); });
   $("verPass").addEventListener("click",()=>{ const p=$("loginPass"); p.type=p.type==="password"?"text":"password"; });
-  $("btnSalir").addEventListener("click",async()=>{ await supa.auth.signOut(); try{ await supaTienda.auth.signOut(); }catch(_){} limpiarForm(); mostrarPanel(false); });
+  // scope "local": cierra SOLO este navegador. Con el cierre global por defecto, salir de aquí
+  // también tumbaba la sesión del panel de tracking (misma cuenta), y viceversa.
+  $("btnSalir").addEventListener("click",async()=>{ try{ await supa.auth.signOut({ scope:"local" }); }catch(_){} try{ await supaTienda.auth.signOut({ scope:"local" }); }catch(_){} limpiarForm(); mostrarPanel(false); });
   ["gesturestart","gesturechange","gestureend"].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
 
   // ============ Arranque ============
