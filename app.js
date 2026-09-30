@@ -111,6 +111,15 @@ function miniatura(src){
   return /^imgP\//.test(r) ? r.replace(/^imgP\//, "imgM/").replace(/\.[^./]+$/, ".webp") : s;
 }
 function imgMini(src){ const m = miniatura(src); return m !== String(src || "") ? `src="${esc(m)}" data-orig="${esc(src)}"` : `src="${esc(src)}"`; }
+// Foto GRANDE de un producto del panel: copia en GitHub (imgG/panel/<ruta>.webp, 1400px) que
+// genera scripts/gen-miniaturas.mjs. Antes cada vista bajaba las fotos de Supabase (≈2 MB por
+// producto) y agotaba el egress del plan gratis. Si la copia aún no existe, cae a la original.
+function grande(src){
+  const s = String(src || "");
+  if(!s.startsWith(STORAGE_CATALOGO)) return s;
+  const rel = s.slice(STORAGE_CATALOGO.length).split("?")[0];
+  return rel ? "imgG/panel/" + decodeURIComponent(rel).replace(/\.[^./]+$/, ".webp") : s;
+}
 // Fotos que no cargan: 1) mini inexistente → foto original; 2) la original también
 // falla → la tarjeta muestra el recuadro "sin imagen". (Reemplaza el onerror inline,
 // que la CSP del sitio bloquea.)
@@ -1618,9 +1627,12 @@ function renderGaleria(inmediata){
 
   if(img.dataset.src !== nuevaSrc){
     img.dataset.src = nuevaSrc;
+    const g = grande(nuevaSrc);
     const aplicar = () => {
       if(img.dataset.src !== nuevaSrc) return;   // el usuario ya cambió otra vez
-      img.src = nuevaSrc;
+      // Copia de GitHub; si no existe, el listener de error vuelve a la original (data-orig).
+      if(g !== nuevaSrc) img.dataset.orig = nuevaSrc; else delete img.dataset.orig;
+      img.src = g;
       img.className = claseBase;
       img.style.opacity = "1";
     };
@@ -1632,7 +1644,7 @@ function renderGaleria(inmediata){
       const pre = new Image();
       pre.onload = aplicar;
       pre.onerror = aplicar;
-      pre.src = nuevaSrc;
+      pre.src = g;
       if(pre.complete && pre.naturalWidth) aplicar();
     }
   } else {
@@ -1651,13 +1663,13 @@ function renderGaleria(inmediata){
   $("#galeriaContador").textContent = varias
     ? `${indiceImagen + 1} / ${imagenesActuales.length}` : "";
 
-  // Miniaturas SIN loading="lazy": se cargan de una vez para que siempre se vean
-  // y, de paso, dejan todas las fotos del producto en caché → cambiar es instantáneo.
+  // Miniaturas: la versión chica (imgM, ~30 KB) en vez de la foto completa; antes esta tira
+  // bajaba TODAS las fotos grandes de una vez aunque el cliente mirara solo la primera.
   $("#miniaturas").innerHTML = varias
     ? imagenesActuales.map((src, i) => `
         <button class="miniatura ${i === indiceImagen ? "activa" : ""}" type="button"
                 data-miniatura="${i}" aria-label="Ver imagen ${i + 1}">
-          <img src="${esc(src)}" alt="" decoding="async">
+          <img ${imgMini(src)} alt="" decoding="async">
         </button>`).join("")
     : "";
 }

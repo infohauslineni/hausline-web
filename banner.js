@@ -57,7 +57,13 @@
     function cerrar(){ marcar(); if(rot){ clearInterval(rot); rot=null; } ov.remove(); }
     function pintar(){
       var b = BANNERS[i];
-      var img = '<img class="bnr-img" src="'+esc(imgUrl(b.imagen))+'" alt="Promoción HAUSLINE">';
+      // Imagen subida desde el panel (Supabase): se usa la copia en GitHub (imgG/panel/banners/…
+      // .webp, la genera scripts/gen-miniaturas.mjs) para no gastar el egress de Supabase en cada
+      // visita. Si la copia aún no existe, el listener de error de app.js vuelve a la original.
+      var orig = imgUrl(b.imagen), copia = orig;
+      var ST = "https://xgdijumnmaqfirmckugw.supabase.co/storage/v1/object/public/catalogo/";
+      if(String(b.imagen).indexOf(ST) === 0){ var rel = String(b.imagen).slice(ST.length).split("?")[0]; if(rel) copia = "/imgG/panel/" + decodeURIComponent(rel).replace(/\.[^./]+$/, ".webp"); }
+      var img = '<img class="bnr-img" src="'+esc(copia)+'"'+(copia !== orig ? ' data-orig="'+esc(orig)+'"' : "")+' alt="Promoción HAUSLINE">';
       var inner = b.enlace ? '<a href="'+esc(b.enlace)+'">'+img+'</a>' : img;
       var dots = BANNERS.length > 1
         ? '<div class="bnr-dots">'+BANNERS.map(function(_, k){ return '<i class="'+(k===i?"on":"")+'" data-k="'+k+'"></i>'; }).join("")+'</div>'

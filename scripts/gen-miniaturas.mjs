@@ -46,29 +46,55 @@ let hechas = 0, saltadas = 0, faltan = 0, antes = 0, despues = 0
 // Productos subidos desde el PANEL: su foto vive en Supabase Storage (bucket catalogo).
 // Se descarga y se guarda en imgM/panel/<ruta del bucket>.webp — misma regla que
 // miniatura() en app.js. El workflow corre cada 15 min, así que los nuevos la reciben solos.
+// Además, TODAS las fotos de la galería del producto (datos.imagenes) se copian también en
+// grande (imgG/panel/<ruta>.webp, 1400px): la vista del producto las sirve desde aquí (GitHub
+// Pages, gratis) en vez de bajarlas de Supabase en cada visita — eso era lo que agotaba el
+// "egress" del plan gratis de Supabase (≈2 MB por producto abierto). Las imágenes del aviso
+// emergente (banners/) van a imgG/panel/banners/. grande()/banner.js usan la misma regla.
 const STORAGE = 'https://xgdijumnmaqfirmckugw.supabase.co/storage/v1/object/public/catalogo/'
 const KEY = 'sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw'
+const ANCHO_G = 1400
+const CALIDAD_G = 78
+let grandes = 0
+async function espejo(url, conMini) {
+  if (!url.startsWith(STORAGE)) return
+  const rel = decodeURIComponent(url.slice(STORAGE.length).split('?')[0])
+  if (!rel) return
+  const webp = rel.replace(/\.[^./]+$/, '.webp')
+  const mini = conMini && !rel.startsWith('banners/') ? path.join(raiz, 'imgM', 'panel', webp) : null
+  const grande = path.join(raiz, 'imgG', 'panel', webp)
+  const faltaMini = mini && !fs.existsSync(mini)
+  const faltaGrande = !fs.existsSync(grande)
+  if (!faltaMini && !faltaGrande) { saltadas++; return }   // el panel sube un nombre nuevo por foto
+  try {
+    const img = await fetch(url)
+    if (!img.ok) { faltan++; return }
+    const orig = Buffer.from(await img.arrayBuffer())
+    if (faltaMini) {
+      const buf = await sharp(orig).rotate().resize({ width: ANCHO, withoutEnlargement: true }).webp({ quality: CALIDAD }).toBuffer()
+      fs.mkdirSync(path.dirname(mini), { recursive: true }); fs.writeFileSync(mini, buf)
+      antes += orig.length; despues += buf.length; hechas++
+    }
+    if (faltaGrande) {
+      const buf = await sharp(orig).rotate().resize({ width: ANCHO_G, height: ANCHO_G, fit: 'inside', withoutEnlargement: true }).webp({ quality: CALIDAD_G }).toBuffer()
+      fs.mkdirSync(path.dirname(grande), { recursive: true }); fs.writeFileSync(grande, buf)
+      grandes++
+    }
+  } catch (e) { console.log(`⚠ panel ${rel}: ${e.message}`) }
+}
 try {
   const r = await fetch('https://xgdijumnmaqfirmckugw.supabase.co/rest/v1/catalogo_web?select=datos&activo=eq.true',
     { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } })
   const filas = r.ok ? await r.json() : []
   for (const f of filas) {
-    const url = String((f.datos && f.datos.imagen) || '')
-    if (!url.startsWith(STORAGE)) continue
-    const rel = decodeURIComponent(url.slice(STORAGE.length).split('?')[0])
-    if (!rel || rel.startsWith('banners/')) continue
-    const destino = path.join(raiz, 'imgM', 'panel', rel.replace(/\.[^./]+$/, '.webp'))
-    if (fs.existsSync(destino)) { saltadas++; continue }   // el panel sube un nombre nuevo por foto
-    try {
-      const img = await fetch(url)
-      if (!img.ok) { faltan++; continue }
-      const orig = Buffer.from(await img.arrayBuffer())
-      const buf = await sharp(orig).rotate().resize({ width: ANCHO, withoutEnlargement: true }).webp({ quality: CALIDAD }).toBuffer()
-      fs.mkdirSync(path.dirname(destino), { recursive: true })
-      fs.writeFileSync(destino, buf)
-      antes += orig.length; despues += buf.length; hechas++
-    } catch (e) { console.log(`⚠ panel ${rel}: ${e.message}`) }
+    const d = f.datos || {}
+    const urls = [...new Set([d.imagen, ...(Array.isArray(d.imagenes) ? d.imagenes : [])].map((u) => String(u || '')).filter(Boolean))]
+    for (const u of urls) await espejo(u, true)
   }
+  const rb = await fetch('https://xgdijumnmaqfirmckugw.supabase.co/rest/v1/rpc/banners_activos',
+    { method: 'POST', headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' }, body: '{}' })
+  const banners = rb.ok ? await rb.json() : []
+  for (const b of Array.isArray(banners) ? banners : []) await espejo(String((b && b.imagen) || ''), false)
 } catch (e) {
   console.log(`⚠ Panel no disponible (${e.message}); sin miniaturas del panel`)
 }
@@ -88,5 +114,5 @@ for (const rel of rutas) {
     console.log(`⚠ ${rel}: ${e.message}`)
   }
 }
-console.log(`✓ Miniaturas: ${hechas} nuevas, ${saltadas} al día, ${faltan} sin archivo` +
+console.log(`✓ Miniaturas: ${hechas} nuevas, ${grandes} fotos grandes (imgG), ${saltadas} al día, ${faltan} sin archivo` +
   (hechas ? ` · ${(antes / 1e6).toFixed(1)}MB → ${(despues / 1e6).toFixed(1)}MB` : ''))

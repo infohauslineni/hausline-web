@@ -340,7 +340,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   async function subirFotos(codigo){ const urls=[];
     for(let i=0;i<fotos.length;i++){ const f=fotos[i]; if(f.remota){ urls.push(f.remota); continue; }
       const ruta=`${codigo}/${Date.now()}-${i}.jpg`;
-      const {error}=await supa.storage.from(BUCKET).upload(ruta,f.blob,{contentType:"image/jpeg",upsert:true}); if(error) throw error;
+      const {error}=await supa.storage.from(BUCKET).upload(ruta,f.blob,{contentType:"image/jpeg",upsert:true,cacheControl:"31536000"}); if(error) throw error;
       urls.push(supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl); } return urls; }
   // Etiquetas opcionales del producto: [idDelCheckbox, propiedadEnDatos]. Deben coincidir con
   // ETIQUETAS_OPCIONALES de productos.js (el sitio lee esa propiedad y muestra el badge).
@@ -809,7 +809,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
     try{
       const ruta="banners/"+Date.now()+".jpg";
-      const {error:upErr}=await supa.storage.from(BUCKET).upload(ruta,bnrBlob,{contentType:"image/jpeg",upsert:true}); if(upErr) throw upErr;
+      const {error:upErr}=await supa.storage.from(BUCKET).upload(ruta,bnrBlob,{contentType:"image/jpeg",upsert:true,cacheControl:"31536000"}); if(upErr) throw upErr;
       const url=supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
       const base={ imagen_url:url, enlace:($("bnrEnlace").value||"").trim()||null, titulo:($("bnrTitulo").value||"").trim()||null };
       const inicia=dtLocalToIso($("bnrDesde").value), finaliza=dtLocalToIso($("bnrHasta").value);
