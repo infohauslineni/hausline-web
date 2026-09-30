@@ -16,7 +16,9 @@ const HL_VIEWS = {
 
 // Carga la librería de Supabase desde CDN solo si hay claves.
 function hlInitSupabase(){
-  if(!SUPABASE_URL || !SUPABASE_ANON_KEY) return; // no configurado → desactivado
+  // typeof: si config.js no llegó a cargar (corte de red en el teléfono) la variable ni existe;
+  // antes eso tiraba "SUPABASE_URL is not defined". Así solo se desactiva el contador.
+  if(typeof SUPABASE_URL === "undefined" || typeof SUPABASE_ANON_KEY === "undefined" || !SUPABASE_URL || !SUPABASE_ANON_KEY) return;
   const s = document.createElement("script");
   s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js";
   s.onload = () => {

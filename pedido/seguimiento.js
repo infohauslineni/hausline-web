@@ -80,8 +80,11 @@
   }
   // En "País de destino": llegada + 2 días hábiles. Si llega ESE día (o ya pasó) y el pedido
   // sigue sin pasar a "Disponible para entrega", la entrega se corre 3 días más (y así cada vez).
-  function trasLlegada(llegada) {
-    var e = sumarHabiles(aFecha(llegada), 2), g = 0;
+  function trasLlegada(llegada) { return posponer(iso(sumarHabiles(aFecha(llegada), 2))); }
+  // Desde las 12 a. m. del día de la entrega (o si ya pasó) se corre de a 3 días hasta quedar a futuro.
+  function posponer(fecha) {
+    var e = aFecha(String(fecha).slice(0, 10)), g = 0;
+    e.setHours(12, 0, 0, 0);
     var hoy = new Date(); hoy.setHours(12, 0, 0, 0);
     while (e.getTime() <= hoy.getTime() && g++ < 60) e.setDate(e.getDate() + 3);
     return iso(e);
@@ -101,8 +104,14 @@
     if (entregado) return entregado;
     var est = p.estado_codigo;
     if (est === "disponible_entrega" || est === "empaquetado" || est === "pagado") return p.fecha_estimada;
-    var llegada = buscar("País de destino");
-    if (llegada && est === "llego_nicaragua") return trasLlegada(llegada.fecha);
+    // País de destino: manda la fecha de la base (la corre +3 días a las 12 a. m. si llegó el día
+    // sin pasar a Disponible). Aquí se aplica la misma regla por si la página se abre antes de
+    // que corra la tarea. Sin fecha guardada: llegada + 2 días hábiles.
+    if (est === "llego_nicaragua") {
+      if (p.fecha_estimada) return posponer(p.fecha_estimada);
+      var llegada = buscar("País de destino");
+      return llegada ? trasLlegada(llegada.fecha) : null;
+    }
     // Sin el registro de llegada: la fecha guardada, pero nunca "hoy" si sigue en País de destino.
     if (p.fecha_estimada) return TRANSITO[est] ? aFuturo(p.fecha_estimada, 3) : aFuturo(p.fecha_estimada, est === "llego_nicaragua" ? 1 : 0);
     return null;
