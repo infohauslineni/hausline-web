@@ -62,7 +62,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       // del código —ej. los Birkenstock con 100% OG— salgan pre-marcadas y no se pierdan al guardar).
       og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true,
       demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"",
-      prepMin:Number(p.prepMin)||0, prepMax:Number(p.prepMax)||0 };
+      prepMin:Number(p.prepMin)||0, prepMax:Number(p.prepMax)||0,
+      // Entrega inmediata del producto base (sin esto, al editarlo salía desmarcada y se perdía al guardar).
+      entregaInmediata:p.entregaInmediata===true, tallasEntregaInmediata:p.tallasEntregaInmediata||[], coloresEntregaInmediata:p.coloresEntregaInmediata||[],
+      precioEntregaInmediata:Number(p.precioEntregaInmediata)||0, cantidadDisponible:Number(p.cantidadDisponible)||0 };
   }
 
   // ============ Fotos ============
@@ -373,6 +376,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     // Producto NUEVO (el código no estaba en el catálogo): al guardar se abre la imagen para Instagram.
     const previo=itemsMerged.find(i=>String(i.codigo||"").toUpperCase()===codigo);
     const esNuevo=!previo||esBorrador(previo);
+    // Entrega inmediata recién activada (antes no la tenía): también abre la imagen, en modo "Entrega inmediata".
+    const teniaEI=!!(previo&&!esNuevo&&previo.datos&&previo.datos.entregaInmediata);
     const btn=$(borrador?"btnBorrador":"btnGuardar"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Guardando…'; aviso($("avisoForm"),"","");
     if(!(await asegurarSesion())){ btn.disabled=false; btn.innerHTML=t; return; }
     try{ const urls=await subirFotos(codigo); const cotizar=$("fCotizar").checked; const oferta=Number($("fOferta").value||0);
@@ -397,6 +402,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         fecha:new Date().toISOString().slice(0,10) };
       // Etiquetas opcionales elegidas en el formulario.
       ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
+      // Precio y cantidad de entrega inmediata no tienen campo en el formulario: se conservan los que ya traía.
+      if(previo&&previo.datos){ ["precioEntregaInmediata","cantidadDisponible"].forEach(k=>{ if(Number(previo.datos[k])>0) datos[k]=Number(previo.datos[k]); }); }
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:borrador?false:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
       if(borrador){
         limpiarForm(); await cargarRemotos(); filtroEstado="borradores"; pagina=1; renderChips(); renderTabla(); irA("lista");
@@ -414,7 +421,10 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       }
       aviso($("avisoForm"), "✓ Guardado. Ya se ve en la web. El tracking lo toma solo.", "ok");
       limpiarForm(); await cargarRemotos(); irA("lista");
-      if(esNuevo && window.HLInstagram) window.HLInstagram.abrir(datos);
+      if(window.HLInstagram){
+        const nuevaEI=datos.entregaInmediata&&!teniaEI;
+        if(esNuevo||nuevaEI) window.HLInstagram.abrir(datos, nuevaEI?"inmediata":"nuevo");
+      }
     }catch(err){ aviso($("avisoForm"),"Error al guardar: "+(err.message||err),"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
   }

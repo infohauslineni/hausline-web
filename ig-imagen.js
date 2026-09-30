@@ -62,13 +62,20 @@
     return out;
   }
 
-  function precioTexto(p){
+  // modo "inmediata": si el producto tiene precio propio de entrega inmediata, se usa ese.
+  function precioTexto(p, modo){
+    if(modo === "inmediata" && Number(p.precioEntregaInmediata) > 0){ var e = Number(p.precioEntregaInmediata); return "US$ " + (Number.isInteger(e) ? e : e.toFixed(2)); }
     if(p.cotizar || !(Number(p.precio) > 0)) return "Precio a consultar";
     var n = Number(p.precioOferta) > 0 ? Number(p.precioOferta) : Number(p.precio);
     return "US$ " + (Number.isInteger(n) ? n : n.toFixed(2));
   }
+  function listaEI(p){
+    var t = Array.isArray(p.tallasEntregaInmediata) ? p.tallasEntregaInmediata.filter(Boolean) : [];
+    var c = Array.isArray(p.coloresEntregaInmediata) ? p.coloresEntregaInmediata.filter(Boolean) : [];
+    return { tallas: t, colores: c };
+  }
 
-  function dibujar(canvas, p, img, formato){
+  function dibujar(canvas, p, img, formato, modo){
     var W = 1080, H = formato === "story" ? 1920 : 1350;
     canvas.width = W; canvas.height = H;
     var ctx = canvas.getContext("2d");
@@ -76,13 +83,15 @@
     ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
 
     var story = formato === "story";
+    var inmediata = modo === "inmediata";
+    var ei = listaEI(p);
     var y0 = story ? 190 : 120;
 
     // Encabezado
     ctx.fillStyle = C.gris; ctx.font = "600 26px " + SANS;
-    textoEspaciado(ctx, "NUEVO INGRESO", W / 2, y0, 9);
+    textoEspaciado(ctx, inmediata ? "ENTREGA INMEDIATA" : "NUEVO INGRESO", W / 2, y0, 9);
     ctx.fillStyle = C.tinta; ctx.font = "600 " + (story ? 104 : 92) + "px " + SERIF;
-    ctx.fillText("Nuevo en HAUSLINE", W / 2, y0 + (story ? 110 : 98));
+    ctx.fillText(inmediata ? "Disponible ya" : "Nuevo en HAUSLINE", W / 2, y0 + (story ? 110 : 98));
 
     // Tarjeta con la foto
     var cx = 90, cw = W - 180, cy = y0 + (story ? 170 : 145), ch = story ? 920 : 715;
@@ -101,31 +110,59 @@
     } else {
       ctx.fillStyle = C.gris2; ctx.font = "500 32px " + SANS; ctx.fillText("Foto del producto", W / 2, cy + ch / 2);
     }
+    // Sello sobre la foto (entrega inmediata).
+    if(inmediata){
+      ctx.font = "600 24px " + SANS;
+      var sello = "LISTO PARA ENTREGAR", sw = 0;
+      sello.split("").forEach(function(c){ sw += ctx.measureText(c).width + 3; });
+      var pw = sw + 56, px = cx + 28, py = cy + 28;
+      rectRedondo(ctx, px, py, pw, 58, 29); ctx.fillStyle = C.tinta; ctx.fill();
+      ctx.fillStyle = C.fondo; textoEspaciado(ctx, sello, px + pw / 2, py + 38, 3);
+    }
 
-    // Nombre + precio
-    var yN = cy + ch + (story ? 100 : 78);
+    // Nombre (+ tallas disponibles) + precio
+    var yN = cy + ch + (story ? 100 : 72);
     ctx.fillStyle = C.tinta; ctx.font = "500 " + (story ? 44 : 38) + "px " + SANS;
-    var ls = lineas(ctx, String(p.nombre || "").toUpperCase(), W - 200, 2);
+    var ls = lineas(ctx, String(p.nombre || "").toUpperCase(), W - 200, inmediata && !story ? 1 : 2);
     ls.forEach(function(l, i){ textoEspaciado(ctx, l, W / 2, yN + i * (story ? 56 : 48), 3); });
-    var yP = yN + (ls.length - 1) * (story ? 56 : 48) + (story ? 96 : 80);
-    ctx.font = "600 " + (story ? 80 : 68) + "px " + SERIF;
-    ctx.fillText(precioTexto(p), W / 2, yP);
+    var yUlt = yN + (ls.length - 1) * (story ? 56 : 48);
+    if(inmediata && (ei.tallas.length || ei.colores.length)){
+      var det = (ei.tallas.length ? (ei.tallas.length === 1 ? "Talla " : "Tallas ") + ei.tallas.join(" · ") : "") + (ei.tallas.length && ei.colores.length ? "   |   " : "") + (ei.colores.length ? ei.colores.join(" · ") : "");
+      yUlt += story ? 62 : 50;
+      ctx.fillStyle = C.gris; ctx.font = "500 " + (story ? 34 : 30) + "px " + SANS;
+      ctx.fillText(lineas(ctx, det, W - 200, 1)[0] || det, W / 2, yUlt);
+    }
+    var yP = yUlt + (story ? 96 : 78);
+    ctx.fillStyle = C.tinta; ctx.font = "600 " + (story ? 80 : 68) + "px " + SERIF;
+    ctx.fillText(precioTexto(p, modo), W / 2, yP);
 
     // Pie
     if(story){
       var bwid = 780, bx = (W - bwid) / 2, by = H - 260;
       rectRedondo(ctx, bx, by, bwid, 96, 48); ctx.fillStyle = C.tinta; ctx.fill();
       ctx.fillStyle = C.fondo; ctx.font = "600 30px " + SANS;
-      textoEspaciado(ctx, "ENCARGALO EN " + SITIO.toUpperCase(), W / 2, by + 60, 2);
+      textoEspaciado(ctx, (inmediata ? "PEDILO EN " : "ENCARGALO EN ") + SITIO.toUpperCase(), W / 2, by + 60, 2);
       ctx.fillStyle = C.gris; ctx.font = "500 28px " + SANS;
-      ctx.fillText("Envíos a toda Nicaragua · " + (p.codigo || ""), W / 2, H - 110);
+      ctx.fillText((inmediata ? "Ya en Nicaragua, sin esperar el encargo · " : "Envíos a toda Nicaragua · ") + (p.codigo || ""), W / 2, H - 110);
     } else {
       ctx.fillStyle = C.gris; ctx.font = "500 28px " + SANS;
-      ctx.fillText("Encargalo en " + SITIO + " · Envíos a toda Nicaragua", W / 2, H - 70);
+      ctx.fillText(inmediata ? "Ya en Nicaragua · pedilo en " + SITIO : "Encargalo en " + SITIO + " · Envíos a toda Nicaragua", W / 2, H - 70);
     }
   }
 
-  function textoPost(p){
+  function textoPost(p, modo){
+    if(modo === "inmediata"){
+      var ei = listaEI(p), cant = Number(p.cantidadDisponible) || 0;
+      return "⚡ Entrega inmediata en HAUSLINE\n\n"
+        + (p.nombre || "") + "\n"
+        + "💵 " + precioTexto(p, modo) + "\n"
+        + (ei.tallas.length ? "📏 " + (ei.tallas.length === 1 ? "Talla disponible: " : "Tallas disponibles: ") + ei.tallas.join(" · ") + "\n" : "")
+        + (ei.colores.length ? "🎨 " + ei.colores.join(" · ") + "\n" : "")
+        + "✅ Ya está en Nicaragua: te lo entregamos sin esperar el encargo" + (cant > 0 && cant <= 3 ? "\n🔥 Últimas " + cant + " unidades" : "") + "\n\n"
+        + "🛒 Pedilo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
+        + "📲 WhatsApp " + WHATSAPP + "\n\n"
+        + "#hausline #entregainmediata #nicaragua #managua #sneakers #streetwear";
+    }
     var dem = (typeof p.demoraExtendida !== "undefined" && p.demoraExtendida) ? "\n⏳ Este producto puede tardar un poco más de lo normal." : "";
     return "✨ Nuevo en HAUSLINE\n\n"
       + (p.nombre || "") + "\n"
@@ -147,7 +184,8 @@
     + ".hlig-btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:1px solid #b6f13c;background:#b6f13c;color:#0b0f08;border-radius:12px;padding:11px 14px;font-weight:700;font-size:13px;cursor:pointer}"
     + ".hlig-btn.sec{background:transparent;color:#eef1ec;border-color:#2f362e}"
     + ".hlig-txt{width:100%;min-height:150px;margin-top:14px;background:#0a0c0a;border:1px solid #2f362e;border-radius:12px;color:#eef1ec;padding:12px;font-size:13px;line-height:1.5;font-family:inherit;resize:vertical;box-sizing:border-box}"
-    + ".hlig-fila{display:flex;gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap}";
+    + ".hlig-fila{display:flex;gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap}"
+    + ".hlig-modos{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}.hlig-modo{border:1px solid #2f362e;background:transparent;color:#eef1ec;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer}.hlig-modo.on{background:#eef1ec;color:#0b0f08;border-color:#eef1ec}";
 
   function slug(s){ return String(s || "producto").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 40); }
   function descargar(canvas, nombre){
@@ -159,14 +197,19 @@
     }, "image/jpeg", 0.92);
   }
 
-  // p = datos del producto del panel: { codigo, nombre, precio, precioOferta, cotizar, imagen, demoraExtendida }
-  async function abrir(p){
+  // p = datos del producto del panel: { codigo, nombre, precio, precioOferta, cotizar, imagen, demoraExtendida,
+  //   entregaInmediata, tallasEntregaInmediata, coloresEntregaInmediata, precioEntregaInmediata }
+  // modo = "nuevo" (Nuevo ingreso) | "inmediata" (Entrega inmediata). Sin modo: inmediata si el producto la tiene.
+  async function abrir(p, modo){
     if(!p) return;
+    var conEI = !!p.entregaInmediata;
+    modo = modo === "inmediata" || modo === "nuevo" ? modo : (conEI ? "inmediata" : "nuevo");
     if(!document.getElementById("hlig-css")){ var st = document.createElement("style"); st.id = "hlig-css"; st.textContent = CSS; document.head.appendChild(st); }
     var ov = document.createElement("div"); ov.className = "hlig-ov";
     ov.innerHTML = '<div class="hlig-box" role="dialog" aria-modal="true" aria-label="Imagen para Instagram">'
       + '<div class="hlig-h"><b>📸 Imagen para Instagram · ' + esc(p.codigo || "") + '</b><button class="hlig-x" type="button" data-cerrar aria-label="Cerrar">✕</button></div>'
       + '<p class="hlig-sub">Descargala y programala en Meta Business Suite (post y story). El texto de abajo va de descripción.</p>'
+      + (conEI || modo === "inmediata" ? '<div class="hlig-modos"><button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button><button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
       + '<div class="hlig-grid"><div class="hlig-col"><small>Post · 4:5</small><canvas data-c="post"></canvas><button class="hlig-btn" type="button" data-d="post">⬇ Descargar post</button></div>'
       + '<div class="hlig-col"><small>Story · 9:16</small><canvas data-c="story" style="max-height:560px;object-fit:contain"></canvas><button class="hlig-btn" type="button" data-d="story">⬇ Descargar story</button></div></div>'
       + '<textarea class="hlig-txt" data-t readonly></textarea>'
@@ -177,7 +220,7 @@
     document.addEventListener("keydown", onKey);
     ov.addEventListener("click", function(e){ if(e.target === ov) cerrar(); });
     ov.querySelectorAll("[data-cerrar]").forEach(function(b){ b.addEventListener("click", cerrar); });
-    var txt = ov.querySelector("[data-t]"); txt.value = textoPost(p);
+    var txt = ov.querySelector("[data-t]");
     ov.querySelector("[data-copiar]").addEventListener("click", function(e){
       var b = e.currentTarget;
       (navigator.clipboard ? navigator.clipboard.writeText(txt.value) : Promise.reject()).catch(function(){ txt.select(); document.execCommand("copy"); })
@@ -186,11 +229,17 @@
 
     await fuentesListas();
     var img = await cargarImagen(p.imagen || (p.imagenes && p.imagenes[0]) || "");
+    var pintar = function(){
+      ov.querySelectorAll("[data-m]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-m") === modo); });
+      txt.value = textoPost(p, modo);
+      ["post", "story"].forEach(function(f){ dibujar(ov.querySelector('[data-c="' + f + '"]'), p, img, f, modo); });
+    };
+    ov.querySelectorAll("[data-m]").forEach(function(b){ b.addEventListener("click", function(){ modo = b.getAttribute("data-m"); pintar(); }); });
+    pintar();
     ["post", "story"].forEach(function(f){
       var cv = ov.querySelector('[data-c="' + f + '"]');
-      dibujar(cv, p, img, f);
       ov.querySelector('[data-d="' + f + '"]').addEventListener("click", function(){
-        try{ descargar(cv, "hausline-" + slug(p.codigo || p.nombre) + "-" + f + ".jpg"); }
+        try{ descargar(cv, "hausline-" + slug(p.codigo || p.nombre) + (modo === "inmediata" ? "-inmediata" : "") + "-" + f + ".jpg"); }
         catch(err){ alert("No se pudo descargar la imagen (la foto no permite exportarse). Probá con otra foto del producto."); }
       });
     });
