@@ -589,8 +589,12 @@
             <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
               <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Usos</label><select id="cupUsos"><option value="1">Un solo uso</option><option value="varios">Varios (con tope)</option><option value="ilimitado">Ilimitado</option></select></div>
               <div style="flex:1;min-width:120px;" id="cupTopeWrap" hidden><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Tope de usos</label><input id="cupTope" type="number" min="1" step="1" value="20"></div>
-              <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Vence (opcional)</label><input id="cupVence" type="date"></div>
             </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+              <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Empieza (opcional)</label><input id="cupInicia" type="date"></div>
+              <div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Termina (opcional)</label><input id="cupVence" type="date"></div>
+            </div>
+            <p style="font-size:11.5px;color:var(--texto2);margin:6px 0 0;">Vacío = empieza ya / no vence. Funciona desde las 12 a. m. del día de inicio hasta las 11:59 p. m. del último día (hora de Nicaragua).</p>
             <label style="display:block;font-size:12px;color:var(--texto2);margin:14px 0 6px;">Nota (opcional)</label>
             <input id="cupNota" placeholder="Ej. promo del Día de las Madres">
             <button id="cupAdd" class="btn" style="margin-top:14px;">Crear cupón</button>
@@ -636,6 +640,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.min.js" integrity="sha384-q36VSR1ktH2hgqgm+0LDeyqPW8CyZHSxfDSttSPm5ReOJzB+sYThmh7D4fE+jWTs" crossorigin="anonymous"></script>
 <script src="ig-imagen.js?v=20260930"></script>
-<script src="admin.js?v=20260930"></script>
+<script src="admin.js?v=20260930b"></script>
 </body>
 </html>

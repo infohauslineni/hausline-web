@@ -900,13 +900,17 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     if(codigo.length<3){ aviso($("cupAviso"),"El código es muy corto.","err"); return; }
     if(!(valor>0)){ aviso($("cupAviso"),"Indicá el valor del descuento.","err"); return; }
     if(tipo==="porcentaje"&&valor>100){ aviso($("cupAviso"),"El porcentaje no puede pasar de 100.","err"); return; }
+    const inicia=$("cupInicia").value||null, vence=$("cupVence").value||null;
+    if(inicia&&vence&&vence<inicia){ aviso($("cupAviso"),"La fecha en que termina no puede ser antes de la de inicio.","err"); return; }
     const usosSel=$("cupUsos").value, usos_max = usosSel==="ilimitado"?null:(usosSel==="1"?1:Math.max(1,Number($("cupTope").value||1)));
     const btn=$("cupAdd"); btn.disabled=true; const t=btn.innerHTML; btn.innerHTML='<span class="spin"></span> Creando…'; aviso($("cupAviso"),"","");
     if(!(await asegurarSesionTienda(true))){ aviso($("cupAviso"),"No se pudo entrar al proyecto de Cupones"+(ultimoErrorTienda?(": "+ultimoErrorTienda):". Revisá tus credenciales del sistema (app de tracking)."),"err"); btn.disabled=false; btn.innerHTML=t; return; }
     try{
-      const {error}=await supaTienda.from("cupones").insert({ codigo, tipo, valor, usos_max, vence_el:$("cupVence").value||null, nota:($("cupNota").value||"").trim()||null, cliente_id:null });
-      if(error) throw error;
-      $("cupCodigo").value=""; $("cupNota").value=""; $("cupVence").value="";
+      const fila={ codigo, tipo, valor, usos_max, vence_el:vence, nota:($("cupNota").value||"").trim()||null, cliente_id:null };
+      if(inicia) fila.inicia_el=inicia;   // solo si se eligió: así crear sigue andando aunque falte la columna
+      const {error}=await supaTienda.from("cupones").insert(fila);
+      if(error) throw (/inicia_el/.test(error.message||"")?new Error("Falta aplicar la migración de fecha de inicio (202609300001) en Supabase."):error);
+      $("cupCodigo").value=""; $("cupNota").value=""; $("cupVence").value=""; $("cupInicia").value="";
       aviso($("cupAviso"),"✓ Cupón creado. Link para Brevo: hauslineshopni.es/?cupon="+codigo,"ok"); cargarCupones();
     }catch(err){ const m=err.message||String(err); aviso($("cupAviso"), /duplicate/i.test(m)?"Ese código ya existe.": /row-level security|violates|permission|not allowed/i.test(m)?"Tu usuario no tiene permiso en el proyecto de Cupones (perfil inactivo o distinto). Debe ser el mismo admin de la app de tracking.":"Error: "+m,"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
@@ -921,20 +925,45 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   async function cargarCupones(){
     const cont=$("cupLista"); cont.innerHTML='<div class="cargando">Cargando…</div>';
     if(!(await asegurarSesionTienda())){ pedirConexion(cont, cargarCupones, "los cupones"); return; }
-    const {data,error}=await supaTienda.from("cupones").select("id,codigo,tipo,valor,usos_max,usos_confirmados,vence_el,activo").order("created_at",{ascending:false});
+    const campos="id,codigo,tipo,valor,usos_max,usos_confirmados,vence_el,activo";
+    let {data,error}=await supaTienda.from("cupones").select(campos+",inicia_el").order("created_at",{ascending:false});
+    const conInicio=!error;
+    if(error&&/inicia_el/.test(error.message||"")) ({data,error}=await supaTienda.from("cupones").select(campos).order("created_at",{ascending:false}));
     if(error){ cont.innerHTML='<div class="cargando" style="color:#e5484d;">No se pudieron cargar. Cerrá sesión y volvé a entrar (para el login del segundo proyecto).</div>'; return; }
     if(!data||!data.length){ cont.innerHTML='<div class="cargando">Sin cupones todavía.</div>'; return; }
-    const hoy=new Date().toISOString().slice(0,10);
+    // "Hoy" en hora de Nicaragua (igual que la base): con UTC, después de las 6 p. m. ya sería mañana.
+    const hoy=new Date(Date.now()-6*3600e3).toISOString().slice(0,10);
+    const fmt=d=>{ const [y,m,dd]=String(d).split("-"); return dd+"/"+m+"/"+y; };
+    const bs='flex:none;width:auto;padding:6px 10px;font-size:12px;';
+    const chip=(txt,color)=>'<span style="display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.03em;background:'+color+'22;color:'+color+';">'+txt+'</span>';
     cont.innerHTML=data.map(c=>{
       const val=c.tipo==="porcentaje"?(c.valor+"%"):("US$ "+Number(c.valor).toFixed(2));
       const usos=c.usos_max==null?(c.usos_confirmados+" usos · ilimitado"):(c.usos_confirmados+" / "+c.usos_max+" usos");
-      const venc=c.vence_el&&c.vence_el<hoy, inact=!c.activo||venc;
-      return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--linea);'+(inact?"opacity:.6;":"")+'">'
-        +'<div style="flex:1;min-width:160px;"><b style="font-family:monospace;font-size:14px;">'+esc(c.codigo)+'</b> <span style="color:var(--texto2);font-size:12px;">· '+val+' · '+usos+'</span>'+(venc?'<span style="color:#e5484d;font-size:11px;font-weight:700;"> · VENCIDO</span>':'')+'</div>'
-        +'<button class="btn btn-sec" data-cup-copy="'+esc(c.codigo)+'" style="padding:6px 10px;font-size:12px;">Copiar link</button>'
-        +'<button class="btn btn-sec" data-cup-toggle="'+c.id+'" style="padding:6px 10px;font-size:12px;">'+(c.activo?"Desactivar":"Activar")+'</button>'
-        +'<button class="btn btn-sec" data-cup-del="'+c.id+'" style="padding:6px 10px;font-size:12px;color:#e5484d;">Borrar</button></div>';
+      const venc=c.vence_el&&c.vence_el<hoy, prog=c.inicia_el&&c.inicia_el>hoy, inact=!c.activo||venc;
+      const estado=!c.activo?chip("DESACTIVADO","#9aa39a"):venc?chip("VENCIDO","#e5484d"):prog?chip("PROGRAMADO","#f5a524"):chip("ACTIVO","#46a758");
+      const fechas=(c.inicia_el?"Desde "+fmt(c.inicia_el):"Desde ya")+" · "+(c.vence_el?"hasta "+fmt(c.vence_el):"sin vencimiento");
+      return '<div style="padding:12px 0;border-bottom:1px solid var(--linea);">'
+        +'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">'
+        +'<div style="flex:1;min-width:200px;'+(inact?"opacity:.6;":"")+'"><b style="font-family:monospace;font-size:14px;">'+esc(c.codigo)+'</b>'+estado
+        +'<div style="color:var(--texto2);font-size:12px;margin-top:3px;">'+val+' · '+usos+' · '+fechas+'</div></div>'
+        +'<button class="btn btn-sec" data-cup-copy="'+esc(c.codigo)+'" style="'+bs+'">Copiar link</button>'
+        +(conInicio?'<button class="btn btn-sec" data-cup-fechas="'+c.id+'" style="'+bs+'">Fechas</button>':'')
+        +'<button class="btn btn-sec" data-cup-toggle="'+c.id+'" style="'+bs+'">'+(c.activo?"Desactivar":"Activar")+'</button>'
+        +'<button class="btn btn-sec" data-cup-del="'+c.id+'" style="'+bs+'color:#e5484d;">Borrar</button></div>'
+        +'<div data-cup-ed="'+c.id+'" style="margin-top:10px;display:none;gap:10px;flex-wrap:wrap;align-items:flex-end;">'
+        +'<div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Empieza</label><input type="date" data-ed-ini value="'+(c.inicia_el||"")+'"></div>'
+        +'<div style="flex:1;min-width:140px;"><label style="display:block;font-size:12px;color:var(--texto2);margin:0 0 6px;">Termina</label><input type="date" data-ed-fin value="'+(c.vence_el||"")+'"></div>'
+        +'<button class="btn" data-ed-ok style="flex:none;width:auto;padding:12px 18px;">Guardar fechas</button></div></div>';
     }).join("");
+    cont.querySelectorAll("[data-cup-fechas]").forEach(b=>b.addEventListener("click",()=>{ const ed=cont.querySelector('[data-cup-ed="'+b.dataset.cupFechas+'"]'); ed.style.display=ed.style.display==="none"?"flex":"none"; }));
+    cont.querySelectorAll("[data-cup-ed]").forEach(ed=>ed.querySelector("[data-ed-ok]").addEventListener("click",async e=>{
+      const ini=ed.querySelector("[data-ed-ini]").value||null, fin=ed.querySelector("[data-ed-fin]").value||null;
+      if(ini&&fin&&fin<ini){ alert("La fecha en que termina no puede ser antes de la de inicio."); return; }
+      const b=e.currentTarget; b.disabled=true; b.textContent="Guardando…";
+      const {error}=await supaTienda.from("cupones").update({inicia_el:ini,vence_el:fin}).eq("id",ed.dataset.cupEd);
+      if(error){ alert("No se pudo guardar: "+error.message); b.disabled=false; b.textContent="Guardar fechas"; return; }
+      cargarCupones();
+    }));
     cont.querySelectorAll("[data-cup-copy]").forEach(b=>b.addEventListener("click",()=>{ const url="https://hauslineshopni.es/?cupon="+encodeURIComponent(b.dataset.cupCopy); try{navigator.clipboard.writeText(url);}catch(e){} const o=b.textContent; b.textContent="✓ Copiado"; setTimeout(()=>b.textContent=o,1200); }));
     cont.querySelectorAll("[data-cup-toggle]").forEach(b=>b.addEventListener("click",async()=>{ const c=data.find(x=>x.id===b.dataset.cupToggle); await supaTienda.from("cupones").update({activo:!c.activo}).eq("id",c.id); cargarCupones(); }));
     cont.querySelectorAll("[data-cup-del]").forEach(b=>b.addEventListener("click",async()=>{ if(!confirm("¿Borrar este cupón?"))return; await supaTienda.from("cupones").delete().eq("id",b.dataset.cupDel); cargarCupones(); }));
