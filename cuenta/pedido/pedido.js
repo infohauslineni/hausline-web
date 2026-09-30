@@ -63,7 +63,15 @@
     if (e.id === "entregado") return p.fecha_entrega ? "Entregado el " + C.fecha(p.fecha_entrega) : "Entregado";
     if (e.id === "cancelado") return "—";
     if (e.id === "disponible") return "Ya está en Nicaragua";
-    if (p.fecha_estimada) return C.fecha(p.fecha_estimada);
+    if (p.fecha_estimada) {
+      // Si llegó el día y el pedido sigue en camino (p. ej. en País de destino, sin pasar a
+      // Disponible), la entrega se corre 3 días más cada vez: nunca mostramos una fecha vencida.
+      var f = new Date(String(p.fecha_estimada).slice(0, 10) + "T12:00:00");
+      var hoy = new Date(); hoy.setHours(12, 0, 0, 0);
+      var g = 0;
+      while (f.getTime() <= hoy.getTime() && g++ < 60) f.setDate(f.getDate() + 3);
+      return C.fecha(f.toISOString().slice(0, 10));
+    }
     return p.envio_rapido ? "15–20 días" : "20–25 días";
   }
 

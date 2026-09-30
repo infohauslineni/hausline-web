@@ -78,9 +78,12 @@
     while (n < dias) { d.setDate(d.getDate() + 1); if (d.getDay() !== 0 && d.getDay() !== 6) n++; }
     return d;
   }
+  // En "País de destino": llegada + 2 días hábiles. Si llega ESE día (o ya pasó) y el pedido
+  // sigue sin pasar a "Disponible para entrega", la entrega se corre 3 días más (y así cada vez).
   function trasLlegada(llegada) {
     var e = sumarHabiles(aFecha(llegada), 2), g = 0;
-    while (e.getTime() < Date.now() && g++ < 20) e = sumarHabiles(e, 2);
+    var hoy = new Date(); hoy.setHours(12, 0, 0, 0);
+    while (e.getTime() <= hoy.getTime() && g++ < 60) e.setDate(e.getDate() + 3);
     return iso(e);
   }
   // Nunca mostrar una fecha que ya pasó: se corre de a 3 días (con un mínimo de días a futuro).
@@ -100,7 +103,8 @@
     if (est === "disponible_entrega" || est === "empaquetado" || est === "pagado") return p.fecha_estimada;
     var llegada = buscar("País de destino");
     if (llegada && est === "llego_nicaragua") return trasLlegada(llegada.fecha);
-    if (p.fecha_estimada) return TRANSITO[est] ? aFuturo(p.fecha_estimada, 3) : aFuturo(p.fecha_estimada, 0);
+    // Sin el registro de llegada: la fecha guardada, pero nunca "hoy" si sigue en País de destino.
+    if (p.fecha_estimada) return TRANSITO[est] ? aFuturo(p.fecha_estimada, 3) : aFuturo(p.fecha_estimada, est === "llego_nicaragua" ? 1 : 0);
     return null;
   }
   function diasHasta(v) {
