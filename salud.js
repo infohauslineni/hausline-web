@@ -71,10 +71,35 @@
   // Sin archivo = código inyectado por el navegador o una app (la CSP no deja correr scripts
   // inline nuestros), p. ej. el puente de Instagram/Facebook en iPhone (window.webkit.messageHandlers).
   function nuestro(archivo) { return !!archivo && (archivo.indexOf(location.origin) === 0 || /cdn\.jsdelivr\.net\/npm\/@supabase/.test(archivo)); }
-  var RUIDO = /webkit\.messageHandlers|_AutofillCallbackHandler|__gCrWeb|instantSearchSDKJSBridgeClearHighlight|Java object is gone|ResizeObserver loop/i;
+  // contentScriptData: extensión de Safari (iPhone/Mac) que inyecta su código en la página.
+  var RUIDO = /webkit\.messageHandlers|_AutofillCallbackHandler|__gCrWeb|instantSearchSDKJSBridgeClearHighlight|Java object is gone|ResizeObserver loop|contentScriptData/i;
+
+  // Archivos de la tienda que no llegaron a cargar (red cortada, bloqueador de anuncios, caché
+  // rota). Sin config.js o carrito.js el resto falla con "X is not defined": esto dice la causa.
+  var sinCargar = [];
+  var BASICOS = /^\/(config|productos|carrito|app)\.js$/;
+  function recargarUnaVez() {
+    try {
+      if (sessionStorage.getItem("hausline_recarga_js")) return;
+      sessionStorage.setItem("hausline_recarga_js", "1");
+    } catch (e) { return; } // sin sessionStorage no hay cómo evitar un bucle: no se recarga
+    setTimeout(function () { location.reload(); }, 50);
+  }
+  window.addEventListener("error", function (e) {
+    var el = e && e.target;
+    if (!el || el.tagName !== "SCRIPT" || !el.src || el.src.indexOf(location.origin) !== 0) return;
+    var archivo = el.src.replace(location.origin, "").split("?")[0];
+    sinCargar.push(archivo);
+    error("script_no_cargo", archivo);
+    // Sin un archivo básico la tienda queda rota: se recarga la página una sola vez por pestaña.
+    if (BASICOS.test(archivo)) recargarUnaVez();
+  }, true);
+
   window.addEventListener("error", function (e) {
     if (!e || !e.message || e.message === "Script error." || RUIDO.test(e.message) || !nuestro(e.filename)) return;
-    error("js_error", e.message, { archivo: String(e.filename || "").replace(location.origin, "").split("?")[0], linea: e.lineno || null });
+    var detalle = { archivo: String(e.filename || "").replace(location.origin, "").split("?")[0], linea: e.lineno || null };
+    if (sinCargar.length) detalle.sin_cargar = sinCargar.slice(0, 5);
+    error("js_error", e.message, detalle);
   });
   window.addEventListener("unhandledrejection", function (e) {
     var r = e && e.reason;
