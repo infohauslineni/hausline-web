@@ -185,6 +185,9 @@
     + ".hlig-btn.sec{background:transparent;color:#eef1ec;border-color:#2f362e}"
     + ".hlig-txt{width:100%;min-height:150px;margin-top:14px;background:#0a0c0a;border:1px solid #2f362e;border-radius:12px;color:#eef1ec;padding:12px;font-size:13px;line-height:1.5;font-family:inherit;resize:vertical;box-sizing:border-box}"
     + ".hlig-fila{display:flex;gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap}"
+    + ".hlig-fotos{margin:0 0 14px}.hlig-fotos small{display:block;color:#99a299;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:7px}"
+    + ".hlig-tira{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px}.hlig-ft{flex:none;width:62px;height:62px;border-radius:10px;border:2px solid #2f362e;padding:0;overflow:hidden;cursor:pointer;background:#0a0c0a;position:relative}"
+    + ".hlig-ft img{width:100%;height:100%;object-fit:cover;display:block}.hlig-ft.on{border-color:#b6f13c;box-shadow:0 0 0 2px rgba(182,241,60,.35)}.hlig-ft.on::after{content:'✓';position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:#b6f13c;color:#0b0f08;font-size:10px;font-weight:800;display:grid;place-items:center}"
     + ".hlig-modos{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}.hlig-modo{border:1px solid #2f362e;background:transparent;color:#eef1ec;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer}.hlig-modo.on{background:#eef1ec;color:#0b0f08;border-color:#eef1ec}";
 
   function slug(s){ return String(s || "producto").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 40); }
@@ -204,11 +207,17 @@
     if(!p) return;
     var conEI = !!p.entregaInmediata;
     modo = modo === "inmediata" || modo === "nuevo" ? modo : (conEI ? "inmediata" : "nuevo");
+    // Todas las fotos del producto (sin repetir), para elegir cuál sale en el post y la story.
+    var fotos = [p.imagen].concat(Array.isArray(p.imagenes) ? p.imagenes : []).map(function(u){ return String(u || "").trim(); })
+      .filter(function(u, i, a){ return u && a.indexOf(u) === i; });
     if(!document.getElementById("hlig-css")){ var st = document.createElement("style"); st.id = "hlig-css"; st.textContent = CSS; document.head.appendChild(st); }
     var ov = document.createElement("div"); ov.className = "hlig-ov";
     ov.innerHTML = '<div class="hlig-box" role="dialog" aria-modal="true" aria-label="Imagen para Instagram">'
       + '<div class="hlig-h"><b>📸 Imagen para Instagram · ' + esc(p.codigo || "") + '</b><button class="hlig-x" type="button" data-cerrar aria-label="Cerrar">✕</button></div>'
       + '<p class="hlig-sub">Descargala y programala en Meta Business Suite (post y story). El texto de abajo va de descripción.</p>'
+      + (fotos.length > 1 ? '<div class="hlig-fotos"><small>Foto para el post y la story · tocá para cambiarla</small><div class="hlig-tira">'
+        + fotos.map(function(u, i){ return '<button class="hlig-ft' + (i ? '' : ' on') + '" type="button" data-f="' + i + '" aria-label="Usar foto ' + (i + 1) + '"><img src="' + esc(u) + '" alt="" loading="lazy"></button>'; }).join("")
+        + '</div></div>' : '')
       + (conEI || modo === "inmediata" ? '<div class="hlig-modos"><button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button><button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
       + '<div class="hlig-grid"><div class="hlig-col"><small>Post · 4:5</small><canvas data-c="post"></canvas><button class="hlig-btn" type="button" data-d="post">⬇ Descargar post</button></div>'
       + '<div class="hlig-col"><small>Story · 9:16</small><canvas data-c="story" style="max-height:560px;object-fit:contain"></canvas><button class="hlig-btn" type="button" data-d="story">⬇ Descargar story</button></div></div>'
@@ -228,7 +237,7 @@
     });
 
     await fuentesListas();
-    var img = await cargarImagen(p.imagen || (p.imagenes && p.imagenes[0]) || "");
+    var img = await cargarImagen(fotos[0] || "");
     var pintar = function(){
       ov.querySelectorAll("[data-m]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-m") === modo); });
       txt.value = textoPost(p, modo);
@@ -236,6 +245,16 @@
     };
     ov.querySelectorAll("[data-m]").forEach(function(b){ b.addEventListener("click", function(){ modo = b.getAttribute("data-m"); pintar(); }); });
     pintar();
+    // Elegir otra foto: se carga (con CORS, para poder descargar) y se redibuja todo.
+    var pedidoFoto = 0;
+    ov.querySelectorAll("[data-f]").forEach(function(b){ b.addEventListener("click", async function(){
+      var n = ++pedidoFoto, i = Number(b.getAttribute("data-f"));
+      ov.querySelectorAll("[data-f]").forEach(function(x){ x.classList.toggle("on", x === b); });
+      var nueva = await cargarImagen(fotos[i]);
+      if(n !== pedidoFoto) return;   // tocó otra foto mientras cargaba
+      if(!nueva){ alert("Esa foto no se pudo usar para la imagen. Probá con otra."); return; }
+      img = nueva; pintar();
+    }); });
     ["post", "story"].forEach(function(f){
       var cv = ov.querySelector('[data-c="' + f + '"]');
       ov.querySelector('[data-d="' + f + '"]').addEventListener("click", function(){
