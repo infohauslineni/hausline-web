@@ -412,14 +412,24 @@
     }
     // guardado=true: el código vino solo de la memoria del navegador (no lo escribió el cliente
     // ni venía en el link). Si ya no sirve, se olvida en silencio en vez de mostrar un error.
-    async function aplicarCupon(code, guardado){ code=(code||"").trim(); if(!code) return; var errB=$("ck").querySelector("[data-cuperr]");
-      try{ var t=calc(); var res=await fetch(SB_URL+"rpc/validar_cupon",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:code,p_total:t.subtotal})});
+    async function aplicarCupon(code, guardado){ code=(code||"").trim().toUpperCase().replace(/s+/g,""); if(!code) return;
+      // Los cupones del panel son HAUS-XXXXX: si el cliente lo escribe sin el guion ("HAUS87TWT"), se lo ponemos.
+      if(/^HAUS[A-Z0-9]{5}$/.test(code)) code="HAUS-"+code.slice(4); var errB=$("ck").querySelector("[data-cuperr]");
+      try{ var t=calc(), res=null;
+        // Si se cae la señal un momento (en iPhone: "Load failed"), se reintenta solo 2 veces.
+        for(var intento=0; intento<3; intento++){
+          try{ res=await fetch(SB_URL+"rpc/validar_cupon",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:code,p_total:t.subtotal})}); break; }
+          catch(errRed){ if(intento===2) throw errRed; await new Promise(function(r){ setTimeout(r, intento?2500:900); }); }
+        }
         if(!res.ok) throw await errorHttp(res, "cupon"); var r=await res.json();
         if(!r||!r.valido){
           if(guardado){ try{ localStorage.removeItem("hausline_cupon"); localStorage.removeItem("hausline_cupon_txt"); }catch(e){} var ci=$("ck").querySelector("[data-cupc]"); if(ci) ci.value=""; return; }
           if(errB){ errB.textContent=(r&&r.motivo)||"Código no válido."; errB.hidden=false; } return; }
         cupon={id:r.id,codigo:r.codigo,tipo:r.tipo,valor:Number(r.valor)}; var box=$("ck").querySelector("[data-cupon]"); box.innerHTML=cuponHTML(); wireCupon(); pintarResumen();
-      }catch(e){ if(guardado) return; falla("cupon_error", "No se pudo validar el cupón "+code+": "+((e&&e.message)||"error")); if(errB){ errB.textContent="No pudimos validar el cupón. "+explicarError(e, "cupon").texto; errB.hidden=false; } }
+      }catch(e){ if(guardado) return;
+        // Sin señal: no es falla del sistema → evento "sin_conexion" (no sale en la lista de errores).
+        if(!e||!e.status&&/failed to fetch|load failed|networkerror|network request failed/i.test(String(e&&e.message||e))){ try{ if(window.HauslineSalud) window.HauslineSalud.registrar("sin_conexion",{mensaje:"validar_cupon "+code}); }catch(_){} if(errB){ errB.textContent="Se cortó tu conexión. Revisá tu internet y tocá Aplicar de nuevo."; errB.hidden=false; } return; }
+        falla("cupon_error", "No se pudo validar el cupón "+code+": "+((e&&e.message)||"error")); if(errB){ errB.textContent="No pudimos validar el cupón. "+explicarError(e, "cupon").texto; errB.hidden=false; } }
     }
     wireCupon();
     // Carga las promos automáticas y re-pinta el resumen (para mostrar el descuento aplicado).

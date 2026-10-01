@@ -88,6 +88,7 @@
   var ultimoMostrado = "";
   function mensajeError(error) {
     var m = (error && (error.message || error.error_description)) || "";
+    if (error && !error.__registrado && esErrorDeRed(error)) { try { error.__registrado = true; } catch (e) {} S.registrar("sin_conexion", { mensaje: m }); }
     if (error && !error.__registrado && !error.validacion && !ERROR_DEL_CLIENTE.test(m)) {
       try { error.__registrado = true; } catch (e) {}
       S.error("error_visto", m || "Error sin mensaje", error.code ? { codigo: String(error.code) } : null);
@@ -104,7 +105,7 @@
     if (/password/i.test(m) && /(6|8) characters|short|weak/i.test(m)) return "La contraseña es muy débil: usá al menos 8 caracteres.";
     if (/rate limit|too many|security purposes/i.test(m)) return "Demasiados intentos. Esperá un minuto e intentá de nuevo.";
     if (/signups? not allowed|signup is disabled/i.test(m)) return "El registro de cuentas todavía no está habilitado.";
-    if (/failed to fetch|network/i.test(m)) return "Sin conexión. Revisá tu internet e intentá de nuevo.";
+    if (/failed to fetch|load failed|network|internet connection/i.test(m)) return "Sin conexión. Revisá tu internet e intentá de nuevo.";
     return m || "Algo salió mal. Intentá de nuevo.";
   }
 
@@ -140,6 +141,20 @@
   function esErrorDeSesion(e) {
     return !!e && (e.code === "42501" || e.code === "PGRST301" || e.code === "PGRST303" || /jwt expired|permission denied for function/i.test(e.message || ""));
   }
+  // Falla de RED (el teléfono perdió señal, cambió de wifi a datos, la app quedó en segundo
+  // plano): en iPhone llega como "TypeError: Load failed". No es falla del sistema: se
+  // reintenta solo y, si sigue sin red, se anota como evento "sin_conexion" (no como error).
+  function esErrorDeRed(e) {
+    var m = (e && (e.message || e.details)) || String(e || "");
+    return /load failed|failed to fetch|networkerror|network request failed|fetch failed|network connection was lost|internet connection appears|^network:/i.test(m);
+  }
+  function esperar(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function esperarConexion(max) {
+    return new Promise(function (r) {
+      var hecho = false; function fin() { if (hecho) return; hecho = true; window.removeEventListener("online", fin); r(); }
+      window.addEventListener("online", fin); setTimeout(fin, max);
+    });
+  }
   var yendoAIngresar = false;
   function irAIngresar() {
     if (yendoAIngresar) return;
@@ -148,7 +163,13 @@
     location.replace("/cuenta/ingresar/?volver=" + encodeURIComponent(location.pathname + location.search));
   }
   async function llamar(nombre, args) {
-    var r = await sb.rpc(nombre, args || {});
+    var r;
+    for (var i = 0; i < 3; i++) {
+      try { r = await sb.rpc(nombre, args || {}); } catch (e) { r = { data: null, error: e }; }
+      if (!r.error || !esErrorDeRed(r.error)) break;
+      if (i < 2) { if (navigator.onLine === false) await esperarConexion(8000); else await esperar(i ? 2500 : 900); }
+    }
+    if (r.error && esErrorDeRed(r.error)) { try { r.error.red = true; } catch (e) {} return r; }
     if (!r.error || !esErrorDeSesion(r.error)) return r;
     var s = await sb.auth.getSession();
     if (s && s.data && s.data.session) return sb.rpc(nombre, args || {});
@@ -167,6 +188,7 @@
     var r = await llamar(nombre, args);
     if (r.error) {
       if (r.error.sesion) throw r.error;
+      if (r.error.red) { S.registrar("sin_conexion", { mensaje: nombre }); try { r.error.__registrado = true; } catch (e) {} throw r.error; }
       S.error("rpc_error", (r.error.message || "Error") + " · " + nombre, { funcion: nombre, codigo: r.error.code || null });
       try { r.error.__registrado = true; } catch (e) {}
       throw r.error;
@@ -182,6 +204,7 @@
     try {
       var r = await llamar("mis_encargos_cliente");
       // PGRST202 = la función todavía no existe en la base (migración sin aplicar): no es falla del cliente.
+      if (r.error && r.error.red) { S.registrar("sin_conexion", { mensaje: "mis_encargos_cliente" }); return []; }
       if (r.error) { if (r.error.code !== "PGRST202" && !r.error.sesion) S.error("rpc_error", (r.error.message || "Error") + " · mis_encargos_cliente", { funcion: "mis_encargos_cliente", codigo: r.error.code || null }); return []; }
       return Array.isArray(r.data) ? r.data : [];
     } catch (e) { return []; }

@@ -90,13 +90,15 @@
     C.navInferior("cuenta");
     var nombre = ((s.user.user_metadata && s.user.user_metadata.nombre) || "Cliente").split(/\s+/)[0];
     var pedidos = [];
-    var r = await Promise.all([C.cuenta().catch(function () { return null; }), C.misPedidos().catch(function () { return null; }), C.misEncargos()]);
+    var errPedidos = null;
+    var r = await Promise.all([C.cuenta().catch(function () { return null; }), C.misPedidos().catch(function (e) { errPedidos = e; return null; }), C.misEncargos()]);
     var encargos = r[2];
     if (r[0] && r[0].nombre) nombre = r[0].nombre.split(/\s+/)[0];
     if (r[1]) pedidos = r[1];
     pintar(nombre, pedidos, encargos);
     if (r[1]) C.salud.registrar("vio_cuenta", { detalle: { pedidos: pedidos.length } });
-    if (!r[1]) C.aviso("No pudimos cargar tus pedidos. Recargá la página.", "error");
+    // Sin señal (ya se reintentó solo): se le explica al cliente, sin anotarlo como falla del sistema.
+    if (!r[1]) C.aviso(errPedidos && errPedidos.red ? "Se cortó tu conexión. Revisá tu internet y recargá la página." : "No pudimos cargar tus pedidos. Recargá la página.", "error", !!(errPedidos && errPedidos.red));
     // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
     C.autoActualizar(async function () {
       var nuevos = await C.misPedidos();
