@@ -98,6 +98,12 @@
     }catch(e){}
   }
 
+  function quitarChip(){
+    estado.codigo = "";
+    if(obs){ obs.disconnect(); obs = null; }
+    var el = document.getElementById("cuponChip"); if(el) el.remove();
+  }
+
   function mostrar(codigo, corto){
     estado.codigo = codigo; estado.corto = corto || "Descuento";
     if(cerrado()) return;
@@ -117,20 +123,23 @@
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(r){
         if(r && r.valido){ var corto = etiquetaCorta(r); guardar(r.codigo, corto); mostrar(r.codigo, corto); }
-        else { borrar(); } // inválido/vencido/agotado: no molestar
+        else if(r){ borrar(); quitarChip(); } // inválido/desactivado/vencido/agotado/aún no empieza: no molestar
+        else if(!esDeUrl && leerTxt()) mostrar(codigo, leerTxt()); // la base no respondió: se deja el que había
       })
-      .catch(function(){ if(esDeUrl){ guardar(codigo, "Descuento"); mostrar(codigo, "Descuento"); } });
+      .catch(function(){
+        if(esDeUrl){ guardar(codigo, "Descuento"); mostrar(codigo, "Descuento"); }
+        else if(leerTxt()) mostrar(codigo, leerTxt()); // sin conexión: se deja el que había
+      });
   }
 
   function arranque(){
     if(cerrado()) return;
     var deUrl = getParam("cupon");
     if(deUrl){ validarYMostrar(deUrl, true); return; }
+    // El cupón guardado se REVALIDA en cada visita: antes se mostraba la etiqueta guardada sin
+    // preguntar, y seguía apareciendo aunque el cupón se hubiera desactivado, vencido o borrado.
     var guardado = leer();
-    if(guardado){
-      var corto = leerTxt();
-      if(corto) mostrar(guardado, corto); else validarYMostrar(guardado, false);
-    }
+    if(guardado) validarYMostrar(guardado, false);
   }
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", arranque);

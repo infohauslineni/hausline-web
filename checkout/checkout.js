@@ -410,12 +410,16 @@
       var inp=box.querySelector("[data-cupc]"); if(inp) inp.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); aplicarCupon(inp.value); } });
       var q=box.querySelector("[data-cupq]"); if(q) q.addEventListener("click", function(){ cupon=null; box.innerHTML=cuponHTML(); wireCupon(); pintarResumen(); });
     }
-    async function aplicarCupon(code){ code=(code||"").trim(); if(!code) return; var errB=$("ck").querySelector("[data-cuperr]");
+    // guardado=true: el código vino solo de la memoria del navegador (no lo escribió el cliente
+    // ni venía en el link). Si ya no sirve, se olvida en silencio en vez de mostrar un error.
+    async function aplicarCupon(code, guardado){ code=(code||"").trim(); if(!code) return; var errB=$("ck").querySelector("[data-cuperr]");
       try{ var t=calc(); var res=await fetch(SB_URL+"rpc/validar_cupon",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_codigo:code,p_total:t.subtotal})});
         if(!res.ok) throw await errorHttp(res, "cupon"); var r=await res.json();
-        if(!r||!r.valido){ if(errB){ errB.textContent=(r&&r.motivo)||"Código no válido."; errB.hidden=false; } return; }
+        if(!r||!r.valido){
+          if(guardado){ try{ localStorage.removeItem("hausline_cupon"); localStorage.removeItem("hausline_cupon_txt"); }catch(e){} var ci=$("ck").querySelector("[data-cupc]"); if(ci) ci.value=""; return; }
+          if(errB){ errB.textContent=(r&&r.motivo)||"Código no válido."; errB.hidden=false; } return; }
         cupon={id:r.id,codigo:r.codigo,tipo:r.tipo,valor:Number(r.valor)}; var box=$("ck").querySelector("[data-cupon]"); box.innerHTML=cuponHTML(); wireCupon(); pintarResumen();
-      }catch(e){ falla("cupon_error", "No se pudo validar el cupón "+code+": "+((e&&e.message)||"error")); if(errB){ errB.textContent="No pudimos validar el cupón. "+explicarError(e, "cupon").texto; errB.hidden=false; } }
+      }catch(e){ if(guardado) return; falla("cupon_error", "No se pudo validar el cupón "+code+": "+((e&&e.message)||"error")); if(errB){ errB.textContent="No pudimos validar el cupón. "+explicarError(e, "cupon").texto; errB.hidden=false; } }
     }
     wireCupon();
     // Carga las promos automáticas y re-pinta el resumen (para mostrar el descuento aplicado).
@@ -424,13 +428,13 @@
     // (localStorage hausline_cupon): lo autocompletamos y aplicamos solo, sin que el cliente
     // tenga que escribirlo. Si ya no es válido, aplicarCupon muestra el aviso y no lo aplica.
     (function(){
-      var code = "";
+      var code = "", guardado = false;
       try{ code = new URLSearchParams(location.search).get("cupon") || ""; }catch(e){}
-      if(!code){ try{ code = localStorage.getItem("hausline_cupon") || ""; }catch(e){} }
+      if(!code){ try{ code = localStorage.getItem("hausline_cupon") || ""; guardado = !!code; }catch(e){} }
       code = (code || "").trim();
       if(code && !cupon){
         var inp = $("ck").querySelector("[data-cupc]"); if(inp) inp.value = code;
-        aplicarCupon(code);
+        aplicarCupon(code, guardado);
       }
     })();
     $("ck").querySelector("[data-continuar]").addEventListener("click", function(){ enviarInfo(form, pend, esCarrito, calc, envioFlag, cupon, this, paisSel, dialSel); });
