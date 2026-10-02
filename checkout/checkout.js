@@ -429,7 +429,7 @@
     }
     // guardado=true: el código vino solo de la memoria del navegador (no lo escribió el cliente
     // ni venía en el link). Si ya no sirve, se olvida en silencio en vez de mostrar un error.
-    async function aplicarCupon(code, guardado){ code=(code||"").trim().toUpperCase().replace(/s+/g,""); if(!code) return;
+    async function aplicarCupon(code, guardado){ code=(code||"").trim().toUpperCase().replace(/\s+/g,""); if(!code) return;
       // Los cupones del panel son HAUS-XXXXX: si el cliente lo escribe sin el guion ("HAUS87TWT"), se lo ponemos.
       if(/^HAUS[A-Z0-9]{5}$/.test(code)) code="HAUS-"+code.slice(4); var errB=$("ck").querySelector("[data-cuperr]");
       try{ var t=calc(), res=null;

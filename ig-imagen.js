@@ -188,6 +188,7 @@
     + ".hlig-fotos{margin:0 0 14px}.hlig-fotos small{display:block;color:#99a299;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:7px}"
     + ".hlig-tira{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px}.hlig-ft{flex:none;width:62px;height:62px;border-radius:10px;border:2px solid #2f362e;padding:0;overflow:hidden;cursor:pointer;background:#0a0c0a;position:relative}"
     + ".hlig-ft img{width:100%;height:100%;object-fit:cover;display:block}.hlig-ft.on{border-color:#b6f13c;box-shadow:0 0 0 2px rgba(182,241,60,.35)}.hlig-ft.on::after{content:'✓';position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:#b6f13c;color:#0b0f08;font-size:10px;font-weight:800;display:grid;place-items:center}"
+    + ".hlig-pub{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding:12px;border:1px solid #2f362e;border-radius:12px;background:#0d100d}.hlig-pub label{display:flex;align-items:center;gap:6px;font-size:13px;color:#eef1ec;cursor:pointer}.hlig-pub [data-pubest]{font-size:12.5px;color:#99a299;flex-basis:100%}.hlig-pub [data-pubest] a{color:#b6f13c}"
     + ".hlig-modos{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}.hlig-modo{border:1px solid #2f362e;background:transparent;color:#eef1ec;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer}.hlig-modo.on{background:#eef1ec;color:#0b0f08;border-color:#eef1ec}";
 
   function slug(s){ return String(s || "producto").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 40); }
@@ -221,7 +222,8 @@
       + (conEI || modo === "inmediata" ? '<div class="hlig-modos"><button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button><button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
       + '<div class="hlig-grid"><div class="hlig-col"><small>Post · 4:5</small><canvas data-c="post"></canvas><button class="hlig-btn" type="button" data-d="post">⬇ Descargar post</button></div>'
       + '<div class="hlig-col"><small>Story · 9:16</small><canvas data-c="story" style="max-height:560px;object-fit:contain"></canvas><button class="hlig-btn" type="button" data-d="story">⬇ Descargar story</button></div></div>'
-      + '<textarea class="hlig-txt" data-t readonly></textarea>'
+      + '<textarea class="hlig-txt" data-t aria-label="Texto de la publicación"></textarea>'
+      + (typeof window.HLInstagramPublicar === "function" ? '<div class="hlig-pub"><label><input type="checkbox" data-pp checked> Post (con el texto)</label><label><input type="checkbox" data-ps checked> Story</label><button class="hlig-btn" type="button" data-publicar>📲 Publicar en Instagram</button><span data-pubest>Se publica directo en tu cuenta de Instagram, con la foto y el texto que ves arriba (podés editar el texto).</span></div>' : '')
       + '<div class="hlig-fila"><button class="hlig-btn sec" type="button" data-copiar>Copiar texto</button><button class="hlig-btn sec" type="button" data-cerrar>Listo</button></div></div>';
     document.body.appendChild(ov);
     var cerrar = function(){ ov.remove(); document.removeEventListener("keydown", onKey); };
@@ -238,13 +240,14 @@
 
     await fuentesListas();
     var img = await cargarImagen(fotos[0] || "");
-    var pintar = function(){
+    // conTexto: el texto se rehace al cambiar de modo, no al cambiar de foto (así no se pierde lo editado).
+    var pintar = function(conTexto){
       ov.querySelectorAll("[data-m]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-m") === modo); });
-      txt.value = textoPost(p, modo);
+      if(conTexto) txt.value = textoPost(p, modo);
       ["post", "story"].forEach(function(f){ dibujar(ov.querySelector('[data-c="' + f + '"]'), p, img, f, modo); });
     };
-    ov.querySelectorAll("[data-m]").forEach(function(b){ b.addEventListener("click", function(){ modo = b.getAttribute("data-m"); pintar(); }); });
-    pintar();
+    ov.querySelectorAll("[data-m]").forEach(function(b){ b.addEventListener("click", function(){ modo = b.getAttribute("data-m"); pintar(true); }); });
+    pintar(true);
     // Elegir otra foto: se carga (con CORS, para poder descargar) y se redibuja todo.
     var pedidoFoto = 0;
     ov.querySelectorAll("[data-f]").forEach(function(b){ b.addEventListener("click", async function(){
@@ -261,6 +264,29 @@
         try{ descargar(cv, "hausline-" + slug(p.codigo || p.nombre) + (modo === "inmediata" ? "-inmediata" : "") + "-" + f + ".jpg"); }
         catch(err){ alert("No se pudo descargar la imagen (la foto no permite exportarse). Probá con otra foto del producto."); }
       });
+    });
+
+    // Publicar directo en Instagram (admin.js define window.HLInstagramPublicar: sube los JPG y
+    // llama a la API del panel, que usa la API oficial de Meta).
+    var btnPub = ov.querySelector("[data-publicar]");
+    if(btnPub) btnPub.addEventListener("click", async function(){
+      var est = ov.querySelector("[data-pubest]");
+      var conPost = ov.querySelector("[data-pp]").checked, conStory = ov.querySelector("[data-ps]").checked;
+      if(!conPost && !conStory){ est.textContent = "Elegí post, story o los dos."; return; }
+      if(!confirm("¿Publicar ahora en Instagram " + (conPost && conStory ? "el post y la story" : conPost ? "el post" : "la story") + " de " + (p.codigo || "este producto") + "?")) return;
+      var blob = function(f){ return new Promise(function(res){ try{ ov.querySelector('[data-c="' + f + '"]').toBlob(res, "image/jpeg", 0.92); }catch(e){ res(null); } }); };
+      btnPub.disabled = true; var t0 = btnPub.textContent; btnPub.textContent = "Publicando…"; est.textContent = "Subiendo las imágenes y publicando (puede tardar unos segundos)…";
+      try{
+        var post = conPost ? await blob("post") : null, story = conStory ? await blob("story") : null;
+        if((conPost && !post) || (conStory && !story)) throw new Error("La foto no permite exportarse. Probá con otra foto del producto.");
+        var r = await window.HLInstagramPublicar({ codigo: p.codigo || slug(p.nombre), post: post, story: story, caption: txt.value });
+        var links = [r.post && r.post.permalink ? '<a href="' + esc(r.post.permalink) + '" target="_blank" rel="noopener">ver post</a>' : (r.post ? "post publicado" : ""), r.story ? "story publicada" : ""].filter(Boolean).join(" · ");
+        est.innerHTML = "✅ Listo en Instagram: " + links + (r.errorStory ? ' · <span style="color:#f5a524">la story no salió: ' + esc(r.errorStory) + "</span>" : "");
+        btnPub.textContent = "✓ Publicado";
+      }catch(err){
+        est.innerHTML = '<span style="color:#ff8a8a">' + esc(err && err.message || "No se pudo publicar.") + "</span>";
+        btnPub.disabled = false; btnPub.textContent = t0;
+      }
     });
   }
 
