@@ -408,6 +408,17 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
       // Precio y cantidad de entrega inmediata no tienen campo en el formulario: se conservan los que ya traía.
       if(previo&&previo.datos){ ["precioEntregaInmediata","cantidadDisponible"].forEach(k=>{ if(Number(previo.datos[k])>0) datos[k]=Number(previo.datos[k]); }); }
+      // Entrega inmediata también se cambia SOLA (al vender, al cancelar, o desde Compras libres del
+      // panel). Si en este formulario no se tocaron esos campos, se conserva lo que haya guardado
+      // AHORA en la base: si no, una pestaña abierta desde antes pisaba esos cambios al guardar.
+      if(previo&&previo.datos&&!esNuevo){
+        const lista=(v)=>JSON.stringify((Array.isArray(v)?v:[]).map(String));
+        const sinTocar=!!previo.datos.entregaInmediata===datos.entregaInmediata&&lista(previo.datos.tallasEntregaInmediata)===lista(datos.tallasEntregaInmediata)&&lista(previo.datos.coloresEntregaInmediata)===lista(datos.coloresEntregaInmediata);
+        if(sinTocar){
+          const {data:actual}=await supa.from("catalogo_web").select("datos").eq("codigo",codigo).maybeSingle();
+          if(actual&&actual.datos){ ["entregaInmediata","tallasEntregaInmediata","coloresEntregaInmediata","cantidadDisponible"].forEach(k=>{ if(k in actual.datos) datos[k]=actual.datos[k]; }); }
+        }
+      }
       const {error}=await supa.from("catalogo_web").upsert({codigo,activo:borrador?false:$("fActivo").checked,datos},{onConflict:"codigo"}); if(error) throw error;
       if(borrador){
         limpiarForm(); await cargarRemotos(); filtroEstado="borradores"; pagina=1; renderChips(); renderTabla(); irA("lista");

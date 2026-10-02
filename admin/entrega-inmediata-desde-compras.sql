@@ -3,8 +3,9 @@
 --
 -- El panel de tracking (botón "Poner en Entrega inmediata" de una compra Disponible) le pide a
 -- su servidor que llame a esta función: agrega las tallas a "Tallas disponibles ahora" del
--- producto y lo marca como Entrega inmediata en la tienda. Cada compra (p_ref) se agrega UNA sola
--- vez (ei_altas). Usa la misma clave secreta de entrega inmediata (secretos_internos).
+-- producto y lo marca como Entrega inmediata en la tienda. Una misma compra (p_ref) no se agrega
+-- dos veces MIENTRAS el producto siga en Entrega inmediata; si ya salió (se vendió, se quitó o se
+-- desmarcó en el admin), se puede volver a poner. Usa la clave secreta de entrega inmediata.
 -- ============================================================================
 
 create table if not exists public.ei_altas (
@@ -25,13 +26,16 @@ begin
   select * into r from public.catalogo_web where upper(codigo) = upper(btrim(p_codigo)) for update;
   if not found then return 'sin fila en el catálogo'; end if;
   insert into public.ei_altas (ref, codigo, tallas) values (p_ref, r.codigo, coalesce(p_tallas, '[]'::jsonb)) on conflict (ref) do nothing;
-  if not found then return 'ya estaba agregada'; end if;
-  -- Solo textos cortos y no vacíos.
+  if not found then
+    -- Ya se había agregado: solo se bloquea si el producto SIGUE en Entrega inmediata.
+    if coalesce((r.datos->>'entregaInmediata')::boolean, false) then return 'ya estaba agregada'; end if;
+    update public.ei_altas set tallas = coalesce(p_tallas, '[]'::jsonb), created_at = now() where ref = p_ref;
+  end if;
   select coalesce(jsonb_agg(to_jsonb(left(btrim(x), 20))), '[]'::jsonb) into nuevas
   from jsonb_array_elements_text(case when jsonb_typeof(p_tallas) = 'array' then p_tallas else '[]'::jsonb end) x
   where btrim(x) <> '';
   d := r.datos;
-  actuales := case when jsonb_typeof(d->'tallasEntregaInmediata') = 'array' then d->'tallasEntregaInmediata' else '[]'::jsonb end;
+  actuales := case when coalesce((d->>'entregaInmediata')::boolean, false) and jsonb_typeof(d->'tallasEntregaInmediata') = 'array' then d->'tallasEntregaInmediata' else '[]'::jsonb end;
   d := jsonb_set(d, '{tallasEntregaInmediata}', actuales || nuevas);
   d := jsonb_set(d, '{entregaInmediata}', 'true'::jsonb);
   update public.catalogo_web set datos = d, activo = true, updated_at = now() where id = r.id;
