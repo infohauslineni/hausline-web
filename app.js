@@ -2733,6 +2733,18 @@ document.addEventListener("carrito:cambio", () => {
 // ARRANQUE
 // ============================================================
 
+// Ejecuta `alListo` si la función global `nombre` existe; si no (su archivo no cargó por mala
+// señal), vuelve a pedir ese archivo UNA vez y la ejecuta cuando llegue. Nunca tira error.
+function conScript(nombre, archivo, alListo){
+  if(typeof window[nombre] === "function"){ try{ alListo(); }catch(e){} return; }
+  var previo = [].slice.call(document.scripts).find(function(s){ return (s.getAttribute("src") || "").indexOf(archivo) >= 0; });
+  var src = previo ? previo.getAttribute("src") : archivo;
+  var s = document.createElement("script");
+  s.src = src + (src.indexOf("?") >= 0 ? "&" : "?") + "r=" + Date.now();
+  s.onload = function(){ if(typeof window[nombre] === "function"){ try{ alListo(); }catch(e){} } };
+  document.head.appendChild(s);
+}
+
 function iniciar(){
   $("#anioActual").textContent = new Date().getFullYear();
 
@@ -2743,8 +2755,10 @@ function iniciar(){
   renderInicio();
   actualizarAccesosOfertas();
 
-  actualizarContadorCarrito();
-  actualizarContadorFavoritos();
+  // Si carrito.js / favoritos.js no llegaron a cargar (señal mala), antes esto tiraba un error y
+  // la tienda no terminaba de arrancar. Ahora arranca igual y se vuelven a pedir una vez.
+  conScript("actualizarContadorCarrito", "carrito.js", function(){ actualizarContadorCarrito(); });
+  conScript("actualizarContadorFavoritos", "favoritos.js", function(){ actualizarContadorFavoritos(); });
 
   // Ruta real del producto (/p/CODIGO): es una página indexable propia, así que
   // se abre SIEMPRE (también al recargar) manteniendo la URL /p/CODIGO. Dejamos
