@@ -890,33 +890,6 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     }));
   }
 
-  // ============ Publicar en Instagram (botón del modal de ig-imagen.js) ============
-  // Sube el post y la story (JPG) al almacenamiento público del catálogo (carpeta ig/) y le pide
-  // al servidor del panel que los publique con la API oficial de Meta (api/_instagram.js). Usa la
-  // sesión del SISTEMA (la misma de cupones): solo el administrador puede publicar.
-  const API_PANEL = "https://hausline-tracking.vercel.app/api/notificar-estado";
-  window.HLInstagramPublicar = async ({ codigo, post, story, caption }) => {
-    if(!(await asegurarSesion())) throw new Error("Tu sesión del catálogo venció. Volvé a entrar.");
-    if(!(await asegurarSesionTienda(true))) throw new Error("No se pudo conectar tu cuenta del sistema"+(ultimoErrorTienda?": "+ultimoErrorTienda:"."));
-    const base = "ig/"+String(codigo||"producto").replace(/[^\w-]+/g,"-")+"-"+Date.now();
-    const subir = async (blob, sufijo) => {
-      if(!blob) return null;
-      const ruta = base+"-"+sufijo+".jpg";
-      const { error } = await supa.storage.from(BUCKET).upload(ruta, blob, { contentType:"image/jpeg", upsert:true, cacheControl:"31536000" });
-      if(error) throw new Error("No se pudo subir la imagen: "+error.message);
-      return supa.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
-    };
-    const [post_url, story_url] = await Promise.all([subir(post,"post"), subir(story,"story")]);
-    const { data } = await supaTienda.auth.getSession();
-    const token = data && data.session && data.session.access_token;
-    if(!token) throw new Error("No hay sesión del sistema. Tocá Conectar en Cupones e intentá de nuevo.");
-    const res = await fetch(API_PANEL, { method:"POST", headers:{ "content-type":"application/json", authorization:"Bearer "+token }, body: JSON.stringify({ publicarInstagram:true, post_url, story_url, caption }) });
-    const j = await res.json().catch(()=>({}));
-    if(res.status===401) throw new Error("Tu sesión del sistema venció. Cerrá sesión y volvé a entrar.");
-    if(!res.ok || !j.ok) throw new Error(j.configurar ? "Instagram todavía no está conectado al sistema. Pedile a tu asistente que lo conecte (faltan los datos de Meta)." : (j.error || "No se pudo publicar en Instagram (HTTP "+res.status+")."));
-    return j;
-  };
-
   // ============ Cupones (proyecto de la tienda · login dual) ============
   function generarCodigoCupon(){ var abc="ABCDEFGHJKMNPQRSTUVWXYZ23456789",s=""; for(var i=0;i<5;i++) s+=abc[Math.floor(Math.random()*abc.length)]; return "HAUS-"+s; }
   $("cupTipo").addEventListener("change",()=>{ $("cupValorLbl").textContent = $("cupTipo").value==="porcentaje"?"Porcentaje (%)":"Monto (US$)"; });
