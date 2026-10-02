@@ -5,8 +5,11 @@
 // ============================================================
 
 // ---------- TASA DEL DÓLAR (para el conversor USD → C$) ----------
-// Cambia solo este número cuando cambie el tipo de cambio.
-const HAUSLINE_EXCHANGE_RATE = 37;
+// Viene del PANEL (Configuración → Moneda y tipo de cambio), vía la función pública
+// tipo_cambio_publico (se pide al final de este archivo). Mientras llega se usa la última que
+// se recibió en este navegador; 37 es solo el respaldo si nunca se pudo leer.
+let HAUSLINE_EXCHANGE_RATE = 37;
+try { const tc = Number(localStorage.getItem("hausline_tc")); if(tc >= 20 && tc <= 80) HAUSLINE_EXCHANGE_RATE = tc; } catch(e){}
 
 // ---------- MONEDA ----------
 // Formatea un precio en USD según la moneda que el cliente eligió.
@@ -224,5 +227,20 @@ const HAUSLINE_TIKTOK    = "https://tiktok.com/@hausline.niof";
       HAUSLINE_CUENTAS.splice.apply(HAUSLINE_CUENTAS, [0, HAUSLINE_CUENTAS.length].concat(nuevas));
       try{ document.dispatchEvent(new CustomEvent("hausline:cuentas")); }catch(e){}
     }).catch(function(){});
+  }catch(e){}
+})();
+
+// Tipo de cambio del panel. Si cambió, se guarda y se avisa (app.js repinta los precios en C$).
+(function(){
+  try{
+    fetch(SUPABASE_URL + "rpc/tipo_cambio_publico", { method: "POST", headers: { "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + SUPABASE_ANON_KEY }, body: "{}" })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(v){
+        var tc = Number(v);
+        if(!(tc >= 20 && tc <= 80) || tc === HAUSLINE_EXCHANGE_RATE) return;
+        HAUSLINE_EXCHANGE_RATE = tc;
+        try{ localStorage.setItem("hausline_tc", String(tc)); }catch(e){}
+        try{ document.dispatchEvent(new CustomEvent("hausline:tipo-cambio")); }catch(e){}
+      }).catch(function(){});
   }catch(e){}
 })();

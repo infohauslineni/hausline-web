@@ -2593,6 +2593,8 @@ function cambiarMoneda(m){
 
 $$("[data-moneda]").forEach(b => b.addEventListener("click", () => cambiarMoneda(b.dataset.moneda)));
 actualizarBotonesMoneda();
+// Llegó el tipo de cambio del panel (config.js): si se ven córdobas, se repintan con el nuevo.
+document.addEventListener("hausline:tipo-cambio", () => { if(monedaActual === "NIO") repintarPrecios(); });
 
 // ============================================================
 // COMPARTIR (panel de escritorio) + COPIAR
