@@ -63,6 +63,8 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       og100:p.og100===true, masVendido:p.masVendido===true, ultimasUnidades:p.ultimasUnidades===true, exclusivo:p.exclusivo===true, preventa:p.preventa===true, edicionLimitada:p.edicionLimitada===true, restock:p.restock===true, recomendado:p.recomendado===true,
       demoraExtendida:p.demoraExtendida===true, diasExtra:Number(p.diasExtra)||0, notaDemora:p.notaDemora||"",
       prepMin:Number(p.prepMin)||0, prepMax:Number(p.prepMax)||0,
+      // Fecha de alta (para "Nuevo"): los de fábrica sin fecha cuentan como viejos, así editarlos no los vuelve "nuevos".
+      fecha:p.fecha||"2025-01-01",
       // Entrega inmediata del producto base (sin esto, al editarlo salía desmarcada y se perdía al guardar).
       entregaInmediata:p.entregaInmediata===true, tallasEntregaInmediata:p.tallasEntregaInmediata||[], coloresEntregaInmediata:p.coloresEntregaInmediata||[],
       precioEntregaInmediata:Number(p.precioEntregaInmediata)||0, cantidadDisponible:Number(p.cantidadDisponible)||0 };
@@ -399,7 +401,9 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
         // Preparación propia (config.js → preparacionDe): vacío = el tiempo general.
         ...leerPreparacion(),
         borrador,
-        fecha:new Date().toISOString().slice(0,10) };
+        // Fecha en que se AGREGÓ el producto: editarlo no la cambia (si no, cualquier producto viejo
+        // editado volvía a salir como "Nuevo"). Ver destacadoVigente() en productos.js.
+        fecha:(!esNuevo && previo && previo.datos && /^\d{4}-\d{2}-\d{2}/.test(String(previo.datos.fecha||""))) ? String(previo.datos.fecha).slice(0,10) : new Date().toISOString().slice(0,10) };
       // Etiquetas opcionales elegidas en el formulario.
       ETQ_ADMIN.forEach(([id,prop])=>{ datos[prop]=$(id).checked; });
       // Precio y cantidad de entrega inmediata no tienen campo en el formulario: se conservan los que ya traía.

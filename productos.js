@@ -6564,10 +6564,19 @@ function fechaOrden(producto){
 // Ordena de más nuevo a más viejo: primero los fijados a mano
 // (destacadoNuevo), luego por fecha, y como último desempate por la
 // posición en el catálogo (lo último agregado al final).
+// "Destacado en Nuevo" vence solo: cuenta los primeros DIAS_DESTACADO_NUEVO días desde que se
+// agregó el producto (su fecha). Sin fecha o pasado ese plazo, compite como cualquiera por fecha.
+const DIAS_DESTACADO_NUEVO = 21;
+function destacadoVigente(producto){
+  if(!producto.destacadoNuevo) return false;
+  const t = fechaOrden(producto);
+  return t > 0 && (Date.now() - t) <= DIAS_DESTACADO_NUEVO * 86400000;
+}
+
 function ordenarNuevos(lista){
   return [...lista].sort((a, b) => {
-    const pa = a.destacadoNuevo ? 1 : 0;
-    const pb = b.destacadoNuevo ? 1 : 0;
+    const pa = destacadoVigente(a) ? 1 : 0;
+    const pb = destacadoVigente(b) ? 1 : 0;
     if(pa !== pb) return pb - pa;
     const fa = fechaOrden(a), fb = fechaOrden(b);
     if(fa !== fb) return fb - fa;
