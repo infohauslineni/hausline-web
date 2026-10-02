@@ -368,7 +368,7 @@
       +       '<div class="field"><label class="label">Nombre completo *</label><input class="input" name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>'
       +       '<div class="field"><label class="label">País *</label><button type="button" class="combo" data-paisbtn><span class="combo-fl">'+flag(paisSel.i)+'</span><span class="combo-tx" data-paistx>'+esc(paisSel.n)+'</span><span class="combo-ch">'+ICON.chev+'</span></button></div>'
       +       '<div class="field"><label class="label">WhatsApp *</label><div class="tel"><button type="button" class="tel-code" data-dialbtn><span>'+flag(dialSel.i)+'</span><b data-dialtx>+'+dialSel.d+'</b>'+ICON.chev+'</button><input class="input tel-num" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="8890 1122" required></div></div>'
-      +       '<div class="field"><label class="label">Correo electrónico *</label><input class="input" name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com" required></div>'
+      +       '<div class="field"><label class="label">Correo electrónico *</label><input class="input" name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com" required><p style="margin:6px 0 0;font-size:11.5px;color:#8a8378">Te mandamos aquí la confirmación y el seguimiento. Si no terminás tu pedido, te recordamos tu carrito una sola vez.</p></div>'
       +       '<div data-ubic>'+ubicNI()+'</div>'
       +       (esCarrito?"":'<div class="row">'
       +         (pend.opts.talla?'<div class="field"><label class="label">Talla / detalle</label><input class="input" name="talla" placeholder="Talla o N/A" value="'+esc(pend.opts.talla)+'"></div>':"")
@@ -391,6 +391,23 @@
       + '</div>';
 
     var form=$("ck").querySelector(".ck-form");
+    // CARRITO ABANDONADO: al escribir un correo válido se guarda el carrito (RPC
+    // guardar_carrito_abandonado). Si en 2 h no termina el pedido, le llega UN correo con sus
+    // productos (api/_automatico.js). Si lo termina, no se le escribe. Best-effort: nunca molesta.
+    (function(){
+      var ultimo="";
+      function guardarCarrito(){
+        var correo=(form.correo.value||"").trim().toLowerCase();
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(correo)) return;
+        var t=calc(), fuente=esCarrito?pend.items:[{ codigo:pend.producto.codigo }];
+        var items=t.items.map(function(it,i){ return { codigo:(fuente[i]&&fuente[i].codigo)||null, nombre:it.nombre||"", marca:it.marca||"", talla:it.talla||"", imagen:it.imagen||"", cantidad:it.cantidad||1, precio:Math.round((Number(it.lineTotal)||0)*100)/100 }; });
+        var firma=correo+"|"+(form.nombre.value||"").trim()+"|"+JSON.stringify(items);
+        if(firma===ultimo) return; ultimo=firma;
+        try{ fetch(SB_URL+"rpc/guardar_carrito_abandonado",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_correo:correo,p_nombre:(form.nombre.value||"").trim()||null,p_items:items,p_total:t.total})}).catch(function(){}); }catch(_){}
+      }
+      if(form.correo){ form.correo.addEventListener("change", guardarCarrito); form.correo.addEventListener("blur", guardarCarrito); }
+      if(form.nombre) form.nombre.addEventListener("change", guardarCarrito);
+    })();
     var revs=$("ck").querySelectorAll(".rv"); for(var i=0;i<revs.length;i++) revs[i].style.animationDelay=Math.min(i*50,300)+"ms";
     $("ck").querySelector("[data-volver]").addEventListener("click", function(){ location.href="/"; });
     function actualizarDial(){ var d=$("ck").querySelector("[data-dialbtn]"); if(!d) return; d.querySelector("span").textContent=flag(dialSel.i); d.querySelector("[data-dialtx]").textContent="+"+dialSel.d; }
