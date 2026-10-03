@@ -20,7 +20,7 @@ try { monedaActual = localStorage.getItem("hausline_moneda") || "USD"; } catch(e
 function formatearMoneda(usd){
   const n = Number(usd) || 0;
   if(monedaActual === "NIO"){
-    return "C$" + Math.round(n * HAUSLINE_EXCHANGE_RATE).toLocaleString("en-US");
+    return "C$" + cordobasCerrados(n).toLocaleString("en-US");
   }
   return "$" + n.toLocaleString("en-US");
 }
@@ -32,7 +32,7 @@ function precioUSD(usd){
 
 // Precio SIEMPRE en córdobas (para el mensaje de WhatsApp del pedido).
 function precioNIO(usd){
-  return "C$" + Math.round((Number(usd) || 0) * HAUSLINE_EXCHANGE_RATE).toLocaleString("en-US");
+  return "C$" + cordobasCerrados(usd).toLocaleString("en-US");
 }
 
 // ---------- ENVÍO (pedidos por encargo) ----------

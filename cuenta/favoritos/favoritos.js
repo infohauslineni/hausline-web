@@ -23,7 +23,7 @@
     if (v == null) return "Precio a consultar";
     var moneda = "USD";
     try { moneda = localStorage.getItem("hausline_moneda") || "USD"; } catch (e) {}
-    if (moneda === "NIO" && typeof HAUSLINE_EXCHANGE_RATE !== "undefined") return "C$ " + Math.round(Number(v) * HAUSLINE_EXCHANGE_RATE).toLocaleString("en-US");
+    if (moneda === "NIO" && typeof HAUSLINE_EXCHANGE_RATE !== "undefined") return "C$ " + (Math.ceil(Number(v) * HAUSLINE_EXCHANGE_RATE / 10) * 10).toLocaleString("en-US");
     return C.monto(v);
   }
   var urlProducto = function (c) { return "/p/" + encodeURIComponent(c) + "/"; };
