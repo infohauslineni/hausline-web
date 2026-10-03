@@ -2864,7 +2864,14 @@ function iniciar(){
   console.log(`HAUSLINE · ${productos.length} productos · ${marcasCatalogo.length} marcas`);
 }
 
-iniciar();
+// Si productos.js no llegó a cargar (señal mala), antes la tienda se quedaba en blanco con el error
+// "productos is not defined". Ahora se vuelve a pedir una vez y la tienda arranca cuando llega.
+if(typeof productos === "undefined") conScript("normalizarProducto", "productos.js", function(){
+  iniciar();
+  // catalogo-remoto.js ya corrió sin productos (y no hizo nada): ahora sí suma los del admin.
+  if(typeof cargarProductosDelPanel === "function") cargarProductosDelPanel();
+});
+else iniciar();
 
 // ============================================================
 // BLOQUEO DE ZOOM (pellizco / doble-toque)

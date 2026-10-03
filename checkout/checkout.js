@@ -296,7 +296,12 @@
     list.innerHTML=arr.map(function(p){ return '<button type="button" class="pais-row" data-i="'+p.i+'"><span class="pais-fl">'+flag(p.i)+'</span><span class="pais-nm">'+esc(p.n)+'</span><span class="pais-dc">+'+p.d+'</span></button>'; }).join("") || '<div class="pais-empty">Sin resultados</div>';
     list.querySelectorAll(".pais-row").forEach(function(b){ b.addEventListener("click", function(){ var p=PAISES_DATA.find(function(x){return x.i===b.getAttribute("data-i");}); var cb=PAIS_CB; cerrarPaisPicker(); if(cb&&p) cb(p); }); });
   }
-  function ubicNI(){ return '<div class="field"><label class="label">Departamento / ciudad *</label><select class="select" name="departamento" required><option value="">Selecciona tu departamento</option>'+DEPTOS.map(function(d){return '<option>'+esc(d)+'</option>';}).join("")+'</select></div>'; }
+  // Nicaragua: departamento + dirección de entrega (queda guardada en el cliente para coordinar el
+  // envío cuando el pedido esté disponible; se le pide confirmarla en ese momento).
+  function ubicNI(){ return '<div class="field"><label class="label">Departamento / ciudad *</label><select class="select" name="departamento" required><option value="">Selecciona tu departamento</option>'+DEPTOS.map(function(d){return '<option>'+esc(d)+'</option>';}).join("")+'</select></div>'
+    +'<div class="field"><label class="label">Dirección de entrega *</label><input class="input" name="direccion" autocomplete="street-address" placeholder="Barrio, calle, número de casa" required></div>'
+    +'<div class="field"><label class="label">Punto de referencia</label><input class="input" name="ref" placeholder="Ej. Frente al parque, portón negro (opcional)"></div>'
+    +'<p style="margin:-4px 0 0;font-size:11.5px;color:#8a8378">Cuando tu pedido esté listo te confirmamos esta dirección y el costo del envío.</p>'; }
   function ubicIntl(){ return '<div class="row"><div class="field"><label class="label">Ciudad *</label><input class="input" name="ciudad" autocomplete="address-level2" placeholder="Ej. Miami" required></div><div class="field"><label class="label">Estado / Provincia</label><input class="input" name="estado" autocomplete="address-level1" placeholder="Opcional"></div></div>'
     +'<div class="field"><label class="label">Dirección completa *</label><input class="input" name="direccion" autocomplete="street-address" placeholder="Calle, número, apto." required></div>'
     +'<div class="row"><div class="field"><label class="label">Código postal</label><input class="input" name="cp" autocomplete="postal-code" placeholder="Opcional"></div><div class="field"><label class="label">Referencia</label><input class="input" name="ref" placeholder="Opcional"></div></div>'
@@ -304,7 +309,10 @@
   // Lee y valida la ubicación. `pais` es el objeto {n,i,d} del selector.
   function leerUbic(form, pais){
     var nombre = pais ? pais.n : "Nicaragua";
-    if(nombre==="Nicaragua"){ var d=form.departamento?form.departamento.value:""; return { ok:!!d, pais:nombre, ciudad:d, direccion:null, intl:false, err:"Elegí tu departamento." }; }
+    if(nombre==="Nicaragua"){
+      var d=form.departamento?form.departamento.value:"", dn=form.direccion?form.direccion.value.trim():"", rn=form.ref?form.ref.value.trim():"";
+      return { ok:!!(d&&dn.length>=5), pais:nombre, ciudad:d, direccion:[dn, rn?("Ref: "+rn):""].filter(Boolean).join(" · ")||null, intl:false, err:d?"Escribí tu dirección de entrega (barrio, calle, casa).":"Elegí tu departamento." };
+    }
     var ci=form.ciudad?form.ciudad.value.trim():"", di=form.direccion?form.direccion.value.trim():"";
     var est=form.estado?form.estado.value.trim():"", cp=form.cp?form.cp.value.trim():"", ref=form.ref?form.ref.value.trim():"";
     var dir=[di, est, cp?("CP "+cp):"", ref?("Ref: "+ref):""].filter(Boolean).join(" · ");
