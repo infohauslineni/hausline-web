@@ -75,6 +75,21 @@
     return { tallas: t, colores: c };
   }
 
+  // Textos de cada modo de la imagen.
+  //   nuevo     → Nuevo ingreso (por encargo)
+  //   inmediata → ya está en Nicaragua
+  //   encamino  → viene en camino: se puede apartar ya con el 50%
+  function textosModo(modo){
+    if(modo === "inmediata") return { kicker: "ENTREGA INMEDIATA", titulo: "Disponible ya", sello: "LISTO PARA ENTREGAR", boton: "PEDILO EN ", subStory: "Ya en Nicaragua, sin esperar el encargo · ", piePost: "Ya en Nicaragua · pedilo en " + SITIO };
+    if(modo === "encamino") return { kicker: "EN CAMINO", titulo: "Apartalo ya", sello: "LLEGA PRONTO", boton: "APARTALO EN ", subStory: "Reservalo con el 50% · ", piePost: "Llega pronto · apartalo con el 50% en " + SITIO };
+    return { kicker: "NUEVO INGRESO", titulo: "Nuevo en HAUSLINE", sello: "", boton: "ENCARGALO EN ", subStory: "Envíos a toda Nicaragua · ", piePost: "Encargalo en " + SITIO + " · Envíos a toda Nicaragua" };
+  }
+  function tallasModo(p, modo){
+    if(modo === "encamino") return { tallas: (Array.isArray(p.tallasEnCamino) ? p.tallasEnCamino : []).filter(Boolean), colores: [] };
+    if(modo === "inmediata") return listaEI(p);
+    return { tallas: [], colores: [] };
+  }
+
   function dibujar(canvas, p, img, formato, modo){
     var W = 1080, H = formato === "story" ? 1920 : 1350;
     canvas.width = W; canvas.height = H;
@@ -83,15 +98,16 @@
     ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
 
     var story = formato === "story";
-    var inmediata = modo === "inmediata";
-    var ei = listaEI(p);
+    var tx = textosModo(modo);
+    var conDetalle = modo === "inmediata" || modo === "encamino";
+    var ei = tallasModo(p, modo);
     var y0 = story ? 190 : 120;
 
     // Encabezado
     ctx.fillStyle = C.gris; ctx.font = "600 26px " + SANS;
-    textoEspaciado(ctx, inmediata ? "ENTREGA INMEDIATA" : "NUEVO INGRESO", W / 2, y0, 9);
+    textoEspaciado(ctx, tx.kicker, W / 2, y0, 9);
     ctx.fillStyle = C.tinta; ctx.font = "600 " + (story ? 104 : 92) + "px " + SERIF;
-    ctx.fillText(inmediata ? "Disponible ya" : "Nuevo en HAUSLINE", W / 2, y0 + (story ? 110 : 98));
+    ctx.fillText(tx.titulo, W / 2, y0 + (story ? 110 : 98));
 
     // Tarjeta con la foto
     var cx = 90, cw = W - 180, cy = y0 + (story ? 170 : 145), ch = story ? 920 : 715;
@@ -110,10 +126,10 @@
     } else {
       ctx.fillStyle = C.gris2; ctx.font = "500 32px " + SANS; ctx.fillText("Foto del producto", W / 2, cy + ch / 2);
     }
-    // Sello sobre la foto (entrega inmediata).
-    if(inmediata){
+    // Sello sobre la foto (entrega inmediata / en camino).
+    if(tx.sello){
       ctx.font = "600 24px " + SANS;
-      var sello = "LISTO PARA ENTREGAR", sw = 0;
+      var sello = tx.sello, sw = 0;
       sello.split("").forEach(function(c){ sw += ctx.measureText(c).width + 3; });
       var pw = sw + 56, px = cx + 28, py = cy + 28;
       rectRedondo(ctx, px, py, pw, 58, 29); ctx.fillStyle = C.tinta; ctx.fill();
@@ -123,10 +139,10 @@
     // Nombre (+ tallas disponibles) + precio
     var yN = cy + ch + (story ? 100 : 72);
     ctx.fillStyle = C.tinta; ctx.font = "500 " + (story ? 44 : 38) + "px " + SANS;
-    var ls = lineas(ctx, String(p.nombre || "").toUpperCase(), W - 200, inmediata && !story ? 1 : 2);
+    var ls = lineas(ctx, String(p.nombre || "").toUpperCase(), W - 200, conDetalle && !story ? 1 : 2);
     ls.forEach(function(l, i){ textoEspaciado(ctx, l, W / 2, yN + i * (story ? 56 : 48), 3); });
     var yUlt = yN + (ls.length - 1) * (story ? 56 : 48);
-    if(inmediata && (ei.tallas.length || ei.colores.length)){
+    if(conDetalle && (ei.tallas.length || ei.colores.length)){
       var det = (ei.tallas.length ? (ei.tallas.length === 1 ? "Talla " : "Tallas ") + ei.tallas.join(" · ") : "") + (ei.tallas.length && ei.colores.length ? "   |   " : "") + (ei.colores.length ? ei.colores.join(" · ") : "");
       yUlt += story ? 62 : 50;
       ctx.fillStyle = C.gris; ctx.font = "500 " + (story ? 34 : 30) + "px " + SANS;
@@ -141,16 +157,27 @@
       var bwid = 780, bx = (W - bwid) / 2, by = H - 260;
       rectRedondo(ctx, bx, by, bwid, 96, 48); ctx.fillStyle = C.tinta; ctx.fill();
       ctx.fillStyle = C.fondo; ctx.font = "600 30px " + SANS;
-      textoEspaciado(ctx, (inmediata ? "PEDILO EN " : "ENCARGALO EN ") + SITIO.toUpperCase(), W / 2, by + 60, 2);
+      textoEspaciado(ctx, tx.boton + SITIO.toUpperCase(), W / 2, by + 60, 2);
       ctx.fillStyle = C.gris; ctx.font = "500 28px " + SANS;
-      ctx.fillText((inmediata ? "Ya en Nicaragua, sin esperar el encargo · " : "Envíos a toda Nicaragua · ") + (p.codigo || ""), W / 2, H - 110);
+      ctx.fillText(tx.subStory + (p.codigo || ""), W / 2, H - 110);
     } else {
       ctx.fillStyle = C.gris; ctx.font = "500 28px " + SANS;
-      ctx.fillText(inmediata ? "Ya en Nicaragua · pedilo en " + SITIO : "Encargalo en " + SITIO + " · Envíos a toda Nicaragua", W / 2, H - 70);
+      ctx.fillText(tx.piePost, W / 2, H - 70);
     }
   }
 
   function textoPost(p, modo){
+    if(modo === "encamino"){
+      var tc = tallasModo(p, modo).tallas;
+      return "🚚 En camino a HAUSLINE · ¡Apartalo ya!\n\n"
+        + (p.nombre || "") + "\n"
+        + "💵 " + precioTexto(p) + "\n"
+        + (tc.length ? "📏 " + (tc.length === 1 ? "Talla: " : "Tallas: ") + tc.join(" · ") + "\n" : "")
+        + "⏳ Ya viene en camino: reservalo hoy con el 50% y te lo entregamos apenas llegue\n\n"
+        + "🛒 Apartalo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
+        + "📲 WhatsApp " + WHATSAPP + "\n\n"
+        + "#hausline #encamino #preventa #nicaragua #managua #sneakers #streetwear";
+    }
     if(modo === "inmediata"){
       var ei = listaEI(p), cant = Number(p.cantidadDisponible) || 0;
       return "⚡ Entrega inmediata en HAUSLINE\n\n"
@@ -206,8 +233,8 @@
   // modo = "nuevo" (Nuevo ingreso) | "inmediata" (Entrega inmediata). Sin modo: inmediata si el producto la tiene.
   async function abrir(p, modo){
     if(!p) return;
-    var conEI = !!p.entregaInmediata;
-    modo = modo === "inmediata" || modo === "nuevo" ? modo : (conEI ? "inmediata" : "nuevo");
+    var conEI = !!p.entregaInmediata, conEC = !!p.enCamino;
+    modo = modo === "inmediata" || modo === "nuevo" || modo === "encamino" ? modo : (conEI ? "inmediata" : conEC ? "encamino" : "nuevo");
     // Todas las fotos del producto (sin repetir), para elegir cuál sale en el post y la story.
     var fotos = [p.imagen].concat(Array.isArray(p.imagenes) ? p.imagenes : []).map(function(u){ return String(u || "").trim(); })
       .filter(function(u, i, a){ return u && a.indexOf(u) === i; });
@@ -219,7 +246,7 @@
       + (fotos.length > 1 ? '<div class="hlig-fotos"><small>Foto para el post y la story · tocá para cambiarla</small><div class="hlig-tira">'
         + fotos.map(function(u, i){ return '<button class="hlig-ft' + (i ? '' : ' on') + '" type="button" data-f="' + i + '" aria-label="Usar foto ' + (i + 1) + '"><img src="' + esc(u) + '" alt="" loading="lazy"></button>'; }).join("")
         + '</div></div>' : '')
-      + (conEI || modo === "inmediata" ? '<div class="hlig-modos"><button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button><button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
+      + (conEI || conEC || modo !== "nuevo" ? '<div class="hlig-modos">' + (conEC || modo === "encamino" ? '<button class="hlig-modo" type="button" data-m="encamino">🚚 En camino</button>' : '') + (conEI || modo === "inmediata" ? '<button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button>' : '') + '<button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
       + '<div class="hlig-grid"><div class="hlig-col"><small>Post · 4:5</small><canvas data-c="post"></canvas><button class="hlig-btn" type="button" data-d="post">⬇ Descargar post</button></div>'
       + '<div class="hlig-col"><small>Story · 9:16</small><canvas data-c="story" style="max-height:560px;object-fit:contain"></canvas><button class="hlig-btn" type="button" data-d="story">⬇ Descargar story</button></div></div>'
       + '<textarea class="hlig-txt" data-t aria-label="Texto de la publicación"></textarea>'

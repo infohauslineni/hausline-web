@@ -6354,6 +6354,10 @@ function normalizarProducto(producto, indice){
     disponiblePorEncargo: producto.disponiblePorEncargo !== undefined ? producto.disponiblePorEncargo : true,
     entregaInmediata: producto.entregaInmediata || false,
     tallasEntregaInmediata: producto.tallasEntregaInmediata || [],
+    // "En camino · Apartalo ya": compras que vienen en camino (Compras libres del panel). Se
+    // encargan normal (50%); llegan antes que un encargo nuevo.
+    enCamino: producto.enCamino === true,
+    tallasEnCamino: Array.isArray(producto.tallasEnCamino) ? producto.tallasEnCamino : [],
     coloresEntregaInmediata: producto.coloresEntregaInmediata || [],
     cantidadDisponible: producto.cantidadDisponible !== undefined ? producto.cantidadDisponible : null,
     precioEntregaInmediata: producto.precioEntregaInmediata !== undefined ? producto.precioEntregaInmediata : null,

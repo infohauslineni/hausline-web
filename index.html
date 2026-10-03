@@ -103,7 +103,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=20260929">
+  <link rel="stylesheet" href="styles.css?v=20261002e">
 
   <!-- Scripts con defer en el <head>: se descargan EN PARALELO mientras el
        navegador arma la página (más rápido en móvil), pero se ejecutan en
@@ -112,12 +112,12 @@
   <script defer src="meta-pixel.js?v=20260923"></script>
   <script defer src="/salud.js?v=20260927"></script>
   <script defer src="config.js?v=20261002t"></script>
-  <script defer src="productos.js?v=20261002n"></script>
+  <script defer src="productos.js?v=20261002e"></script>
   <script defer src="clientes.js?v=20260724"></script>
   <script defer src="favoritos.js?v=20260724"></script>
   <script defer src="carrito.js?v=20261006p"></script>
   <script defer src="supabase-views.js?v=20260929"></script>
-  <script defer src="app.js?v=20261002t"></script>
+  <script defer src="app.js?v=20261002e"></script>
   <script defer src="busqueda-ux.js?v=20260927"></script>
   <script defer src="encargo.js?v=20261006p"></script>
   <script defer src="catalogo-remoto.js?v=20261006b"></script>
@@ -267,6 +267,17 @@
         </button>
       </div>
       <div class="fila" id="filaInmediata"></div>
+    </section>
+
+    <!-- En camino · Apartalo ya (compras que vienen en camino) -->
+    <section class="seccion" id="en-camino" aria-labelledby="tit-encamino" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-encamino">En camino · Apartalo ya</h2>
+        <button class="ver-todo" type="button" data-coleccion="en-camino">
+          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="fila" id="filaEnCamino"></div>
     </section>
 
     <!-- Nuevo en HAUSLINE -->

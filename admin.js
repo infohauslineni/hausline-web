@@ -412,6 +412,9 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       // panel). Si en este formulario no se tocaron esos campos, se conserva lo que haya guardado
       // AHORA en la base: si no, una pestaña abierta desde antes pisaba esos cambios al guardar.
       if(previo&&previo.datos&&!esNuevo){
+        // "En camino" lo maneja SOLO el panel (Compras libres): no está en este formulario, se conserva.
+        const {data:filaActual}=await supa.from("catalogo_web").select("datos").eq("codigo",codigo).maybeSingle();
+        if(filaActual&&filaActual.datos){ ["enCamino","tallasEnCamino"].forEach(k=>{ if(k in filaActual.datos) datos[k]=filaActual.datos[k]; }); }
         const lista=(v)=>JSON.stringify((Array.isArray(v)?v:[]).map(String));
         const sinTocar=!!previo.datos.entregaInmediata===datos.entregaInmediata&&lista(previo.datos.tallasEntregaInmediata)===lista(datos.tallasEntregaInmediata)&&lista(previo.datos.coloresEntregaInmediata)===lista(datos.coloresEntregaInmediata);
         if(sinTocar){
@@ -497,6 +500,19 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   }
   // Copia de los datos del panel con el nombre que ve el cliente (sin tocar la fila original).
   function conNombreVisible(codigo, datos){ if(!datos) return null; const n=nombreVisible(codigo,datos); return n&&n!==datos.nombre?{...datos,nombre:n}:datos; }
+  // Link del panel (Compras libres → "📸 Post"): admin.html?ig=CODIGO&modo=encamino|inmediata|nuevo
+  // abre el generador de imagen de Instagram de ese producto apenas carga la lista (una vez).
+  let igUrlHecho=false;
+  function abrirIgDesdeUrl(){
+    if(igUrlHecho) return;
+    const q=new URLSearchParams(location.search), cod=(q.get("ig")||"").trim().toUpperCase();
+    if(!cod||!window.HLInstagram) return;
+    const it=itemsMerged.find(i=>String(i.codigo||"").toUpperCase()===cod);
+    if(!it) return;
+    igUrlHecho=true;
+    window.HLInstagram.abrir({...it.datos, codigo:it.codigo}, q.get("modo")||undefined);
+    history.replaceState(null,"",location.pathname);
+  }
   function construirLista(){
     const map=new Map(); remotos.forEach(r=>map.set(String(r.codigo).toUpperCase(),r));
     const items=[],usados=new Set();
@@ -506,6 +522,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
     remotos.forEach(r=>{ const c=String(r.codigo||"").toUpperCase(); if(usados.has(c)) return;
       items.push({codigo:r.codigo,datos:conNombreVisible(r.codigo,r.datos)||{},origen:"nuevo",remoteId:r.id,activo:r.activo}); });
     itemsMerged=items; renderInicio(); renderChips(); renderTabla(); poblarMarcas(); renderVentaLibre(); renderSugNombre();
+    abrirIgDesdeUrl();
   }
   // Autocompletado de marcas: junta las marcas ya usadas (catálogo base + panel) para que
   // al subir un producto elijas la marca EXACTA y no la reescribas mal (mayúsculas/erratas),

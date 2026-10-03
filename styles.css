@@ -1077,6 +1077,9 @@ h1,h2,h3{ margin:0; font-weight:700; letter-spacing:-.02em; }
 .etiqueta.nuevo{ background:var(--verde); color:var(--cream); }
 .etiqueta.oferta{ background:var(--rojo); color:#fff; }
 .etiqueta.inmediata{ background:var(--verde); color:var(--cream); }
+.etiqueta.encamino{ background:#8a5a00; color:#fff7e6; }
+.aviso-encamino{ display:flex; gap:10px; align-items:flex-start; margin-top:10px; padding:11px 13px; border-radius:12px; background:#fff7e6; border:1px solid #f1d39b; color:#5c3d00; font-size:13px; line-height:1.45; }
+.aviso-encamino svg{ flex:none; width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; margin-top:1px; }
 
 /* Colores de las etiquetas opcionales (ver ETIQUETAS_OPCIONALES) */
 .etiqueta.azul{   background:#1e63d0; color:#fff; }

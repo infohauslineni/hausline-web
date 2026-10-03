@@ -32,6 +32,7 @@ const TITULOS_COLECCION = {
   "nuevos":            "Nuevo en HAUSLINE",
   "ofertas":           "Ofertas",
   "entrega-inmediata": "Entrega inmediata",
+  "en-camino": "En camino · Apartalo ya",
   "favoritos":         "Tus favoritos",
   "vistos":            "Vistos recientemente",
   "marcas":            "Marcas"
@@ -189,6 +190,7 @@ function crearCard(producto, modoInmediata){
 
   let etiquetas = "";
   if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
+  else if(producto.enCamino) etiquetas += `<span class="etiqueta encamino">En camino · Apartalo</span>`;
   if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
   // Etiquetas opcionales que hayas activado en el producto
@@ -405,6 +407,10 @@ function productosOferta(){
 
 function productosInmediata(){
   return productos.filter(p => p.entregaInmediata);
+}
+
+function productosEnCamino(){
+  return productos.filter(p => p.enCamino);
 }
 
 function productosVistos(){
@@ -971,6 +977,16 @@ function renderInicio(){
     contInmediata.innerHTML = "";
   }
 
+  // En camino · Apartalo ya: la sección se oculta sola si no hay nada en camino.
+  const enCamino = productosEnCamino();
+  const secEnCamino = document.getElementById("en-camino");
+  const contEnCamino = document.getElementById("filaEnCamino");
+  if(secEnCamino && contEnCamino){
+    secEnCamino.hidden = !enCamino.length;
+    if(enCamino.length) pintarFila("#filaEnCamino", tomar(enCamino, 12));
+    else contEnCamino.innerHTML = "";
+  }
+
   // Ofertas: la sección se oculta sola si no hay promociones vigentes.
   const ofertas = productosOferta();
   const secOfertas = $("#seccionOfertas");
@@ -1248,6 +1264,7 @@ function baseColeccion(){
     case "nuevos":            return ordenarNuevos(productos.filter(esNuevo)).slice(0, CANTIDAD_NUEVOS);
     case "ofertas":           return productosOferta();
     case "entrega-inmediata": return productosInmediata();
+    case "en-camino":         return productosEnCamino();
     case "favoritos":         return productosFavoritos();
     case "vistos":            return productosVistos();
     default:                  return productos;
@@ -1538,6 +1555,14 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
            }. Verlas</span>
          </button>`
       : "";
+  // Viene en camino: se puede apartar ya (se encarga normal con el 50%).
+  if(producto.enCamino){
+    $("#modalAvisoInmediata").innerHTML +=
+      `<div class="aviso-encamino">
+         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
+         <span><b>Viene en camino</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Apartalo ya con el 50% y te lo entregamos apenas llegue.</span>
+       </div>`;
+  }
 
   renderGaleria(true);
   renderSelectores(producto);
