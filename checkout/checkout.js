@@ -441,7 +441,7 @@
       // Los cupones del panel son HAUS-XXXXX: si el cliente lo escribe sin el guion ("HAUS87TWT"), se lo ponemos.
       if(/^HAUS[A-Z0-9]{5}$/.test(code)) code="HAUS-"+code.slice(4);
       // Los de "volver a comprar" son HAUS10-XXXXX: lo mismo ("HAUS107K4QX" → "HAUS10-7K4QX").
-      else if(/^HAUS\d{2}[A-Z0-9]{5}$/.test(code)) code=code.slice(0,6)+"-"+code.slice(6); var errB=$("ck").querySelector("[data-cuperr]");
+      else { var mh=code.match(/^HAUS(\d{1,2})([A-Z0-9]{5})$/); if(mh) code="HAUS"+mh[1]+"-"+mh[2]; } var errB=$("ck").querySelector("[data-cuperr]");
       try{ var t=calc(), res=null;
         // Si se cae la señal un momento (en iPhone: "Load failed"), se reintenta solo 2 veces.
         for(var intento=0; intento<3; intento++){
