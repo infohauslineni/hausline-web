@@ -219,7 +219,7 @@
   /* ---------------- Cancelar pedido = SOLICITUD de reembolso ----------------
      El cliente no cancela directo: deja el motivo + la cuenta para el reembolso y HAUSLINE lo
      revisa. Los motivos dependen de la etapa (los da la base, que también los valida): el de
-     calidad solo en las 24 h tras las fotos de control de calidad; en tránsito, solo motivos
+     calidad solo en las 48 h tras las fotos de control de calidad; en tránsito, solo motivos
      comprobables. Si se rechaza, el cliente elige: seguir con el pedido o cancelar sin reembolso. */
   var MOTIVOS = {
     error_pedido: "Elegí por error la talla, el color o el modelo",
@@ -235,7 +235,7 @@
     otro: "Otro motivo (escríbalo usted)",
   };
   function introEtapa(rb) {
-    if (rb.etapa === "calidad") return "Está dentro de las <b>24 horas</b> para revisar las fotos de control de calidad" + (rb.qc_vence ? " (hasta el " + esc(C.fecha(rb.qc_vence, true)) + ")" : "") + ". Si el producto no es lo que pidió o no cumple sus expectativas, cuéntenos qué vio en las fotos.";
+    if (rb.etapa === "calidad") return "Está dentro de las <b>48 horas</b> para revisar las fotos de control de calidad" + (rb.qc_vence ? " (hasta el " + esc(C.fecha(rb.qc_vence, true)) + ")" : "") + ". Si el producto no es lo que pidió o no cumple sus expectativas, cuéntenos qué vio en las fotos.";
     if (rb.etapa === "transito") return "Su pedido ya pasó el control de calidad y va en camino. En esta etapa solo se aceptan motivos que se puedan <b>comprobar</b>.";
     if (rb.etapa === "disponible") return "Su pedido ya está en Nicaragua. Solo se aceptan motivos que se puedan comprobar con las fotos de recibido.";
     return "Su pedido todavía se está preparando.";
