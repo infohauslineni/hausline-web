@@ -81,8 +81,8 @@
   //   encamino  → viene en camino: se puede apartar ya con el 50%
   function textosModo(modo){
     if(modo === "inmediata") return { kicker: "ENTREGA INMEDIATA", titulo: "Disponible ya", sello: "LISTO PARA ENTREGAR", boton: "PEDILO EN ", subStory: "Ya en Nicaragua, sin esperar el encargo · ", piePost: "Ya en Nicaragua · pedilo en " + SITIO };
-    if(modo === "encamino") return { kicker: "EN CAMINO", titulo: "Apartalo ya", sello: "LLEGA PRONTO", boton: "APARTALO EN ", subStory: "Reservalo con el 50% · ", piePost: "Llega pronto · apartalo con el 50% en " + SITIO };
-    return { kicker: "NUEVO INGRESO", titulo: "Nuevo en HAUSLINE", sello: "", boton: "ENCARGALO EN ", subStory: "Envíos a toda Nicaragua · ", piePost: "Encargalo en " + SITIO + " · Envíos a toda Nicaragua" };
+    if(modo === "encamino") return { kicker: "EN CAMINO", titulo: "Apártelo ya", sello: "LLEGA PRONTO", boton: "APÁRTELO EN ", subStory: "Resérvelo con el 50% · ", piePost: "Llega pronto · apártelo con el 50% en " + SITIO };
+    return { kicker: "NUEVO INGRESO", titulo: "Nuevo en HAUSLINE", sello: "", boton: "ENCÁRGUELO EN ", subStory: "Envíos a toda Nicaragua · ", piePost: "Encárguelo en " + SITIO + " · Envíos a toda Nicaragua" };
   }
   function tallasModo(p, modo){
     if(modo === "encamino") return { tallas: (Array.isArray(p.tallasEnCamino) ? p.tallasEnCamino : []).filter(Boolean), colores: [] };
@@ -169,12 +169,12 @@
   function textoPost(p, modo){
     if(modo === "encamino"){
       var tc = tallasModo(p, modo).tallas;
-      return "🚚 En camino a HAUSLINE · ¡Apartalo ya!\n\n"
+      return "🚚 En camino a HAUSLINE · ¡Apártelo ya!\n\n"
         + (p.nombre || "") + "\n"
         + "💵 " + precioTexto(p) + "\n"
         + (tc.length ? "📏 " + (tc.length === 1 ? "Talla: " : "Tallas: ") + tc.join(" · ") + "\n" : "")
-        + "⏳ Ya viene en camino: reservalo hoy con el 50% y te lo entregamos apenas llegue\n\n"
-        + "🛒 Apartalo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
+        + "⏳ Ya viene en camino: resérvelo hoy con el 50% y se lo entregamos apenas llegue\n\n"
+        + "🛒 Apártelo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
         + "📲 WhatsApp " + WHATSAPP + "\n\n"
         + "#hausline #encamino #preventa #nicaragua #managua #sneakers #streetwear";
     }
@@ -185,8 +185,8 @@
         + "💵 " + precioTexto(p, modo) + "\n"
         + (ei.tallas.length ? "📏 " + (ei.tallas.length === 1 ? "Talla disponible: " : "Tallas disponibles: ") + ei.tallas.join(" · ") + "\n" : "")
         + (ei.colores.length ? "🎨 " + ei.colores.join(" · ") + "\n" : "")
-        + "✅ Ya está en Nicaragua: te lo entregamos sin esperar el encargo" + (cant > 0 && cant <= 3 ? "\n🔥 Últimas " + cant + " unidades" : "") + "\n\n"
-        + "🛒 Pedilo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
+        + "✅ Ya está en Nicaragua: se lo entregamos sin esperar el encargo" + (cant > 0 && cant <= 3 ? "\n🔥 Últimas " + cant + " unidades" : "") + "\n\n"
+        + "🛒 Pídalo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
         + "📲 WhatsApp " + WHATSAPP + "\n\n"
         + "#hausline #entregainmediata #nicaragua #managua #sneakers #streetwear";
     }
@@ -195,7 +195,7 @@
       + (p.nombre || "") + "\n"
       + "💵 " + precioTexto(p) + "\n"
       + "📦 Por encargo · envíos a toda Nicaragua" + dem + "\n\n"
-      + "🛒 Encargalo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
+      + "🛒 Encárguelo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
       + "📲 WhatsApp " + WHATSAPP + "\n\n"
       + "#hausline #nicaragua #managua #sneakers #streetwear #moda";
   }

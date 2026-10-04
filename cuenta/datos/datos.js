@@ -25,7 +25,7 @@
       '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:24px;margin:0">Datos personales</h1>' +
       '<section style="display:flex;gap:20px;align-items:center;margin-top:20px">' +
         '<span class="cta-avatar">' + (av ? '<img src="' + esc(av) + '" alt="">' : I.persona) + "</span>" +
-        '<div style="min-width:0"><b style="display:block;font-size:22px;font-weight:600">' + esc(cuenta.nombre || "Tu nombre") + '</b><span class="cta-prod" style="margin:0">' + esc(sesion.user.email) + "</span>" +
+        '<div style="min-width:0"><b style="display:block;font-size:22px;font-weight:600">' + esc(cuenta.nombre || "Su nombre") + '</b><span class="cta-prod" style="margin:0">' + esc(sesion.user.email) + "</span>" +
         '<button type="button" class="cta-btn-borde" id="btnFoto" style="margin-top:10px">Editar foto</button><input type="file" id="foto" accept="image/jpeg,image/png,image/webp" hidden></div>' +
       "</section>" +
       '<h2 class="cta-sec-h" style="margin-top:28px">Información personal</h2><div class="cta-card cta-filas">' +
@@ -60,33 +60,33 @@
       var f = input.files && input.files[0];
       input.value = "";
       if (!f) return;
-      if (!/^image\//.test(f.type)) { C.aviso("Elegí una imagen (JPG, PNG o WebP).", "error", true); return; }
+      if (!/^image\//.test(f.type)) { C.aviso("Elija una imagen (JPG, PNG o WebP).", "error", true); return; }
       editorFoto(URL.createObjectURL(f), false);
     });
     main.querySelector("#fNombre").addEventListener("click", function () { editarTexto("Nombre completo", "Nombre y apellido", cuenta.nombre || "", "text", "name", guardarNombre); });
     main.querySelector("#fTel").addEventListener("click", function () { editarTexto("Teléfono", "Número de WhatsApp", cuenta.telefono || "", "tel", "tel", guardarTel); });
-    main.querySelector("#fCorreo").addEventListener("click", function () { editarTexto("Correo electrónico", "Correo nuevo", sesion.user.email || "", "email", "email", guardarCorreo, "Por seguridad, el cambio se aplica cuando abrás el enlace que te enviamos al correo nuevo."); });
+    main.querySelector("#fCorreo").addEventListener("click", function () { editarTexto("Correo electrónico", "Correo nuevo", sesion.user.email || "", "email", "email", guardarCorreo, "Por seguridad, el cambio se aplica cuando abra el enlace que le enviamos al correo nuevo."); });
     main.querySelector("#fClave").addEventListener("click", function () { editarTexto("Cambiar contraseña", "Contraseña nueva (mínimo 8)", "", "password", "new-password", guardarClave); });
     main.querySelector("#fIdioma").addEventListener("click", function () {
       elegir("Idioma", "idioma", cuenta.idioma, [["es", "Español", ""], ["en", "English", "Próximamente: por ahora el sitio está en español."]]);
     });
     main.querySelector("#fMoneda").addEventListener("click", function () {
-      elegir("Moneda", "moneda", cuenta.moneda, [["USD", "USD - Dólar estadounidense", ""], ["NIO", "NIO - Córdoba nicaragüense", "La tienda te muestra los precios en córdobas."]]);
+      elegir("Moneda", "moneda", cuenta.moneda, [["USD", "USD - Dólar estadounidense", ""], ["NIO", "NIO - Córdoba nicaragüense", "La tienda le muestra los precios en córdobas."]]);
     });
     main.querySelector("#fSalir").addEventListener("click", C.salir);
     main.querySelector("#fEliminar").addEventListener("click", eliminarCuenta);
   }
 
-  // Editor de encuadre: arrastrá para mover, deslizá para acercar. Guarda un JPEG cuadrado 512px.
+  // Editor de encuadre: arrastre para mover, deslice para acercar. Guarda un JPEG cuadrado 512px.
   function editorFoto(src, remota) {
     var TAM = 260;
     var h = C.hoja('<div style="display:grid;place-items:center">' +
       '<div id="marco" style="position:relative;width:' + TAM + 'px;height:' + TAM + 'px;border-radius:999px;overflow:hidden;background:#EAE7E1;touch-action:none;cursor:grab">' +
       '<canvas id="lienzo" width="' + TAM * 2 + '" height="' + TAM * 2 + '" style="width:100%;height:100%"></canvas></div>' +
-      '<p class="cta-nota" style="text-align:center">Arrastrá la foto para acomodarla.</p>' +
+      '<p class="cta-nota" style="text-align:center">Arrastre la foto para acomodarla.</p>' +
       '<label style="display:flex;align-items:center;gap:10px;width:100%;max-width:280px;margin-top:6px;font-size:13px;color:var(--texto-2)">−<input type="range" id="zoom" min="1" max="3" step="0.01" value="1" style="flex:1;accent-color:#171310">+</label></div>' +
       '<button type="button" class="cta-btn" id="guardarFoto" style="margin-top:18px">Guardar foto</button>' +
-      '<button type="button" class="cta-link" style="display:block;margin:12px auto 0" id="cancelarFoto">Cancelar</button>', "Ajustá tu foto");
+      '<button type="button" class="cta-link" style="display:block;margin:12px auto 0" id="cancelarFoto">Cancelar</button>', "Ajuste su foto");
     var canvas = h.panel.querySelector("#lienzo"), ctx = canvas.getContext("2d"), marco = h.panel.querySelector("#marco");
     var img = new Image(), z = 1, ox = 0, oy = 0, ini = null;
     if (remota) img.crossOrigin = "anonymous";
@@ -129,20 +129,20 @@
   }
 
   function eliminarCuenta() {
-    var h = C.hoja('<p class="cta-sub" style="margin:0;font-size:14px">Se borran <b style="color:var(--texto)">para siempre</b> tu correo, contraseña, teléfono, foto, direcciones y lista de deseos. Tus <b style="color:var(--texto)">pedidos se conservan</b> en HAUSLINE (podés seguirlos con su código).</p>' +
-      '<form id="fBorrar"><label class="cta-field" style="margin-top:16px"><span>Confirmá con tu contraseña</span><input class="cta-input" id="pwBorrar" type="password" autocomplete="current-password"></label>' +
+    var h = C.hoja('<p class="cta-sub" style="margin:0;font-size:14px">Se borran <b style="color:var(--texto)">para siempre</b> su correo, contraseña, teléfono, foto, direcciones y lista de deseos. Sus <b style="color:var(--texto)">pedidos se conservan</b> en HAUSLINE (puede seguirlos con su código).</p>' +
+      '<form id="fBorrar"><label class="cta-field" style="margin-top:16px"><span>Confirme con su contraseña</span><input class="cta-input" id="pwBorrar" type="password" autocomplete="current-password"></label>' +
       '<button class="cta-btn" id="btnBorrar" style="margin-top:18px;background:var(--rojo);border-color:var(--rojo)">Eliminar mi cuenta</button></form>' +
-      '<button type="button" class="cta-link" style="display:block;margin:12px auto 0" id="noBorrar">Cancelar</button>', "¿Eliminar tu cuenta?");
+      '<button type="button" class="cta-link" style="display:block;margin:12px auto 0" id="noBorrar">Cancelar</button>', "¿Eliminar su cuenta?");
     h.panel.querySelector("#noBorrar").addEventListener("click", h.cerrar);
     h.panel.querySelector("#fBorrar").addEventListener("submit", async function (e) {
       e.preventDefault();
       var pw = h.panel.querySelector("#pwBorrar").value;
-      if (!pw) return C.aviso("Escribí tu contraseña.", "error", true);
+      if (!pw) return C.aviso("Escriba su contraseña.", "error", true);
       var b = h.panel.querySelector("#btnBorrar"); b.disabled = true; b.textContent = "Eliminando…";
       try {
         await C.eliminarCuenta(pw);
         h.cerrar();
-        main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600;font-size:17px">Tu cuenta fue eliminada</p><p class="cta-nota" style="font-size:13.5px;margin-top:8px">Gracias por haber sido parte de HAUSLINE. Tus pedidos siguen disponibles con su código.</p><a class="cta-btn auto" style="margin-top:18px" href="/">Volver a la tienda</a></div>';
+        main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600;font-size:17px">Su cuenta fue eliminada</p><p class="cta-nota" style="font-size:13.5px;margin-top:8px">Gracias por haber sido parte de HAUSLINE. Sus pedidos siguen disponibles con su código.</p><a class="cta-btn auto" style="margin-top:18px" href="/">Volver a la tienda</a></div>';
       } catch (err) { C.aviso(C.mensajeError(err), "error"); b.disabled = false; b.textContent = "Eliminar mi cuenta"; }
     });
   }
@@ -158,14 +158,14 @@
       catch (err) { C.aviso(C.mensajeError(err), "error"); btn.disabled = false; btn.textContent = "Guardar"; }
     });
   }
-  async function guardarNombre(v) { if (v.length < 2) throw C.errorCliente("Escribí tu nombre completo."); await C.actualizarCuenta({ nombre: v }); C.aviso("Guardado."); }
-  async function guardarTel(v) { if (!/^[0-9+ ()-]{7,25}$/.test(v)) throw C.errorCliente("Revisá el número (ej. +505 8888 8888)."); await C.actualizarCuenta({ telefono: v }); C.aviso("Guardado."); }
+  async function guardarNombre(v) { if (v.length < 2) throw C.errorCliente("Escriba su nombre completo."); await C.actualizarCuenta({ nombre: v }); C.aviso("Guardado."); }
+  async function guardarTel(v) { if (!/^[0-9+ ()-]{7,25}$/.test(v)) throw C.errorCliente("Revise el número (ej. +505 8888 8888)."); await C.actualizarCuenta({ telefono: v }); C.aviso("Guardado."); }
   async function guardarCorreo(v) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) throw C.errorCliente("Correo inválido.");
     if (v.toLowerCase() === String(sesion.user.email).toLowerCase()) return;
     var r = await C.sb.auth.updateUser({ email: v.toLowerCase() }, { emailRedirectTo: C.SITIO + "/cuenta/datos/" });
     if (r.error) throw r.error;
-    C.aviso("Te enviamos un enlace al correo nuevo para confirmar el cambio.");
+    C.aviso("Le enviamos un enlace al correo nuevo para confirmar el cambio.");
   }
   async function guardarClave(v) {
     if (v.length < 8) throw C.errorCliente("La contraseña debe tener al menos 8 caracteres.");
@@ -190,7 +190,7 @@
     if (!sesion) return;
     C.navInferior("cuenta");
     try { cuenta = await C.cuenta(); pintar(); }
-    catch (err) { main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tus datos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
+    catch (err) { main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar sus datos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
   }
   iniciar();
 })();

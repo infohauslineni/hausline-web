@@ -22,9 +22,9 @@
   }
 
   function pintar() {
-    main.innerHTML = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:24px;margin:0">Direcciones</h1><p class="cta-sub" style="margin-top:4px;font-size:14px">Gestioná tus direcciones de envío y facturación.</p>' +
+    main.innerHTML = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:24px;margin:0">Direcciones</h1><p class="cta-sub" style="margin-top:4px;font-size:14px">Gestione sus direcciones de envío y facturación.</p>' +
       '<div style="margin-top:16px;display:grid;gap:12px">' + (dirs.length ? dirs.map(tarjeta).join("") :
-        '<div class="cta-card cta-vacio"><p style="font-weight:600">Todavía no guardaste direcciones</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Guardá tu casa, trabajo u otro lugar para pedir el envío de tus pedidos con un toque.</p></div>') + "</div>" +
+        '<div class="cta-card cta-vacio"><p style="font-weight:600">Todavía no guardó direcciones</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Guarde su casa, trabajo u otro lugar para pedir el envío de sus pedidos con un toque.</p></div>') + "</div>" +
       '<a class="cta-btn" style="margin-top:18px" href="/cuenta/direccion/">Agregar nueva dirección</a>';
     dirs.forEach(function (d) { var el = main.querySelector('[data-mapa="' + d.id + '"]'); if (el) C.mapa(el, { lat: d.lat, lng: d.lng }); });
     main.querySelectorAll("[data-borrar]").forEach(function (b) { b.addEventListener("click", function () { borrar(b.dataset.borrar); }); });
@@ -40,7 +40,7 @@
     var d = dirs.filter(function (x) { return x.id === id; })[0];
     if (!d) return;
     var h = C.hoja('<p class="cta-sub" style="margin:0;font-size:14px"><b style="color:var(--texto)">' + esc(d.nombre) + "</b> · " + esc(d.direccion + ", " + d.ciudad) + "</p>" +
-      (d.predeterminada ? '<p class="cta-nota">Es tu dirección predeterminada: otra pasará a serlo.</p>' : "") +
+      (d.predeterminada ? '<p class="cta-nota">Es su dirección predeterminada: otra pasará a serlo.</p>' : "") +
       '<button type="button" class="cta-btn" id="sBorrar" style="margin-top:18px;background:var(--rojo);border-color:var(--rojo)">Eliminar dirección</button><button type="button" class="cta-link" style="display:block;margin:12px auto 0" id="sCancelar">Cancelar</button>', "¿Eliminar esta dirección?");
     h.panel.querySelector("#sCancelar").addEventListener("click", h.cerrar);
     h.panel.querySelector("#sBorrar").addEventListener("click", async function () {
@@ -60,7 +60,7 @@
     if (!s) return;
     C.navInferior("cuenta");
     try { await cargar(); }
-    catch (err) { main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tus direcciones</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
+    catch (err) { main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar sus direcciones</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
   }
   iniciar();
 })();

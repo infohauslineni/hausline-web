@@ -253,7 +253,7 @@
             </svg>
           </div>
           <div class="pa-title">¡Pedido confirmado! <b>✓</b></div>
-          <div class="pa-sub">Preparando tu envío — te llevamos al pago seguro…</div>
+          <div class="pa-sub">Preparando su envío — le llevamos al pago seguro…</div>
         </div>`;
       document.body.appendChild(ov);
       document.body.style.overflow = "hidden";
@@ -325,7 +325,7 @@
         <div class="it"><span class="em">📦</span>Seguimiento del pedido</div>
         <div class="it"><span class="em">💬</span>Soporte por WhatsApp</div>
       </div>
-      <div class="enc-trust-tag"><b>Compra con confianza.</b> Te mantenemos informado desde la confirmación hasta la entrega de tu pedido.</div>`;
+      <div class="enc-trust-tag"><b>Compra con confianza.</b> Le mantenemos informado desde la confirmación hasta la entrega de su pedido.</div>`;
   }
 
   // Pastilla de color por banco para la lista de cuentas de la pasarela.
@@ -341,7 +341,7 @@
   // Departamentos de Nicaragua para el encargo (se guarda como ubicación del cliente y
   // sirve para calcular el envío: Managua = delivery; el resto = bus / Cargotrans).
   var DEPARTAMENTOS_NI = ["Managua","Masaya","Carazo","Granada","Rivas","León","Chinandega","Estelí","Madriz","Nueva Segovia","Matagalpa","Jinotega","Boaco","Chontales","Río San Juan","RACCN (Costa Caribe Norte)","RACCS (Costa Caribe Sur)"];
-  function deptoOptions(sel){ return '<option value="">Selecciona tu departamento</option>' + DEPARTAMENTOS_NI.map(function(d){ return '<option value="'+esc(d)+'"'+(sel===d?" selected":"")+'>'+esc(d)+'</option>'; }).join(""); }
+  function deptoOptions(sel){ return '<option value="">Seleccione su departamento</option>' + DEPARTAMENTOS_NI.map(function(d){ return '<option value="'+esc(d)+'"'+(sel===d?" selected":"")+'>'+esc(d)+'</option>'; }).join(""); }
 
   // Países a los que enviamos (a todo el mundo). Nicaragua va primero y es el valor por
   // defecto. Para envíos fuera de Nicaragua, el costo del envío se COTIZA por WhatsApp.
@@ -356,7 +356,7 @@
     return ''
       + '<div class="enc-f"><label>Ciudad *</label><input name="ciudad" autocomplete="address-level2" placeholder="Ej. Miami" required></div>'
       + '<div class="enc-f"><label>Dirección completa *</label><input name="direccion" autocomplete="street-address" placeholder="Calle, número, ZIP / código postal" required></div>'
-      + '<div class="enc-intl-note">🌍 <b>Envío internacional:</b> el costo del envío se cotiza por WhatsApp según tu país. El precio que ves es solo el del producto; el tiempo de entrega también se coordina por WhatsApp.</div>';
+      + '<div class="enc-intl-note">🌍 <b>Envío internacional:</b> el costo del envío se cotiza por WhatsApp según su país. El precio que ve es solo el del producto; el tiempo de entrega también se coordina por WhatsApp.</div>';
   }
   function ubicacionHTML(){
     return ''
@@ -378,13 +378,13 @@
     var pais = (form.pais && form.pais.value) ? form.pais.value : "Nicaragua";
     if(pais === "Nicaragua"){
       var dep = form.departamento ? form.departamento.value : "";
-      return { ok: !!dep, internacional: false, pais: pais, ciudad: dep, direccion: null, errMsg: "Elegí tu departamento." };
+      return { ok: !!dep, internacional: false, pais: pais, ciudad: dep, direccion: null, errMsg: "Elija su departamento." };
     }
     var ciudad = form.ciudad ? form.ciudad.value.trim() : "";
     var direccion = form.direccion ? form.direccion.value.trim() : "";
     return { ok: !!(ciudad && direccion), internacional: true, pais: pais,
       ciudad: ciudad ? (ciudad + ", " + pais) : pais, direccion: direccion || null,
-      errMsg: "Completá tu ciudad y dirección para el envío internacional." };
+      errMsg: "Complete su ciudad y dirección para el envío internacional." };
   }
 
   // HTML de la pasarela de pago (pantalla de éxito), compartido por producto y carrito.
@@ -400,7 +400,7 @@
         <div class="pz-acc-right"><div class="pz-acc-num"><span class="lbl">${esBilletera(c)?"Número":"Cuenta"}</span><span class="val">${esc(c.numero)}</span></div><button class="pz-copy" type="button" data-copiar="${esc(c.numero)}">⧉ Copiar</button></div>
       </div>`;
     }).join("");
-    const accs = filas || `<div class="pz-acc-row"><div class="pz-acc-info"><b>Escríbenos por WhatsApp para los datos de pago</b></div></div>`;
+    const accs = filas || `<div class="pz-acc-row"><div class="pz-acc-info"><b>Escríbanos por WhatsApp para los datos de pago</b></div></div>`;
     return `
       <button class="enc-x pz-x" type="button" aria-label="Cerrar">&times;</button>
       <div class="pz-hero">
@@ -411,22 +411,22 @@
       </div>
       <div class="pz-pay">
         <div><div class="pz-pay-k">${o.parcial?"Total a pagar (50%)":"Total a pagar"}</div><div class="pz-pay-usd">${usd}</div><div class="pz-pay-nio">≈ ${nio}</div></div>
-        <div class="pz-clock"><span class="ic">⏱</span><div><b>Tenés 24 horas para pagar</b><small>Si no recibimos tu pago en este tiempo, tu encargo será cancelado.</small></div></div>
+        <div class="pz-clock"><span class="ic">⏱</span><div><b>Tiene 24 horas para pagar</b><small>Si no recibimos su pago en este tiempo, su encargo será cancelado.</small></div></div>
       </div>
       <div class="pz-sec">¿Cómo pagar?</div>
       <div class="pz-steps">
-        <div class="pz-step"><div class="n">1</div><div class="em">🏦</div><b>Elegí una cuenta</b><small>La cuenta a la que vas a transferir</small></div>
+        <div class="pz-step"><div class="n">1</div><div class="em">🏦</div><b>Elija una cuenta</b><small>La cuenta a la que va a transferir</small></div>
         <div class="ar">→</div>
-        <div class="pz-step"><div class="n">2</div><div class="em">📲</div><b>Transferí el monto</b><small>Enviá exactamente ${usd}</small></div>
+        <div class="pz-step"><div class="n">2</div><div class="em">📲</div><b>Transfiera el monto</b><small>Envíe exactamente ${usd}</small></div>
         <div class="ar">→</div>
-        <div class="pz-step"><div class="n">3</div><div class="em">💬</div><b>Enviá tu comprobante</b><small>Subí tu comprobante por WhatsApp</small></div>
+        <div class="pz-step"><div class="n">3</div><div class="em">💬</div><b>Envíe su comprobante</b><small>Subí su comprobante por WhatsApp</small></div>
       </div>
-      <div class="pz-acc-title"><span class="em">🚚</span> Transferí a cualquiera de estas cuentas</div>
+      <div class="pz-acc-title"><span class="em">🚚</span> Transfiera a cualquiera de estas cuentas</div>
       <div class="pz-accs">${accs}</div>
-      <div class="pz-wa"><div class="tx"><b>💬 Enviá tu comprobante por WhatsApp</b><small>Subí tu comprobante para confirmar tu pago</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.waMsg)}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a></div>
-      <div class="pz-help"><div class="tx"><b>🎧 ¿Necesitás ayuda?</b><small>Escribinos por WhatsApp y te ayudamos.</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.ayudaMsg)}" target="_blank" rel="noopener noreferrer">Contactar soporte</a></div>
+      <div class="pz-wa"><div class="tx"><b>💬 Envíe su comprobante por WhatsApp</b><small>Subí su comprobante para confirmar su pago</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.waMsg)}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp ↗</a></div>
+      <div class="pz-help"><div class="tx"><b>🎧 ¿Necesita ayuda?</b><small>Escríbanos por WhatsApp y le ayudamos.</small></div><a href="https://wa.me/${waNumero()}?text=${encodeURIComponent(o.ayudaMsg)}" target="_blank" rel="noopener noreferrer">Contactar soporte</a></div>
       <button class="pz-again" type="button">🛍️ Encargar otro producto</button>
-      <div class="enc-hint">Guardá tu código <b style="color:#171310">${esc(o.codigo)}</b> para dar seguimiento a tu pedido. Si no coordinás el pago en 24 h, se cancela solo.</div>`;
+      <div class="enc-hint">Guarde su código <b style="color:#171310">${esc(o.codigo)}</b> para dar seguimiento a su pedido. Si no coordina el pago en 24 h, se cancela solo.</div>`;
   }
   function bindPasarela(){
     const x=card.querySelector(".enc-x"); if(x) x.addEventListener("click", cerrar);
@@ -500,7 +500,7 @@
   // Lista de cuentas tipo pasarela: el número se despliega al seleccionar el banco.
   function cuentasAccordionHTML(monto){
     var cuentas = (typeof HAUSLINE_CUENTAS!=="undefined"?HAUSLINE_CUENTAS:[]);
-    if(!cuentas.length) return '<div class="enc-intl-note"><b>Escríbenos por WhatsApp</b> y te damos los datos de pago.</div>';
+    if(!cuentas.length) return '<div class="enc-intl-note"><b>Escríbanos por WhatsApp</b> y le damos los datos de pago.</div>';
     return '<div class="enc-pm-list">'+cuentas.map(function(cu,i){
       var bd=badgeCuenta(cu), cord=esCord(cu);
       var montoNum = cord ? String(cordobas(monto)) : (Number(monto)||0).toFixed(2);
@@ -535,9 +535,9 @@
     var st=card.querySelector("#encUpStatus"), drop=card.querySelector("#encUpDrop");
     function set(t,m){ if(!st)return; st.hidden=false; st.className="enc-up-status enc-up-"+t; st.textContent=m; if(drop) drop.style.display=(t==="load"||t==="done")?"none":""; }
     if(!file) return;
-    if(!/^(image\/|application\/pdf)/.test(file.type||"")){ set("error","Formato no válido. Subí una imagen o PDF."); return; }
+    if(!/^(image\/|application\/pdf)/.test(file.type||"")){ set("error","Formato no válido. Suba una imagen o PDF."); return; }
     if(file.size>6*1024*1024){ set("error","El archivo pesa demasiado (máx. 6 MB)."); return; }
-    set("load","Subiendo tu comprobante…");
+    set("load","Subiendo su comprobante…");
     var K=(typeof SUPABASE_ANON_KEY!=="undefined"?SUPABASE_ANON_KEY:""), U=(typeof SUPABASE_URL!=="undefined"?SUPABASE_URL:"");
     var base=U.replace(/\/rest\/v1\/?$/,"");
     var ext=String(file.name||"").split(".").pop().toLowerCase().replace(/[^a-z0-9]/g,"") || (file.type.indexOf("pdf")>=0?"pdf":"jpg");
@@ -545,8 +545,8 @@
     fetch(base+"/storage/v1/object/comprobantes/"+ruta.split("/").map(encodeURIComponent).join("/"),{method:"POST",headers:{apikey:K,Authorization:"Bearer "+K,"Content-Type":file.type||"application/octet-stream","x-upsert":"true"},body:file})
       .then(function(r){ if(!r.ok) throw 0; return fetch(U+"rpc/registrar_comprobante_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:K,Authorization:"Bearer "+K},body:JSON.stringify({p_codigo:codigo,p_ruta:ruta})}); })
       .then(function(r){ return r.ok?r.json():false; })
-      .then(function(ok){ if(!ok) throw 0; set("done","¡Listo! Recibimos tu comprobante. Lo verificamos y te contactamos por WhatsApp."); })
-      .catch(function(){ set("error","No se pudo subir el comprobante. Probá de nuevo o enviálo por WhatsApp."); });
+      .then(function(ok){ if(!ok) throw 0; set("done","¡Listo! Recibimos su comprobante. Lo verificamos y le contactamos por WhatsApp."); })
+      .catch(function(){ set("error","No se pudo subir el comprobante. Pruebe de nuevo o envíelo por WhatsApp."); });
   }
   // Paso 2 (Pago) y Paso 3 (Confirmación). o = { codigo, monto, nombre }.
   function entrarPago(o){
@@ -555,14 +555,14 @@
     card.innerHTML = topHTML("Pago") + stepperHTML(2)
       + '<div class="enc-pay-bar"><div><div class="k">Total a pagar</div><div class="v">'+fmtUSD(o.monto)+'</div><div class="nio">≈ '+fmtNIO(cordobas(o.monto))+'</div></div>'
       +   '<div style="text-align:right"><div class="k">Código</div><div class="code">'+esc(o.codigo)+'</div></div></div>'
-      + '<div class="enc-cta-title">Elegí cómo pagar</div>'
-      + '<p class="enc-pm-hint">Tocá el banco al que vas a transferir para ver el número de cuenta.</p>'
+      + '<div class="enc-cta-title">Elija cómo pagar</div>'
+      + '<p class="enc-pm-hint">Toque el banco al que va a transferir para ver el número de cuenta.</p>'
       + cuentasAccordionHTML(o.monto)
-      + '<div class="enc-cta-title">Enviá tu comprobante</div>'
+      + '<div class="enc-cta-title">Envíe su comprobante</div>'
       + '<a class="enc-btn wa" href="'+waHref+'" target="_blank" rel="noopener noreferrer">Enviar comprobante por WhatsApp</a>'
-      + '<div class="enc-up"><label class="enc-up-drop" id="encUpDrop"><input type="file" id="encUpInput" accept="image/*,application/pdf" hidden><span class="enc-up-ic">📎</span><span class="enc-up-txt"><b>O subí tu comprobante aquí</b><small>Imagen o PDF · opcional · máximo 6 MB</small></span></label><div class="enc-up-status" id="encUpStatus" hidden></div></div>'
+      + '<div class="enc-up"><label class="enc-up-drop" id="encUpDrop"><input type="file" id="encUpInput" accept="image/*,application/pdf" hidden><span class="enc-up-ic">📎</span><span class="enc-up-txt"><b>O suba su comprobante aquí</b><small>Imagen o PDF · opcional · máximo 6 MB</small></span></label><div class="enc-up-status" id="encUpStatus" hidden></div></div>'
       + '<button class="enc-btn" id="encConfirmar" type="button">CONFIRMAR PEDIDO</button>'
-      + '<div class="enc-hint">También podés pagar más tarde: guardá tu código <b style="color:#171310">'+esc(o.codigo)+'</b> y volvé cuando quieras. Si no coordinás en 24 h, el encargo se cancela solo.</div>';
+      + '<div class="enc-hint">También puede pagar más tarde: guarde su código <b style="color:#171310">'+esc(o.codigo)+'</b> y vuelva cuando quiera. Si no coordina en 24 h, el encargo se cancela solo.</div>';
     bindTop();
     wireCuentas(card);
     var input=card.querySelector("#encUpInput"); if(input) input.addEventListener("change", function(){ if(this.files&&this.files[0]) subirComp(this.files[0], o.codigo); });
@@ -572,14 +572,14 @@
   function mostrarOk(codigo){
     card.innerHTML = topHTML("Confirmación") + stepperHTML(3)
       + '<div class="enc-ok-ic">✓</div>'
-      + '<h3 style="text-align:center;font-size:20px;font-weight:800;margin:12px 0 0">¡Gracias por tu compra!</h3>'
-      + '<p style="text-align:center;font-size:13px;color:#8B857B;margin:6px 0 0;line-height:1.5">Tu pedido fue recibido y está en proceso. Verificamos tu pago y te contactamos.</p>'
+      + '<h3 style="text-align:center;font-size:20px;font-weight:800;margin:12px 0 0">¡Gracias por su compra!</h3>'
+      + '<p style="text-align:center;font-size:13px;color:#8B857B;margin:6px 0 0;line-height:1.5">Su pedido fue recibido y está en proceso. Verificamos su pago y le contactamos.</p>'
       + '<div class="enc-cta-title" style="text-align:center">Código de seguimiento</div>'
       + '<div style="text-align:center"><span class="pz-code">'+esc(codigo)+'</span> <button class="enc-pm-cp" type="button" data-cp="'+esc(codigo)+'" style="margin-left:6px">Copiar</button></div>'
       + '<div class="enc-ok-list">'
-      +   '<div class="enc-ok-item"><span class="em">✉️</span><span>Te enviamos un correo con los detalles del pedido (si dejaste tu correo).</span></div>'
-      +   '<div class="enc-ok-item"><span class="em">💬</span><span>Podés contactarnos por WhatsApp si tenés alguna duda.</span></div>'
-      +   '<div class="enc-ok-item"><span class="em">📦</span><span>Seguí el estado de tu pedido en tiempo real con tu código.</span></div>'
+      +   '<div class="enc-ok-item"><span class="em">✉️</span><span>Le enviamos un correo con los detalles del pedido (si dejó su correo).</span></div>'
+      +   '<div class="enc-ok-item"><span class="em">💬</span><span>Puede contactarnos por WhatsApp si tiene alguna duda.</span></div>'
+      +   '<div class="enc-ok-item"><span class="em">📦</span><span>Siga el estado de su pedido en tiempo real con su código.</span></div>'
       + '</div>'
       + '<button class="enc-back" id="encVolver" type="button">Volver a la tienda</button>';
     bindTop();
@@ -642,7 +642,7 @@
           <div><div class="nm">${esc(nombre)}</div><div class="mt">${[esc(marca), "Código "+esc(producto.codigo)].filter(Boolean).join(" · ")}</div></div>
         </div>
         <form class="enc-form" novalidate>
-          <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
+          <div class="enc-f"><label>Su nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
           ${ubicacionHTML()}
           <div class="enc-f"><label>Correo (para el seguimiento del pedido)</label><input name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com"></div>
@@ -658,11 +658,11 @@
             <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
           </div>
 
-          <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
+          <div class="enc-f"><label>¿Tiene un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(t)}</div>
           <div class="enc-err" data-err></div>
           <button class="enc-btn" type="submit">Continuar con el pago →</button>
-          <div class="enc-hint">No se cobra nada en línea. En el siguiente paso elegís la cuenta y enviás tu comprobante. Si no coordinás en 24 h, el encargo se cancela solo.</div>
+          <div class="enc-hint">No se cobra nada en línea. En el siguiente paso elige la cuenta y envía su comprobante. Si no coordina en 24 h, el encargo se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
@@ -733,7 +733,7 @@
       const correo = form.correo.value.trim();
       const talla = form.talla.value.trim();
       cant = Math.min(20, Math.max(1, parseInt(form.cantidad.value,10)||1));
-      if(nombreV.length < 2) return mostrarErr("Escribe tu nombre completo.");
+      if(nombreV.length < 2) return mostrarErr("Escribe su nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return mostrarErr("Escribe un WhatsApp válido (solo números).");
       if(!ub.ok) return mostrarErr(ub.errMsg);
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return mostrarErr("El correo no es válido.");
@@ -762,7 +762,7 @@
         entrarPago({ codigo: String(sol), monto: calc().ahora, nombre: nombreV });
       }catch(ex){
         btn.disabled = false; btn.innerHTML = "Continuar con el pago →";
-        mostrarErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo.");
+        mostrarErr("No se pudo crear el encargo. Revise su internet e inténtelo de nuevo.");
       }
       function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }
     }
@@ -814,11 +814,11 @@
     function renderForm(){
       const lista = items.map(it => `<div class="enc-cart-it"><div><b>${esc(it.nombre)}</b><small>${[esc(it.marca), it.talla?('Talla '+esc(it.talla)):'', '×'+(it.cantidad||1)].filter(Boolean).join(' · ')}${it.envio==='rapido'?' · Rápido':''}</small></div><span class="mono">${fmtUSD((Number(it.precioUnitario)||0)*(it.cantidad||1)+recargoItem(it))}</span></div>`).join("");
       card.innerHTML = `
-        <div class="enc-top"><h3>Encargar tu carrito</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
+        <div class="enc-top"><h3>Encargar su carrito</h3><button class="enc-x" type="button" aria-label="Cerrar">&times;</button></div>
         ${stepperHTML(1)}
         <div class="enc-cart">${lista}</div>
         <form class="enc-form" novalidate>
-          <div class="enc-f"><label>Tu nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
+          <div class="enc-f"><label>Su nombre completo *</label><input name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>
           <div class="enc-f"><label>WhatsApp *</label><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="Ej. 8890 1122" required></div>
           ${ubicacionHTML()}
           <div class="enc-f"><label>Correo (para el seguimiento)</label><input name="correo" type="email" inputmode="email" placeholder="tucorreo@correo.com"></div>
@@ -828,11 +828,11 @@
             <button type="button" class="enc-opt ${pago==='total'?'sel':''}" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>
             <button type="button" class="enc-opt ${pago==='50'?'sel':''}" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>
           </div>
-          <div class="enc-f"><label>¿Tienes un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
+          <div class="enc-f"><label>¿Tiene un código de descuento?</label><div data-cupon>${cuponHTML()}</div></div>
           <div class="enc-total" data-total>${totalHTML(calc())}</div>
           <div class="enc-err" data-err></div>
           <button class="enc-btn" type="submit">Continuar con el pago →</button>
-          <div class="enc-hint">No se cobra nada en línea. En el siguiente paso elegís la cuenta y enviás tu comprobante. Si no coordinás en 24 h, se cancela solo.</div>
+          <div class="enc-hint">No se cobra nada en línea. En el siguiente paso elige la cuenta y envía su comprobante. Si no coordina en 24 h, se cancela solo.</div>
         </form>`;
       card.querySelector(".enc-x").addEventListener("click", cerrar);
       const form = card.querySelector(".enc-form");
@@ -875,7 +875,7 @@
       function showErr(m){ err.textContent=m; err.style.display="block"; }
       const nombre = form.nombre.value.trim(), wa = form.whatsapp.value.trim(), correo = form.correo.value.trim();
       const ub = leerUbicacion(form);
-      if(nombre.length<2) return showErr("Escribe tu nombre completo.");
+      if(nombre.length<2) return showErr("Escribe su nombre completo.");
       if(!/^[0-9+ ()-]{7,25}$/.test(wa)) return showErr("Escribe un WhatsApp válido (solo números).");
       if(!ub.ok) return showErr(ub.errMsg);
       if(correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido.");
@@ -899,10 +899,10 @@
         if(typeof vaciarCarrito==="function") vaciarCarrito();
         suscribir(correo, nombre, form.optin && form.optin.checked);
         guardarDatosResenaGoogle(grupo, correo, envioCarrito);
-        recordarPedido([grupo], items.length === 1 ? items[0].nombre : "Tu carrito");
+        recordarPedido([grupo], items.length === 1 ? items[0].nombre : "Su carrito");
         // Paso 2: Pago (dentro del mismo modal, sin redirigir).
         entrarPago({ codigo: grupo, monto: calc().ahora, nombre: nombre });
-      }catch(ex){ btn.disabled=false; btn.innerHTML="Continuar con el pago →"; showErr("No se pudo crear el encargo. Revisa tu internet e inténtalo de nuevo."); }
+      }catch(ex){ btn.disabled=false; btn.innerHTML="Continuar con el pago →"; showErr("No se pudo crear el encargo. Revise su internet e inténtelo de nuevo."); }
     }
   };
 })();

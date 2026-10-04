@@ -100,13 +100,13 @@
   function errorCliente(m) { var e = new Error(m); e.validacion = true; return e; }
   function textoError(m) {
     if (/invalid login|invalid credentials/i.test(m)) return "Correo o contraseña incorrectos.";
-    if (/email not confirmed/i.test(m)) return "Primero confirmá tu correo: te enviamos un enlace al registrarte.";
-    if (/already registered|already exists|user already/i.test(m)) return "Ya existe una cuenta con ese correo. Ingresá o recuperá tu contraseña.";
-    if (/password/i.test(m) && /(6|8) characters|short|weak/i.test(m)) return "La contraseña es muy débil: usá al menos 8 caracteres.";
-    if (/rate limit|too many|security purposes/i.test(m)) return "Demasiados intentos. Esperá un minuto e intentá de nuevo.";
+    if (/email not confirmed/i.test(m)) return "Primero confirme su correo: le enviamos un enlace al registrarse.";
+    if (/already registered|already exists|user already/i.test(m)) return "Ya existe una cuenta con ese correo. Ingrese o recupere su contraseña.";
+    if (/password/i.test(m) && /(6|8) characters|short|weak/i.test(m)) return "La contraseña es muy débil: use al menos 8 caracteres.";
+    if (/rate limit|too many|security purposes/i.test(m)) return "Demasiados intentos. Espere un minuto e intente de nuevo.";
     if (/signups? not allowed|signup is disabled/i.test(m)) return "El registro de cuentas todavía no está habilitado.";
-    if (/failed to fetch|load failed|network|internet connection/i.test(m)) return "Sin conexión. Revisá tu internet e intentá de nuevo.";
-    return m || "Algo salió mal. Intentá de nuevo.";
+    if (/failed to fetch|load failed|network|internet connection/i.test(m)) return "Sin conexión. Revise su internet e intente de nuevo.";
+    return m || "Algo salió mal. Intente de nuevo.";
   }
 
   /* ---------------- Sesión ---------------- */
@@ -179,7 +179,7 @@
       e = new Error("network: no se pudo renovar la sesión");
     } else {
       irAIngresar();
-      e = new Error("Tu sesión expiró. Volvé a ingresar.");
+      e = new Error("Su sesión expiró. Vuelva a ingresar.");
     }
     e.__registrado = true; e.sesion = true;
     return { data: null, error: e };
@@ -222,24 +222,24 @@
     var mitad = e.pago_tipo === "50" && Number(e.abono) > 0 && Number(e.abono) < Number(e.total);
     var estadoHtml = enRevision ? '<span class="cta-estado revision"><i></i>Pago en revisión</span>'
       : vencida ? '<span class="cta-estado cancelado"><i></i>Venció el plazo de pago</span>'
-      : '<span class="cta-estado espera"><i></i>Esperando tu pago</span>';
+      : '<span class="cta-estado espera"><i></i>Esperando su pago</span>';
     // Últimas 3 horas sin pago: aviso en rojo con el tiempo que le queda.
     var minutos = e.vence ? Math.max(0, Math.round((new Date(e.vence).getTime() - Date.now()) / 60000)) : null;
     var porVencer = !enRevision && !vencida && minutos != null && minutos <= 180;
     var queda = minutos == null ? "" : minutos >= 60 ? Math.floor(minutos / 60) + " h" + (minutos % 60 ? " " + (minutos % 60) + " min" : "") : minutos + " min";
-    var alerta = porVencer ? '<div class="cta-alerta-vence">⚠️ Tu encargo vence en ' + esc(queda) + ". Pagá y enviá tu comprobante antes, o se cancela solo.</div>" : "";
+    var alerta = porVencer ? '<div class="cta-alerta-vence">⚠️ Su encargo vence en ' + esc(queda) + ". Pague y envíe su comprobante antes, o se cancela solo.</div>" : "";
     var detalle = enRevision
-      ? "Recibimos tu aviso de pago" + (e.comprobante ? " y tu comprobante" : "") + ". Lo estamos revisando: cuando lo confirmemos, tu pedido pasa a “Mis pedidos” con su código HS y te avisamos por correo."
-      : vencida ? "El plazo para pagar venció y el encargo se canceló. Si ya pagaste o querés retomarlo, escribinos por WhatsApp."
-      : "Tenés hasta el " + fecha(e.vence, true) + " para pagar y enviar tu comprobante. Si no, el encargo se cancela solo.";
+      ? "Recibimos su aviso de pago" + (e.comprobante ? " y su comprobante" : "") + ". Lo estamos revisando: cuando lo confirmemos, su pedido pasa a “Mis pedidos” con su código HS y le avisamos por correo."
+      : vencida ? "El plazo para pagar venció y el encargo se canceló. Si ya pagó o desea retomarlo, escríbanos por WhatsApp."
+      : "Tiene hasta el " + fecha(e.vence, true) + " para pagar y enviar su comprobante. Si no, el encargo se cancela solo.";
     var boton = enRevision ? ""
       : vencida ? '<a class="cta-btn linea" style="margin-top:12px" href="' + linkWhatsApp("Hola, mi encargo " + e.codigo + " venció. ¿Me ayudan a retomarlo?") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>'
       : '<a class="cta-btn" style="margin-top:12px" href="/checkout/?c=' + encodeURIComponent(e.codigo) + '">Pagar y enviar comprobante</a>';
     return '<div class="cta-card cta-pad cta-encargo">' +
       '<div style="display:flex;gap:14px;align-items:center"><span class="cta-foto">' + (foto ? '<img src="' + esc(foto) + '" alt="" loading="lazy">' : CAJA_ENC) + "</span>" +
       '<div class="cta-pedido-info"><span class="cta-cod">Encargo #' + esc(e.codigo) + "</span>" +
-      '<span class="cta-prod">' + esc(nombre || "Tu encargo") + "</span>" +
-      '<span class="cta-prod" style="color:var(--texto-3);white-space:normal">' + esc(fecha(e.creado)) + " · Total " + esc(monto(e.total)) + (mitad ? " · pagás 50%: " + esc(monto(e.abono)) : "") + "</span>" +
+      '<span class="cta-prod">' + esc(nombre || "Su encargo") + "</span>" +
+      '<span class="cta-prod" style="color:var(--texto-3);white-space:normal">' + esc(fecha(e.creado)) + " · Total " + esc(monto(e.total)) + (mitad ? " · paga 50%: " + esc(monto(e.abono)) : "") + "</span>" +
       estadoHtml + "</div></div>" + alerta +
       (porVencer ? "" : '<p class="cta-nota" style="font-size:13px;line-height:1.5;margin:12px 0 0">' + esc(detalle) + "</p>") + boton + "</div>";
   }
@@ -272,7 +272,7 @@
   async function uid() { var s = await sesion(); return s ? s.user.id : null; }
   async function actualizarCuenta(cambios) {
     var id = await uid();
-    if (!id) throw new Error("Tu sesión expiró. Volvé a ingresar.");
+    if (!id) throw new Error("Su sesión expiró. Vuelva a ingresar.");
     var r = await sb.from("cuentas_cliente").update(Object.assign({}, cambios, { updated_at: new Date().toISOString() })).eq("user_id", id);
     if (r.error) throw r.error;
     // La moneda elegida también la usa la tienda para mostrar precios.
@@ -284,12 +284,12 @@
   }
   // Recibe la foto YA recortada (Blob JPEG del editor de encuadre).
   async function subirAvatar(file) {
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw errorCliente("Usá una foto JPG, PNG o WebP.");
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw errorCliente("Use una foto JPG, PNG o WebP.");
     if (file.size > 3 * 1024 * 1024) throw errorCliente("La foto pesa más de 3 MB.");
     var anterior = null;
     try { var c = await cuenta(); anterior = c && c.avatar_path; } catch (e) {}
     var id = await uid();
-    if (!id) throw new Error("Tu sesión expiró. Volvé a ingresar.");
+    if (!id) throw new Error("Su sesión expiró. Vuelva a ingresar.");
     var ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
     var path = id + "/avatar-" + Date.now() + "." + ext; // nombre nuevo: evita la foto vieja en caché
     var r = await sb.storage.from("avatares").upload(path, file, { contentType: file.type, upsert: true });
@@ -309,7 +309,7 @@
   // Sus pedidos se conservan en HAUSLINE. Pide la contraseña otra vez (inicio de sesión reciente).
   async function eliminarCuenta(password) {
     var s = await sesion();
-    if (!s) throw new Error("Tu sesión expiró. Volvé a ingresar.");
+    if (!s) throw new Error("Su sesión expiró. Vuelva a ingresar.");
     var r = await sb.auth.signInWithPassword({ email: s.user.email, password: password });
     if (r.error) throw r.error;
     var res = await fetch("https://hausline-tracking.vercel.app/api/eliminar-usuario", {
@@ -318,7 +318,7 @@
       body: JSON.stringify({ propia: true }),
     });
     var j = await res.json().catch(function () { return {}; });
-    if (!res.ok || !j.ok) throw new Error(j.error || "No se pudo eliminar la cuenta. Intentá de nuevo.");
+    if (!res.ok || !j.ok) throw new Error(j.error || "No se pudo eliminar la cuenta. Intente de nuevo.");
     try { await sb.auth.signOut({ scope: "local" }); } catch (e) {}
     try { localStorage.removeItem(FAV_KEY); } catch (e) {}
   }
@@ -333,7 +333,7 @@
     var q = id ? sb.from("direcciones_cliente").update(Object.assign({}, datos, { updated_at: new Date().toISOString() })).eq("id", id)
                : sb.from("direcciones_cliente").insert(datos);
     var r = await q.select("*").single();
-    if (r.error) throw new Error(/10 direcciones/.test(r.error.message || "") ? "Podés guardar hasta 10 direcciones." : "No se pudo guardar la dirección.");
+    if (r.error) throw new Error(/10 direcciones/.test(r.error.message || "") ? "Puede guardar hasta 10 direcciones." : "No se pudo guardar la dirección.");
     return r.data;
   }
   async function eliminarDireccion(id) { var r = await sb.from("direcciones_cliente").delete().eq("id", id); if (r.error) throw r.error; }

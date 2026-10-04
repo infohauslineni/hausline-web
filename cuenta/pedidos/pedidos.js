@@ -27,12 +27,12 @@
     var vis = pedidos.filter(function (p) { return filtro === "todos" || C.grupo(p.estado_codigo) === filtro; });
     // Solo tiene encargos esperando confirmación: no le decimos "no hay pedidos" como si faltara algo.
     if (!vis.length && filtro === "todos" && encargos.length) {
-      document.getElementById("lista").innerHTML = '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos tu encargo, aparece aquí como pedido con su código HS y podés seguirlo paso a paso.</p>';
+      document.getElementById("lista").innerHTML = '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos su encargo, aparece aquí como pedido con su código HS y puede seguirlo paso a paso.</p>';
       return;
     }
     document.getElementById("lista").innerHTML = vis.length ? vis.map(tarjeta).join("") :
-      '<div class="cta-card cta-vacio"><p style="font-weight:600">' + (filtro === "todos" ? "Todavía no hay pedidos en tu cuenta" : "No hay pedidos en esta etapa") + "</p>" +
-      (filtro === "todos" ? '<p class="cta-nota" style="font-size:13.5px;margin-top:6px">Aparecen los pedidos hechos con el mismo correo de tu cuenta o comprados con tu sesión abierta. ¿Compraste con otro correo? Escribinos y lo asociamos.</p><a class="cta-btn auto linea" style="margin-top:16px" href="' + C.linkWhatsApp("Hola, quiero asociar mis pedidos a mi cuenta de HAUSLINE.") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>' : "") + "</div>";
+      '<div class="cta-card cta-vacio"><p style="font-weight:600">' + (filtro === "todos" ? "Todavía no hay pedidos en su cuenta" : "No hay pedidos en esta etapa") + "</p>" +
+      (filtro === "todos" ? '<p class="cta-nota" style="font-size:13.5px;margin-top:6px">Aparecen los pedidos hechos con el mismo correo de su cuenta o comprados con su sesión abierta. ¿Compró con otro correo? Escríbanos y lo asociamos.</p><a class="cta-btn auto linea" style="margin-top:16px" href="' + C.linkWhatsApp("Hola, quiero asociar mis pedidos a mi cuenta de HAUSLINE.") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>' : "") + "</div>";
   }
 
   // Encargos web todavía sin confirmar: van arriba de la lista (no dependen del filtro).
@@ -66,7 +66,7 @@
         if (JSON.stringify(nuevosEnc) !== JSON.stringify(encargos)) { encargos = nuevosEnc; pintarEncargos(); }
       });
     }
-    catch (err) { document.getElementById("lista").innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tus pedidos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
+    catch (err) { document.getElementById("lista").innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar sus pedidos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
   }
   iniciar();
 })();

@@ -64,10 +64,10 @@
     if(document.getElementById("cuponChip") || !estado.codigo) return;
     inyectarCss();
     var el = document.createElement("div"); el.id = "cuponChip"; el.setAttribute("role","status");
-    el.setAttribute("title", "Tocá para copiar el código");
+    el.setAttribute("title", "Toque para copiar el código");
     el.innerHTML =
       '<span class="cc-tag">🎟️</span>'
-      + '<span class="cc-tx"><b class="cc-code">' + estado.codigo + '</b><small>' + estado.corto + ' · tocá para copiar</small></span>'
+      + '<span class="cc-tx"><b class="cc-code">' + estado.codigo + '</b><small>' + estado.corto + ' · toque para copiar</small></span>'
       + '<button type="button" class="cc-x" aria-label="Cerrar">&times;</button>';
     document.body.appendChild(el);
 

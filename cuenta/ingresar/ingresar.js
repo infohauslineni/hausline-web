@@ -19,10 +19,10 @@
   }
 
   var TEXTOS = {
-    ingresar: { t: "Bienvenido", s: "Tus pedidos, su estado y su historial en un solo lugar.", b: "Ingresar" },
-    crear: { t: "Creá tu cuenta", s: "Seguí cada pedido en tiempo real y recibí avisos por correo.", b: "Crear cuenta" },
-    recuperar: { t: "Recuperá tu contraseña", s: "Te enviamos un enlace para crear una contraseña nueva.", b: "Enviar enlace" },
-    nueva: { t: "Nueva contraseña", s: "Escribí la contraseña nueva de tu cuenta.", b: "Guardar contraseña" },
+    ingresar: { t: "Bienvenido", s: "Sus pedidos, su estado y su historial en un solo lugar.", b: "Ingresar" },
+    crear: { t: "Cree su cuenta", s: "Siga cada pedido en tiempo real y reciba avisos por correo.", b: "Crear cuenta" },
+    recuperar: { t: "Recupere su contraseña", s: "Le enviamos un enlace para crear una contraseña nueva.", b: "Enviar enlace" },
+    nueva: { t: "Nueva contraseña", s: "Escriba la contraseña nueva de su cuenta.", b: "Guardar contraseña" },
   };
 
   function mensaje(texto, tipo) {
@@ -48,17 +48,17 @@
 
   $("form").addEventListener("submit", async function (e) {
     e.preventDefault();
-    if (ocupado || !C.sb) { if (!C.sb) mensaje("No se pudo cargar el sistema de cuentas. Recargá la página.", "err"); return; }
+    if (ocupado || !C.sb) { if (!C.sb) mensaje("No se pudo cargar el sistema de cuentas. Recargue la página.", "err"); return; }
     var correo = $("correo").value.trim().toLowerCase();
     var clave = $("clave").value;
     var nombre = $("nombre").value.trim();
     var telefono = $("telefono").value.trim();
     var validoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
-    if (modo !== "nueva" && !validoCorreo) return mensaje("Escribí un correo válido.", "err");
-    if (modo === "crear" && nombre.length < 2) return mensaje("Escribí tu nombre completo.", "err");
-    if (modo === "crear" && !/^[0-9+ ()-]{7,25}$/.test(telefono)) return mensaje("Escribí tu teléfono (ej. +505 8888 8888).", "err");
+    if (modo !== "nueva" && !validoCorreo) return mensaje("Escriba un correo válido.", "err");
+    if (modo === "crear" && nombre.length < 2) return mensaje("Escriba su nombre completo.", "err");
+    if (modo === "crear" && !/^[0-9+ ()-]{7,25}$/.test(telefono)) return mensaje("Escriba su teléfono (ej. +505 8888 8888).", "err");
     if ((modo === "crear" || modo === "nueva") && clave.length < 8) return mensaje("La contraseña debe tener al menos 8 caracteres.", "err");
-    if (modo === "ingresar" && !clave) return mensaje("Escribí tu contraseña.", "err");
+    if (modo === "ingresar" && !clave) return mensaje("Escriba su contraseña.", "err");
 
     ocupado = true; $("enviar").disabled = true; $("enviar").textContent = "Un momento…"; mensaje("");
     try {
@@ -83,19 +83,19 @@
         S.registrar("registro_ok", { detalle: { requiere_confirmar: !(r2.data && r2.data.session) } });
         if (r2.data && r2.data.session) { location.replace(destino); return; }
         $("form").reset(); cambiar("ingresar");
-        mensaje("¡Listo! Te enviamos un correo a " + correo + ". Abrí el enlace para verificar tu cuenta y después ingresá.", "ok");
+        mensaje("¡Listo! Le enviamos un correo a " + correo + ". Abra el enlace para verificar su cuenta y después ingrese.", "ok");
         return;
       }
       if (modo === "recuperar") {
         var r3 = await C.sb.auth.resetPasswordForEmail(correo, { redirectTo: C.SITIO + "/cuenta/ingresar/?recuperar=1" });
         if (r3.error) throw r3.error;
         S.registrar("recuperar_enviado");
-        mensaje("Si existe una cuenta con " + correo + ", te llegará un enlace para crear una contraseña nueva. Revisá también spam.", "ok");
+        mensaje("Si existe una cuenta con " + correo + ", le llegará un enlace para crear una contraseña nueva. Revise también spam.", "ok");
         return;
       }
       if (modo === "nueva") {
         var s = await C.sesion();
-        if (!s) throw new Error("El enlace venció. Pedí uno nuevo desde “¿Olvidaste tu contraseña?”.");
+        if (!s) throw new Error("El enlace venció. Pida uno nuevo desde “¿Olvidó su contraseña?”.");
         var r4 = await C.sb.auth.updateUser({ password: clave });
         if (r4.error) throw r4.error;
         S.registrar("clave_nueva_ok");
@@ -116,19 +116,19 @@
 
   async function iniciar() {
     pintar();
-    if (!C.sb) { mensaje("No se pudo cargar el sistema de cuentas. Revisá tu conexión y recargá.", "err"); return; }
+    if (!C.sb) { mensaje("No se pudo cargar el sistema de cuentas. Revise su conexión y recargue.", "err"); return; }
     S.registrar("vio_ingresar", { detalle: { modo: modo } });
     // El enlace del correo (verificación / recuperación) trae la sesión en la URL: supabase-js
     // la detecta. Recuperación → formulario de contraseña nueva.
     C.sb.auth.onAuthStateChange(function (evento) { if (evento === "PASSWORD_RECOVERY") cambiar("nueva"); });
     var s = await C.sesion();
-    if (modo === "nueva") { if (!s) mensaje("Abrí esta página desde el enlace que te enviamos por correo.", "err"); return; }
+    if (modo === "nueva") { if (!s) mensaje("Abra esta página desde el enlace que le enviamos por correo.", "err"); return; }
     if (s) {
       if (C.param("verificado")) { S.registrar("correo_verificado"); C.aviso("¡Correo verificado! Bienvenido a HAUSLINE."); }
       location.replace(destino);
       return;
     }
-    if (C.param("verificado")) { S.registrar("correo_verificado"); mensaje("¡Correo verificado! Ingresá con tu contraseña.", "ok"); }
+    if (C.param("verificado")) { S.registrar("correo_verificado"); mensaje("¡Correo verificado! Ingrese con su contraseña.", "ok"); }
     var hashErr = /error_description=([^&]+)/.exec(location.hash);
     if (hashErr) S.error("enlace_invalido", decodeURIComponent(hashErr[1].replace(/\+/g, " ")));
     if (hashErr) mensaje("El enlace no es válido o ya venció. " + decodeURIComponent(hashErr[1].replace(/\+/g, " ")), "err");

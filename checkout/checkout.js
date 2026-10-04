@@ -103,14 +103,14 @@
     if(upInput) upInput.addEventListener("change", function(){
       clearStatus();
       var file=this.files&&this.files[0]; if(!file) return;
-      if(!/^(image\/|application\/pdf)/.test(file.type||"")){ setStatus("error","Formato no válido. Subí una imagen o PDF."); this.value=""; return; }
+      if(!/^(image\/|application\/pdf)/.test(file.type||"")){ setStatus("error","Formato no válido. Suba una imagen o PDF."); this.value=""; return; }
       if(file.size>6*1024*1024){ setStatus("error","El archivo pesa demasiado (máx. 6 MB)."); this.value=""; return; }
       staged=file; mostrarPreview(file); if(onChange) onChange(file);
     });
     return { get file(){ return staged; }, quitar:quitar };
   }
 
-  // Animación del camión de HAUSLINE mientras se crea el pedido ("Creando tu pedido…").
+  // Animación del camión de HAUSLINE mientras se crea el pedido ("Creando su pedido…").
   function inyectarCamionCSS(){
     if($("camionCss")) return;
     var st=document.createElement("style"); st.id="camionCss";
@@ -143,7 +143,7 @@
         +'<path d="M129 30 h4 a3 3 0 0 1 2.5 1.4 l5.2 8.6 h-11.7 z" fill="#2b3145"/>'
         +'<g class="cam-wheel"><circle cx="30" cy="56" r="10" fill="#141826"/><circle cx="30" cy="56" r="3.4" fill="#4f46e5"/></g>'
         +'<g class="cam-wheel"><circle cx="112" cy="56" r="10" fill="#141826"/><circle cx="112" cy="56" r="3.4" fill="#4f46e5"/></g></svg></div>'
-        +'<div class="cam-t">'+esc(texto||"Creando tu pedido…")+' <b>🚚</b></div><div class="cam-s">Un momento, estamos registrando tu pedido…</div></div>';
+        +'<div class="cam-t">'+esc(texto||"Creando su pedido…")+' <b>🚚</b></div><div class="cam-s">Un momento, estamos registrando su pedido…</div></div>';
       document.body.appendChild(ov); document.body.style.overflow="hidden";
     }catch(_){}
   }
@@ -191,12 +191,12 @@
     var code = o.codigo ? '<div class="sum-code"><span>Código de pedido</span><b>'+esc(o.codigo)+'</b></div>' : '';
     // Varios productos: se envían JUNTOS cuando todos estén listos.
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
-    var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Tu pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
+    var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Su pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
     var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>'
       + (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar, o.prep||null))+'</div>' : '') : '';
     // Aviso de demora extendida (producto de un proveedor que tarda más).
     var demora = (o.demora && typeof textoAvisoDemora==="function") ? '<div class="sum-row" style="margin-top:8px;display:block;padding:10px 12px;border:1px solid #f0c36d;background:#fff7e6;border-radius:10px;font-size:12.5px;line-height:1.5;color:#6b4a0c">⏳ '+esc(textoAvisoDemora(o.demora))+'</div>' : '';
-    return '<div class="sumcard rv"><h3 class="sum-h">Tu pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+demora+juntos+grand+pill+code
+    return '<div class="sumcard rv"><h3 class="sum-h">Su pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+demora+juntos+grand+pill+code
       + '<div class="sum-trust"><span>'+ICON.shield+' Compra protegida</span><span>'+ICON.truck+' Seguimiento en vivo</span></div></div>';
   }
 
@@ -280,7 +280,7 @@
     var ov=$("paisOv");
     if(!ov){
       ov=document.createElement("div"); ov.id="paisOv"; ov.className="pais-ov";
-      ov.innerHTML='<div class="pais-sheet"><div class="pais-top"><b>Elegí tu país</b><button type="button" class="pais-close" aria-label="Cerrar">&times;</button></div><div class="pais-search"><input id="paisInp" placeholder="Buscar país o código…" autocomplete="off"></div><div class="pais-list" id="paisList"></div></div>';
+      ov.innerHTML='<div class="pais-sheet"><div class="pais-top"><b>Elija su país</b><button type="button" class="pais-close" aria-label="Cerrar">&times;</button></div><div class="pais-search"><input id="paisInp" placeholder="Buscar país o código…" autocomplete="off"></div><div class="pais-list" id="paisList"></div></div>';
       document.body.appendChild(ov);
       ov.addEventListener("click", function(e){ if(e.target===ov||e.target.closest(".pais-close")) cerrarPaisPicker(); });
       $("paisInp").addEventListener("input", function(){ pintarPaisList(this.value); });
@@ -298,25 +298,25 @@
   }
   // Nicaragua: departamento + dirección de entrega (queda guardada en el cliente para coordinar el
   // envío cuando el pedido esté disponible; se le pide confirmarla en ese momento).
-  function ubicNI(){ return '<div class="field"><label class="label">Departamento / ciudad *</label><select class="select" name="departamento" required><option value="">Selecciona tu departamento</option>'+DEPTOS.map(function(d){return '<option>'+esc(d)+'</option>';}).join("")+'</select></div>'
+  function ubicNI(){ return '<div class="field"><label class="label">Departamento / ciudad *</label><select class="select" name="departamento" required><option value="">Seleccione su departamento</option>'+DEPTOS.map(function(d){return '<option>'+esc(d)+'</option>';}).join("")+'</select></div>'
     +'<div class="field"><label class="label">Dirección de entrega *</label><input class="input" name="direccion" autocomplete="street-address" placeholder="Barrio, calle, número de casa" required></div>'
     +'<div class="field"><label class="label">Punto de referencia</label><input class="input" name="ref" placeholder="Ej. Frente al parque, portón negro (opcional)"></div>'
-    +'<p style="margin:10px 0 4px;font-size:12px;line-height:1.45;color:#8a8378">📦 Cuando tu pedido esté listo te confirmamos esta dirección y el costo del envío.</p>'; }
+    +'<p style="margin:10px 0 4px;font-size:12px;line-height:1.45;color:#8a8378">📦 Cuando su pedido esté listo le confirmamos esta dirección y el costo del envío.</p>'; }
   function ubicIntl(){ return '<div class="row"><div class="field"><label class="label">Ciudad *</label><input class="input" name="ciudad" autocomplete="address-level2" placeholder="Ej. Miami" required></div><div class="field"><label class="label">Estado / Provincia</label><input class="input" name="estado" autocomplete="address-level1" placeholder="Opcional"></div></div>'
     +'<div class="field"><label class="label">Dirección completa *</label><input class="input" name="direccion" autocomplete="street-address" placeholder="Calle, número, apto." required></div>'
     +'<div class="row"><div class="field"><label class="label">Código postal</label><input class="input" name="cp" autocomplete="postal-code" placeholder="Opcional"></div><div class="field"><label class="label">Referencia</label><input class="input" name="ref" placeholder="Opcional"></div></div>'
-    +'<div class="note">🌍 <b>Envío internacional:</b> el costo del envío se cotiza por WhatsApp según tu país. El precio que ves es solo del producto; el tiempo y costo de entrega se confirman antes de procesar el pedido.</div>'; }
+    +'<div class="note">🌍 <b>Envío internacional:</b> el costo del envío se cotiza por WhatsApp según su país. El precio que ve es solo del producto; el tiempo y costo de entrega se confirman antes de procesar el pedido.</div>'; }
   // Lee y valida la ubicación. `pais` es el objeto {n,i,d} del selector.
   function leerUbic(form, pais){
     var nombre = pais ? pais.n : "Nicaragua";
     if(nombre==="Nicaragua"){
       var d=form.departamento?form.departamento.value:"", dn=form.direccion?form.direccion.value.trim():"", rn=form.ref?form.ref.value.trim():"";
-      return { ok:!!(d&&dn.length>=5), pais:nombre, ciudad:d, direccion:[dn, rn?("Ref: "+rn):""].filter(Boolean).join(" · ")||null, intl:false, err:d?"Escribí tu dirección de entrega (barrio, calle, casa).":"Elegí tu departamento." };
+      return { ok:!!(d&&dn.length>=5), pais:nombre, ciudad:d, direccion:[dn, rn?("Ref: "+rn):""].filter(Boolean).join(" · ")||null, intl:false, err:d?"Escriba su dirección de entrega (barrio, calle, casa).":"Elija su departamento." };
     }
     var ci=form.ciudad?form.ciudad.value.trim():"", di=form.direccion?form.direccion.value.trim():"";
     var est=form.estado?form.estado.value.trim():"", cp=form.cp?form.cp.value.trim():"", ref=form.ref?form.ref.value.trim():"";
     var dir=[di, est, cp?("CP "+cp):"", ref?("Ref: "+ref):""].filter(Boolean).join(" · ");
-    return { ok:!!(ci&&di), pais:nombre, ciudad:ci?(ci+", "+nombre):nombre, direccion:dir||null, intl:true, err:"Completá tu ciudad y dirección." };
+    return { ok:!!(ci&&di), pais:nombre, ciudad:ci?(ci+", "+nombre):nombre, direccion:dir||null, intl:true, err:"Complete su ciudad y dirección." };
   }
   function recordarPedido(codigo, producto){ try{ var a=JSON.parse(localStorage.getItem("hausline_pedidos")||"[]"); a.push({codigo:String(codigo),producto:producto||"",ts:Date.now()}); localStorage.setItem("hausline_pedidos",JSON.stringify(a.slice(-6))); }catch(e){} }
   function suscribir(correo,nombre,optin){ if(!optin||!correo) return; try{ fetch(SB_URL+"rpc/suscribir_publico",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:"Bearer "+SB_KEY},body:JSON.stringify({p_correo:correo,p_nombre:nombre||null,p_fuente:"checkout"})}).catch(function(){}); }catch(e){} }
@@ -325,7 +325,7 @@
   function renderInfo(){
     progreso(1);
     var pend; try{ pend=JSON.parse(sessionStorage.getItem("hausline_encargo")||"null"); }catch(e){ pend=null; }
-    if(!pend){ estado("No hay un pedido en curso","Elegí un producto en la tienda y tocá “Encargar” para empezar tu compra."); return; }
+    if(!pend){ estado("No hay un pedido en curso","Elija un producto en la tienda y toque “Encargar” para empezar su compra."); return; }
     var esCarrito=pend.tipo==="carrito";
     var pago="total", cupon=null;
     var cant=esCarrito?1:Math.max(1,parseInt(pend.opts.cantidad,10)||1);
@@ -371,12 +371,12 @@
       +   '<button class="back rv" data-volver>← Seguir comprando</button>'
       +   '<div class="panel rv">'
       +     '<h1 class="panel-h">Información de contacto y envío</h1>'
-      +     '<p class="panel-sub">Con estos datos coordinamos tu pedido y te damos el seguimiento.</p>'
+      +     '<p class="panel-sub">Con estos datos coordinamos su pedido y le damos el seguimiento.</p>'
       +     '<form class="ck-form" novalidate>'
       +       '<div class="field"><label class="label">Nombre completo *</label><input class="input" name="nombre" autocomplete="name" placeholder="Ej. María Gómez" required></div>'
       +       '<div class="field"><label class="label">País *</label><button type="button" class="combo" data-paisbtn><span class="combo-fl">'+flag(paisSel.i)+'</span><span class="combo-tx" data-paistx>'+esc(paisSel.n)+'</span><span class="combo-ch">'+ICON.chev+'</span></button></div>'
       +       '<div class="field"><label class="label">WhatsApp *</label><div class="tel"><button type="button" class="tel-code" data-dialbtn><span>'+flag(dialSel.i)+'</span><b data-dialtx>+'+dialSel.d+'</b>'+ICON.chev+'</button><input class="input tel-num" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="8890 1122" required></div></div>'
-      +       '<div class="field"><label class="label">Correo electrónico *</label><input class="input" name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com" required><p style="margin:6px 0 0;font-size:11.5px;color:#8a8378">Te mandamos aquí la confirmación y el seguimiento. Si no terminás tu pedido, te recordamos tu carrito una sola vez.</p></div>'
+      +       '<div class="field"><label class="label">Correo electrónico *</label><input class="input" name="correo" type="email" inputmode="email" autocomplete="email" placeholder="tucorreo@correo.com" required><p style="margin:6px 0 0;font-size:11.5px;color:#8a8378">Le mandamos aquí la confirmación y el seguimiento. Si no termina su pedido, le recordamos su carrito una sola vez.</p></div>'
       +       '<div data-ubic>'+ubicNI()+'</div>'
       +       (esCarrito?"":'<div class="row">'
       +         (pend.opts.talla?'<div class="field"><label class="label">Talla / detalle</label><input class="input" name="talla" placeholder="Talla o N/A" value="'+esc(pend.opts.talla)+'"></div>':"")
@@ -387,13 +387,13 @@
       +   '</div>'
       +   '<div class="panel rv">'
       +     '<h2 class="panel-h">Forma de pago</h2>'
-      +     '<p class="panel-sub">Pago por transferencia. En el siguiente paso ves las cuentas.</p>'
+      +     '<p class="panel-sub">Pago por transferencia. En el siguiente paso ve las cuentas.</p>'
       +     '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button><button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button></div>'
-      +     '<div class="field"><label class="label">¿Tenés un código de descuento?</label><div data-cupon>'+cuponHTML()+'</div></div>'
+      +     '<div class="field"><label class="label">¿Tiene un código de descuento?</label><div data-cupon>'+cuponHTML()+'</div></div>'
       +   '</div>'
       +   '<div class="err" data-err hidden></div>'
       +   '<button class="btn" style="margin-top:16px" data-continuar type="button">Continuar con el pago →</button>'
-      +   '<p class="foot">No se cobra nada en línea. Si no coordinás el pago en 24 h, el pedido se cancela solo.</p>'
+      +   '<p class="foot">No se cobra nada en línea. Si no coordina el pago en 24 h, el pedido se cancela solo.</p>'
       + '</div>'
       + '<aside class="col-side"><div id="resumen">'+resumenHTML(sumOpts())+'</div></aside>'
       + '</div>';
@@ -453,7 +453,7 @@
         cupon={id:r.id,codigo:r.codigo,tipo:r.tipo,valor:Number(r.valor)}; var box=$("ck").querySelector("[data-cupon]"); box.innerHTML=cuponHTML(); wireCupon(); pintarResumen();
       }catch(e){ if(guardado) return;
         // Sin señal: no es falla del sistema → evento "sin_conexion" (no sale en la lista de errores).
-        if(!e||!e.status&&/failed to fetch|load failed|networkerror|network request failed/i.test(String(e&&e.message||e))){ try{ if(window.HauslineSalud) window.HauslineSalud.registrar("sin_conexion",{mensaje:"validar_cupon "+code}); }catch(_){} if(errB){ errB.textContent="Se cortó tu conexión. Revisá tu internet y tocá Aplicar de nuevo."; errB.hidden=false; } return; }
+        if(!e||!e.status&&/failed to fetch|load failed|networkerror|network request failed/i.test(String(e&&e.message||e))){ try{ if(window.HauslineSalud) window.HauslineSalud.registrar("sin_conexion",{mensaje:"validar_cupon "+code}); }catch(_){} if(errB){ errB.textContent="Se cortó su conexión. Revise su internet y toque Aplicar de nuevo."; errB.hidden=false; } return; }
         falla("cupon_error", "No se pudo validar el cupón "+code+": "+((e&&e.message)||"error")); if(errB){ errB.textContent="No pudimos validar el cupón. "+explicarError(e, "cupon").texto; errB.hidden=false; } }
     }
     wireCupon();
@@ -483,15 +483,15 @@
     var num=String(form.whatsapp.value||"").replace(/\D/g,"");
     var wa="+"+dial.d+" "+num;
     var ub=leerUbic(form, pais);
-    if(nombre.length<2) return showErr("Escribí tu nombre completo.");
-    if(num.length<7 || num.length>15) return showErr("Introducí un número de WhatsApp válido.");
-    if(!correo) return showErr("Escribí tu correo electrónico (es obligatorio para el seguimiento).");
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido. Revisalo (ej. nombre@correo.com).");
+    if(nombre.length<2) return showErr("Escriba su nombre completo.");
+    if(num.length<7 || num.length>15) return showErr("Introduzca un número de WhatsApp válido.");
+    if(!correo) return showErr("Escriba su correo electrónico (es obligatorio para el seguimiento).");
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return showErr("El correo no es válido. Revíselo (ej. nombre@correo.com).");
     if(!ub.ok) return showErr(ub.err);
     // Verificación: el cliente confirma que su WhatsApp y correo están bien (por ahí lo
     // contactamos y le llega el seguimiento). Si algo está mal, vuelve a corregir.
-    var ok = await dlg({ tono:"accent", icon:ICON.chat, titulo:"Verificá tus datos de contacto",
-      cuerpo:"Por acá te contactamos y te enviamos el seguimiento. Confirmá que están BIEN escritos:<br><br><b>WhatsApp:</b> "+esc(wa)+"<br><b>Correo:</b> "+esc(correo),
+    var ok = await dlg({ tono:"accent", icon:ICON.chat, titulo:"Verifique sus datos de contacto",
+      cuerpo:"Por acá le contactamos y le enviamos el seguimiento. Confirme que están BIEN escritos:<br><br><b>WhatsApp:</b> "+esc(wa)+"<br><b>Correo:</b> "+esc(correo),
       okTxt:"Sí, son correctos", cancelTxt:"Corregir" });
     if(!ok) return;
     var optin=form.optin&&form.optin.checked;
@@ -526,7 +526,7 @@
       if(!r2.ok) throw await errorHttp(r2,"crear"); codigo=String(await r2.json());
     }
     codigoCreado = codigo;
-    suscribir(ct.correo, ct.nombre, ct.optin); guardarGcr(codigo, ct.correo, ct.envio||"estandar"); recordarPedido(codigo, pend.tipo==="carrito"?"Tu carrito":pend.producto.nombre);
+    suscribir(ct.correo, ct.nombre, ct.optin); guardarGcr(codigo, ct.correo, ct.envio||"estandar"); recordarPedido(codigo, pend.tipo==="carrito"?"Su carrito":pend.producto.nombre);
     return codigo;
   }
   // Sube un archivo al bucket y registra la ruta (marca pago reportado). Devuelve/lanza.
@@ -549,7 +549,7 @@
     progreso(2);
     await cargarPromos();
     var pend; try{ pend=JSON.parse(sessionStorage.getItem("hausline_encargo")||"null"); }catch(e){ pend=null; }
-    if(!pend || !pend.contacto){ estado("Empezá tu pedido", "Elegí un producto en la tienda y completá tus datos para pagar."); return; }
+    if(!pend || !pend.contacto){ estado("Empiece su pedido", "Elija un producto en la tienda y complete sus datos para pagar."); return; }
     var esCarrito=pend.tipo==="carrito"; var ct=pend.contacto; var pago = ct.pago==="50"?"50":"total";
     function recargoDe(envio,c){ return envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
     var bruto=0, sumItems=[];
@@ -566,15 +566,15 @@
 
     $("ck").innerHTML='<div class="grid"><div class="col-main">'
       + '<button class="back rv" data-volver>← Volver a mis datos</button>'
-      + '<div class="panel rv"><h1 class="panel-h">Elegí cómo pagar</h1><p class="panel-sub">Transferí el monto y confirmá. Tu pedido se crea al confirmar el pago.</p>'+metodosHTML(ahora)+'</div>'
-      + '<div class="panel rv"><h2 class="panel-h">Enviá tu comprobante</h2><p class="panel-sub">Subilo para agilizar la confirmación (opcional; también podés por WhatsApp luego).</p>'
-      +   '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Subí tu comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
+      + '<div class="panel rv"><h1 class="panel-h">Elija cómo pagar</h1><p class="panel-sub">Transfiera el monto y confirme. Su pedido se crea al confirmar el pago.</p>'+metodosHTML(ahora)+'</div>'
+      + '<div class="panel rv"><h2 class="panel-h">Envíe su comprobante</h2><p class="panel-sub">Súbalo para agilizar la confirmación (opcional; también puede por WhatsApp luego).</p>'
+      +   '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Suba su comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
       +   '<div class="up-preview" id="upPreview" hidden></div>'
       +   '<div class="up-status" id="upStatus" hidden></div>'
       + '</div>'
       + '<div class="err" data-err hidden></div>'
       + '<button class="btn" id="ckConfirmar" type="button" style="margin-top:16px">Ya realicé mi pago →</button>'
-      + '<p class="foot">No se cobra nada en línea. Al confirmar te damos tu número de orden.</p>'
+      + '<p class="foot">No se cobra nada en línea. Al confirmar le damos su número de orden.</p>'
       + '</div><aside class="col-side">'+sumHTML+'</aside></div>';
     anim(); wireMetodos($("ck"));
     var bk=$("ck").querySelector("[data-volver]"); if(bk) bk.addEventListener("click", function(){ location.href="/checkout/?paso=info"; });
@@ -584,7 +584,7 @@
     var comp=wireComprobante(function(file){ if(conf) conf.textContent = file ? "Enviar comprobante y confirmar pedido →" : "Ya realicé mi pago →"; });
     async function finalizar(file){
       if(err) err.hidden=true;
-      mostrarCamion("Creando tu pedido…"); var t0=Date.now(); var etapa="crear";
+      mostrarCamion("Creando su pedido…"); var t0=Date.now(); var etapa="crear";
       try{
         var cod=await crearPedido(pend);
         etapa = file ? "comprobante" : "reportar";
@@ -600,10 +600,10 @@
         if(etapa!=="crear" && codigoCreado){
           // El pedido YA quedó creado: no decir que no se confirmó. Al volver a tocar el botón se
           // reintenta solo lo que faltó (crearPedido reusa el mismo código, no duplica).
-          var queFalto = etapa==="comprobante" ? "no pudimos subir tu comprobante" : "no pudimos avisar tu pago";
+          var queFalto = etapa==="comprobante" ? "no pudimos subir su comprobante" : "no pudimos avisar su pago";
           if(err){
-            err.innerHTML=esc("Tu pedido ya quedó registrado (código "+codigoCreado+"), pero "+queFalto+". "+ex.texto+" Si preferís, envialo por WhatsApp con tu código.")+
-              accionError("whatsapp", etapa==="comprobante" ? "no se pudo subir mi comprobante, te lo envío por aquí." : "ya transferí pero no se pudo avisar el pago.", codigoCreado);
+            err.innerHTML=esc("Su pedido ya quedó registrado (código "+codigoCreado+"), pero "+queFalto+". "+ex.texto+" Si prefiere, envíelo por WhatsApp con su código.")+
+              accionError("whatsapp", etapa==="comprobante" ? "no se pudo subir mi comprobante, se lo envío por aquí." : "ya transfiera pero no se pudo avisar el pago.", codigoCreado);
             err.hidden=false; err.scrollIntoView({block:"center",behavior:"smooth"});
           }
           if(conf) conf.textContent = file ? "Reintentar enviar comprobante →" : "Reintentar →";
@@ -614,7 +614,7 @@
     }
     if(conf) conf.addEventListener("click", async function(){
       if(comp.file){ finalizar(comp.file); return; }
-      var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya transferiste?", cuerpo:"Al confirmar creamos tu pedido y te damos tu número de orden. Si podés, <b>subí tu comprobante</b> para agilizar; si no, podés enviarlo por WhatsApp después.", okTxt:"Subir comprobante", cancelTxt:"Sí, ya transferí →" });
+      var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya transfirió?", cuerpo:"Al confirmar creamos su pedido y le damos su número de orden. Si puede, <b>suba su comprobante</b> para agilizar; si no, puede enviarlo por WhatsApp después.", okTxt:"Subir comprobante", cancelTxt:"Sí, ya transferí →" });
       if(subir){ var inp=$("upInput"); if(inp) inp.click(); return; }
       finalizar(null);
     });
@@ -634,7 +634,7 @@
     });
   });
   function metodosInner(monto){
-    if(!CUENTAS.length) return '<div class="note"><b>Escríbenos por WhatsApp</b> y te damos los datos de pago.</div>';
+    if(!CUENTAS.length) return '<div class="note"><b>Escríbanos por WhatsApp</b> y le damos los datos de pago.</div>';
     return '<div class="methods">'+CUENTAS.map(function(cu,i){
       var b=badge(cu), cord=esCordoba(cu);
       var num=cord?String(cordobas(monto)):(Number(monto)||0).toFixed(2);
@@ -672,28 +672,28 @@
     if(pagado){
       $("ck").innerHTML='<div class="grid"><div class="col-main">'
         +'<div class="panel rv" style="text-align:center;padding:34px 22px"><div class="conf-check" style="width:64px;height:64px;box-shadow:0 0 0 6px var(--ok-soft)">'+ICON.check+'</div>'
-        +'<h1 class="panel-h" style="font-size:20px;margin-top:16px">¡Pago confirmado!</h1><p class="panel-sub" style="margin-top:6px">Recibimos tu pago. Tu pedido ya está en proceso y te contactamos por WhatsApp.</p>'
-        +'<a class="btn btn-wa" style="max-width:340px;margin:8px auto 0" href="https://wa.me/'+WA+'?text='+encodeURIComponent("Hola, sobre mi pedido "+codigo+": ")+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escribinos por WhatsApp</a></div>'
+        +'<h1 class="panel-h" style="font-size:20px;margin-top:16px">¡Pago confirmado!</h1><p class="panel-sub" style="margin-top:6px">Recibimos su pago. Su pedido ya está en proceso y le contactamos por WhatsApp.</p>'
+        +'<a class="btn btn-wa" style="max-width:340px;margin:8px auto 0" href="https://wa.me/'+WA+'?text='+encodeURIComponent("Hola, sobre mi pedido "+codigo+": ")+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escríbanos por WhatsApp</a></div>'
         +'</div><aside class="col-side">'+sumHTML+'</aside></div>';
       anim(); return;
     }
 
     var waMsg="Hola, acabo de realizar el pago de mi pedido "+codigo+" por "+usd(c.ahora)+". Adjunto mi comprobante.";
     var timer = vencido
-      ? '<div class="timer exp">'+ICON.alert+'<div><b>Tiempo agotado</b><small>El período de pago terminó. Escribinos para reactivarlo.</small></div></div>'
+      ? '<div class="timer exp">'+ICON.alert+'<div><b>Tiempo agotado</b><small>El período de pago terminó. Escríbanos para reactivarlo.</small></div></div>'
       : '<div class="timer" id="timerBox">'+ICON.clock+'<div><b id="timer">--:--:--</b><small>Tiempo restante para pagar. Si no se paga a tiempo, el pedido se cancela solo.</small></div></div>';
     var yaComp=items.some(function(s){ return s.comprobante; });
 
     $("ck").innerHTML='<div class="grid"><div class="col-main">'
       + '<button class="back rv" data-volver>← Volver</button>'
       + timer
-      + '<div class="panel rv"><h1 class="panel-h">Elegí cómo pagar</h1><p class="panel-sub">Tocá el banco al que vas a transferir para ver el número de cuenta.</p>'+metodosHTML(c.ahora)+'</div>'
-      + '<div class="panel rv"><h2 class="panel-h">Enviá tu comprobante</h2><p class="panel-sub">Es opcional, pero agiliza la confirmación de tu pago.</p>'
+      + '<div class="panel rv"><h1 class="panel-h">Elija cómo pagar</h1><p class="panel-sub">Toque el banco al que va a transferir para ver el número de cuenta.</p>'+metodosHTML(c.ahora)+'</div>'
+      + '<div class="panel rv"><h2 class="panel-h">Envíe su comprobante</h2><p class="panel-sub">Es opcional, pero agiliza la confirmación de su pago.</p>'
       +   '<a class="btn btn-wa" href="https://wa.me/'+WA+'?text='+encodeURIComponent(waMsg)+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Enviar por WhatsApp</a>'
-      +   '<div class="divider-or">o subilo aquí</div>'
+      +   '<div class="divider-or">o súbalo aquí</div>'
       +   (yaComp
-          ? '<div class="up-status up-done">✓ Ya recibimos tu comprobante. Lo estamos verificando.</div>'
-          : '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Subí tu comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
+          ? '<div class="up-status up-done">✓ Ya recibimos su comprobante. Lo estamos verificando.</div>'
+          : '<label class="up-drop" id="upDrop"><input type="file" id="upInput" accept="image/*,application/pdf" hidden><span class="up-ic">'+ICON.upload+'</span><span class="up-txt"><b>Suba su comprobante</b><small>Imagen (JPG/PNG) o PDF · máx. 6 MB</small></span></label>'
             +'<div class="up-preview" id="upPreview" hidden></div>')
       +   '<div class="up-status" id="upStatus" hidden></div>'
       + '</div>'
@@ -711,8 +711,8 @@
       // Si NO envió su comprobante (ni ahora ni antes), avisamos: sin comprobante no podemos confirmar el pedido.
       var yaTiene = items.some(function(s){ return s.comprobante; }) || comprobanteSubido;
       if(!staged && !yaTiene){
-        var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya enviaste tu comprobante?",
-          cuerpo:"Sin tu <b>comprobante de pago</b> no podemos confirmar tu pedido. Subilo acá o enviálo por WhatsApp. Si ya lo mandaste por WhatsApp, continuá.",
+        var subir = await dlg({ tono:"warn", icon:ICON.upload, titulo:"¿Ya envió su comprobante?",
+          cuerpo:"Sin su <b>comprobante de pago</b> no podemos confirmar su pedido. Súbalo acá o envíelo por WhatsApp. Si ya lo mandó por WhatsApp, continúe.",
           okTxt:"Subir comprobante", cancelTxt:"Ya lo envié →" });
         if(subir){ var inp=$("upInput"); if(inp) inp.click(); return; }
       }
@@ -769,12 +769,12 @@
     var pe=null; if(items){ items.forEach(function(s){ if(s.pedido_estado && pe==null) pe=s.pedido_estado; }); }
     var nivel = confirmado ? nivelPedido(pe) : 1; // sin confirmar: "Pago en revisión" activo
     var defs=[
-      { t:"Pedido recibido", s:"Registramos tu pedido" },
-      { t:"Pago en revisión", s: confirmado?"Verificamos tu pago":"Estamos verificando tu pago" },
-      { t:"Orden confirmada", s: confirmado?"¡Tu pago fue confirmado!":"Cuando validemos tu pago" },
-      { t:"Preparando tu pedido", s:"Alistamos tu producto" },
-      { t:"Enviado", s:"Tu pedido va en camino" },
-      { t:"Entregado", s:"¡Gracias por tu compra!" }
+      { t:"Pedido recibido", s:"Registramos su pedido" },
+      { t:"Pago en revisión", s: confirmado?"Verificamos su pago":"Estamos verificando su pago" },
+      { t:"Orden confirmada", s: confirmado?"¡Su pago fue confirmado!":"Cuando validemos su pago" },
+      { t:"Preparando su pedido", s:"Alistamos su producto" },
+      { t:"Enviado", s:"Su pedido va en camino" },
+      { t:"Entregado", s:"¡Gracias por su compra!" }
     ];
     return { cancelado:cancelado, confirmado:confirmado, pe:pe, estados: defs.map(function(d,i){
       return { t:d.t, s:d.s, st: i<nivel ? "done" : (i===nivel ? (nivel===5?"done":"active") : "pending") };
@@ -796,9 +796,9 @@
         $("ck").innerHTML='<div class="conf">'
           + '<div class="conf-check" style="background:#d8402e">'+ICON.alert+'</div>'
           + '<h1 class="conf-h">Pedido cancelado</h1>'
-          + '<p class="conf-p">Este pedido fue cancelado. Si creés que es un error o querés retomarlo, escribinos por WhatsApp.</p>'
+          + '<p class="conf-p">Este pedido fue cancelado. Si cree que es un error o desea retomarlo, escríbanos por WhatsApp.</p>'
           + '<div class="conf-code"><span class="lb">Número de orden</span><b>'+esc(codigo)+'</b><button class="copy" data-copy="'+esc(codigo)+'" data-msg="¡Número copiado!">Copiar número</button></div>'
-          + '<a class="btn btn-wa" style="margin-top:16px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escribinos por WhatsApp</a>'
+          + '<a class="btn btn-wa" style="margin-top:16px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escríbanos por WhatsApp</a>'
           + '<a class="btn btn-ghost" style="margin-top:10px" href="/">Volver a la tienda</a>'
           + '</div>';
         wireCopy($("ck"));
@@ -807,12 +807,12 @@
       $("ck").innerHTML='<div class="conf">'
         + '<div class="conf-check'+(confirmado?"":" pend")+'">'+ICON.check+'</div>'
         + '<h1 class="conf-h">'+(confirmado?"¡Pago confirmado!":"¡Pedido recibido!")+'</h1>'
-        + '<p class="conf-p">'+(confirmado?"Tu pago fue confirmado y tu pedido ya está en proceso.":"Gracias por tu compra. Estamos verificando tu pago; te confirmamos por WhatsApp.")+'</p>'
+        + '<p class="conf-p">'+(confirmado?"Su pago fue confirmado y su pedido ya está en proceso.":"Gracias por su compra. Estamos verificando su pago; le confirmamos por WhatsApp.")+'</p>'
         + '<div class="conf-code"><span class="lb">Número de orden</span><b>'+esc(codigo)+'</b><button class="copy" data-copy="'+esc(codigo)+'" data-msg="¡Número copiado!">Copiar número</button></div>'
-        + '<div class="panel" style="margin-top:22px;text-align:left"><h3 class="panel-h" style="margin-bottom:14px">Estado de tu pedido</h3>'+timelineHTML(r.estados)+'</div>'
-        + '<p class="conf-hint">Guardá tu número de orden <b>'+esc(codigo)+'</b>: lo necesitás para consultar tu pedido.</p>'
+        + '<div class="panel" style="margin-top:22px;text-align:left"><h3 class="panel-h" style="margin-bottom:14px">Estado de su pedido</h3>'+timelineHTML(r.estados)+'</div>'
+        + '<p class="conf-hint">Guarde su número de orden <b>'+esc(codigo)+'</b>: lo necesita para consultar su pedido.</p>'
         + (confirmado ? '' : '<a class="btn" style="margin-top:8px" href="/checkout/?c='+encodeURIComponent(codigo)+'&paso=pago">Ver cuentas para pagar</a>')
-        + '<a class="btn btn-wa" style="margin-top:10px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escribinos por WhatsApp</a>'
+        + '<a class="btn btn-wa" style="margin-top:10px" href="'+ayuda+'" target="_blank" rel="noopener noreferrer">'+ICON.wa+' Escríbanos por WhatsApp</a>'
         + '<a class="btn btn-ghost" style="margin-top:10px" href="/">Volver a la tienda</a>'
         + '</div>';
       wireCopy($("ck"));
@@ -851,7 +851,7 @@
   // Aviso silencioso al panel ("Salud de clientes"): así nos enteramos si el checkout le falla a alguien.
   function falla(nombre, mensaje, detalle){ try{ if(window.HauslineSalud) window.HauslineSalud.error(nombre, mensaje, detalle||null); }catch(_){} }
   // Error del servidor con su mensaje REAL (Supabase devuelve JSON {message}): así el cliente
-  // ve qué pasó de verdad y no siempre "revisá tu internet".
+  // ve qué pasó de verdad y no siempre "revise su internet".
   async function errorHttp(r, etapa){
     var t=""; try{ t=(await r.text()).slice(0,300); }catch(_){}
     var e=new Error(etapa+" HTTP "+r.status+(t?": "+t:""));
@@ -864,21 +864,21 @@
   function explicarError(e, etapa){
     var srv=(e&&e.servidor)||"", msg=(e&&e.message)||"", st=e&&e.status;
     if(!st && (/failed to fetch|load failed|networkerror|network request failed|abort|timeout|timed out/i.test(msg) || (e&&e.name)==="TypeError"))
-      return { texto:"No pudimos conectarnos con el servidor. Revisá tu conexión a internet e intentá de nuevo.", accion:null };
-    if(e && e.noPendiente) return { texto:"Recibimos tu comprobante, pero este pedido ya no está esperando pago (puede que ya lo hayamos confirmado o que haya vencido). Envianos el comprobante por WhatsApp con tu código y lo revisamos.", accion:"whatsapp" };
-    if(/demasiados pedidos seguidos/i.test(srv)) return { texto:"Registramos varios pedidos seguidos con este WhatsApp. Para continuar, escribinos por WhatsApp y lo terminamos juntos.", accion:"whatsapp" };
-    if(/demasiados pedidos/i.test(srv)) return { texto:"Estamos recibiendo muchos pedidos en este momento. Esperá unos minutos e intentá de nuevo.", accion:null };
-    if(/whatsapp inv/i.test(srv)) return { texto:"Tu número de WhatsApp no es válido. Volvé a tus datos y revisalo.", accion:"volver" };
-    if(/nombre inv/i.test(srv)) return { texto:"Falta tu nombre completo. Volvé a tus datos y revisalo.", accion:"volver" };
-    if(/carrito vac/i.test(srv)) return { texto:"Tu carrito está vacío. Volvé a la tienda y agregá los productos de nuevo.", accion:"tienda" };
-    if(/demasiados productos/i.test(srv)) return { texto:"Tu pedido tiene más de 30 productos. Dividilo en dos pedidos o escribinos por WhatsApp.", accion:"whatsapp" };
-    if(/producto inv/i.test(srv)) return { texto:"Hubo un problema con el producto. Volvé a la tienda y agregalo de nuevo.", accion:"tienda" };
+      return { texto:"No pudimos conectarnos con el servidor. Revise su conexión a internet e intente de nuevo.", accion:null };
+    if(e && e.noPendiente) return { texto:"Recibimos su comprobante, pero este pedido ya no está esperando pago (puede que ya lo hayamos confirmado o que haya vencido). Envíenos el comprobante por WhatsApp con su código y lo revisamos.", accion:"whatsapp" };
+    if(/demasiados pedidos seguidos/i.test(srv)) return { texto:"Registramos varios pedidos seguidos con este WhatsApp. Para continuar, escríbanos por WhatsApp y lo terminamos juntos.", accion:"whatsapp" };
+    if(/demasiados pedidos/i.test(srv)) return { texto:"Estamos recibiendo muchos pedidos en este momento. Espere unos minutos e intente de nuevo.", accion:null };
+    if(/whatsapp inv/i.test(srv)) return { texto:"Su número de WhatsApp no es válido. Vuelva a sus datos y revíselo.", accion:"volver" };
+    if(/nombre inv/i.test(srv)) return { texto:"Falta su nombre completo. Vuelva a sus datos y revíselo.", accion:"volver" };
+    if(/carrito vac/i.test(srv)) return { texto:"Su carrito está vacío. Vuelva a la tienda y agregue los productos de nuevo.", accion:"tienda" };
+    if(/demasiados productos/i.test(srv)) return { texto:"Su pedido tiene más de 30 productos. Divídalo en dos pedidos o escríbanos por WhatsApp.", accion:"whatsapp" };
+    if(/producto inv/i.test(srv)) return { texto:"Hubo un problema con el producto. Vuelva a la tienda y agréguelo de nuevo.", accion:"tienda" };
     if(etapa==="upload"){
-      if(st===413 || /too large|maximum allowed size|exceeded/i.test(srv)) return { texto:"El comprobante pesa demasiado. Subí una captura de pantalla (es más liviana) o envialo por WhatsApp.", accion:"whatsapp" };
-      if(/mime|content.?type|invalid.*type/i.test(srv)) return { texto:"Ese formato no se puede subir. Usá una foto (JPG o PNG) o un PDF.", accion:null };
+      if(st===413 || /too large|maximum allowed size|exceeded/i.test(srv)) return { texto:"El comprobante pesa demasiado. Suba una captura de pantalla (es más liviana) o envíelo por WhatsApp.", accion:"whatsapp" };
+      if(/mime|content.?type|invalid.*type/i.test(srv)) return { texto:"Ese formato no se puede subir. Use una foto (JPG o PNG) o un PDF.", accion:null };
     }
-    if(st>=500) return { texto:"Nuestro sistema tuvo un problema momentáneo. Intentá de nuevo en un minuto; si sigue, escribinos por WhatsApp.", accion:"whatsapp" };
-    return { texto:"Algo falló de nuestro lado. Intentá de nuevo; si sigue pasando, escribinos por WhatsApp y lo resolvemos por ahí.", accion:"whatsapp" };
+    if(st>=500) return { texto:"Nuestro sistema tuvo un problema momentáneo. Intente de nuevo en un minuto; si sigue, escríbanos por WhatsApp.", accion:"whatsapp" };
+    return { texto:"Algo falló de nuestro lado. Intente de nuevo; si sigue pasando, escríbanos por WhatsApp y lo resolvemos por ahí.", accion:"whatsapp" };
   }
   // Botón de ayuda debajo del mensaje de error.
   function accionError(accion, texto, codigo){
@@ -913,20 +913,20 @@
       var items=null;
       if(CODIGOS.length===1) items=await fetchGrupo(CODIGOS[0]).catch(function(){ return null; });
       if(!items){ var rs=await Promise.all(CODIGOS.map(function(c){ return fetchSolicitud(c).catch(function(){ return null; }); })); items=rs.filter(Boolean); }
-      if(!items.length){ if(!silencioso) estado("No encontramos ese pedido","Verificá el código (ej. SOL-1234). Si acabás de crearlo, esperá unos segundos y recargá."); return; }
+      if(!items.length){ if(!silencioso) estado("No encontramos ese pedido","Verifique el código (ej. SOL-1234). Si acaba de crearlo, espere unos segundos y recargue."); return; }
       if(silencioso && ultimoEstado!==null && calcular(items).estado===ultimoEstado) return;
       renderPago(items);
-    }catch(ex){ if(!silencioso){ falla("checkout_error", "No se pudo cargar el pedido: "+((ex&&ex.message)||"error"), {paso:"confirmacion"}); estado("No pudimos cargar tu pedido", explicarError(ex, "cargar").texto); } }
+    }catch(ex){ if(!silencioso){ falla("checkout_error", "No se pudo cargar el pedido: "+((ex&&ex.message)||"error"), {paso:"confirmacion"}); estado("No pudimos cargar su pedido", explicarError(ex, "cargar").texto); } }
   }
   function iniciarPolling(){ clearInterval(pollInt); pollInt=setInterval(function(){ if(document.hidden) return; cargarPago(true); },20000); }
 
   // ---- Router ----
   var PASO=new URLSearchParams(location.search).get("paso");
   CODIGOS=leerCodigos();
-  if(!SB_URL||!SB_KEY){ falla("checkout_error", "Configuración incompleta (sin SB_URL/SB_KEY)"); estado("Configuración incompleta","No se pudo conectar con el servidor de pagos. Escribinos por WhatsApp."); }
+  if(!SB_URL||!SB_KEY){ falla("checkout_error", "Configuración incompleta (sin SB_URL/SB_KEY)"); estado("Configuración incompleta","No se pudo conectar con el servidor de pagos. Escríbanos por WhatsApp."); }
   else if(PASO==="info" && !CODIGOS.length){ renderInfo(); }
   else if(PASO==="confirmacion" && CODIGOS.length){ renderConfirmacion(CODIGOS[0]); }
   else if(PASO==="pago" && !CODIGOS.length){ renderPagoPreorden(); }
   else if(CODIGOS.length){ cargarPago(false); iniciarPolling(); }
-  else { estado("Empezá tu pedido","Abrí esta página desde el enlace que te dimos, o elegí un producto en la tienda y tocá “Encargar”."); }
+  else { estado("Empiece su pedido","Abra esta página desde el enlace que le dimos, o elija un producto en la tienda y toque “Encargar”."); }
 })();

@@ -16,10 +16,10 @@
   var estado = { p: null, dirs: [], tarifas: [], entrega: null, elegida: null, urls: [], rb: null };
 
   function noEncontrado() {
-    main.innerHTML = '<div class="cta-card cta-vacio" style="margin-top:6px"><p style="font-weight:600;font-size:17px">No encontramos el pedido ' + esc(codigo) + " en tu cuenta</p>" +
-      '<p class="cta-nota" style="font-size:13.5px;margin-top:8px">Solo ves los pedidos hechos con el mismo correo de tu cuenta (ya verificado) o comprados con tu sesión abierta. Si es tuyo y usaste otro correo, escribinos y lo asociamos.</p>' +
+    main.innerHTML = '<div class="cta-card cta-vacio" style="margin-top:6px"><p style="font-weight:600;font-size:17px">No encontramos el pedido ' + esc(codigo) + " en su cuenta</p>" +
+      '<p class="cta-nota" style="font-size:13.5px;margin-top:8px">Solo ve los pedidos hechos con el mismo correo de su cuenta (ya verificado) o comprados con su sesión abierta. Si es suyo y usó otro correo, escríbanos y lo asociamos.</p>' +
       '<a class="cta-btn auto" style="margin-top:18px" href="' + C.linkWhatsApp("Hola, quiero asociar mi pedido " + codigo + " a mi cuenta de HAUSLINE.") + '" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>' +
-      (/^HS\d{6}$/.test(codigo) ? '<p class="cta-nota" style="font-size:13.5px;margin-top:16px">También podés verlo sin iniciar sesión: <a href="/pedido/?c=' + encodeURIComponent(codigo) + '">seguimiento de ' + esc(codigo) + "</a></p>" : "") + "</div>";
+      (/^HS\d{6}$/.test(codigo) ? '<p class="cta-nota" style="font-size:13.5px;margin-top:16px">También puede verlo sin iniciar sesión: <a href="/pedido/?c=' + encodeURIComponent(codigo) + '">seguimiento de ' + esc(codigo) + "</a></p>" : "") + "</div>";
   }
 
   // Etapa de cada producto (seguimiento por producto del panel), en palabras del cliente.
@@ -31,9 +31,9 @@
   };
   // Fotos del pedido con su URL firmada, en orden: control de calidad → recibido → empaque → entrega.
   var TIPOS_FOTO = [
-    ["control_calidad", "Control de calidad", "Revisamos tu pedido antes de enviarlo. Estas son las fotos reales de tu producto."],
-    ["recibido_hausline", "Recibido en HAUSLINE", "Tu pedido ya llegó a nuestras manos en Nicaragua."],
-    ["empaque", "Empaquetado", "Así va empacado tu pedido."],
+    ["control_calidad", "Control de calidad", "Revisamos su pedido antes de enviarlo. Estas son las fotos reales de su producto."],
+    ["recibido_hausline", "Recibido en HAUSLINE", "Su pedido ya llegó a nuestras manos en Nicaragua."],
+    ["empaque", "Empaquetado", "Así va empacado su pedido."],
     ["entrega", "Entrega", ""],
   ];
   function armarGaleria(p) {
@@ -52,7 +52,7 @@
 
   function progreso(estadoCodigo) {
     var e = C.etapa(estadoCodigo);
-    if (e.id === "cancelado") return '<p class="cta-sub" style="margin:0">Este pedido fue cancelado. Si tenés dudas, escribinos por WhatsApp.</p>';
+    if (e.id === "cancelado") return '<p class="cta-sub" style="margin:0">Este pedido fue cancelado. Si tiene dudas, escríbanos por WhatsApp.</p>';
     return '<ol class="cta-pasos">' + C.ETAPAS.map(function (paso, i) {
       var clase = i < e.indice || e.id === "entregado" ? "hecho" : i === e.indice ? "actual" : "";
       return '<li class="cta-paso ' + clase + '"><span class="n" aria-hidden="true">' + (clase === "hecho" ? "✓" : "") + "</span>" + esc(paso.label) + (clase === "actual" ? '<span class="cta-nota" style="margin:0 0 0 auto">Actual</span>' : "") + "</li>";
@@ -78,7 +78,7 @@
   // Misma aclaración que en la tienda (config.js → textoTiemposEnvio).
   function aclaracionTiempos(p) {
     return "El tiempo de entrega incluye aprox. " + (p.envio_rapido ? "3 a 4" : "4 a 5") + " días de preparación (algunos productos tardan más); " +
-      "el resto es tránsito, que empieza a contar cuando tu pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
+      "el resto es tránsito, que empieza a contar cuando su pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
   }
 
   function tarjetaProducto(p) {
@@ -102,12 +102,12 @@
         (qc.length ? '<span class="cta-prod" style="margin:4px 0 0;color:var(--texto-2);white-space:normal">📷 ' + qc.length + (qc.length === 1 ? " foto" : " fotos") + " de control de calidad abajo</span>" : "") + "</div>" +
         (o.precio_unitario != null ? '<b style="font-weight:500;font-size:13px;white-space:nowrap">' + esc(C.monto(o.precio_unitario * (o.cantidad || 1), p.moneda)) + "</b>" : "") + "</div>";
     }).join("") +
-      (enCamino ? '<div class="cta-aviso-juntos">📦 <span>Tu pedido tiene ' + items.length + " productos: se envían <b>todos juntos una vez que estén fabricados y revisados</b>. Te avisaremos una vez despachados.</span></div>" : "") : "";
+      (enCamino ? '<div class="cta-aviso-juntos">📦 <span>Su pedido tiene ' + items.length + " productos: se envían <b>todos juntos una vez que estén fabricados y revisados</b>. Le avisaremos una vez despachados.</span></div>" : "") : "";
     return '<div class="cta-card cta-pad"><div style="display:flex;gap:16px;align-items:center">' +
       '<span class="cta-foto" style="width:96px;height:96px">' + (foto ? '<img src="' + esc(foto) + '" alt="" loading="lazy">' : CAJA) + "</span>" +
       '<div style="min-width:0;flex:1">' + (items.length > 1
         ? '<b style="display:block;font-weight:600;font-size:15px">' + items.length + ' productos</b><span class="cta-prod" style="margin:0">' + esc(items.map(function (o) { return o.marca || o.producto; }).filter(Boolean).join(", ")) + "</span>"
-        : '<b style="display:block;font-weight:600;font-size:15px">' + esc(it.marca || "") + '</b><span class="cta-prod" style="margin:0">' + esc(it.producto || "Tu pedido") + "</span>" +
+        : '<b style="display:block;font-weight:600;font-size:15px">' + esc(it.marca || "") + '</b><span class="cta-prod" style="margin:0">' + esc(it.producto || "Su pedido") + "</span>" +
           (det ? '<span class="cta-prod" style="margin:0;color:var(--texto-3)">' + esc(det) + "</span>" : "")) +
       '<span class="cta-prod" style="margin:0;color:var(--texto-3)">Pedido #' + esc(p.codigo) + "</span>" +
       (p.total != null ? '<b style="display:block;font-weight:600;margin-top:2px">' + esc(C.monto(p.total, p.moneda)) + "</b>" : "") +
@@ -119,13 +119,13 @@
     var p = estado.p, d = estado.elegida, ent = estado.entrega;
     var costo = C.costoDelivery(d, estado.tarifas);
     var html = '<section class="cta-card cta-pad" style="margin-top:12px">' +
-      '<div class="cta-listo"><span class="cta-listo-ic">' + CAMION + '</span><div><h2 style="margin:0;font-size:17px;font-weight:600">¡Tu pedido ya está disponible!</h2><p class="cta-sub" style="margin-top:4px;font-size:14px">Tu pedido ya se encuentra en Nicaragua. Solicitá el envío a tu dirección registrada.</p></div></div>';
+      '<div class="cta-listo"><span class="cta-listo-ic">' + CAMION + '</span><div><h2 style="margin:0;font-size:17px;font-weight:600">¡Su pedido ya está disponible!</h2><p class="cta-sub" style="margin-top:4px;font-size:14px">Su pedido ya se encuentra en Nicaragua. Solicite el envío a su dirección registrada.</p></div></div>';
     if (ent && ent.solicitada_at) {
-      html += '<div class="cta-nota-ok">✓ <span>Solicitaste el envío el ' + esc(C.fecha(ent.solicitada_at)) + (ent.direccion ? " a “" + esc(ent.direccion.nombre) + "”" : "") + ". Te confirmamos la entrega por WhatsApp.</span></div>";
+      html += '<div class="cta-nota-ok">✓ <span>Solicitó el envío el ' + esc(C.fecha(ent.solicitada_at)) + (ent.direccion ? " a “" + esc(ent.direccion.nombre) + "”" : "") + ". Le confirmamos la entrega por WhatsApp.</span></div>";
     }
     html += '<p class="cta-eyebrow" style="margin:18px 0 8px">Dirección de entrega</p>';
     if (!d) {
-      html += '<div class="cta-dir" style="padding:20px;text-align:center"><p style="margin:0;font-weight:600">Todavía no tenés una dirección guardada</p><p class="cta-nota" style="font-size:13px">Agregala para ver el costo de delivery y solicitar el envío.</p>' +
+      html += '<div class="cta-dir" style="padding:20px;text-align:center"><p style="margin:0;font-weight:600">Todavía no tiene una dirección guardada</p><p class="cta-nota" style="font-size:13px">Agréguela para ver el costo de delivery y solicitar el envío.</p>' +
         '<a class="cta-btn auto" style="margin-top:14px" href="/cuenta/direccion/?volver=' + encodeURIComponent("/cuenta/pedido/?id=" + p.codigo) + '">Agregar dirección</a></div></section>';
       return html;
     }
@@ -136,7 +136,7 @@
       '<div class="cta-kv" style="margin-top:12px;border-top:0"><span>Costo de delivery</span><b>' + esc(costo != null ? C.monto(costo) : "A cotizar por WhatsApp") + "</b></div>" +
       (Number(p.saldo || 0) > 0.01 ? '<div class="cta-kv"><span>Saldo pendiente del pedido</span><b>' + esc(C.monto(p.saldo, p.moneda)) + "</b></div>" : "") +
       '<button type="button" class="cta-btn" id="solicitar" style="margin-top:14px">' + (ent && ent.solicitada_at ? "Volver a solicitar envío" : "Solicitar envío a esta dirección") + "</button>" +
-      '<div style="text-align:center;margin-top:18px"><p style="margin:0;font-weight:600;font-size:14px">¿Necesitás cambiar tu dirección?</p><p class="cta-nota" style="margin-top:2px">Podés actualizarla antes de solicitar el envío.</p>' +
+      '<div style="text-align:center;margin-top:18px"><p style="margin:0;font-weight:600;font-size:14px">¿Necesita cambiar su dirección?</p><p class="cta-nota" style="margin-top:2px">Puede actualizarla antes de solicitar el envío.</p>' +
       '<button type="button" class="cta-btn linea" id="cambiar" style="margin-top:12px">Cambiar dirección</button></div></section>';
     return html;
   }
@@ -175,7 +175,7 @@
         '<div class="cta-kv"><span>Pagado</span><b>' + esc(C.monto(p.abono, p.moneda)) + "</b></div>" +
         '<div class="cta-kv"><span>Saldo pendiente</span><b>' + esc(C.monto(p.saldo, p.moneda)) + "</b></div></div></section>";
     }
-    html += '<section class="cta-sec"><a class="cta-btn linea" href="' + C.linkWhatsApp("Hola, tengo una consulta sobre mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">¿Dudas? Escribinos por WhatsApp</a></section>';
+    html += '<section class="cta-sec"><a class="cta-btn linea" href="' + C.linkWhatsApp("Hola, tengo una consulta sobre mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">¿Dudas? Escríbanos por WhatsApp</a></section>';
     html += seccionCancelacion(p);
     main.innerHTML = html;
     main.querySelectorAll("[data-rb]").forEach(function (b) { b.addEventListener("click", function () { accionReembolso(b.dataset.rb); }); });
@@ -213,7 +213,7 @@
       }
       html += '<div class="cta-grupo-fotos"><b style="display:block;font-weight:600">' + esc(t[1]) + "</b>" + (t[2] ? '<p class="cta-nota" style="margin:2px 0 0">' + esc(t[2]) + "</p>" : "") + cuerpo + "</div>";
     });
-    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de tu pedido <span class="cta-nota" style="margin:0;font-weight:400">Tocá para ampliar</span></h2><div class="cta-card cta-pad">' + html + "</div></section>";
+    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de su pedido <span class="cta-nota" style="margin:0;font-weight:400">Toque para ampliar</span></h2><div class="cta-card cta-pad">' + html + "</div></section>";
   }
 
   /* ---------------- Cancelar pedido = SOLICITUD de reembolso ----------------
@@ -232,17 +232,17 @@
     paquete_perdido: "La paquetería reportó el paquete como perdido o dañado",
     llego_danado: "Las fotos de recibido muestran el producto dañado",
     no_coincide: "El producto recibido no es el que pedí",
-    otro: "Otro motivo (escribilo vos)",
+    otro: "Otro motivo (escríbalo usted)",
   };
   function introEtapa(rb) {
-    if (rb.etapa === "calidad") return "Estás dentro de las <b>24 horas</b> para revisar las fotos de control de calidad" + (rb.qc_vence ? " (hasta el " + esc(C.fecha(rb.qc_vence, true)) + ")" : "") + ". Si el producto no es lo que pediste o no cumple tus expectativas, contanos qué viste en las fotos.";
-    if (rb.etapa === "transito") return "Tu pedido ya pasó el control de calidad y va en camino. En esta etapa solo se aceptan motivos que se puedan <b>comprobar</b>.";
-    if (rb.etapa === "disponible") return "Tu pedido ya está en Nicaragua. Solo se aceptan motivos que se puedan comprobar con las fotos de recibido.";
-    return "Tu pedido todavía se está preparando.";
+    if (rb.etapa === "calidad") return "Está dentro de las <b>24 horas</b> para revisar las fotos de control de calidad" + (rb.qc_vence ? " (hasta el " + esc(C.fecha(rb.qc_vence, true)) + ")" : "") + ". Si el producto no es lo que pidió o no cumple sus expectativas, cuéntenos qué vio en las fotos.";
+    if (rb.etapa === "transito") return "Su pedido ya pasó el control de calidad y va en camino. En esta etapa solo se aceptan motivos que se puedan <b>comprobar</b>.";
+    if (rb.etapa === "disponible") return "Su pedido ya está en Nicaragua. Solo se aceptan motivos que se puedan comprobar con las fotos de recibido.";
+    return "Su pedido todavía se está preparando.";
   }
   function avisoRevision(rb) {
     var pagado = Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "";
-    return '<div class="cta-aviso-juntos" style="margin-top:14px;background:#fff7e6;color:#6b4a0c">⚠️ <span>Esto es una <b style="color:inherit">solicitud de reembolso</b>, no una cancelación inmediata. HAUSLINE la revisa y el reembolso <b style="color:inherit">solo se aprueba si el motivo es real y se puede verificar</b> (por ejemplo, con las fotos de control de calidad). Si no se aprueba, vas a poder elegir entre <b style="color:inherit">seguir con tu pedido</b> o <b style="color:inherit">cancelarlo sin reembolso</b>, perdiendo lo pagado' + pagado + ".</span></div>";
+    return '<div class="cta-aviso-juntos" style="margin-top:14px;background:#fff7e6;color:#6b4a0c">⚠️ <span>Esto es una <b style="color:inherit">solicitud de reembolso</b>, no una cancelación inmediata. HAUSLINE la revisa y el reembolso <b style="color:inherit">solo se aprueba si el motivo es real y se puede verificar</b> (por ejemplo, con las fotos de control de calidad). Si no se aprueba, va a poder elegir entre <b style="color:inherit">seguir con su pedido</b> o <b style="color:inherit">cancelarlo sin reembolso</b>, perdiendo lo pagado' + pagado + ".</span></div>";
   }
 
   function seccionCancelacion(p) {
@@ -254,45 +254,45 @@
       '<div class="cta-kv"><span>Reembolso a</span><b>' + esc(s.banco) + " · ****" + esc(String(s.numero_cuenta || "").slice(-4)) + "</b></div>" : "";
     if (s && s.estado === "pendiente") {
       return tarjeta("Solicitud de cancelación en revisión",
-        '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">La enviaste el ' + esc(C.fecha(s.created_at)) + ". HAUSLINE la está revisando y te avisamos por aquí y por correo. Mientras tanto, tu pedido sigue su curso.</p>" + datos +
+        '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">La envió el ' + esc(C.fecha(s.created_at)) + ". HAUSLINE la está revisando y le avisamos por aquí y por correo. Mientras tanto, su pedido sigue su curso.</p>" + datos +
         '<button type="button" class="cta-btn linea" style="margin-top:14px" data-rb="seguir">Retirar solicitud y seguir con mi pedido</button>');
     }
     if (s && s.estado === "rechazada") {
-      return tarjeta("Tu solicitud de cancelación no fue aprobada",
+      return tarjeta("Su solicitud de cancelación no fue aprobada",
         (s.respuesta ? '<p class="cta-sub" style="font-size:14px;margin-top:6px">“' + esc(s.respuesta) + "”</p>" : "") + datos +
-        '<p style="margin:16px 0 8px;font-weight:600;font-size:14px">¿Qué querés hacer?</p>' +
+        '<p style="margin:16px 0 8px;font-weight:600;font-size:14px">¿Qué desea hacer?</p>' +
         '<div class="cta-botones"><button type="button" class="cta-btn chico" data-rb="seguir">Seguir con mi pedido</button><button type="button" class="cta-btn linea chico" data-rb="perder">Cancelar sin reembolso</button></div>' +
-        '<p class="cta-nota" style="font-size:12.5px;margin-top:10px">Si cancelás sin reembolso, perdés lo pagado' + (Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "") + ".</p>" +
-        (s.plazo_decision_at ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tenés hasta el <b>' + esc(C.fecha(s.plazo_decision_at, true)) + "</b> para elegir. Si no elegís, tu pedido sigue su curso.</p>" : ""));
+        '<p class="cta-nota" style="font-size:12.5px;margin-top:10px">Si cancela sin reembolso, pierde lo pagado' + (Number(rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(rb.monto_pagado, rb.moneda)) + ")" : "") + ".</p>" +
+        (s.plazo_decision_at ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tiene hasta el <b>' + esc(C.fecha(s.plazo_decision_at, true)) + "</b> para elegir. Si no elige, su pedido sigue su curso.</p>" : ""));
     }
     if (s && s.estado === "aprobada") {
       return tarjeta("Cancelación aprobada",
-        '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Aprobamos tu solicitud' + (s.monto_reembolso != null ? " y te reembolsamos " + esc(C.monto(s.monto_reembolso, rb.moneda)) : "") + " a la cuenta que indicaste." + (s.respuesta ? " " + esc(s.respuesta) : "") + "</p>" + datos);
+        '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Aprobamos su solicitud' + (s.monto_reembolso != null ? " y le reembolsamos " + esc(C.monto(s.monto_reembolso, rb.moneda)) : "") + " a la cuenta que indicó." + (s.respuesta ? " " + esc(s.respuesta) : "") + "</p>" + datos);
     }
     if (s && s.estado === "cancelada_sin_reembolso") {
-      return tarjeta("Elegiste cancelar sin reembolso", '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Registramos tu decisión. HAUSLINE cancelará tu pedido en breve.</p>');
+      return tarjeta("Eligió cancelar sin reembolso", '<p class="cta-nota" style="font-size:13.5px;margin-top:4px">Registramos su decisión. HAUSLINE cancelará su pedido en breve.</p>');
     }
-    var vencio = s && s.estado === "retirada" && s.vencida ? '<div class="cta-nota-ok" style="margin:0 0 12px;text-align:left">✓ <span>Venció el plazo de 48 horas para elegir: tu pedido sigue su curso.</span></div>' : "";
+    var vencio = s && s.estado === "retirada" && s.vencida ? '<div class="cta-nota-ok" style="margin:0 0 12px;text-align:left">✓ <span>Venció el plazo de 48 horas para elegir: su pedido sigue su curso.</span></div>' : "";
     if (rb.etapa === "no_permitida" || !(rb.motivos || []).length || Number(rb.intentos || 0) >= 3) return vencio ? '<section class="cta-sec">' + vencio + "</section>" : "";
-    return '<section class="cta-sec" style="text-align:center">' + vencio + '<button type="button" class="cta-link" data-rb="abrir" style="font-size:13.5px">¿Necesitás cancelar tu pedido?</button>' +
-      (rb.etapa === "calidad" && rb.qc_vence ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tenés hasta el ' + esc(C.fecha(rb.qc_vence, true)) + " para reportar un problema con las fotos de control de calidad.</p>" : "") + "</section>";
+    return '<section class="cta-sec" style="text-align:center">' + vencio + '<button type="button" class="cta-link" data-rb="abrir" style="font-size:13.5px">¿Necesita cancelar su pedido?</button>' +
+      (rb.etapa === "calidad" && rb.qc_vence ? '<p class="cta-nota" style="font-size:12.5px;margin-top:4px">Tiene hasta el ' + esc(C.fecha(rb.qc_vence, true)) + " para reportar un problema con las fotos de control de calidad.</p>" : "") + "</section>";
   }
 
   async function accionReembolso(accion) {
     if (accion === "abrir") return formularioCancelacion();
     if (accion === "perder") {
-      var h = C.hoja('<p class="cta-sub" style="font-size:14px;margin:0">Vas a cancelar tu pedido <b>sin reembolso</b>: perdés lo pagado' + (Number(estado.rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(estado.rb.monto_pagado, estado.rb.moneda)) + ")" : "") + ". Esto no se puede deshacer.</p>" +
+      var h = C.hoja('<p class="cta-sub" style="font-size:14px;margin:0">Va a cancelar su pedido <b>sin reembolso</b>: pierde lo pagado' + (Number(estado.rb.monto_pagado || 0) > 0 ? " (" + esc(C.monto(estado.rb.monto_pagado, estado.rb.moneda)) + ")" : "") + ". Esto no se puede deshacer.</p>" +
         '<div class="cta-botones" style="margin-top:18px"><button type="button" class="cta-btn linea chico" id="rbNo">Volver</button><button type="button" class="cta-btn chico" id="rbSi">Sí, cancelar</button></div>', "¿Cancelar sin reembolso?");
       h.panel.querySelector("#rbNo").addEventListener("click", h.cerrar);
       h.panel.querySelector("#rbSi").addEventListener("click", async function () {
         this.disabled = true;
-        try { var r = await C.decidirReembolso(estado.p.codigo, "cancelar_sin_reembolso"); h.cerrar(); C.aviso(r && r.vencido ? "Venció el plazo para elegir: tu pedido sigue su curso." : "Registramos tu decisión."); await recargarReembolso(); }
+        try { var r = await C.decidirReembolso(estado.p.codigo, "cancelar_sin_reembolso"); h.cerrar(); C.aviso(r && r.vencido ? "Venció el plazo para elegir: su pedido sigue su curso." : "Registramos su decisión."); await recargarReembolso(); }
         catch (err) { this.disabled = false; C.aviso(C.mensajeError(err), "error"); }
       });
       return;
     }
     if (accion === "seguir") {
-      try { await C.decidirReembolso(estado.p.codigo, "seguir"); C.aviso("¡Listo! Tu pedido sigue su curso."); await recargarReembolso(); }
+      try { await C.decidirReembolso(estado.p.codigo, "seguir"); C.aviso("¡Listo! Su pedido sigue su curso."); await recargarReembolso(); }
       catch (err) { C.aviso(C.mensajeError(err), "error"); }
     }
   }
@@ -302,9 +302,9 @@
     var rb = estado.rb;
     var elegido = null;
     var html = '<p class="cta-sub" style="font-size:14px;margin:0">' + introEtapa(rb) + "</p>" +
-      '<p class="cta-eyebrow" style="margin:18px 0 8px">¿Por qué querés cancelar?</p>' +
+      '<p class="cta-eyebrow" style="margin:18px 0 8px">¿Por qué desea cancelar?</p>' +
       rb.motivos.filter(function (m) { return MOTIVOS[m]; }).map(function (m) { return '<button type="button" class="cta-opcion" data-motivo="' + esc(m) + '"><span class="radio"></span><span>' + esc(MOTIVOS[m]) + "</span></button>"; }).join("") +
-      '<label class="cta-field" style="margin-top:16px"><span id="rbDetalleLbl">Contanos qué pasó</span><textarea class="cta-input" id="rbDetalle" rows="3" maxlength="1000" style="resize:vertical" placeholder="Explicá con detalle. Si es por las fotos, decinos qué viste."></textarea></label>' +
+      '<label class="cta-field" style="margin-top:16px"><span id="rbDetalleLbl">Cuéntenos qué pasó</span><textarea class="cta-input" id="rbDetalle" rows="3" maxlength="1000" style="resize:vertical" placeholder="Explique con detalle. Si es por las fotos, díganos qué vio."></textarea></label>' +
       '<p class="cta-eyebrow" style="margin:18px 0 0">Cuenta para el reembolso</p>' +
       '<label class="cta-field" style="margin-top:8px"><span>Banco</span><input class="cta-input" id="rbBanco" maxlength="60" placeholder="Ej. LAFISE, BAC, Banpro"></label>' +
       '<label class="cta-field"><span>Número de cuenta</span><input class="cta-input" id="rbNumero" inputmode="numeric" maxlength="40" placeholder="Solo números"></label>' +
@@ -319,8 +319,8 @@
       b.addEventListener("click", function () {
         elegido = b.dataset.motivo;
         h.panel.querySelectorAll("[data-motivo]").forEach(function (x) { x.classList.toggle("on", x === b); });
-        q("#rbDetalleLbl").textContent = elegido === "otro" ? "Escribí tu motivo" : "Contanos qué pasó";
-        q("#rbDetalle").placeholder = elegido === "otro" ? "Explicá con detalle por qué querés cancelar. Revisamos que sea un motivo real y comprobable." : "Explicá con detalle. Si es por las fotos, decinos qué viste.";
+        q("#rbDetalleLbl").textContent = elegido === "otro" ? "Escriba su motivo" : "Cuéntenos qué pasó";
+        q("#rbDetalle").placeholder = elegido === "otro" ? "Explique con detalle por qué desea cancelar. Revisamos que sea un motivo real y comprobable." : "Explique con detalle. Si es por las fotos, díganos qué vio.";
         if (elegido === "otro") q("#rbDetalle").focus();
       });
     });
@@ -328,14 +328,14 @@
     q("#rbEnviar").addEventListener("click", async function () {
       var btn = this, err = q("#rbError");
       var d = { motivo: elegido, detalle: q("#rbDetalle").value.trim(), banco: q("#rbBanco").value.trim(), numero: q("#rbNumero").value.replace(/[^0-9]/g, ""), titular: q("#rbTitular").value.trim() };
-      var falta = !d.motivo ? "Elegí el motivo." : d.detalle.length < 15 ? "Contanos con más detalle qué pasó (mínimo 15 caracteres)." :
-        d.banco.length < 2 ? "Indicá el banco." : d.numero.length < 6 ? "Revisá el número de cuenta." : d.titular.length < 5 ? "Escribí el nombre completo del titular." :
-        !q("#rbEntiendo").checked ? "Marcá que entendés que el reembolso depende de la revisión." : "";
+      var falta = !d.motivo ? "Elija el motivo." : d.detalle.length < 15 ? "Cuéntenos con más detalle qué pasó (mínimo 15 caracteres)." :
+        d.banco.length < 2 ? "Indique el banco." : d.numero.length < 6 ? "Revise el número de cuenta." : d.titular.length < 5 ? "Escriba el nombre completo del titular." :
+        !q("#rbEntiendo").checked ? "Marque que entiende que el reembolso depende de la revisión." : "";
       if (falta) { err.textContent = falta; err.hidden = false; return; }
       err.hidden = true; btn.disabled = true; btn.textContent = "Enviando…";
       try {
         await C.solicitarReembolso(estado.p.codigo, d);
-        h.panel.innerHTML = '<div style="text-align:center;padding:10px 0"><p style="font-weight:600;font-size:18px;margin:0 0 6px">Solicitud enviada</p><p class="cta-nota" style="font-size:14px;max-width:320px;margin:0 auto">HAUSLINE va a revisar tu solicitud y te avisamos por aquí y por correo. Mientras tanto, tu pedido sigue su curso.</p>' +
+        h.panel.innerHTML = '<div style="text-align:center;padding:10px 0"><p style="font-weight:600;font-size:18px;margin:0 0 6px">Solicitud enviada</p><p class="cta-nota" style="font-size:14px;max-width:320px;margin:0 auto">HAUSLINE va a revisar su solicitud y le avisamos por aquí y por correo. Mientras tanto, su pedido sigue su curso.</p>' +
           '<button type="button" class="cta-btn" style="margin-top:18px" id="rbOk">Entendido</button></div>';
         h.panel.querySelector("#rbOk").addEventListener("click", function () { h.cerrar(); });
         await recargarReembolso();
@@ -357,7 +357,7 @@
       '<div class="cta-botones" style="margin-top:14px">' +
       (estado.elegida ? '<a class="cta-btn linea chico" href="/cuenta/direccion/?id=' + encodeURIComponent(estado.elegida.id) + "&volver=" + volver + '">Editar esta</a>' : "<span></span>") +
       '<a class="cta-btn chico" href="/cuenta/direccion/?volver=' + volver + '">Agregar nueva</a></div>';
-    var h = C.hoja(html, "Elegí la dirección de entrega");
+    var h = C.hoja(html, "Elija la dirección de entrega");
     h.panel.querySelectorAll("[data-id]").forEach(function (b) {
       b.addEventListener("click", function () {
         estado.elegida = estado.dirs.filter(function (d) { return d.id === b.dataset.id; })[0] || estado.elegida;
@@ -368,14 +368,14 @@
 
   async function solicitar() {
     var d = estado.elegida, p = estado.p;
-    var h = C.hoja('<div style="text-align:center;padding:26px 0"><span class="cta-spin"></span><p style="font-weight:600;font-size:17px;margin:16px 0 4px">Solicitando envío</p><p class="cta-nota">Estamos registrando tu solicitud…</p></div>');
+    var h = C.hoja('<div style="text-align:center;padding:26px 0"><span class="cta-spin"></span><p style="font-weight:600;font-size:17px;margin:16px 0 4px">Solicitando envío</p><p class="cta-nota">Estamos registrando su solicitud…</p></div>');
     try {
       var inicio = Date.now();
       var r = await C.solicitarEntrega(p.codigo, d.id);
       var falta = 700 - (Date.now() - inicio); if (falta > 0) await new Promise(function (ok) { setTimeout(ok, falta); });
       estado.entrega = r;
       var msg = C.mensajeEnvio(p.codigo, d, r && r.costo != null ? Number(r.costo) : C.costoDelivery(d, estado.tarifas));
-      h.panel.innerHTML = '<div style="text-align:center"><span class="cta-wa-badge">' + WA + '</span><p style="font-weight:600;font-size:18px;margin:12px 0 4px">Solicitud registrada</p><p class="cta-nota" style="font-size:14px;margin:0 auto;max-width:300px">Serás redirigido a WhatsApp para confirmar tu entrega con HAUSLINE.</p></div>' +
+      h.panel.innerHTML = '<div style="text-align:center"><span class="cta-wa-badge">' + WA + '</span><p style="font-weight:600;font-size:18px;margin:12px 0 4px">Solicitud registrada</p><p class="cta-nota" style="font-size:14px;margin:0 auto;max-width:300px">Será redirigido a WhatsApp para confirmar su entrega con HAUSLINE.</p></div>' +
         '<div class="cta-wa"><div class="cta-wa-h"><span class="cta-wa-av">H</span><span><b>HAUSLINE</b><small>en línea</small></span></div><div class="cta-wa-b"><p class="cta-wa-msg">' + esc(msg) + "<small>✓✓</small></p></div></div>" +
         '<a class="cta-btn cta-btn-wa" style="margin-top:16px" href="' + esc(C.linkWhatsApp(msg)) + '" target="_blank" rel="noopener noreferrer" id="abrirWa">' + WA + " Abrir WhatsApp</a>" +
         '<button type="button" class="cta-link" style="display:block;margin:12px auto 0" id="ahoraNo">Ahora no</button>';

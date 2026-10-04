@@ -29,7 +29,7 @@
     err.style.display = "none";
     var nombre = "Cliente verificado";
     var comentario = document.getElementById("comentario").value.trim();
-    if(!estrellas) return mostrarErr("Elegí cuántas estrellas.");
+    if(!estrellas) return mostrarErr("Elija cuántas estrellas.");
 
     var btn = document.getElementById("enviar");
     btn.disabled = true; btn.textContent = "Enviando…";
@@ -44,13 +44,13 @@
       document.getElementById("caja").innerHTML =
         '<div class="ok">' +
           '<div class="ic">✓</div>' +
-          '<h2>¡Gracias por tu reseña!</h2>' +
-          '<p>La revisamos y la publicamos muy pronto. Apreciamos que compartas tu experiencia con HAUSLINE.</p>' +
+          '<h2>¡Gracias por su reseña!</h2>' +
+          '<p>La revisamos y la publicamos muy pronto. Apreciamos que comparta su experiencia con HAUSLINE.</p>' +
           '<a class="volver" href="/">← Volver a la tienda</a>' +
         '</div>';
     }catch(ex){
       btn.disabled = false; btn.textContent = "Enviar reseña";
-      mostrarErr("No se pudo enviar. Revisá tu internet e intentá de nuevo.");
+      mostrarErr("No se pudo enviar. Revise su internet e intente de nuevo.");
     }
   });
 })();

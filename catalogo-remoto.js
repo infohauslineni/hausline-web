@@ -1,6 +1,6 @@
 // ============================================================
 //  PRODUCTOS CARGADOS DESDE EL PANEL  (Supabase · hausline-shop)
-//  - Trae los productos que subís en admin.html y los agrega al
+//  - Trae los productos que sube en admin.html y los agrega al
 //    catálogo del sitio, ADEMÁS de los de productos.js.
 //  - Si Supabase no responde, la web sigue igual con productos.js.
 //  - Los códigos que ya existan en productos.js NO se duplican.

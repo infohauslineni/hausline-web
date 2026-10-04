@@ -31,8 +31,8 @@ function agregarAlCarrito(item, cantidad){
   // pide al cliente hacer los pedidos por separado. Devuelve {ok:false, motivo} en ese caso.
   if(items.length && items.some(i => !!i.entregaInmediata !== nuevoInmediata)){
     return { ok:false, motivo: nuevoInmediata
-      ? "Este producto es de entrega inmediata y tu carrito tiene productos por encargo. Terminá ese pedido (o vaciá el carrito) y pedí los de entrega inmediata por separado."
-      : "Este producto es por encargo y tu carrito tiene productos de entrega inmediata. Terminá ese pedido (o vaciá el carrito) y encargá por separado." };
+      ? "Este producto es de entrega inmediata y su carrito tiene productos por encargo. Termine ese pedido (o vacíe el carrito) y pida los de entrega inmediata por separado."
+      : "Este producto es por encargo y su carrito tiene productos de entrega inmediata. Termine ese pedido (o vacíe el carrito) y encargue por separado." };
   }
   const clave = claveVariante(item.codigo, item.talla, item.color);
   const existente = items.find(i => claveVariante(i.codigo, i.talla, i.color) === clave);
@@ -178,7 +178,7 @@ function mensajeCarritoWhatsApp(){
 function enviarPedidoWhatsApp(){
   const msg = mensajeCarritoWhatsApp();
   if(!msg){
-    alert("Tu carrito está vacío.");
+    alert("Su carrito está vacío.");
     return;
   }
   window.open(

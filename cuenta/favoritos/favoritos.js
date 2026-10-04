@@ -29,10 +29,10 @@
   var urlProducto = function (c) { return "/p/" + encodeURIComponent(c) + "/"; };
 
   function pintar() {
-    var html = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:24px;margin:0">Lista de deseos</h1><p class="cta-sub" style="margin-top:4px;font-size:14px">Tus productos favoritos, siempre a mano.</p>';
+    var html = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:24px;margin:0">Lista de deseos</h1><p class="cta-sub" style="margin-top:4px;font-size:14px">Sus productos favoritos, siempre a mano.</p>';
     if (!lista.length) {
       html += '<div class="cta-card cta-vacio" style="margin-top:18px">' + CORAZON.replace("<svg", '<svg style="width:28px;height:28px;fill:none;stroke:var(--texto-3);stroke-width:1.4;margin:0 auto 10px;display:block"') +
-        '<p style="font-weight:600">Tu lista de deseos está vacía</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Tocá el corazón en cualquier producto de la tienda y aparece aquí, en todos tus dispositivos.</p><a class="cta-btn auto" style="margin-top:16px" href="/">Explorar la tienda</a></div>';
+        '<p style="font-weight:600">Su lista de deseos está vacía</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Toque el corazón en cualquier producto de la tienda y aparece aquí, en todos sus dispositivos.</p><a class="cta-btn auto" style="margin-top:16px" href="/">Explorar la tienda</a></div>';
     } else {
       html += '<div style="margin-top:16px">' + lista.map(function (f) {
         var d = datosDe(f.codigo) || {};
@@ -57,8 +57,8 @@
     var antes = lista.slice();
     lista = lista.filter(function (f) { return f.codigo !== codigo; });
     pintar();
-    try { await C.quitarFavorito(codigo); C.aviso("Quitado de tu lista de deseos."); }
-    catch (e) { lista = antes; pintar(); C.aviso("No se pudo quitar. Intentá de nuevo.", "error"); }
+    try { await C.quitarFavorito(codigo); C.aviso("Quitado de su lista de deseos."); }
+    catch (e) { lista = antes; pintar(); C.aviso("No se pudo quitar. Intente de nuevo.", "error"); }
   }
 
   function menu(codigo) {
@@ -88,7 +88,7 @@
     // Incluye también los productos cargados desde el panel de la tienda.
     if (typeof cargarProductosDelPanel === "function") { try { await cargarProductosDelPanel(); } catch (e) {} }
     try { lista = await C.sincronizarFavoritos(datosDe); pintar(); }
-    catch (err) { main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tu lista de deseos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
+    catch (err) { main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar su lista de deseos</p><p class="cta-nota">' + esc(C.mensajeError(err)) + "</p></div>"; }
   }
   iniciar();
 })();

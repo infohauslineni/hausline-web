@@ -27,24 +27,24 @@
     var t, s, verde = false, href = "/cuenta/pedidos/", btn = "Ver detalles";
     if (disponibles.length) {
       t = disponibles.length === 1 ? "1 pedido disponible para entrega" : disponibles.length + " pedidos disponibles para entrega";
-      s = "Ya está en Nicaragua · solicitá tu envío"; verde = true;
+      s = "Ya está en Nicaragua · solicite su envío"; verde = true;
       href = "/cuenta/pedido/?id=" + encodeURIComponent(disponibles[0].codigo);
     } else if (activos.length) {
       t = activos.length === 1 ? "1 pedido en trámite" : activos.length + " pedidos en trámite";
       var prox = activos.filter(function (p) { return p.fecha_estimada; }).sort(function (a, b) { return a.fecha_estimada.localeCompare(b.fecha_estimada); })[0];
       var d = diasHasta(prox && prox.fecha_estimada);
-      s = d ? "Llegará en aprox. " + d + (d === 1 ? " día" : " días") : "Te avisamos en cada etapa";
+      s = d ? "Llegará en aprox. " + d + (d === 1 ? " día" : " días") : "Le avisamos en cada etapa";
       if (activos.length === 1) href = "/cuenta/pedido/?id=" + encodeURIComponent(activos[0].codigo);
     } else if (pendientesEnc.length) {
       // Todavía no hay pedidos, pero sí un encargo esperando confirmación.
       var porPagar = pendientesEnc.filter(function (e) { return !e.pago_reportado; });
       t = pendientesEnc.length === 1 ? "1 encargo esperando confirmación" : pendientesEnc.length + " encargos esperando confirmación";
-      s = porPagar.length ? "Falta tu pago para confirmarlo" : "Estamos revisando tu pago";
+      s = porPagar.length ? "Falta su pago para confirmarlo" : "Estamos revisando su pago";
       if (porPagar.length) { href = "/checkout/?c=" + encodeURIComponent(porPagar[0].codigo); btn = "Pagar"; }
     } else {
-      t = "No tenés pedidos en camino"; s = "Descubrí lo nuevo en la tienda."; href = "/"; btn = "Ir a la tienda";
+      t = "No tiene pedidos en camino"; s = "Descubra lo nuevo en la tienda."; href = "/"; btn = "Ir a la tienda";
     }
-    return '<a class="cta-hero" href="' + href + '">' + CAJA + '<span class="cta-hero-sep"></span><span class="cta-hero-t"><small>Tus pedidos</small><b>' + esc(t) + "</b><span" + (verde ? ' class="verde"' : "") + ">" + esc(s) + '</span></span><span class="cta-hero-btn">' + btn + " ›</span></a>";
+    return '<a class="cta-hero" href="' + href + '">' + CAJA + '<span class="cta-hero-sep"></span><span class="cta-hero-t"><small>Sus pedidos</small><b>' + esc(t) + "</b><span" + (verde ? ' class="verde"' : "") + ">" + esc(s) + '</span></span><span class="cta-hero-btn">' + btn + " ›</span></a>";
   }
 
   function mini(estado) {
@@ -78,8 +78,8 @@
       "</nav>" +
       '<section class="cta-sec" style="margin-top:28px"><div class="cta-sec-h"><span>Pedidos recientes</span><a class="cta-link" style="text-decoration:none" href="/cuenta/pedidos/">Ver todos ›</a></div>' +
       (recientes.length ? recientes.map(reciente).join("") : (encargos && encargos.length)
-        ? '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos tu encargo, aparece aquí como pedido con su código HS.</p>' :
-        '<div class="cta-card cta-vacio"><p style="font-weight:600">Todavía no hay pedidos en tu cuenta</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Cuando compres con este correo, tus pedidos aparecen aquí.</p></div>') +
+        ? '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos su encargo, aparece aquí como pedido con su código HS.</p>' :
+        '<div class="cta-card cta-vacio"><p style="font-weight:600">Todavía no hay pedidos en su cuenta</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Cuando compre con este correo, sus pedidos aparecen aquí.</p></div>') +
       "</section>" +
       '<a class="cta-club" href="/">' + ICON.corona + '<span style="flex:1"><span class="cta-eyebrow" style="display:block">HAUSLINE Club</span><b style="display:block;font-weight:600;font-size:15px;margin-top:3px">Sé el primero en descubrir</b><span class="cta-nota" style="display:block;margin:2px 0 0;font-size:12.5px">Nuevas colecciones, lanzamientos y más.</span></span>' + FLECHA + "</a>";
   }
@@ -98,7 +98,7 @@
     pintar(nombre, pedidos, encargos);
     if (r[1]) C.salud.registrar("vio_cuenta", { detalle: { pedidos: pedidos.length } });
     // Sin señal (ya se reintentó solo): se le explica al cliente, sin anotarlo como falla del sistema.
-    if (!r[1]) C.aviso(errPedidos && errPedidos.red ? "Se cortó tu conexión. Revisá tu internet y recargá la página." : "No pudimos cargar tus pedidos. Recargá la página.", "error", !!(errPedidos && errPedidos.red));
+    if (!r[1]) C.aviso(errPedidos && errPedidos.red ? "Se cortó su conexión. Revise su internet y recargue la página." : "No pudimos cargar sus pedidos. Recargue la página.", "error", !!(errPedidos && errPedidos.red));
     // Los cambios que haga HAUSLINE en el panel aparecen solos, sin recargar.
     C.autoActualizar(async function () {
       var nuevos = await C.misPedidos();

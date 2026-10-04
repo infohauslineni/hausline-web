@@ -30,13 +30,13 @@
     llego_nicaragua: 5, disponible_entrega: 6, empaquetado: 6, pagado: 6, entregado: 7,
   };
   var NOTA = {
-    pedido_confirmado: "Recibimos y confirmamos tu orden.", en_preparacion: "Estamos preparando tu pedido.",
-    control_calidad: "Tu pedido está pasando por control de calidad.", etiqueta_creada: "Tu pedido fue despachado y va en camino.",
-    despachado: "Tu pedido fue despachado y va en camino.", transito_internacional: "Tu pedido está en tránsito internacional.",
-    recibido_estados_unidos: "Tu pedido está en tránsito internacional.", transito_nicaragua: "Tu pedido está en tránsito internacional.",
-    llego_nicaragua: "Tu pedido llegó al país de destino.", disponible_entrega: "Tu pedido está disponible para entrega.",
-    pagado: "Confirmamos el pago de tu pedido.", empaquetado: "Tu pedido está empaquetado y listo para envío.",
-    entregado: "Tu pedido fue entregado.", cancelado: "El pedido fue cancelado.",
+    pedido_confirmado: "Recibimos y confirmamos su orden.", en_preparacion: "Estamos preparando su pedido.",
+    control_calidad: "Su pedido está pasando por control de calidad.", etiqueta_creada: "Su pedido fue despachado y va en camino.",
+    despachado: "Su pedido fue despachado y va en camino.", transito_internacional: "Su pedido está en tránsito internacional.",
+    recibido_estados_unidos: "Su pedido está en tránsito internacional.", transito_nicaragua: "Su pedido está en tránsito internacional.",
+    llego_nicaragua: "Su pedido llegó al país de destino.", disponible_entrega: "Su pedido está disponible para entrega.",
+    pagado: "Confirmamos el pago de su pedido.", empaquetado: "Su pedido está empaquetado y listo para envío.",
+    entregado: "Su pedido fue entregado.", cancelado: "El pedido fue cancelado.",
   };
   var TRANSITO = { etiqueta_creada: 1, despachado: 1, transito_internacional: 1, recibido_estados_unidos: 1, transito_nicaragua: 1 };
 
@@ -183,20 +183,20 @@
       '<button class="cta-btn auto" type="submit">Rastrear</button></form>';
   }
   function noEncontrado(cod) {
-    return '<div class="seg-alerta"><b>No encontramos un pedido con ' + (cod ? "el código " + esc(cod) : "ese código") + '.</b><span>Verificá que esté bien escrito (HS + 6 números) o escribinos por WhatsApp.</span></div>';
+    return '<div class="seg-alerta"><b>No encontramos un pedido con ' + (cod ? "el código " + esc(cod) : "ese código") + '.</b><span>Verifique que esté bien escrito (HS + 6 números) o escríbanos por WhatsApp.</span></div>';
   }
   function inicio(msgError) {
     var rec = recientes().slice(0, 5);
     document.title = "Seguimiento de pedidos · HAUSLINE";
     main.innerHTML =
       '<div class="seg-landing"><p class="cta-eyebrow">Seguimiento de pedidos</p>' +
-      '<h1 class="cta-h1">¿Dónde está tu pedido?</h1>' +
-      '<p class="cta-sub">Ingresá el código que recibiste al confirmar tu compra y seguí tu pedido paso a paso. Sin cuenta, sin contraseñas.</p>' +
+      '<h1 class="cta-h1">¿Dónde está su pedido?</h1>' +
+      '<p class="cta-sub">Ingrese el código que recibió al confirmar su compra y siga su pedido paso a paso. Sin cuenta, sin contraseñas.</p>' +
       '<div style="margin-top:22px">' + buscador(codigo) + "</div>" + (msgError || "") +
-      '<p class="cta-nota" style="margin-top:10px">Tu código empieza con <b>HS</b> y tiene 6 números.</p></div>' +
-      (rec.length ? '<section class="cta-sec"><h2 class="cta-sec-h">Tus pedidos en este teléfono</h2><div class="cta-card">' +
+      '<p class="cta-nota" style="margin-top:10px">Su código empieza con <b>HS</b> y tiene 6 números.</p></div>' +
+      (rec.length ? '<section class="cta-sec"><h2 class="cta-sec-h">Sus pedidos en este teléfono</h2><div class="cta-card">' +
         rec.map(function (x) { return '<a class="seg-fila" href="/pedido/?c=' + encodeURIComponent(x.codigo) + '"><b>' + esc(x.codigo) + '</b><span aria-hidden="true">›</span></a>'; }).join("") + "</div></section>" : "") +
-      '<section class="cta-sec"><div class="cta-card cta-pad"><p style="margin:0;font-weight:600">¿Tenés cuenta en HAUSLINE?</p><p class="cta-nota" style="margin-top:4px">Entrá a Mi cuenta para ver todos tus pedidos juntos desde cualquier teléfono.</p><a class="cta-btn linea" style="margin-top:12px" href="/cuenta/">Ir a Mi cuenta</a></div></section>';
+      '<section class="cta-sec"><div class="cta-card cta-pad"><p style="margin:0;font-weight:600">¿Tiene cuenta en HAUSLINE?</p><p class="cta-nota" style="margin-top:4px">Entre a Mi cuenta para ver todos sus pedidos juntos desde cualquier teléfono.</p><a class="cta-btn linea" style="margin-top:12px" href="/cuenta/">Ir a Mi cuenta</a></div></section>';
     conectarBuscador();
   }
   function conectarBuscador() {
@@ -219,7 +219,7 @@
     var det = [it.talla ? "Talla " + it.talla : null, it.cantidad ? "×" + it.cantidad : null, it.color ? String(it.color).toUpperCase() : null].filter(Boolean).join(" · ");
     return '<div class="cta-card cta-pad"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><p class="cta-eyebrow">Pedido</p><span class="seg-chip">' + esc(p.codigo) + "</span></div>" +
       '<div style="display:flex;gap:14px;align-items:center;margin-top:12px"><span class="cta-foto" style="width:72px;height:72px">' + (foto ? '<img src="' + esc(foto) + '" alt="" loading="lazy">' : CAJA) + "</span>" +
-      '<div style="min-width:0;flex:1"><b style="display:block;font-weight:600;font-size:15px">' + esc(items.length > 1 ? items.length + " productos" : it.producto || "Tu pedido") + "</b>" +
+      '<div style="min-width:0;flex:1"><b style="display:block;font-weight:600;font-size:15px">' + esc(items.length > 1 ? items.length + " productos" : it.producto || "Su pedido") + "</b>" +
       (items.length > 1 ? '<span class="cta-prod" style="margin:0;color:var(--texto-3)">' + esc(items.map(function (o) { return o.producto; }).filter(Boolean).join(", ")) + "</span>"
         : det ? '<span class="cta-prod" style="margin:0;color:var(--texto-3)">' + esc(det) + "</span>" : "") +
       '<span class="cta-prod" style="margin:2px 0 0;color:var(--texto-3);font-size:12px">Pedido realizado: ' + esc(C.fecha(p.fecha_pedido)) + "</span></div></div>" +
@@ -232,7 +232,7 @@
 
   function tarjetaEstado(p) {
     if (p.estado_codigo === "cancelado") {
-      return '<div class="cta-card cta-pad"><h2 class="seg-estado"><i class="rojo"></i>Pedido cancelado</h2><p class="cta-nota" style="margin-top:6px">' + esc(p.notas_publicas || NOTA.cancelado) + " Si tenés dudas, escribinos por WhatsApp.</p></div>";
+      return '<div class="cta-card cta-pad"><h2 class="seg-estado"><i class="rojo"></i>Pedido cancelado</h2><p class="cta-nota" style="margin-top:6px">' + esc(p.notas_publicas || NOTA.cancelado) + " Si tiene dudas, escríbanos por WhatsApp.</p></div>";
     }
     var idx = STEP_INDEX[p.estado_codigo] != null ? STEP_INDEX[p.estado_codigo] : 0;
     var entregado = p.estado_codigo === "entregado";
@@ -240,7 +240,7 @@
     var pct = entregado ? 100 : Math.round((num / STEPS.length) * 100);
     var clave = fechaClave(p);
     var dias = clave && !entregado && idx >= 4 ? diasHasta(clave) : null;
-    var sub = entregado ? "¡Gracias por tu compra!" : dias != null ? (dias > 1 ? "Faltan aproximadamente " + dias + " días" : dias === 1 ? "Llega mañana" : dias === 0 ? "Llega hoy" : "En camino, muy pronto") : "La fecha es estimada y puede variar.";
+    var sub = entregado ? "¡Gracias por su compra!" : dias != null ? (dias > 1 ? "Faltan aproximadamente " + dias + " días" : dias === 1 ? "Llega mañana" : dias === 0 ? "Llega hoy" : "En camino, muy pronto") : "La fecha es estimada y puede variar.";
     return '<div class="cta-card cta-pad">' +
       '<div style="display:flex;align-items:center;gap:8px"><h2 class="seg-estado">' + esc(STEPS[idx]) + "</h2>" +
       '<span class="seg-pill' + (entregado ? "" : " vivo") + '">' + (entregado ? "✓ Entregado" : "<i></i>En curso") + "</span></div>" +
@@ -250,11 +250,11 @@
       '<div class="seg-fecha"><div><p class="cta-eyebrow" style="color:var(--texto)">' + (entregado ? "Entregado el" : "Entrega estimada") + "</p>" +
       '<b>' + esc(clave ? C.fecha(clave) : "Por confirmar") + "</b><span>" + esc(sub) + "</span></div>" +
       (dias != null && dias >= 0 && !entregado ? '<span class="seg-dias"><b>' + (dias === 0 ? "¡Hoy!" : dias) + "</b>" + (dias > 0 ? "<small>" + (dias === 1 ? "día" : "días") + "</small>" : "") + "</span>" : "") + "</div>" +
-      '<p class="cta-nota" style="font-size:11.5px;line-height:1.5;margin-top:10px">El tiempo de entrega incluye unos días de preparación (aprox. 4-5 en envío estándar y 3-4 en rápido; algunos productos tardan más) y el resto es tránsito, que empieza a contar cuando tu pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.</p>' +
+      '<p class="cta-nota" style="font-size:11.5px;line-height:1.5;margin-top:10px">El tiempo de entrega incluye unos días de preparación (aprox. 4-5 en envío estándar y 3-4 en rápido; algunos productos tardan más) y el resto es tránsito, que empieza a contar cuando su pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.</p>' +
       '<button type="button" class="cta-btn linea" id="compartir" style="margin-top:12px">Compartir seguimiento</button></div>';
   }
 
-  var FOTO_LABEL = { control_calidad: "Control de calidad", recibido_hausline: "Tu producto", producto: "Producto", empaque: "Empaquetado", recibido_local: "Recibido" };
+  var FOTO_LABEL = { control_calidad: "Control de calidad", recibido_hausline: "Su producto", producto: "Producto", empaque: "Empaquetado", recibido_local: "Recibido" };
   var FOTO_ORDEN = ["control_calidad", "recibido_hausline", "producto", "empaque", "recibido_local"];
   function galeria(p) {
     var g = [];
@@ -263,7 +263,7 @@
   }
   function tarjetaFotos(g) {
     if (!g.length) return "";
-    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de tu pedido</h2><div class="cta-card cta-pad"><p class="cta-nota" style="margin:0 0 10px">Fotos reales de tu producto en control de calidad y cada etapa. Tocá una para verla en grande.</p>' +
+    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de su pedido</h2><div class="cta-card cta-pad"><p class="cta-nota" style="margin:0 0 10px">Fotos reales de su producto en control de calidad y cada etapa. Toque una para verla en grande.</p>' +
       (g.length === 1
         ? '<button type="button" class="seg-foto-unica" data-foto="0" aria-label="Ver foto ampliada"><img src="' + esc(g[0].url) + '" alt="' + esc(g[0].titulo) + '"><span>' + esc(g[0].titulo) + "</span></button>"
         : '<div class="cta-fotos">' + g.map(function (f, i) { return '<button type="button" data-foto="' + i + '" aria-label="Ver foto ampliada"><img src="' + esc(f.url) + '" alt="' + esc(f.titulo) + '" loading="lazy"></button>'; }).join("") + "</div>") +
@@ -296,14 +296,14 @@
       '<a class="cta-link seg-volver" href="/pedido/">‹ Consultar otro pedido</a>' +
       tarjetaPedido(p) + '<div style="margin-top:12px">' + tarjetaEstado(p) + "</div>" +
       (cancelado ? "" : tarjetaFotos(g)) + tarjetaEtapas(p) + tarjetaDetalle(p) +
-      '<section class="cta-sec"><div class="cta-card cta-pad"><p style="margin:0;font-weight:600">Todos tus pedidos en un solo lugar</p><p class="cta-nota" style="margin-top:4px">Opcional: creá tu cuenta gratis con el mismo correo de tu compra y verás todos tus pedidos juntos, desde cualquier teléfono.</p><a class="cta-btn linea" style="margin-top:12px" href="/cuenta/pedido/?id=' + encodeURIComponent(p.codigo) + '">Ir a Mi cuenta</a></div></section>' +
-      '<section class="cta-sec"><div class="cta-card cta-pad seg-ayuda"><p style="margin:0;font-weight:600">¿Necesitás ayuda con tu pedido?</p><p class="cta-nota" style="margin-top:4px">Nuestro equipo está listo para ayudarte.</p><a class="cta-btn" style="margin-top:12px" href="' + C.linkWhatsApp("Hola, necesito ayuda con mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">WhatsApp HAUSLINE</a></div></section>';
+      '<section class="cta-sec"><div class="cta-card cta-pad"><p style="margin:0;font-weight:600">Todos sus pedidos en un solo lugar</p><p class="cta-nota" style="margin-top:4px">Opcional: cree su cuenta gratis con el mismo correo de su compra y verá todos sus pedidos juntos, desde cualquier teléfono.</p><a class="cta-btn linea" style="margin-top:12px" href="/cuenta/pedido/?id=' + encodeURIComponent(p.codigo) + '">Ir a Mi cuenta</a></div></section>' +
+      '<section class="cta-sec"><div class="cta-card cta-pad seg-ayuda"><p style="margin:0;font-weight:600">¿Necesita ayuda con su pedido?</p><p class="cta-nota" style="margin-top:4px">Nuestro equipo está listo para ayudarle.</p><a class="cta-btn" style="margin-top:12px" href="' + C.linkWhatsApp("Hola, necesito ayuda con mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">WhatsApp HAUSLINE</a></div></section>';
     main.querySelectorAll("[data-foto]").forEach(function (b) { b.addEventListener("click", function () { C.visor(g, Number(b.dataset.foto)); }); });
     var bc = document.getElementById("compartir");
     if (bc) bc.addEventListener("click", async function () {
       var url = location.origin + "/pedido/?c=" + encodeURIComponent(p.codigo);
       try {
-        if (navigator.share) await navigator.share({ title: "Pedido " + p.codigo + " · HAUSLINE", text: "Seguí mi pedido HAUSLINE", url: url });
+        if (navigator.share) await navigator.share({ title: "Pedido " + p.codigo + " · HAUSLINE", text: "Siga mi pedido HAUSLINE", url: url });
         else { await navigator.clipboard.writeText(url); C.aviso("Enlace copiado."); }
       } catch (e) { /* canceló el compartir */ }
     });
@@ -327,7 +327,7 @@
       if (silencioso && esDeRed(err)) return; // actualización en segundo plano: el cliente no vio nada
       S.error("seguimiento_error", codigo + " · " + ((err && err.message) || "Error"), { silencioso: !!silencioso });
       if (!silencioso) {
-        main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar tu pedido</p><p class="cta-nota">Puede ser tu conexión o un problema nuestro. Intentá de nuevo en un momento.</p>' +
+        main.innerHTML = '<div class="cta-card cta-vacio"><p style="font-weight:600">No pudimos cargar su pedido</p><p class="cta-nota">Puede ser su conexión o un problema nuestro. Intente de nuevo en un momento.</p>' +
           '<button class="cta-btn auto linea" style="margin-top:16px" type="button" id="reintentar">Reintentar</button></div>';
         document.getElementById("reintentar").addEventListener("click", function () { location.reload(); });
       }

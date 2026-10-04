@@ -73,14 +73,14 @@
     box.className = "hl-aviso__box";
     box.innerHTML =
       '<p class="hl-aviso__t">Bienvenido a HAUSLINE 👟</p>' +
-      '<p class="hl-aviso__lead">Antes de entrar, tené en cuenta cómo funciona la tienda:</p>' +
+      '<p class="hl-aviso__lead">Antes de entrar, tenga en cuenta cómo funciona la tienda:</p>' +
       '<ul class="hl-aviso__list">' +
         li("📦", "Todo es por encargo",
           'Los productos se importan bajo pedido. Solo los marcados como <em>Entrega inmediata</em> ya están en Nicaragua y se entregan de una vez.') +
         li("💱", "Dólares o córdobas",
-          'Podés ver los precios en <em>US$</em> o <em>C$</em> con el botón de moneda en la parte de arriba.') +
+          'Puede ver los precios en <em>US$</em> o <em>C$</em> con el botón de moneda en la parte de arriba.') +
         li("🛒", "Los pedidos se hacen aquí",
-          'Encargá directamente desde la web. Atención al cliente: <span class="hl-aviso__tel">' + TEL_ATENCION + '</span>.') +
+          'Encargue directamente desde la web. Atención al cliente: <span class="hl-aviso__tel">' + TEL_ATENCION + '</span>.') +
       '</ul>' +
       '<p class="hl-aviso__cookies">🍪 Usamos cookies necesarias para que el sitio funcione. <a href="/privacidad.html">Más información</a>.</p>' +
       '<button type="button" class="hl-aviso__btn">Entendido, entrar</button>';

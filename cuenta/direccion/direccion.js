@@ -28,7 +28,7 @@
       '<label class="cta-field"><span>Referencia (opcional)</span><input class="cta-input" id="referencia" maxlength="300" placeholder="Ej. portón negro, frente al parque" value="' + esc(f.referencia || "") + '"></label>' +
       '<label class="cta-field"><span>País</span><select class="cta-input cta-select" id="pais">' + PAISES.concat(PAISES.indexOf(f.pais) === -1 && f.pais ? [f.pais] : []).map(function (p) { return "<option" + (p === f.pais ? " selected" : "") + ">" + esc(p) + "</option>"; }).join("") + "</select></label>" +
       '<div class="cta-grid2">' +
-        (esNica() ? '<label class="cta-field"><span>Departamento</span><select class="cta-input cta-select" id="departamento"><option value="">Elegí…</option>' + DEPARTAMENTOS.map(function (d) { return "<option" + (d === f.departamento ? " selected" : "") + ">" + esc(d) + "</option>"; }).join("") + "</select></label>" : "") +
+        (esNica() ? '<label class="cta-field"><span>Departamento</span><select class="cta-input cta-select" id="departamento"><option value="">Elija…</option>' + DEPARTAMENTOS.map(function (d) { return "<option" + (d === f.departamento ? " selected" : "") + ">" + esc(d) + "</option>"; }).join("") + "</select></label>" : "") +
         '<label class="cta-field"' + (esNica() ? "" : ' style="grid-column:1/-1"') + "><span>" + (esNica() ? "Ciudad / municipio" : "Ciudad") + '</span><input class="cta-input" id="ciudad" maxlength="100" placeholder="Managua" value="' + esc(f.ciudad) + '"></label>' +
       "</div>" +
       '<div class="cta-grid2">' +
@@ -36,7 +36,7 @@
         '<label class="cta-field"><span>Tipo de dirección</span><select class="cta-input cta-select" id="tipo">' + [["residencial", "Residencial"], ["trabajo", "Trabajo"], ["otro", "Otro"]].map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === f.tipo ? " selected" : "") + ">" + t[1] + "</option>"; }).join("") + "</select></label>" +
       "</div>" +
       '<p class="cta-field" style="margin-bottom:6px"><span>Ubicación en el mapa</span></p><div id="mapa"></div>' +
-      '<div style="display:flex;justify-content:space-between;gap:10px;margin-top:8px;align-items:center"><span class="cta-nota" style="margin:0" id="ayudaMapa">' + (f.lat != null ? "Arrastrá el mapa para ajustar el pin." : "Arrastrá el mapa hasta tu casa o usá tu ubicación.") + '</span><button type="button" class="cta-link" id="gps" style="white-space:nowrap">Usar mi ubicación</button></div>' +
+      '<div style="display:flex;justify-content:space-between;gap:10px;margin-top:8px;align-items:center"><span class="cta-nota" style="margin:0" id="ayudaMapa">' + (f.lat != null ? "Arrastre el mapa para ajustar el pin." : "Arrastre el mapa hasta su casa o use su ubicación.") + '</span><button type="button" class="cta-link" id="gps" style="white-space:nowrap">Usar mi ubicación</button></div>' +
       '<div class="cta-kv" style="margin-top:16px"><span>Costo de delivery para esta zona</span><b id="costo">' + esc(costoTexto()) + "</b></div>" +
       '<label class="cta-check"><input type="checkbox" id="pred"' + (f.predeterminada ? " checked" : "") + "> Establecer como dirección predeterminada</label>" +
       '<button class="cta-btn" id="guardar" style="margin-top:22px">Guardar dirección</button>' +
@@ -44,16 +44,16 @@
       "</form>";
 
     var $ = function (s) { return main.querySelector(s); };
-    var m = C.mapa($("#mapa"), { lat: f.lat, lng: f.lng, interactivo: true, onCambio: function (p) { f.lat = p.lat; f.lng = p.lng; $("#ayudaMapa").textContent = "Arrastrá el mapa para ajustar el pin."; } });
+    var m = C.mapa($("#mapa"), { lat: f.lat, lng: f.lng, interactivo: true, onCambio: function (p) { f.lat = p.lat; f.lng = p.lng; $("#ayudaMapa").textContent = "Arrastre el mapa para ajustar el pin."; } });
     $("#gps").addEventListener("click", function () {
-      if (!navigator.geolocation) return C.aviso("Tu navegador no permite usar la ubicación.", "error", true);
+      if (!navigator.geolocation) return C.aviso("Su navegador no permite usar la ubicación.", "error", true);
       $("#gps").textContent = "Buscando…";
       navigator.geolocation.getCurrentPosition(function (pos) {
         $("#gps").textContent = "Usar mi ubicación";
         m.poner(pos.coords.latitude, pos.coords.longitude, 17);
       }, function () {
         $("#gps").textContent = "Usar mi ubicación";
-        C.aviso("No pudimos obtener tu ubicación. Revisá el permiso o mové el mapa a mano.", "error", true);
+        C.aviso("No pudimos obtener su ubicación. Revise el permiso o mueva el mapa a mano.", "error", true);
       }, { enableHighAccuracy: true, timeout: 12000 });
     });
     main.querySelectorAll("[data-rapido]").forEach(function (b) {
@@ -87,8 +87,8 @@
   async function guardar(e) {
     e.preventDefault();
     leer();
-    var err = !f.nombre ? "Poné un nombre (ej. Casa, Trabajo)." : f.direccion.length < 3 ? "Escribí la dirección completa." :
-      esNica() && !f.departamento ? "Elegí el departamento." : !f.ciudad ? "Escribí la ciudad." : null;
+    var err = !f.nombre ? "Ponga un nombre (ej. Casa, Trabajo)." : f.direccion.length < 3 ? "Escriba la dirección completa." :
+      esNica() && !f.departamento ? "Elija el departamento." : !f.ciudad ? "Escriba la ciudad." : null;
     if (err) return C.aviso(err, "error", true);
     var btn = main.querySelector("#guardar"); btn.disabled = true; btn.textContent = "Guardando…";
     try {

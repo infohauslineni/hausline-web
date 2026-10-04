@@ -32,8 +32,8 @@ const TITULOS_COLECCION = {
   "nuevos":            "Nuevo en HAUSLINE",
   "ofertas":           "Ofertas",
   "entrega-inmediata": "Entrega inmediata",
-  "en-camino": "En camino · Apartalo ya",
-  "favoritos":         "Tus favoritos",
+  "en-camino": "En camino · Apártelo ya",
+  "favoritos":         "Sus favoritos",
   "vistos":            "Vistos recientemente",
   "marcas":            "Marcas"
 };
@@ -66,7 +66,7 @@ const POLITICAS = {
   ],
   garantia: [
     "Garantía de 24 horas por defectos de fábrica.",
-    "Revisa tu pedido al momento de recibirlo."
+    "Revise su pedido al momento de recibirlo."
   ]
 };
 
@@ -190,7 +190,7 @@ function crearCard(producto, modoInmediata){
 
   let etiquetas = "";
   if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
-  else if(producto.enCamino) etiquetas += `<span class="etiqueta encamino">En camino · Apartalo</span>`;
+  else if(producto.enCamino) etiquetas += `<span class="etiqueta encamino">En camino · Apártelo</span>`;
   if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
   // Etiquetas opcionales que hayas activado en el producto
@@ -701,7 +701,7 @@ function renderEditorial(){
     cont.innerHTML = `
       <div class="editorial-vacio">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        Espacio listo para tus fotos publicitarias.
+        Espacio listo para sus fotos publicitarias.
         <code>clientes.js → editoriales</code>
       </div>`;
     return;
@@ -977,7 +977,7 @@ function renderInicio(){
     contInmediata.innerHTML = "";
   }
 
-  // En camino · Apartalo ya: la sección se oculta sola si no hay nada en camino.
+  // En camino · Apártelo ya: la sección se oculta sola si no hay nada en camino.
   const enCamino = productosEnCamino();
   const secEnCamino = document.getElementById("en-camino");
   const contEnCamino = document.getElementById("filaEnCamino");
@@ -1506,7 +1506,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // En entrega inmediata se paga completo al recibir, sin abono previo.
   // Si el producto está "a consultar" no hay abono todavía: primero el precio.
   $("#modalAbono").innerHTML = cotizar
-    ? `Escríbenos por WhatsApp y te pasamos el precio.`
+    ? `Escríbanos por WhatsApp y le pasamos el precio.`
     : modoInmediataActual
     ? `Disponible ahora, sin abono previo.`
     : `Abono para confirmar: <strong>${formatoPrecio(Math.round(precio * 0.5))}</strong> (50%)`;
@@ -1560,7 +1560,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     $("#modalAvisoInmediata").innerHTML +=
       `<div class="aviso-encamino">
          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
-         <span><b>Viene en camino</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Apartalo ya con el 50% y te lo entregamos apenas llegue.</span>
+         <span><b>Viene en camino</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Apártelo ya con el 50% y se lo entregamos apenas llegue.</span>
        </div>`;
   }
 
@@ -1717,7 +1717,7 @@ function renderSelectores(producto){
       .map(t => `<button class="opcion" type="button" data-talla="${esc(t)}">${esc(t)}</button>`).join("");
     $("#tallasNota").textContent = modoInmediataActual
       ? "Disponibles ahora, listas para entrega"
-      : "Bajo encargo · elige el tipo de envío abajo";
+      : "Bajo encargo · elija el tipo de envío abajo";
   } else {
     selTallas.hidden = true;
     $("#opcionesTallas").innerHTML = "";
@@ -1891,7 +1891,7 @@ window.addEventListener("popstate", () => {
   // ¿El destino es la MISMA vista que ya está montada debajo del producto?
   // Si sí, al cerrar el producto NO re-renderizamos: solo lo ocultamos y
   // restauramos la posición. Así se conserva la página, los filtros y la
-  // subcategoría exactamente donde estabas (antes te devolvía a la página 1).
+  // subcategoría exactamente donde estabas (antes le devolvía a la página 1).
   const mismaVista =
     (destino.tipo === "inicio" && estadoVista === "inicio") ||
     (destino.tipo !== "inicio" && coleccionActual &&
@@ -2123,7 +2123,7 @@ function renderCarrito(){
     cuerpo.innerHTML = `
       <div class="panel-vacio">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        Tu carrito está vacío
+        Su carrito está vacío
       </div>`;
     pie.hidden = true;
     return;
@@ -2182,7 +2182,7 @@ function renderFavoritos(){
     cuerpo.innerHTML = `
       <div class="panel-vacio">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        Todavía no tienes favoritos
+        Todavía no tiene favoritos
       </div>`;
     return;
   }

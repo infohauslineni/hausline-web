@@ -54,11 +54,11 @@ const HAUSLINE_ENVIO_DEFECTO = "estandar";
 // Con `prep` (preparacionDe) habla del tiempo propio de ESE producto.
 function textoTiemposEnvio(metodo, prep){
   if(prep && metodo) return "Incluye aprox. " + textoPreparacion(metodo, prep) + " de preparación de este producto; "
-    + "el resto es tiempo de tránsito, que empieza a contar cuando tu pedido sale en camino. "
+    + "el resto es tiempo de tránsito, que empieza a contar cuando su pedido sale en camino. "
     + "Las fechas de entrega son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
   var p = metodo && metodo.preparacion ? metodo.preparacion : "unos días";
   return "Incluye aprox. " + p + " de preparación (algunos productos tardan más en prepararse); "
-    + "el resto es tiempo de tránsito, que empieza a contar cuando tu pedido sale en camino. "
+    + "el resto es tiempo de tránsito, que empieza a contar cuando su pedido sale en camino. "
     + "Las fechas de entrega son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
 }
 
@@ -108,7 +108,7 @@ function textoAvisoDemora(demora){
   if(!demora) return "";
   return "Este producto puede tardar más de lo esperado"
     + (demora.nota ? `: ${demora.nota.replace(/[.\s]+$/, "")}.` : ".")
-    + " Te avisamos por WhatsApp o correo cualquier novedad.";
+    + " Le avisamos por WhatsApp o correo cualquier novedad.";
 }
 
 // ---------- CÓRDOBAS "CERRADOS" ----------
@@ -133,14 +133,14 @@ const HAUSLINE_CUENTAS = [
 //  BANNERS · AVISO EMERGENTE AL ABRIR LA WEB
 //  Muestra un aviso CHICO (no ocupa toda la pantalla) con la imagen de la
 //  promo y una X para cerrar. Aparece una vez por visita. Si tocan la imagen
-//  y pusiste "enlace", los lleva ahí (ej. la tienda con un cupón).
+//  y puso "enlace", los lleva ahí (ej. la tienda con un cupón).
 //
 //  PARA AGREGAR UN BANNER:
 //   1) Subí la imagen a la carpeta  imgP/banners/  (ideal vertical, ~800x1000).
-//   2) Agregá una línea acá con su ruta. Ejemplos:
+//   2) Agregue una línea acá con su ruta. Ejemplos:
 //        { imagen: "imgP/banners/promo1.jpg", enlace: "" },
 //        { imagen: "imgP/banners/verano.jpg", enlace: "/?cupon=HAUS-VERANO" },
-//  Si ponés varias, se turnan solas con puntitos. Dejá la lista vacía [] para
+//  Si pone varias, se turnan solas con puntitos. Deje la lista vacía [] para
 //  no mostrar ningún aviso.
 // ============================================================
 const HAUSLINE_BANNERS = [//
@@ -149,7 +149,7 @@ const HAUSLINE_BANNERS = [//
 
 // ============================================================
 //  SUPABASE  (para el contador REAL de visualizaciones)
-//  Pega aquí los datos de tu proyecto Supabase.
+//  Pega aquí los datos de su proyecto Supabase.
 //  Mientras estén vacíos, la web funciona igual pero sin contador.
 //  NUNCA pegues la clave service_role, SOLO la anon (pública).
 // ============================================================
