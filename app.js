@@ -186,7 +186,7 @@ function crearCard(producto, modoInmediata){
   const oferta = ofertaVigente(producto);
   const precio = precioVigente(producto, inmediata);
   const desc = porcentajeDescuento(producto);
-  const fav = esFavorito(producto.codigo);
+  const fav = typeof esFavorito === "function" && esFavorito(producto.codigo);
 
   let etiquetas = "";
   if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
@@ -1976,7 +1976,7 @@ function cerrarPanelCompartir(){
 
 function actualizarFavModal(){
   if(!productoActual) return;
-  const activo = esFavorito(productoActual.codigo);
+  const activo = typeof esFavorito === "function" && esFavorito(productoActual.codigo);
   const btn = $("#btnFavModal");
   btn.classList.toggle("activo", activo);
   btn.setAttribute("aria-label", activo ? "Quitar de favoritos" : "Guardar en favoritos");
@@ -2583,7 +2583,7 @@ $("#btnVaciarCarrito").addEventListener("click", () => {
 // CONVERSOR DE MONEDA (USD ⇄ C$)
 // ============================================================
 function actualizarBotonesMoneda(){
-  $$("[data-moneda]").forEach(b => b.classList.toggle("activo", b.dataset.moneda === monedaActual));
+  $$("[data-moneda]").forEach(b => b.classList.toggle("activo", b.dataset.moneda === (typeof monedaActual === "undefined" ? "USD" : monedaActual)));
 }
 
 // Vuelve a pintar todo lo que muestra precios, para que cambie la moneda.
@@ -2619,7 +2619,7 @@ function cambiarMoneda(m){
 $$("[data-moneda]").forEach(b => b.addEventListener("click", () => cambiarMoneda(b.dataset.moneda)));
 actualizarBotonesMoneda();
 // Llegó el tipo de cambio del panel (config.js): si se ven córdobas, se repintan con el nuevo.
-document.addEventListener("hausline:tipo-cambio", () => { if(monedaActual === "NIO") repintarPrecios(); });
+document.addEventListener("hausline:tipo-cambio", () => { if(typeof monedaActual !== "undefined" && monedaActual === "NIO") repintarPrecios(); });
 
 // ============================================================
 // COMPARTIR (panel de escritorio) + COPIAR
@@ -2764,11 +2764,16 @@ document.addEventListener("carrito:cambio", () => {
 // señal), vuelve a pedir ese archivo UNA vez y la ejecuta cuando llegue. Nunca tira error.
 function conScript(nombre, archivo, alListo){
   if(typeof window[nombre] === "function"){ try{ alListo(); }catch(e){} return; }
+  pedirScript(archivo, function(){ if(typeof window[nombre] === "function"){ try{ alListo(); }catch(e){} } });
+}
+// Vuelve a pedir un archivo .js (misma versión + marca para saltar la caché rota). Llama a
+// `listo` cuando llega o cuando vuelve a fallar, para que nada se quede esperando.
+function pedirScript(archivo, listo){
   var previo = [].slice.call(document.scripts).find(function(s){ return (s.getAttribute("src") || "").indexOf(archivo) >= 0; });
   var src = previo ? previo.getAttribute("src") : archivo;
   var s = document.createElement("script");
   s.src = src + (src.indexOf("?") >= 0 ? "&" : "?") + "r=" + Date.now();
-  s.onload = function(){ if(typeof window[nombre] === "function"){ try{ alListo(); }catch(e){} } };
+  s.onload = s.onerror = function(){ s.onload = s.onerror = null; listo(); };
   document.head.appendChild(s);
 }
 
@@ -2864,14 +2869,28 @@ function iniciar(){
   console.log(`HAUSLINE · ${productos.length} productos · ${marcasCatalogo.length} marcas`);
 }
 
-// Si productos.js no llegó a cargar (señal mala), antes la tienda se quedaba en blanco con el error
-// "productos is not defined". Ahora se vuelve a pedir una vez y la tienda arranca cuando llega.
-if(typeof productos === "undefined") conScript("normalizarProducto", "productos.js", function(){
-  iniciar();
-  // catalogo-remoto.js ya corrió sin productos (y no hizo nada): ahora sí suma los del admin.
-  if(typeof cargarProductosDelPanel === "function") cargarProductosDelPanel();
-});
-else iniciar();
+// Archivos que la tienda necesita ANTES de arrancar (una función de cada uno → su archivo).
+// Con mala señal alguno no llega y antes salían errores como "productos is not defined",
+// "monedaActual is not defined" o "esFavorito is not defined", y la tienda quedaba a medias.
+// Ahora se vuelven a pedir (en orden, una vez) y la tienda arranca cuando llegan.
+const SCRIPTS_REQUERIDOS = [
+  ["formatearMoneda", "config.js"],
+  ["normalizarProducto", "productos.js"],
+  ["leerVistos", "favoritos.js"],
+  ["actualizarContadorCarrito", "carrito.js"]
+];
+(function arrancar(){
+  const faltan = SCRIPTS_REQUERIDOS.filter(r => typeof window[r[0]] !== "function").map(r => r[1]);
+  if(!faltan.length) return iniciar();
+  let i = 0;
+  (function siguiente(){
+    if(i < faltan.length) return pedirScript(faltan[i++], siguiente);
+    actualizarBotonesMoneda();
+    iniciar();
+    // catalogo-remoto.js ya corrió sin productos (y no hizo nada): ahora sí suma los del admin.
+    if(faltan.includes("productos.js") && typeof cargarProductosDelPanel === "function") cargarProductosDelPanel();
+  })();
+})();
 
 // ============================================================
 // BLOQUEO DE ZOOM (pellizco / doble-toque)
