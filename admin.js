@@ -926,6 +926,9 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
   function generarCodigoCupon(){ var abc="ABCDEFGHJKMNPQRSTUVWXYZ23456789",s=""; for(var i=0;i<5;i++) s+=abc[Math.floor(Math.random()*abc.length)]; return "HAUS-"+s; }
   $("cupTipo").addEventListener("change",()=>{ $("cupValorLbl").textContent = $("cupTipo").value==="porcentaje"?"Porcentaje (%)":"Monto (US$)"; });
   $("cupUsos").addEventListener("change",()=>{ $("cupTopeWrap").hidden = $("cupUsos").value!=="varios"; });
+  // Los cupones duran 15 días por defecto (que compren pronto); se puede cambiar la fecha.
+  function en15Dias(){ return new Date(Date.now() - 6*3600e3 + 15*86400e3).toISOString().slice(0,10); }
+  if(!$("cupVence").value) $("cupVence").value = en15Dias();
   $("cupGen").addEventListener("click",()=>{ $("cupCodigo").value=generarCodigoCupon(); });
   $("cupAdd").addEventListener("click", async ()=>{
     const codigo=($("cupCodigo").value||"").trim().toUpperCase(), tipo=$("cupTipo").value, valor=Number($("cupValor").value||0);
@@ -942,7 +945,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
       if(inicia) fila.inicia_el=inicia;   // solo si se eligió: así crear sigue andando aunque falte la columna
       const {error}=await supaTienda.from("cupones").insert(fila);
       if(error) throw (/inicia_el/.test(error.message||"")?new Error("Falta aplicar la migración de fecha de inicio (202609300001) en Supabase."):error);
-      $("cupCodigo").value=""; $("cupNota").value=""; $("cupVence").value=""; $("cupInicia").value="";
+      $("cupCodigo").value=""; $("cupNota").value=""; $("cupVence").value=en15Dias(); $("cupInicia").value="";
       aviso($("cupAviso"),"✓ Cupón creado. Link para Brevo: hauslineshopni.es/?cupon="+codigo,"ok"); cargarCupones();
     }catch(err){ const m=err.message||String(err); aviso($("cupAviso"), /duplicate/i.test(m)?"Ese código ya existe.": /row-level security|violates|permission|not allowed/i.test(m)?"Tu usuario no tiene permiso en el proyecto de Cupones (perfil inactivo o distinto). Debe ser el mismo admin de la app de tracking.":"Error: "+m,"err"); }
     finally{ btn.disabled=false; btn.innerHTML=t; }
