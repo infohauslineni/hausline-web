@@ -854,7 +854,7 @@ function textoEntregaEstimada(metodo){
   const desde = new Date(hoy); desde.setDate(desde.getDate() + r.min);
   const hasta = new Date(hoy); hasta.setDate(hasta.getDate() + r.max);
   const fmt = f => `${f.getDate()} de ${meses[f.getMonth()]}`;
-  return `Con ${metodo.etiqueta.toLowerCase()} (${(extra || prep) ? diasConDemora(metodo, extra, prep) : metodo.dias}), encargando hoy recibirías aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
+  return `Con ${metodo.etiqueta.toLowerCase()} (${(extra || prep) ? diasConDemora(metodo, extra, prep) : metodo.dias}), encargando hoy recibiría aproximadamente entre el <strong>${fmt(desde)}</strong> y el <strong>${fmt(hasta)}</strong>.`;
 }
 
 // Días de entrega del método para ESE producto (demora extendida + preparación propia).
@@ -1568,6 +1568,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   renderSelectores(producto);
   renderAcordeon(producto);
   if(typeof window.renderResenasProducto === "function") window.renderResenasProducto(producto.codigo);
+  if(typeof window.renderCalidadProducto === "function") window.renderCalidadProducto(producto.codigo);
   actualizarFavModal();
   $("#cantidadValor").textContent = "1";
 
