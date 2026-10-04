@@ -681,7 +681,7 @@
     var waMsg="Hola, acabo de realizar el pago de mi pedido "+codigo+" por "+usd(c.ahora)+". Adjunto mi comprobante.";
     var timer = vencido
       ? '<div class="timer exp">'+ICON.alert+'<div><b>Tiempo agotado</b><small>El período de pago terminó. Escribinos para reactivarlo.</small></div></div>'
-      : '<div class="timer" id="timerBox">'+ICON.clock+'<div><b id="timer">--:--:--</b><small>Tenés 24 h para pagar. Si no, el pedido se cancela solo.</small></div></div>';
+      : '<div class="timer" id="timerBox">'+ICON.clock+'<div><b id="timer">--:--:--</b><small>Tiempo restante para pagar. Si no se paga a tiempo, el pedido se cancela solo.</small></div></div>';
     var yaComp=items.some(function(s){ return s.comprobante; });
 
     $("ck").innerHTML='<div class="grid"><div class="col-main">'
