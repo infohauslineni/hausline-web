@@ -12,6 +12,8 @@
   var S = C.salud;
   var main = document.getElementById("contenido");
   var esc = C.esc;
+  // Notas guardadas antes del cambio a "usted" ("Tu pedido…") se muestran de usted.
+  function deUsted(t) { return t ? String(t).replace(/\bTu\b/g, "Su").replace(/\btu\b/g, "su").replace(/\bte\b/g, "le") : t; }
   var API_FOTOS = "https://hausline-tracking.vercel.app/api/fotos-pedido";
   var LOCAL_KEY = "hausline.pedidos.recientes";
   var CAJA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>';
@@ -232,7 +234,7 @@
 
   function tarjetaEstado(p) {
     if (p.estado_codigo === "cancelado") {
-      return '<div class="cta-card cta-pad"><h2 class="seg-estado"><i class="rojo"></i>Pedido cancelado</h2><p class="cta-nota" style="margin-top:6px">' + esc(p.notas_publicas || NOTA.cancelado) + " Si tiene dudas, escríbanos por WhatsApp.</p></div>";
+      return '<div class="cta-card cta-pad"><h2 class="seg-estado"><i class="rojo"></i>Pedido cancelado</h2><p class="cta-nota" style="margin-top:6px">' + esc(deUsted(p.notas_publicas) || NOTA.cancelado) + " Si tiene dudas, escríbanos por WhatsApp.</p></div>";
     }
     var idx = STEP_INDEX[p.estado_codigo] != null ? STEP_INDEX[p.estado_codigo] : 0;
     var entregado = p.estado_codigo === "entregado";
@@ -244,7 +246,7 @@
     return '<div class="cta-card cta-pad">' +
       '<div style="display:flex;align-items:center;gap:8px"><h2 class="seg-estado">' + esc(STEPS[idx]) + "</h2>" +
       '<span class="seg-pill' + (entregado ? "" : " vivo") + '">' + (entregado ? "✓ Entregado" : "<i></i>En curso") + "</span></div>" +
-      '<p class="cta-nota" style="margin-top:4px">' + esc(p.notas_publicas || NOTA[p.estado_codigo] || "") + "</p>" +
+      '<p class="cta-nota" style="margin-top:4px">' + esc(deUsted(p.notas_publicas) || NOTA[p.estado_codigo] || "") + "</p>" +
       '<div class="seg-barra" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><i style="width:' + Math.max(6, pct) + '%"></i></div>' +
       '<p class="cta-nota" style="margin-top:6px;font-size:12px">Etapa ' + num + " de " + STEPS.length + " · " + pct + "% del proceso</p>" +
       '<div class="seg-fecha"><div><p class="cta-eyebrow" style="color:var(--texto)">' + (entregado ? "Entregado el" : "Entrega estimada") + "</p>" +
@@ -252,6 +254,54 @@
       (dias != null && dias >= 0 && !entregado ? '<span class="seg-dias"><b>' + (dias === 0 ? "¡Hoy!" : dias) + "</b>" + (dias > 0 ? "<small>" + (dias === 1 ? "día" : "días") + "</small>" : "") + "</span>" : "") + "</div>" +
       '<p class="cta-nota" style="font-size:11.5px;line-height:1.5;margin-top:10px">El tiempo de entrega incluye unos días de preparación (aprox. 4-5 en envío estándar y 3-4 en rápido; algunos productos tardan más) y el resto es tránsito, que empieza a contar cuando su pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.</p>' +
       '<button type="button" class="cta-btn linea" id="compartir" style="margin-top:12px">Compartir seguimiento</button></div>';
+  }
+
+  // ── Productos que "pueden tardar más" (marcados en el admin de la tienda) ─────────────────
+  // Si el pedido trae uno, se avisa: cuántos días tomó (o lleva) la preparación y que el tránsito
+  // puede demorar más de lo estimado. La marca vive en el catálogo (catalogo_web.datos).
+  var CATALOGO = { url: "https://xgdijumnmaqfirmckugw.supabase.co", key: "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw" };
+  var demorasCache = {};
+  async function demorasDe(codigos) {
+    var faltan = codigos.filter(function (c) { return !(c in demorasCache); });
+    if (faltan.length) {
+      try {
+        var r = await fetch(CATALOGO.url + "/rest/v1/catalogo_web?select=codigo,datos&codigo=in.(" + faltan.map(encodeURIComponent).join(",") + ")", { headers: { apikey: CATALOGO.key, Authorization: "Bearer " + CATALOGO.key } });
+        var filas = r.ok ? await r.json() : [];
+        faltan.forEach(function (c) { demorasCache[c] = null; });
+        (Array.isArray(filas) ? filas : []).forEach(function (row) {
+          var d = row && row.datos;
+          if (d && d.demoraExtendida === true) demorasCache[String(row.codigo).toUpperCase()] = { extra: Math.max(0, Math.round(Number(d.diasExtra) || 0)), nota: String(d.notaDemora || "").trim() };
+        });
+      } catch (e) { faltan.forEach(function (c) { demorasCache[c] = null; }); }
+    }
+    return codigos.map(function (c) { return demorasCache[c]; }).filter(Boolean);
+  }
+  function diasEntre(a, b) { return Math.max(0, Math.round((b - a) / 86400000)); }
+  async function avisoDemora(p) {
+    var cont = document.getElementById("segDemora");
+    if (!cont || p.estado_codigo === "entregado" || p.estado_codigo === "cancelado") return;
+    var codigos = (p.productos || []).map(function (o) { return String(o.codigo || "").trim().toUpperCase(); }).filter(Boolean);
+    if (!codigos.length) return;
+    var demoras = await demorasDe(codigos);
+    if (!demoras.length || !document.body.contains(cont)) return;
+    var hist = p.historial || [];
+    var prep = null, fin = null;
+    hist.forEach(function (h) {
+      var t = new Date(h.fecha).getTime();
+      if (h.estado === "En preparación" && prep == null) prep = t;
+      if (prep != null && fin == null && h.estado !== "En preparación" && h.estado !== "Orden confirmada" && t >= prep) fin = t;
+    });
+    var dias = prep != null ? diasEntre(prep, fin != null ? fin : Date.now()) : null;
+    var enPrep = prep != null && fin == null;
+    var linea = dias != null && dias > 0
+      ? (enPrep ? "Su producto lleva <b>" + dias + " " + (dias === 1 ? "día" : "días") + "</b> en preparación." : "La preparación de su producto tomó <b>" + dias + " " + (dias === 1 ? "día" : "días") + "</b>.")
+      : "Su producto requiere más tiempo de preparación que lo normal.";
+    var notas = demoras.map(function (d) { return d.nota; }).filter(Boolean);
+    cont.innerHTML = '<div class="cta-card cta-pad" style="margin-top:12px;border-color:#f0c36d;background:#fff7e6">' +
+      '<p style="margin:0;font-weight:600;color:#6b4a0c">⏳ Este producto tarda más de lo normal</p>' +
+      '<p class="cta-nota" style="margin-top:6px;color:#6b4a0c;line-height:1.55">' + linea + " El tiempo en tránsito también puede demorar más de lo estimado." +
+      (notas.length ? " " + esc(notas[0].replace(/[.\s]+$/, "")) + "." : "") +
+      " Le avisaremos por correo cualquier novedad.</p></div>";
   }
 
   var FOTO_LABEL = { control_calidad: "Control de calidad", recibido_hausline: "Su producto", producto: "Producto", empaque: "Empaquetado", recibido_local: "Recibido" };
@@ -294,10 +344,11 @@
     document.title = "Pedido " + p.codigo + " · HAUSLINE";
     main.innerHTML =
       '<a class="cta-link seg-volver" href="/pedido/">‹ Consultar otro pedido</a>' +
-      tarjetaPedido(p) + '<div style="margin-top:12px">' + tarjetaEstado(p) + "</div>" +
+      tarjetaPedido(p) + '<div style="margin-top:12px">' + tarjetaEstado(p) + "</div>" + '<div id="segDemora"></div>' +
       (cancelado ? "" : tarjetaFotos(g)) + tarjetaEtapas(p) + tarjetaDetalle(p) +
       '<section class="cta-sec"><div class="cta-card cta-pad"><p style="margin:0;font-weight:600">Todos sus pedidos en un solo lugar</p><p class="cta-nota" style="margin-top:4px">Opcional: cree su cuenta gratis con el mismo correo de su compra y verá todos sus pedidos juntos, desde cualquier teléfono.</p><a class="cta-btn linea" style="margin-top:12px" href="/cuenta/pedido/?id=' + encodeURIComponent(p.codigo) + '">Ir a Mi cuenta</a></div></section>' +
       '<section class="cta-sec"><div class="cta-card cta-pad seg-ayuda"><p style="margin:0;font-weight:600">¿Necesita ayuda con su pedido?</p><p class="cta-nota" style="margin-top:4px">Nuestro equipo está listo para ayudarle.</p><a class="cta-btn" style="margin-top:12px" href="' + C.linkWhatsApp("Hola, necesito ayuda con mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">WhatsApp HAUSLINE</a></div></section>';
+    void avisoDemora(p)
     main.querySelectorAll("[data-foto]").forEach(function (b) { b.addEventListener("click", function () { C.visor(g, Number(b.dataset.foto)); }); });
     var bc = document.getElementById("compartir");
     if (bc) bc.addEventListener("click", async function () {

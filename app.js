@@ -982,8 +982,12 @@ function renderInicio(){
   const secEnCamino = document.getElementById("en-camino");
   const contEnCamino = document.getElementById("filaEnCamino");
   if(secEnCamino && contEnCamino){
-    secEnCamino.hidden = !enCamino.length;
-    if(enCamino.length) pintarFila("#filaEnCamino", tomar(enCamino, 12));
+    // Sin tomar(): un producto en camino puede estar también en Entrega inmediata (que se pinta
+    // antes) y entonces la fila quedaba vacía con el título visible. Aquí sale siempre.
+    const filaEnCamino = enCamino.slice(0, 12);
+    filaEnCamino.forEach(p => usadosEnInicio.add(p.codigo));
+    secEnCamino.hidden = !filaEnCamino.length;
+    if(filaEnCamino.length) pintarFila("#filaEnCamino", filaEnCamino);
     else contEnCamino.innerHTML = "";
   }
 
