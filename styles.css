@@ -3295,3 +3295,8 @@ body.en-producto .vista-coleccion{ display:none; }
 
 /* FAQ: respuesta legible en claro */
 .faq-item .faq-a{ color:var(--texto-2) !important; font-weight:500; }
+
+/* Etiquetas de la tarjeta: nunca quedan debajo del corazón de favoritos (en teléfono la
+   tarjeta mide ~158 px y "EN CAMINO · APÁRTELO" lo tapaba). */
+.card .etiquetas{ right:44px; }
+.card .etiqueta{ max-width:100%; overflow:hidden; text-overflow:ellipsis; }

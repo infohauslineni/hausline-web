@@ -192,7 +192,7 @@ function crearCard(producto, modoInmediata){
 
   let etiquetas = "";
   if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
-  else if(enCaminoModo || (producto.enCamino && !producto.entregaInmediata)) etiquetas += `<span class="etiqueta encamino">En camino · Apártelo</span>`;
+  else if(enCaminoModo || (producto.enCamino && !producto.entregaInmediata)) etiquetas += `<span class="etiqueta encamino">En camino</span>`;
   if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
   // Etiquetas opcionales que hayas activado en el producto

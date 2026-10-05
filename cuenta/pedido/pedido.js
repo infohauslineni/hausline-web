@@ -177,6 +177,12 @@
     }
     html += '<section class="cta-sec"><a class="cta-btn linea" href="' + C.linkWhatsApp("Hola, tengo una consulta sobre mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">¿Dudas? Escríbanos por WhatsApp</a></section>';
     html += seccionCancelacion(p);
+    if (e.id === "entregado") {
+      var prod = (p.productos || []).filter(function (o) { return o.codigo; })[0];
+      html = html.replace('<div id="pedTiempos"></div>', '<div id="pedTiempos"></div><div style="margin-top:12px;display:grid;gap:12px">' +
+        C.encuestaEntrega(p.codigo, prod && prod.codigo) +
+        (prod ? '<a class="cta-btn linea" href="/p/' + encodeURIComponent(prod.codigo) + '/">Comprar de nuevo</a>' : "") + "</div>");
+    }
     main.innerHTML = html;
     // Preparación aprox. del producto y aviso de demora (se llena cuando llega el catálogo).
     if (C.avisoTiempos) C.avisoTiempos(p).then(function (t) { var c = document.getElementById("pedTiempos"); if (c && t) c.innerHTML = '<div style="margin-top:12px;display:grid;gap:12px">' + t + "</div>"; }).catch(function () {});

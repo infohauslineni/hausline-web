@@ -46,8 +46,11 @@
     return KEY;
   }
 
+  // Pruebas en una computadora (localhost) no son clientes: no se anotan.
+  var esLocal = /^(localhost|127\.0\.0\.1|\[::1\])$|\.(localhost|test)$/.test(location.hostname);
   function registrar(nombre, o) {
     o = o || {};
+    if (esLocal) return;
     try {
       var mensaje = o.mensaje != null ? String(o.mensaje).slice(0, 500) : null;
       var clave = nombre + "|" + (mensaje || "");

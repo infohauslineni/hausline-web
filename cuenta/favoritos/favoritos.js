@@ -42,7 +42,8 @@
           '<div style="min-width:0;flex:1;display:flex;flex-direction:column">' +
             '<div style="display:flex;gap:8px"><a href="' + urlProducto(f.codigo) + '" style="min-width:0;flex:1;text-decoration:none"><b style="display:block;font-weight:600">' + esc(d.marca || f.marca || "") + '</b><span class="cta-prod" style="margin:0">' + esc(d.nombre || f.nombre) + "</span></a>" +
             '<button type="button" class="cta-fav-cora" data-quitar="' + esc(f.codigo) + '" aria-label="Quitar de la lista de deseos">' + CORAZON + "</button></div>" +
-            '<span style="margin-top:4px;font-weight:500">' + esc(precioTexto(d.precio !== undefined ? d.precio : f.precio)) + "</span>" +
+            '<span style="margin-top:4px;font-weight:500">' + esc(precioTexto(d.precio !== undefined ? d.precio : f.precio)) +
+              (d.precio != null && Number(f.precio) > 0 && d.precio < Number(f.precio) - 0.009 ? ' <s style="color:var(--texto-3);font-weight:400;margin-left:6px">' + esc(precioTexto(f.precio)) + '</s> <span class="cta-baja-tag">Bajó de precio</span>' : "") + "</span>" +
             '<div style="margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:8px"><a class="cta-btn-borde" href="' + urlProducto(f.codigo) + '">Agregar al carrito</a><span style="flex:1"></span>' +
             '<button type="button" class="cta-ico" data-menu="' + esc(f.codigo) + '" aria-label="Más opciones" style="width:34px;height:34px">⋯</button></div>' +
           "</div></article>";

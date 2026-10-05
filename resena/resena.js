@@ -20,6 +20,9 @@
     });
   });
 
+  var pre = parseInt(params.get("e") || "", 10);
+  if(pre >= 1 && pre <= 5){ var bt = cont.querySelector('button[data-v="' + pre + '"]'); if(bt) bt.click(); }
+
   var form = document.getElementById("form");
   var err = document.getElementById("err");
   function mostrarErr(m){ err.textContent = m; err.style.display = "block"; }

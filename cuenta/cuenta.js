@@ -708,8 +708,53 @@
       .observe(document.documentElement, { childList: true, subtree: true });
   } catch (e) { /* navegador viejo: las fotos quedan completas (contain) */ }
 
+  // ── Extras de Mi cuenta: cupones, encuesta de 1 toque y bajas de precio (2026-10-04) ────────
+  // Cupones personales vigentes (p. ej. el de "volver a comprar"). Sin la función (migración
+  // 202610040003) devuelve [] y no se muestra nada.
+  async function misCupones() {
+    try { var r = await sb.rpc("mis_cupones_cliente"); return r.error || !Array.isArray(r.data) ? [] : r.data; } catch (e) { return []; }
+  }
+  function tarjetaCupon(c) {
+    var valor = c.tipo === "porcentaje" ? Number(c.valor) + "%" : "$" + Number(c.valor);
+    var vence = c.vence_el ? "Válido hasta el " + fecha(c.vence_el) : "Sin fecha de vencimiento";
+    return '<div class="cta-card cta-pad cta-cupon"><div class="cta-cupon-ic">' + valor + '<small>OFF</small></div>' +
+      '<div class="cta-cupon-t"><b>Tiene un cupón de ' + esc(valor) + ' de descuento</b><span>' + esc(vence) + '</span>' +
+      '<code data-copiar="' + esc(c.codigo) + '" title="Tocar para copiar">' + esc(c.codigo) + "</code></div>" +
+      '<a class="cta-btn auto" href="/?cupon=' + encodeURIComponent(c.codigo) + '">Usar</a></div>';
+  }
+  function conectarCopiar(raiz) {
+    (raiz || document).querySelectorAll("[data-copiar]").forEach(function (el) {
+      el.addEventListener("click", function () { try { navigator.clipboard.writeText(el.dataset.copiar); aviso("Código copiado: " + el.dataset.copiar); } catch (e) {} });
+    });
+  }
+  // Encuesta de 1 toque: cada estrella lleva a la reseña con esa calificación ya marcada.
+  function encuestaEntrega(codigo, producto, titulo) {
+    var base = "/resena/?c=" + encodeURIComponent(codigo) + (producto ? "&p=" + encodeURIComponent(producto) : "");
+    return '<div class="cta-card cta-pad cta-encuesta"><p class="cta-encuesta-t">' + esc(titulo || "¿Cómo le fue con su pedido?") + '</p>' +
+      '<p class="cta-nota" style="margin:2px 0 10px;font-size:12.5px">Toque una estrella. Su opinión ayuda a otros clientes.</p><div class="cta-encuesta-est">' +
+      [1, 2, 3, 4, 5].map(function (n) { return '<a href="' + base + "&e=" + n + '" aria-label="' + n + (n === 1 ? " estrella" : " estrellas") + '">★</a>'; }).join("") + "</div></div>";
+  }
+  // Precio actual de un producto según el catálogo cargado en la página (productos.js + panel).
+  function precioActual(codigo) {
+    if (typeof productos === "undefined") return null;
+    for (var i = 0; i < productos.length; i++) {
+      var p = productos[i];
+      if (String(p.codigo) !== String(codigo)) continue;
+      if (p.cotizar || !(Number(p.precio) > 0)) return null;
+      var hoy = new Date().toISOString().slice(0, 10);
+      var oferta = Number(p.precioOferta) > 0 && Number(p.precioOferta) < Number(p.precio) && (!p.promocionHasta || String(p.promocionHasta).slice(0, 10) >= hoy);
+      return oferta ? Number(p.precioOferta) : Number(p.precio);
+    }
+    return null;
+  }
+  // Favoritos que hoy cuestan menos que cuando los guardó.
+  function bajasDePrecio(favs) {
+    return (favs || []).map(function (f) { var ahora = precioActual(f.codigo); return ahora != null && Number(f.precio) > 0 && ahora < Number(f.precio) - 0.009 ? Object.assign({}, f, { ahora: ahora }) : null; }).filter(Boolean);
+  }
+
   window.HauslineCuenta = {
     avisoTiempos: avisoTiempos,
+    misCupones: misCupones, tarjetaCupon: tarjetaCupon, conectarCopiar: conectarCopiar, encuestaEntrega: encuestaEntrega, precioActual: precioActual, bajasDePrecio: bajasDePrecio, favoritosCuenta: favoritosCuenta,
     autoActualizar: autoActualizar, visor: visor,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,

@@ -103,6 +103,29 @@
     return vitrinaHtml;
   }
 
+  // Cupón vigente, "¿Cómo le fue?" del último pedido entregado y favoritos que bajaron de precio.
+  async function pintarExtras(pedidos) {
+    var partes = [];
+    var cupones = await C.misCupones();
+    if (cupones.length) partes.push(C.tarjetaCupon(cupones[0]));
+    var entregado = (pedidos || []).filter(function (p) { return p.estado_codigo === "entregado"; })[0];
+    if (entregado) {
+      var listo = false;
+      try { listo = localStorage.getItem("hausline_encuesta_" + entregado.codigo) === "1"; } catch (e) {}
+      if (!listo) partes.push(C.encuestaEntrega(entregado.codigo, null, "¿Cómo le fue con su pedido #" + entregado.codigo + "?"));
+    }
+    try {
+      var bajas = C.bajasDePrecio(await C.favoritosCuenta());
+      if (bajas.length) partes.push('<div class="cta-card cta-pad cta-bajas"><p class="cta-encuesta-t">↓ Bajaron de precio en su lista de deseos</p>' +
+        bajas.slice(0, 3).map(function (f) { return '<a class="cta-baja" href="/p/' + encodeURIComponent(f.codigo) + '/"><span>' + esc(f.nombre) + '</span><s>' + C.monto(f.precio) + "</s><b>" + C.monto(f.ahora) + "</b></a>"; }).join("") + "</div>");
+    } catch (e) { /* sin favoritos */ }
+    var cont = document.getElementById("ctaExtras");
+    if (!cont) return;
+    cont.innerHTML = partes.join("");
+    C.conectarCopiar(cont);
+    cont.querySelectorAll(".cta-encuesta-est a").forEach(function (a) { a.addEventListener("click", function () { try { localStorage.setItem("hausline_encuesta_" + entregado.codigo, "1"); } catch (e) {} }); });
+  }
+
   function pintar(nombre, pedidos, encargos) {
     var recientes = pedidos.slice(0, 2);
     main.innerHTML =
@@ -110,6 +133,7 @@
       '<p class="cta-sub" style="margin-top:4px;font-size:14px">Gracias por confiar en HAUSLINE.</p>' +
       '<div style="margin-top:20px">' + hero(pedidos, encargos) + "</div>" +
       C.seccionEncargos(encargos) +
+      '<div id="ctaExtras" class="cta-extras"></div>' +
       '<nav class="cta-tiles" aria-label="Accesos">' +
         '<a class="cta-tile" href="/cuenta/pedidos/">' + ICON.pedidos + "Mis pedidos</a>" +
         '<a class="cta-tile" href="/cuenta/favoritos/">' + ICON.deseos + "Lista de deseos</a>" +
@@ -137,6 +161,7 @@
     if (r[0] && r[0].nombre) nombre = r[0].nombre.split(/\s+/)[0];
     if (r[1]) pedidos = r[1];
     pintar(nombre, pedidos, encargos);
+    pintarExtras(pedidos);
     cargarVitrina().then(function (h) {
       var v = document.getElementById("ctaVitrina");
       if (!v || !h) return;
