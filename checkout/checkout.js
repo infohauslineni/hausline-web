@@ -30,7 +30,10 @@
   function prepPend(pend){ var its=itemsPend(pend); return its.length===1 ? (its[0].prep||null) : null; }
   // Entrega estimada: todo se envía junto, así que manda el producto más lento (un producto
   // sin preparación propia ni demora cuenta con el tiempo general).
+  function fechaCorta(iso){ try{ return new Date(iso+"T12:00:00").toLocaleDateString("es-NI",{day:"numeric",month:"short"}); }catch(e){ return iso; } }
   function diasEnvio(flag, pend){
+    // Apartado de un producto EN CAMINO: llega con la compra que ya viene.
+    if(pend && pend.opts && pend.opts.enCamino){ var l=pend.opts.llegada; return l && l.desde ? (l.desde===l.hasta ? "Llega aprox. el "+fechaCorta(l.desde) : "Llega aprox. "+fechaCorta(l.desde)+" – "+fechaCorta(l.hasta)) : "Ya viene en camino"; }
     var m=ENVCFG[flag], its=itemsPend(pend);
     if(!m) return "";
     var ajusta=its.some(function(it){ return it.prep || (it.demora && it.demora.extra > 0); });
@@ -193,7 +196,9 @@
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
     var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Su pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
     var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>'
-      + (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar, o.prep||null))+'</div>' : '') : '';
+      + (/^(Llega aprox|Ya viene en camino)/.test(o.envioDias)
+          ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">Este producto ya fue comprado y viene en camino: se lo entregamos apenas llegue. Las fechas son aproximadas.</div>'
+          : (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar, o.prep||null))+'</div>' : '')) : '';
     // Aviso de demora extendida (producto de un proveedor que tarda más).
     var demora = (o.demora && typeof textoAvisoDemora==="function") ? '<div class="sum-row" style="margin-top:8px;display:block;padding:10px 12px;border:1px solid #f0c36d;background:#fff7e6;border-radius:10px;font-size:12.5px;line-height:1.5;color:#6b4a0c">⏳ '+esc(textoAvisoDemora(o.demora))+'</div>' : '';
     return '<div class="sumcard rv"><h3 class="sum-h">Su pedido</h3>'+filas+'<div class="sum-sep"></div>'+rows+dias+demora+juntos+grand+pill+code

@@ -603,7 +603,9 @@
       sessionStorage.setItem("hausline_encargo", JSON.stringify({
         tipo:"producto",
         producto:{ codigo:producto.codigo, nombre:_n, marca:_m, imagen:_img, precio:_p, cotizar:_cot, demora:(typeof demoraDe==="function" ? demoraDe(producto) : null), prep:(typeof preparacionDe==="function" ? preparacionDe(producto) : null) },
-        opts:{ talla:opts.talla||"", color:opts.color||"", cantidad:Math.max(1,parseInt(opts.cantidad,10)||1), envio:opts.envio||"estandar", precio:_p }
+        opts:{ talla:opts.talla||"", color:opts.color||"", cantidad:Math.max(1,parseInt(opts.cantidad,10)||1), envio:opts.envio||"estandar", precio:_p,
+               // "En camino": la entrega es la de la compra que ya viene (no 20 a 25 días).
+               enCamino:!!opts.enCamino, llegada:opts.llegada||null }
       }));
     }catch(e){}
     location.href = "/checkout/?paso=info";

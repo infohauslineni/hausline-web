@@ -925,10 +925,35 @@ function pintarPrecioModal(producto, enOferta){
 }
 
 // Refresca el estimado de entrega y el abono según el envío elegido.
+// "En camino": la entrega sale de la COMPRA que viene en camino (RPC en_camino_llegada del panel),
+// no del tiempo de un encargo nuevo. Se guarda por código para no pedirla cada vez.
+const llegadasEnCamino = {};
+function fechaCorta(iso){ try{ return new Date(iso + "T12:00:00").toLocaleDateString("es-NI", { day:"numeric", month:"long" }); }catch(e){ return iso; } }
+function textoLlegada(l){ return l ? (l.desde === l.hasta ? "Llega aprox. el " + fechaCorta(l.desde) : "Llega aprox. entre el " + fechaCorta(l.desde) + " y el " + fechaCorta(l.hasta)) : ""; }
+function cargarLlegadaEnCamino(codigo){
+  if(codigo in llegadasEnCamino) return Promise.resolve(llegadasEnCamino[codigo]);
+  if(typeof SUPABASE_URL !== "string" || !SUPABASE_URL) return Promise.resolve(null);
+  return fetch(SUPABASE_URL + "rpc/en_camino_llegada", { method:"POST", headers:{ "Content-Type":"application/json", apikey:SUPABASE_ANON_KEY, Authorization:"Bearer " + SUPABASE_ANON_KEY }, body: JSON.stringify({ p_codigo: codigo }) })
+    .then(r => r.ok ? r.json() : null).catch(() => null)
+    .then(l => { llegadasEnCamino[codigo] = l && l.desde ? l : null; return llegadasEnCamino[codigo]; });
+}
+
 function actualizarEnvioUI(){
   const entrega = $("#modalEntrega");
   if(modoInmediataActual){
     if(entrega) entrega.innerHTML = "";
+    return;
+  }
+  if(modoEnCaminoActual){
+    const cod = productoActual && productoActual.codigo;
+    const pintarLlegada = (l) => {
+      if(!entrega || !productoActual || productoActual.codigo !== cod || !modoEnCaminoActual) return;
+      entrega.innerHTML = '<div class="entrega-estim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>' +
+        "<span>" + (l ? esc(textoLlegada(l)) : "Ya viene en camino: llega antes que un encargo nuevo") +
+        '<small class="entrega-aclara">Este producto ya fue comprado y viene en camino. Las fechas son aproximadas: a veces la paquetería se retrasa unos días.</small></span></div>';
+    };
+    pintarLlegada(llegadasEnCamino[cod] || null);
+    if(cod) cargarLlegadaEnCamino(cod).then(pintarLlegada);
     return;
   }
   const metodo = (typeof HAUSLINE_ENVIO !== "undefined")
@@ -2063,7 +2088,8 @@ function pedirProductoWhatsApp(){
   // Pedido por ENCARGO: abre el formulario que crea la solicitud en el tracking
   // (con datos del cliente + cuentas de pago). La entrega inmediata sigue por WhatsApp.
   if(!modoInmediataActual && typeof abrirEncargo==="function"){
-    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada, envio: modoEnCaminoActual ? "estandar" : envioSeleccionado });
+    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada, envio: modoEnCaminoActual ? "estandar" : envioSeleccionado,
+      enCamino: modoEnCaminoActual, llegada: modoEnCaminoActual ? (llegadasEnCamino[productoActual.codigo] || null) : null });
     return;
   }
 
