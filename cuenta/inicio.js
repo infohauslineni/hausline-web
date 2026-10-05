@@ -63,6 +63,46 @@
       '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:var(--texto-3);stroke-width:1.6;flex:none" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></a>';
   }
 
+  // ── Vitrina: banner de productos que pasa solo (publicidad dentro de Mi cuenta) ──────────────
+  // Lo nuevo, lo que viene en camino y lo de entrega inmediata del catálogo (admin de la tienda).
+  // Al tocar un producto se abre su página en la tienda.
+  var CAT_URL = "https://xgdijumnmaqfirmckugw.supabase.co", CAT_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
+  var STORAGE_CAT = CAT_URL + "/storage/v1/object/public/catalogo/";
+  var vitrinaHtml = null;
+  function miniatura(src) {
+    var v = String(src || "");
+    if (v.indexOf(STORAGE_CAT) === 0) { var rel = v.slice(STORAGE_CAT.length).split("?")[0]; return rel ? "/imgM/panel/" + decodeURIComponent(rel).replace(/\.[^./]+$/, ".webp") : v; }
+    var r = v.replace(/^\.?\//, "");
+    return /^imgP\//.test(r) ? "/" + r.replace(/^imgP\//, "imgM/").replace(/\.[^./]+$/, ".webp") : C.img(v);
+  }
+  function monto(v) { return "$" + Number(v || 0).toLocaleString("en-US"); }
+  async function cargarVitrina() {
+    if (vitrinaHtml !== null) return vitrinaHtml;
+    vitrinaHtml = "";
+    try {
+      var r = await fetch(CAT_URL + "/rest/v1/catalogo_web?select=codigo,datos,created_at&activo=eq.true&order=created_at.desc&limit=80", { headers: { apikey: CAT_KEY, Authorization: "Bearer " + CAT_KEY } });
+      var filas = r.ok ? await r.json() : [];
+      var lista = (Array.isArray(filas) ? filas : []).map(function (row) { return Object.assign({ _codigo: row.codigo }, row.datos || {}); })
+        .filter(function (d) { return d.nombre && d.imagen && Number(d.precio) > 0 && !d.cotizar && !d.ventaLibre && !/^LIB\d/i.test(d._codigo); });
+      var prio = function (d) { return d.enCamino ? 0 : d.entregaInmediata ? 1 : 2; };
+      lista.sort(function (a, b) { return prio(a) - prio(b); });
+      lista = lista.slice(0, 16);
+      if (lista.length < 4) return vitrinaHtml;
+      var tarjeta = function (d) {
+        var tag = d.enCamino ? "En camino" : d.entregaInmediata ? "Inmediata" : "Nuevo";
+        var precio = d.entregaInmediata && Number(d.precioEntregaInmediata) > 0 ? d.precioEntregaInmediata : (Number(d.precioOferta) > 0 ? d.precioOferta : d.precio);
+        return '<a class="cta-vitrina-item" href="/p/' + encodeURIComponent(d._codigo) + '/"><span class="cta-vitrina-foto" style="position:relative"><span class="cta-vitrina-tag">' + tag + '</span>' +
+          '<img src="' + esc(miniatura(d.imagen)) + '" data-orig="' + esc(C.img(d.imagen)) + '" alt="" loading="lazy" decoding="async"></span>' +
+          "<small>" + esc(d.marca || "HAUSLINE") + "</small><span>" + esc(d.nombre) + "</span><b>" + monto(precio) + "</b></a>";
+      };
+      var items = lista.map(tarjeta).join("");
+      // Se repite la lista para que el desplazamiento sea infinito (la animación corre la mitad).
+      vitrinaHtml = '<section class="cta-vitrina" aria-label="Productos destacados"><div class="cta-vitrina-h"><b>Para usted</b><a href="/">Ver la tienda ›</a></div>' +
+        '<div class="cta-vitrina-viewport"><div class="cta-vitrina-pista" style="--dur:' + Math.max(30, lista.length * 4.5) + 's">' + items + items + "</div></div></section>";
+    } catch (e) { vitrinaHtml = ""; }
+    return vitrinaHtml;
+  }
+
   function pintar(nombre, pedidos, encargos) {
     var recientes = pedidos.slice(0, 2);
     main.innerHTML =
@@ -81,6 +121,7 @@
         ? '<p class="cta-nota" style="font-size:13.5px">Cuando confirmemos su encargo, aparece aquí como pedido con su código HS.</p>' :
         '<div class="cta-card cta-vacio"><p style="font-weight:600">Todavía no hay pedidos en su cuenta</p><p class="cta-nota" style="font-size:13.5px;margin-top:6px">Cuando compre con este correo, sus pedidos aparecen aquí.</p></div>') +
       "</section>" +
+      '<div id="ctaVitrina">' + (vitrinaHtml || "") + "</div>" +
       '<a class="cta-club" href="/">' + ICON.corona + '<span style="flex:1"><span class="cta-eyebrow" style="display:block">HAUSLINE Club</span><b style="display:block;font-weight:600;font-size:15px;margin-top:3px">Sé el primero en descubrir</b><span class="cta-nota" style="display:block;margin:2px 0 0;font-size:12.5px">Nuevas colecciones, lanzamientos y más.</span></span>' + FLECHA + "</a>";
   }
 
@@ -96,6 +137,15 @@
     if (r[0] && r[0].nombre) nombre = r[0].nombre.split(/\s+/)[0];
     if (r[1]) pedidos = r[1];
     pintar(nombre, pedidos, encargos);
+    cargarVitrina().then(function (h) {
+      var v = document.getElementById("ctaVitrina");
+      if (!v || !h) return;
+      v.innerHTML = h;
+      // Si la miniatura todavía no existe, cae a la foto original.
+      v.querySelectorAll("img[data-orig]").forEach(function (im) {
+        im.addEventListener("error", function () { if (im.dataset.orig && im.getAttribute("src") !== im.dataset.orig) im.src = im.dataset.orig; });
+      });
+    });
     if (r[1]) C.salud.registrar("vio_cuenta", { detalle: { pedidos: pedidos.length } });
     // Sin señal (ya se reintentó solo): se le explica al cliente, sin anotarlo como falla del sistema.
     if (!r[1]) C.aviso(errPedidos && errPedidos.red ? "Se cortó su conexión. Revise su internet y recargue la página." : "No pudimos cargar sus pedidos. Recargue la página.", "error", !!(errPedidos && errPedidos.red));

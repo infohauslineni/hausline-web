@@ -85,6 +85,7 @@ let contextoBusqueda = null;         // categoría/subcategoría desde donde se 
 
 let productoActual = null;
 let modoInmediataActual = false;   // true si se abrió desde "Entrega inmediata"
+let modoEnCaminoActual = false;    // true si se abrió desde "En camino · Apártelo ya" (solo las tallas que vienen)
 let imagenesActuales = [];
 let indiceImagen = 0;
 let tallaSeleccionada = "";
@@ -182,7 +183,8 @@ function animarContador(selector){
 // modoInmediata = la tarjeta se está mostrando dentro de "Entrega inmediata".
 // En ese contexto muestra el precio y las tallas que hay físicamente.
 function crearCard(producto, modoInmediata){
-  const inmediata = !!modoInmediata && producto.entregaInmediata;
+  const enCaminoModo = modoInmediata === "encamino" && producto.enCamino;
+  const inmediata = !enCaminoModo && !!modoInmediata && producto.entregaInmediata;
   const oferta = ofertaVigente(producto);
   const precio = precioVigente(producto, inmediata);
   const desc = porcentajeDescuento(producto);
@@ -190,7 +192,7 @@ function crearCard(producto, modoInmediata){
 
   let etiquetas = "";
   if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
-  else if(producto.enCamino) etiquetas += `<span class="etiqueta encamino">En camino · Apártelo</span>`;
+  else if(enCaminoModo || (producto.enCamino && !producto.entregaInmediata)) etiquetas += `<span class="etiqueta encamino">En camino · Apártelo</span>`;
   if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
   // Etiquetas opcionales que hayas activado en el producto
@@ -208,7 +210,9 @@ function crearCard(producto, modoInmediata){
 
   // Solo en el apartado de entrega inmediata se listan las tallas en stock.
   let tallasHtml = "";
-  if(inmediata && producto.tallasEntregaInmediata.length){
+  if(enCaminoModo && producto.tallasEnCamino.length){
+    tallasHtml = `<div class="card-tallas">${producto.tallasEnCamino.slice(0, 4).map(t => `<span class="card-talla">${esc(t)}</span>`).join("")}</div>`;
+  } else if(inmediata && producto.tallasEntregaInmediata.length){
     const visibles = producto.tallasEntregaInmediata.slice(0, 4);
     const resto = producto.tallasEntregaInmediata.length - visibles.length;
     tallasHtml = `<div class="card-tallas">
@@ -235,7 +239,7 @@ function crearCard(producto, modoInmediata){
   const estiloEscala = partesEstilo.length ? ` style="${partesEstilo.join(";")}"` : "";
 
   return `
-    <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : ""}>
+    <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : enCaminoModo ? 'data-modo="encamino"' : ""}>
       <div class="card-img">
         <img class="${claseAjuste}" ${imgMini(producto.imagen)} alt="${esc(nombreProducto(producto))}" loading="lazy" decoding="async"${estiloEscala}>
         <div class="etiquetas"><div class="card-rating" data-rating="${esc(producto.codigo)}"></div>${etiquetas}</div>
@@ -869,7 +873,7 @@ function renderSelectorEnvio(producto){
   const sel = $("#selectorEnvio");
   if(!sel) return;
   const cont = $("#opcionesEnvio");
-  if(modoInmediataActual || necesitaCotizar(producto) || typeof HAUSLINE_ENVIO === "undefined"){
+  if(modoInmediataActual || modoEnCaminoActual || necesitaCotizar(producto) || typeof HAUSLINE_ENVIO === "undefined"){
     sel.hidden = true;
     if(cont) cont.innerHTML = "";
     return;
@@ -987,7 +991,7 @@ function renderInicio(){
     const filaEnCamino = enCamino.slice(0, 12);
     filaEnCamino.forEach(p => usadosEnInicio.add(p.codigo));
     secEnCamino.hidden = !filaEnCamino.length;
-    if(filaEnCamino.length) pintarFila("#filaEnCamino", filaEnCamino);
+    if(filaEnCamino.length) pintarFila("#filaEnCamino", filaEnCamino, "encamino");
     else contEnCamino.innerHTML = "";
   }
 
@@ -1474,7 +1478,8 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   const yaHabiaProducto = document.body.classList.contains("en-producto");
 
   productoActual = producto;
-  modoInmediataActual = !!modoInmediata && producto.entregaInmediata;
+  modoEnCaminoActual = modoInmediata === "encamino" && producto.enCamino && producto.tallasEnCamino.length > 0;
+  modoInmediataActual = !modoEnCaminoActual && modoInmediata !== "encamino" && !!modoInmediata && producto.entregaInmediata;
   imagenesActuales = producto.imagenes.length ? producto.imagenes : [producto.imagen];
   indiceImagen = 0;
   tallaSeleccionada = "";
@@ -1519,13 +1524,15 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // no tiene sentido pagar/agregar algo sin precio, así que solo se cotiza.
   const btnWa = $("#btnWhatsappProducto");
   if(btnWa && btnWa.lastChild){
-    btnWa.lastChild.textContent = cotizar ? " Cotizar" : " Comprar";
+    btnWa.lastChild.textContent = cotizar ? " Cotizar" : modoEnCaminoActual ? " Apartar con el 50%" : " Comprar";
   }
   const btnCart = $("#btnAgregarCarrito");
   if(btnCart) btnCart.hidden = cotizar;
 
   // Disponibilidad según el contexto
-  $("#modalDisponibilidad").innerHTML = modoInmediataActual
+  $("#modalDisponibilidad").innerHTML = modoEnCaminoActual
+    ? `<div class="disponibilidad encargo">En camino · Apártelo ya</div>`
+    : modoInmediataActual
     ? `<div class="disponibilidad inmediata">Entrega inmediata</div>`
     : `<div class="disponibilidad encargo">Disponible por encargo</div>`;
 
@@ -1713,14 +1720,16 @@ function cambiarImagen(delta){
 function renderSelectores(producto){
   // Tallas: en el apartado de entrega inmediata solo las que hay en stock;
   // en el catálogo normal todas, porque se piden por encargo.
-  const tallas = tallasDisponibles(producto, modoInmediataActual);
+  const tallas = modoEnCaminoActual ? producto.tallasEnCamino : tallasDisponibles(producto, modoInmediataActual);
   const selTallas = $("#selectorTallas");
   if(tallas.length){
     selTallas.hidden = false;
     selTallas.classList.remove("error");
     $("#opcionesTallas").innerHTML = tallas
       .map(t => `<button class="opcion" type="button" data-talla="${esc(t)}">${esc(t)}</button>`).join("");
-    $("#tallasNota").textContent = modoInmediataActual
+    $("#tallasNota").textContent = modoEnCaminoActual
+      ? "Esta talla ya viene en camino · apártela con el 50%"
+      : modoInmediataActual
       ? "Disponibles ahora, listas para entrega"
       : "Bajo encargo · elija el tipo de envío abajo";
   } else {
@@ -1758,7 +1767,7 @@ function renderAcordeon(producto){
   if(producto.envioRapido) detalles.push("Envío rápido");
   secciones.push({ titulo: "Detalles", cuerpo: `<ul>${detalles.map(d => `<li>${d}</li>`).join("")}</ul>` });
 
-  const tallas = tallasDisponibles(producto, modoInmediataActual);
+  const tallas = modoEnCaminoActual ? producto.tallasEnCamino : tallasDisponibles(producto, modoInmediataActual);
   if(tallas.length){
     secciones.push({
       titulo: "Tallas disponibles",
@@ -2054,7 +2063,7 @@ function pedirProductoWhatsApp(){
   // Pedido por ENCARGO: abre el formulario que crea la solicitud en el tracking
   // (con datos del cliente + cuentas de pago). La entrega inmediata sigue por WhatsApp.
   if(!modoInmediataActual && typeof abrirEncargo==="function"){
-    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada, envio: envioSeleccionado });
+    abrirEncargo(productoActual, { talla: tallaSeleccionada, color: colorSeleccionado, cantidad: cantidadSeleccionada, envio: modoEnCaminoActual ? "estandar" : envioSeleccionado });
     return;
   }
 
@@ -2257,7 +2266,7 @@ document.addEventListener("click", e => {
   // Si la tarjeta viene del apartado de entrega inmediata se abre en ese modo.
   const card = e.target.closest(".card");
   if(card && !e.target.closest("[data-fav]")){
-    abrirProducto(card.dataset.codigo, card.dataset.modo === "inmediata");
+    abrirProducto(card.dataset.codigo, card.dataset.modo === "inmediata" ? true : card.dataset.modo === "encamino" ? "encamino" : false);
     return;
   }
 
@@ -2601,7 +2610,7 @@ function repintarPrecios(){
   // Si hay un producto abierto, reabrirlo pero CONSERVANDO la selección.
   if(productoActual){
     const t = tallaSeleccionada, c = colorSeleccionado, cant = cantidadSeleccionada, env = envioSeleccionado;
-    const codigo = productoActual.codigo, modo = modoInmediataActual;
+    const codigo = productoActual.codigo, modo = modoEnCaminoActual ? "encamino" : modoInmediataActual;
     abrirProducto(codigo, modo, true);
     tallaSeleccionada = t; colorSeleccionado = c; cantidadSeleccionada = cant; envioSeleccionado = env;
     $("#cantidadValor").textContent = cant;

@@ -256,52 +256,12 @@
       '<button type="button" class="cta-btn linea" id="compartir" style="margin-top:12px">Compartir seguimiento</button></div>';
   }
 
-  // ── Productos que "pueden tardar más" (marcados en el admin de la tienda) ─────────────────
-  // Si el pedido trae uno, se avisa: cuántos días tomó (o lleva) la preparación y que el tránsito
-  // puede demorar más de lo estimado. La marca vive en el catálogo (catalogo_web.datos).
-  var CATALOGO = { url: "https://xgdijumnmaqfirmckugw.supabase.co", key: "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw" };
-  var demorasCache = {};
-  async function demorasDe(codigos) {
-    var faltan = codigos.filter(function (c) { return !(c in demorasCache); });
-    if (faltan.length) {
-      try {
-        var r = await fetch(CATALOGO.url + "/rest/v1/catalogo_web?select=codigo,datos&codigo=in.(" + faltan.map(encodeURIComponent).join(",") + ")", { headers: { apikey: CATALOGO.key, Authorization: "Bearer " + CATALOGO.key } });
-        var filas = r.ok ? await r.json() : [];
-        faltan.forEach(function (c) { demorasCache[c] = null; });
-        (Array.isArray(filas) ? filas : []).forEach(function (row) {
-          var d = row && row.datos;
-          if (d && d.demoraExtendida === true) demorasCache[String(row.codigo).toUpperCase()] = { extra: Math.max(0, Math.round(Number(d.diasExtra) || 0)), nota: String(d.notaDemora || "").trim() };
-        });
-      } catch (e) { faltan.forEach(function (c) { demorasCache[c] = null; }); }
-    }
-    return codigos.map(function (c) { return demorasCache[c]; }).filter(Boolean);
-  }
-  function diasEntre(a, b) { return Math.max(0, Math.round((b - a) / 86400000)); }
+  // Tiempos (preparación aprox. por producto y aviso de demora): función compartida de Mi cuenta.
   async function avisoDemora(p) {
     var cont = document.getElementById("segDemora");
-    if (!cont || p.estado_codigo === "entregado" || p.estado_codigo === "cancelado") return;
-    var codigos = (p.productos || []).map(function (o) { return String(o.codigo || "").trim().toUpperCase(); }).filter(Boolean);
-    if (!codigos.length) return;
-    var demoras = await demorasDe(codigos);
-    if (!demoras.length || !document.body.contains(cont)) return;
-    var hist = p.historial || [];
-    var prep = null, fin = null;
-    hist.forEach(function (h) {
-      var t = new Date(h.fecha).getTime();
-      if (h.estado === "En preparación" && prep == null) prep = t;
-      if (prep != null && fin == null && h.estado !== "En preparación" && h.estado !== "Orden confirmada" && t >= prep) fin = t;
-    });
-    var dias = prep != null ? diasEntre(prep, fin != null ? fin : Date.now()) : null;
-    var enPrep = prep != null && fin == null;
-    var linea = dias != null && dias > 0
-      ? (enPrep ? "Su producto lleva <b>" + dias + " " + (dias === 1 ? "día" : "días") + "</b> en preparación." : "La preparación de su producto tomó <b>" + dias + " " + (dias === 1 ? "día" : "días") + "</b>.")
-      : "Su producto requiere más tiempo de preparación que lo normal.";
-    var notas = demoras.map(function (d) { return d.nota; }).filter(Boolean);
-    cont.innerHTML = '<div class="cta-card cta-pad" style="margin-top:12px;border-color:#f0c36d;background:#fff7e6">' +
-      '<p style="margin:0;font-weight:600;color:#6b4a0c">⏳ Este producto tarda más de lo normal</p>' +
-      '<p class="cta-nota" style="margin-top:6px;color:#6b4a0c;line-height:1.55">' + linea + " El tiempo en tránsito también puede demorar más de lo estimado." +
-      (notas.length ? " " + esc(notas[0].replace(/[.\s]+$/, "")) + "." : "") +
-      " Le avisaremos por correo cualquier novedad.</p></div>";
+    if (!cont || !C.avisoTiempos) return;
+    var html = await C.avisoTiempos(p);
+    if (html && document.body.contains(cont)) cont.innerHTML = '<div style="margin-top:12px;display:grid;gap:12px">' + html + "</div>";
   }
 
   var FOTO_LABEL = { control_calidad: "Control de calidad", recibido_hausline: "Su producto", producto: "Producto", empaque: "Empaquetado", recibido_local: "Recibido" };

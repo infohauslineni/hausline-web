@@ -6323,6 +6323,17 @@ function canonizarMarca(marca){
   return marcasEquivalentes[clave] || String(marca).trim();
 }
 
+// Tallas de Entrega inmediata quitando las que vienen en camino (cada talla en camino descuenta
+// una sola vez: si hay una M en Nicaragua y otra M en camino, la M sigue siendo inmediata).
+function tallasEIsinEnCamino(producto){
+  const quedan = (producto.tallasEntregaInmediata || []).map(String).filter(Boolean);
+  (Array.isArray(producto.tallasEnCamino) ? producto.tallasEnCamino : []).map(String).forEach(t => {
+    const i = quedan.indexOf(t);
+    if(i >= 0) quedan.splice(i, 1);
+  });
+  return quedan;
+}
+
 function normalizarProducto(producto, indice){
   const imagenes = (producto.imagenes && producto.imagenes.filter(Boolean).length)
     ? [...new Set(producto.imagenes.filter(Boolean))]
@@ -6352,8 +6363,10 @@ function normalizarProducto(producto, indice){
     imagenes,
     colores: producto.colores || [],
     disponiblePorEncargo: producto.disponiblePorEncargo !== undefined ? producto.disponiblePorEncargo : true,
-    entregaInmediata: producto.entregaInmediata || false,
-    tallasEntregaInmediata: producto.tallasEntregaInmediata || [],
+    // Una talla que viene EN CAMINO todavía no está en Nicaragua: no cuenta como Entrega
+    // inmediata (sale solo en "En camino"). Si no queda ninguna talla, deja de ser inmediata.
+    entregaInmediata: (producto.entregaInmediata || false) && !(producto.enCamino === true && (producto.tallasEntregaInmediata || []).length && !tallasEIsinEnCamino(producto).length),
+    tallasEntregaInmediata: producto.enCamino === true ? tallasEIsinEnCamino(producto) : (producto.tallasEntregaInmediata || []),
     // "En camino · Apartalo ya": compras que vienen en camino (Compras libres del panel). Se
     // encargan normal (50%); llegan antes que un encargo nuevo.
     enCamino: producto.enCamino === true,

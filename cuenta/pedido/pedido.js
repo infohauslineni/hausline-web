@@ -145,7 +145,7 @@
     var p = estado.p;
     var e = C.etapa(p.estado_codigo);
     armarGaleria(p);
-    var html = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:22px;margin:0 0 14px">Detalle del pedido</h1>' + tarjetaProducto(p);
+    var html = '<h1 class="cta-h1" style="font-family:var(--font);font-weight:600;font-size:22px;margin:0 0 14px">Detalle del pedido</h1>' + tarjetaProducto(p) + '<div id="pedTiempos"></div>';
 
     if (disponible(p)) {
       html += bloqueEntrega() + seccionFotos(p);
@@ -178,6 +178,8 @@
     html += '<section class="cta-sec"><a class="cta-btn linea" href="' + C.linkWhatsApp("Hola, tengo una consulta sobre mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">¿Dudas? Escríbanos por WhatsApp</a></section>';
     html += seccionCancelacion(p);
     main.innerHTML = html;
+    // Preparación aprox. del producto y aviso de demora (se llena cuando llega el catálogo).
+    if (C.avisoTiempos) C.avisoTiempos(p).then(function (t) { var c = document.getElementById("pedTiempos"); if (c && t) c.innerHTML = '<div style="margin-top:12px;display:grid;gap:12px">' + t + "</div>"; }).catch(function () {});
     main.querySelectorAll("[data-rb]").forEach(function (b) { b.addEventListener("click", function () { accionReembolso(b.dataset.rb); }); });
     document.title = "Pedido " + p.codigo + " · HAUSLINE";
 

@@ -440,10 +440,17 @@
     buscar: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
     favoritos: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/>',
     cuenta: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+    perfil: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+    pedidos: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
   };
-  // Navegación inferior fija: Inicio | Buscar | Favoritos | Cuenta.
+  // Navegación inferior fija, TODO dentro de Mi cuenta (no manda a la tienda):
+  // Inicio | Pedidos | Deseos | Perfil. La tienda se abre desde su propio enlace.
   function navInferior(activo) {
-    var items = [["inicio", "/", "Inicio"], ["buscar", "/#buscadorMovil", "Buscar"], ["favoritos", "/cuenta/favoritos/", "Favoritos"], ["cuenta", "/cuenta/", "Cuenta"]];
+    if (activo === "cuenta") {
+      var ruta = location.pathname;
+      activo = /\/cuenta\/pedidos?\//.test(ruta) ? "pedidos" : /\/cuenta\/(datos|direccion|direcciones)\//.test(ruta) ? "perfil" : "inicio";
+    }
+    var items = [["inicio", "/cuenta/", "Inicio"], ["pedidos", "/cuenta/pedidos/", "Pedidos"], ["favoritos", "/cuenta/favoritos/", "Deseos"], ["perfil", "/cuenta/datos/", "Perfil"]];
     var nav = document.createElement("nav");
     nav.className = "cta-nav";
     nav.setAttribute("aria-label", "Navegación");
@@ -583,7 +590,126 @@
     window.addEventListener("focus", correr);
   }
 
+
+  // ── Tiempos del pedido (Mi cuenta + link de seguimiento) ──────────────────────────────────
+  // Lee del catálogo (admin de la tienda) la preparación aprox. de cada producto (prepMin/prepMax,
+  // p. ej. Golden Goose 5 a 7 días) y si "puede tardar más" (demoraExtendida). Devuelve el HTML de:
+  //   · "Estamos preparando su pedido · preparación aprox. 5 a 7 días · lleva N días" (en preparación)
+  //   · "Este producto tarda más de lo normal" (productos marcados con demora)
+  var CATALOGO_URL = "https://xgdijumnmaqfirmckugw.supabase.co", CATALOGO_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
+  var tiemposCache = {};
+  async function datosCatalogo(codigos) {
+    var faltan = codigos.filter(function (c) { return !(c in tiemposCache); });
+    if (faltan.length) {
+      faltan.forEach(function (c) { tiemposCache[c] = null; });
+      try {
+        var r = await fetch(CATALOGO_URL + "/rest/v1/catalogo_web?select=codigo,datos&codigo=in.(" + faltan.map(encodeURIComponent).join(",") + ")", { headers: { apikey: CATALOGO_KEY, Authorization: "Bearer " + CATALOGO_KEY } });
+        var filas = r.ok ? await r.json() : [];
+        (Array.isArray(filas) ? filas : []).forEach(function (row) {
+          var d = (row && row.datos) || {};
+          var pmin = Math.round(Number(d.prepMin) || 0), pmax = Math.max(pmin, Math.round(Number(d.prepMax) || 0));
+          tiemposCache[String(row.codigo).toUpperCase()] = {
+            prep: pmin > 0 ? { min: pmin, max: pmax } : null,
+            demora: d.demoraExtendida === true ? { nota: String(d.notaDemora || "").trim() } : null,
+          };
+        });
+      } catch (e) { /* sin catálogo: se usan los tiempos generales */ }
+    }
+    return codigos.map(function (c) { return tiemposCache[c]; }).filter(Boolean);
+  }
+  var EN_PREPARACION = { pedido_confirmado: 1, en_preparacion: 1, control_calidad: 1 };
+  function esPrep(h) { return h.estado_codigo ? (h.estado_codigo === "en_preparacion" || h.estado_codigo === "control_calidad") : /prepar|calidad/i.test(String(h.estado || "")); }
+  function esConfirmado(h) { return h.estado_codigo ? h.estado_codigo === "pedido_confirmado" : /confirm/i.test(String(h.estado || "")); }
+  async function avisoTiempos(p) {
+    if (!p || p.estado_codigo === "entregado" || p.estado_codigo === "cancelado") return "";
+    var codigos = (p.productos || []).map(function (o) { return String(o.codigo || "").trim().toUpperCase(); }).filter(Boolean);
+    var datos = codigos.length ? await datosCatalogo(codigos) : [];
+    // Días que tomó / lleva la preparación según el historial.
+    var ini = null, fin = null;
+    (p.historial || []).slice().sort(function (a, b) { return new Date(a.fecha) - new Date(b.fecha); }).forEach(function (h) {
+      var t = new Date(h.fecha).getTime();
+      if (esPrep(h) && ini == null) ini = t;
+      else if (ini != null && fin == null && !esPrep(h) && !esConfirmado(h) && t >= ini) fin = t;
+    });
+    var dias = ini != null ? Math.max(0, Math.round(((fin != null ? fin : Date.now()) - ini) / 86400000)) : null;
+    var html = "";
+    if (EN_PREPARACION[p.estado_codigo]) {
+      var preps = datos.map(function (d) { return d.prep; }).filter(Boolean);
+      var prep = preps.length ? preps.reduce(function (a, b) { return { min: Math.max(a.min, b.min), max: Math.max(a.max, b.max) }; })
+        : (p.envio_rapido ? { min: 3, max: 4 } : { min: 4, max: 5 });
+      var rango = prep.min === prep.max ? prep.min + (prep.min === 1 ? " día" : " días") : prep.min + " a " + prep.max + " días";
+      html += '<div class="cta-card cta-pad cta-tiempo">' +
+        '<p class="cta-tiempo-t">Estamos preparando su pedido</p>' +
+        '<div class="cta-tiempo-fila"><span>Tiempo de preparación aprox.</span><b>' + rango + "</b></div>" +
+        (dias != null && ini != null && fin == null ? '<div class="cta-tiempo-fila"><span>Lleva en preparación</span><b>' + dias + (dias === 1 ? " día" : " días") + "</b></div>" : "") +
+        '<p class="cta-nota" style="margin:8px 0 0;font-size:12px;line-height:1.5">Cuando esté listo pasa a control de calidad y le enviamos las fotos para que lo revise.</p></div>';
+    }
+    var demoras = datos.map(function (d) { return d.demora; }).filter(Boolean);
+    if (demoras.length) {
+      var linea = dias != null && dias > 0
+        ? (ini != null && fin == null ? "Su producto lleva <b>" + dias + " " + (dias === 1 ? "día" : "días") + "</b> en preparación." : "La preparación de su producto tomó <b>" + dias + " " + (dias === 1 ? "día" : "días") + "</b>.")
+        : "Su producto requiere más tiempo de preparación que lo normal.";
+      var nota = demoras.map(function (d) { return d.nota; }).filter(Boolean)[0];
+      html += '<div class="cta-card cta-pad cta-demora">' +
+        '<p class="cta-demora-t">⏳ Este producto tarda más de lo normal</p>' +
+        '<p class="cta-nota" style="margin:6px 0 0;line-height:1.55">' + linea + " El tiempo en tránsito también puede demorar más de lo estimado." +
+        (nota ? " " + esc(nota.replace(/[.\s]+$/, "")) + "." : "") + " Le avisaremos por correo cualquier novedad.</p></div>";
+    }
+    return html;
+  }
+
+  // ── Fotos de producto centradas ─────────────────────────────────────────────────────────
+  // Muchas fotos traen el producto corrido (p. ej. Golden Goose abajo a un lado). Se mira la foto
+  // en un canvas chiquito, se ubica el producto (lo que no es color de fondo) y se centra en su
+  // cuadro con un margen; el cuadro toma el color de fondo de la foto. Se aplica solo a las fotos
+  // de .cta-foto y de la vitrina, también a las que se agregan después.
+  function encuadreFoto(img) {
+    var N = 64, W = img.naturalWidth, H = img.naturalHeight;
+    if (!W || !H) return null;
+    var k = N / Math.max(W, H), cw = Math.max(1, Math.round(W * k)), ch = Math.max(1, Math.round(H * k));
+    var cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+    var ctx = cv.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return null;
+    ctx.drawImage(img, 0, 0, cw, ch);
+    var px = ctx.getImageData(0, 0, cw, ch).data;
+    var esq = [0, (cw - 1) * 4, ((ch - 1) * cw) * 4, ((ch - 1) * cw + cw - 1) * 4];
+    var fr = 0, fg = 0, fb = 0; esq.forEach(function (i) { fr += px[i] / 4; fg += px[i + 1] / 4; fb += px[i + 2] / 4; });
+    var x0 = cw, y0 = ch, x1 = -1, y1 = -1;
+    for (var y = 0; y < ch; y++) for (var x = 0; x < cw; x++) {
+      var i = (y * cw + x) * 4;
+      if (px[i + 3] < 30) continue;
+      if (Math.abs(px[i] - fr) + Math.abs(px[i + 1] - fg) + Math.abs(px[i + 2] - fb) > 60) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (x1 < 0) return null;
+    var bw = (x1 - x0 + 1) / cw, bh = (y1 - y0 + 1) / ch;
+    if (bw > 0.92 && bh > 0.92) return null;
+    return { cx: (x0 + x1 + 1) / 2 / cw, cy: (y0 + y1 + 1) / 2 / ch, bw: bw, bh: bh, W: W, H: H, fondo: "rgb(" + Math.round(fr) + "," + Math.round(fg) + "," + Math.round(fb) + ")" };
+  }
+  function centrarFoto(img) {
+    if (img.dataset.centrada) return;
+    img.dataset.centrada = "1";
+    function aplicar() {
+      var e; try { e = encuadreFoto(img); } catch (er) { e = null; }
+      if (!e) return;
+      // Con object-fit:contain la foto ocupa el cuadro (B) con franjas; se calcula dónde quedó el
+      // producto y se escala/traslada para dejarlo al centro ocupando ~84% del cuadro.
+      var s0 = Math.min(1 / e.W, 1 / e.H), dw = e.W * s0, dh = e.H * s0, ox = (1 - dw) / 2, oy = (1 - dh) / 2;
+      var cx = ox + e.cx * dw, cy = oy + e.cy * dh, lado = Math.max(e.bw * dw, e.bh * dh);
+      var k = Math.min(2.6, 0.84 / lado);
+      var tx = -k * (cx - 0.5) * 100, ty = -k * (cy - 0.5) * 100;
+      img.style.transform = "translate(" + tx.toFixed(2) + "%," + ty.toFixed(2) + "%) scale(" + k.toFixed(3) + ")";
+      if (img.parentNode && img.parentNode.style) img.parentNode.style.background = e.fondo;
+    }
+    if (img.complete && img.naturalWidth) aplicar(); else img.addEventListener("load", aplicar, { once: true });
+  }
+  function centrarFotosEn(raiz) { (raiz.querySelectorAll ? raiz : document).querySelectorAll(".cta-foto img, .cta-vitrina-foto img").forEach(centrarFoto); }
+  try {
+    new MutationObserver(function (cambios) { cambios.forEach(function (c) { c.addedNodes.forEach(function (n) { if (n.nodeType === 1) { if (n.matches && n.matches(".cta-foto img, .cta-vitrina-foto img")) centrarFoto(n); else centrarFotosEn(n); } }); }); })
+      .observe(document.documentElement, { childList: true, subtree: true });
+  } catch (e) { /* navegador viejo: las fotos quedan completas (contain) */ }
+
   window.HauslineCuenta = {
+    avisoTiempos: avisoTiempos,
     autoActualizar: autoActualizar, visor: visor,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
