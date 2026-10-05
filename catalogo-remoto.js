@@ -30,6 +30,7 @@ async function cargarProductosDelPanel(){
   if(!Array.isArray(filas) || !filas.length) return;
 
   let agregados = 0;
+  const editados = {};
   filas.forEach(fila => {
     const datos = fila && fila.datos ? fila.datos : null;
     const codigo = (datos && datos.codigo) || (fila && fila.codigo);
@@ -53,7 +54,7 @@ async function cargarProductosDelPanel(){
       // Ya existe en productos.js: es una EDICIÓN hecha desde el panel.
       // Se reemplaza conservando su posición original (orden) en el catálogo.
       const i = productos.indexOf(existente);
-      if(i >= 0) productos[i] = normalizarProducto(datos, existente.orden);
+      if(i >= 0){ productos[i] = normalizarProducto(datos, existente.orden); editados[String(datos.codigo).toUpperCase()] = true; }
     } else {
       // Producto NUEVO (solo existe en el panel): se agrega al final.
       productos.push(normalizarProducto(datos, productos.length));
@@ -61,6 +62,14 @@ async function cargarProductosDelPanel(){
     agregados++;
   });
   if(!agregados) return;
+
+  // Si el cliente ya tenía ABIERTO un producto que cambió en el panel (p. ej. entró directo por
+  // /p/CODIGO/ y la página se abrió con el precio viejo de productos.js), se vuelve a pintar con
+  // los datos nuevos conservando su selección. Antes el pedido podía salir con el precio viejo.
+  try{
+    if(typeof productoActual !== "undefined" && productoActual && editados[String(productoActual.codigo).toUpperCase()]
+       && document.body.classList.contains("en-producto") && typeof repintarPrecios === "function") repintarPrecios();
+  }catch(e){}
 
   // El set de "Nuevo" se calcula una sola vez y queda cacheado; al agregar
   // productos hay que invalidarlo para que los del panel salgan en esa fila.
