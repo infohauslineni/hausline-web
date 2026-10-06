@@ -6409,6 +6409,8 @@ const productosPrivados = [];
 // Para activarla: activa: true. Para apagarla: activa: false.
 // Cuando pasa la fecha "hasta", se apaga sola y vuelven los
 // precios normales, sin que tengas que tocar nada.
+// "desde" (opcional): la promo se prende sola ese día y hora
+// (así se deja programada con anticipación).
 //
 // A quién se le aplica (usa UNA de estas tres):
 //   marca:     "Balenciaga"            -> toda esa marca
@@ -6420,6 +6422,14 @@ const productosPrivados = [];
 // ============================================================
 
 const PROMOCIONES = [
+  {
+    nombre: "Octubre Rosa",
+    descuento: 10,                        // 10% en todo lo de dama
+    categoria: "Dama",
+    desde: "2026-10-19T00:00:00-06:00",   // se prende sola (hora de Nicaragua)
+    hasta: "2026-10-25T23:59:59-06:00",   // y se apaga sola
+    activa: true
+  },
   {
     nombre: "Promoción de temporada",
     descuento: 15,                        // 15% de descuento
@@ -6464,6 +6474,7 @@ function ofertaDe(producto){
   // 2) Promoción general de la lista PROMOCIONES
   const promo = PROMOCIONES.find(p => {
     if(!p.activa || !fechaVigente(p.hasta)) return false;
+    if(p.desde && new Date() < new Date(p.desde)) return false; // todavía no empieza
     if(p.codigos)   return p.codigos.includes(producto.codigo);
     if(p.marca)     return producto.marca === p.marca;
     if(p.categoria) return producto.categoria === p.categoria;
