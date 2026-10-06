@@ -636,7 +636,7 @@
     if (EN_PREPARACION[p.estado_codigo]) {
       var preps = datos.map(function (d) { return d.prep; }).filter(Boolean);
       var prep = preps.length ? preps.reduce(function (a, b) { return { min: Math.max(a.min, b.min), max: Math.max(a.max, b.max) }; })
-        : (p.envio_rapido ? { min: 3, max: 4 } : { min: 4, max: 5 });
+        : { min: 4, max: 5 }; // la preparación es la misma en estándar y rápido
       var rango = prep.min === prep.max ? prep.min + (prep.min === 1 ? " día" : " días") : prep.min + " a " + prep.max + " días";
       html += '<div class="cta-card cta-pad cta-tiempo">' +
         '<p class="cta-tiempo-t">Estamos preparando su pedido</p>' +

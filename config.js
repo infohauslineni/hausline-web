@@ -43,9 +43,11 @@ function precioNIO(usd){
 // Para cambiar los días o el cargo, edita solo estos números.
 // "preparacion" = días aprox. que tarda el proveedor en preparar el pedido; el resto del
 // rango es tiempo de tránsito, que empieza a contar cuando el pedido sale en camino.
+// La preparación NO se puede acelerar: es la misma en estándar y en rápido (4 a 5 días, o la
+// del producto). El envío rápido solo acorta el TRÁNSITO.
 const HAUSLINE_ENVIO = {
   estandar: { id:"estandar", etiqueta:"Envío estándar", dias:"20 a 25 días", diasMin:20, diasMax:25, preparacion:"4 a 5 días", prepMin:4, prepMax:5, recargo:0 },
-  rapido:   { id:"rapido",   etiqueta:"Envío rápido",   dias:"15 a 20 días", diasMin:15, diasMax:20, preparacion:"3 a 4 días", prepMin:3, prepMax:4, recargo:15 }
+  rapido:   { id:"rapido",   etiqueta:"Envío rápido",   dias:"15 a 20 días", diasMin:15, diasMax:20, preparacion:"4 a 5 días", prepMin:4, prepMax:5, recargo:15 }
 };
 const HAUSLINE_ENVIO_DEFECTO = "estandar";
 
@@ -74,9 +76,9 @@ function demoraDe(producto){
 // ---------- PREPARACIÓN POR PRODUCTO ----------
 // Hay productos que el proveedor prepara más rápido (o más lento) que el tiempo general.
 // En el panel (admin.html) → "Preparación aprox." = datos.prepMin / prepMax, en días del
-// envío ESTÁNDAR. Sin dato, el producto usa el general (4 a 5 días). El rápido prepara
-// 1 día antes, igual que el general (4-5 → 3-4). La diferencia contra el general corre la
-// entrega estimada: 2 a 3 días de preparación → 18 a 23 días en estándar.
+// días. Sin dato, el producto usa el general (4 a 5 días). Es la misma con envío rápido
+// (la preparación no se acelera). La diferencia contra el general corre la entrega
+// estimada: 2 a 3 días de preparación → 18 a 23 días en estándar.
 function preparacionDe(producto){
   var a = Math.round(Number(producto && producto.prepMin) || 0);
   if(!(a > 0)) return null;
@@ -84,8 +86,7 @@ function preparacionDe(producto){
 }
 function textoPreparacion(metodo, prep){
   if(!prep) return metodo && metodo.preparacion ? metodo.preparacion : "";
-  var menos = Math.max(0, (HAUSLINE_ENVIO.estandar.prepMin || 0) - ((metodo && metodo.prepMin) || HAUSLINE_ENVIO.estandar.prepMin || 0));
-  var a = Math.max(1, prep.min - menos), b = Math.max(a, prep.max - menos);
+  var a = Math.max(1, prep.min), b = Math.max(a, prep.max);
   return a === b ? a + (a === 1 ? " día" : " días") : a + " a " + b + " días";
 }
 // Rango de días de entrega con el método elegido, corrido por la preparación propia del

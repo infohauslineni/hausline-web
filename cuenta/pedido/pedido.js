@@ -77,7 +77,7 @@
 
   // Misma aclaración que en la tienda (config.js → textoTiemposEnvio).
   function aclaracionTiempos(p) {
-    return "El tiempo de entrega incluye aprox. " + (p.envio_rapido ? "3 a 4" : "4 a 5") + " días de preparación (algunos productos tardan más); " +
+    return "El tiempo de entrega incluye aprox. 4 a 5 días de preparación, o lo que indique el producto (es igual en estándar y en rápido); " +
       "el resto es tránsito, que empieza a contar cuando su pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.";
   }
 

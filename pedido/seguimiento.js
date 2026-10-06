@@ -252,7 +252,7 @@
       '<div class="seg-fecha"><div><p class="cta-eyebrow" style="color:var(--texto)">' + (entregado ? "Entregado el" : "Entrega estimada") + "</p>" +
       '<b>' + esc(clave ? C.fecha(clave) : "Por confirmar") + "</b><span>" + esc(sub) + "</span></div>" +
       (dias != null && dias >= 0 && !entregado ? '<span class="seg-dias"><b>' + (dias === 0 ? "¡Hoy!" : dias) + "</b>" + (dias > 0 ? "<small>" + (dias === 1 ? "día" : "días") + "</small>" : "") + "</span>" : "") + "</div>" +
-      '<p class="cta-nota" style="font-size:11.5px;line-height:1.5;margin-top:10px">El tiempo de entrega incluye unos días de preparación (aprox. 4-5 en envío estándar y 3-4 en rápido; algunos productos tardan más) y el resto es tránsito, que empieza a contar cuando su pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.</p>' +
+      '<p class="cta-nota" style="font-size:11.5px;line-height:1.5;margin-top:10px">El tiempo de entrega incluye unos días de preparación (aprox. 4 a 5 días, o lo que indique el producto; es igual en estándar y en rápido) y el resto es tránsito, que empieza a contar cuando su pedido sale en camino. Las fechas son aproximadas, no exactas: muchas veces las paqueterías retrasan los envíos.</p>' +
       '<button type="button" class="cta-btn linea" id="compartir" style="margin-top:12px">Compartir seguimiento</button></div>';
   }
 

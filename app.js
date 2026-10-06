@@ -61,7 +61,7 @@ const POLITICAS = {
   entrega: [
     "Envío estándar: 20 a 25 días, sin costo adicional.",
     "Envío rápido: 15 a 20 días por $15 adicionales.",
-    "Los días incluyen la preparación (aprox. 4-5 días en estándar y 3-4 en rápido); el resto es tránsito, que cuenta desde que el pedido sale en camino. Las fechas son aproximadas: las paqueterías a veces retrasan los envíos.",
+    "Los días incluyen la preparación (aprox. 4 a 5 días, o lo que indique el producto; es igual en estándar y en rápido); el resto es tránsito, que cuenta desde que el pedido sale en camino. Las fechas son aproximadas: las paqueterías a veces retrasan los envíos.",
     "Los productos de entrega inmediata se entregan sin espera."
   ],
   garantia: [
