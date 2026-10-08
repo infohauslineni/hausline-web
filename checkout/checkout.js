@@ -31,7 +31,11 @@
   // Entrega estimada: todo se envía junto, así que manda el producto más lento (un producto
   // sin preparación propia ni demora cuenta con el tiempo general).
   function fechaCorta(iso){ try{ return new Date(iso+"T12:00:00").toLocaleDateString("es-NI",{day:"numeric",month:"short"}); }catch(e){ return iso; } }
+  // Pedido armado desde el link de pago de Entrega inmediata (se paga completo, entrega ya).
+  function inmediataPend(p){ return !!(p && p.opts && p.opts.inmediata); }
   function diasEnvio(flag, pend){
+    // Compra inmediata (link de pago del panel): ya está en Nicaragua.
+    if(inmediataPend(pend)) return "Entrega inmediata";
     // Apartado de un producto EN CAMINO: llega con la compra que ya viene.
     if(pend && pend.opts && pend.opts.enCamino){ var l=pend.opts.llegada; return l && l.desde ? (l.desde===l.hasta ? "Llega aprox. el "+fechaCorta(l.desde) : "Llega aprox. "+fechaCorta(l.desde)+" – "+fechaCorta(l.hasta)) : "Ya viene en camino"; }
     var m=ENVCFG[flag], its=itemsPend(pend);
@@ -196,7 +200,9 @@
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
     var juntos = unidades > 1 ? '<div class="sum-row" style="padding-top:8px;display:block;font-size:12.5px;line-height:1.5;color:var(--ink-2)">📦 Su pedido tiene '+unidades+' productos: se envían <b style="color:var(--ink)">todos juntos una vez que estén fabricados y revisados</b>.</div>' : '';
     var dias = o.envioDias ? '<div class="sum-row" style="padding-top:8px"><span>Entrega estimada</span><span class="v" style="font-family:var(--font)">'+esc(o.envioDias)+'</span></div>'
-      + (/^(Llega aprox|Ya viene en camino)/.test(o.envioDias)
+      + (o.envioDias === "Entrega inmediata"
+          ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">Este producto ya está en Nicaragua: se lo entregamos apenas confirmemos su pago.</div>'
+        : /^(Llega aprox|Ya viene en camino)/.test(o.envioDias)
           ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">Este producto ya fue comprado y viene en camino: se lo entregamos apenas llegue. Las fechas son aproximadas.</div>'
           : (typeof textoTiemposEnvio==="function" ? '<div class="sum-row" style="display:block;padding-top:4px;font-size:12px;line-height:1.5;color:var(--ink-2)">'+esc(textoTiemposEnvio(ENVCFG[o.envioFlag]||ENVCFG.estandar, o.prep||null))+'</div>' : '')) : '';
     // Aviso de demora extendida (producto de un proveedor que tarda más).
@@ -393,7 +399,11 @@
       +   '<div class="panel rv">'
       +     '<h2 class="panel-h">Forma de pago</h2>'
       +     '<p class="panel-sub">Pago por transferencia. En el siguiente paso ve las cuentas.</p>'
-      +     '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button><button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button></div>'
+      +     (inmediataPend(pend)
+              // Entrega inmediata: ya está en Nicaragua, se paga completo (no hay apartado del 50%).
+              ? '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pago completo</b><small>Entrega inmediata: ya está en Nicaragua</small></button></div>'
+              : '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button><button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button></div>')
+      +     ''
       +     '<div class="field"><label class="label">¿Tiene un código de descuento?</label><div data-cupon>'+cuponHTML()+'</div></div>'
       +   '</div>'
       +   '<div class="err" data-err hidden></div>'
@@ -926,6 +936,33 @@
     }catch(ex){ if(!silencioso){ falla("checkout_error", "No se pudo cargar el pedido: "+((ex&&ex.message)||"error"), {paso:"confirmacion"}); estado("No pudimos cargar su pedido", explicarError(ex, "cargar").texto); } }
   }
   function iniciarPolling(){ clearInterval(pollInt); pollInt=setInterval(function(){ if(document.hidden) return; cargarPago(true); },20000); }
+
+  // ---- Link de pago de ENTREGA INMEDIATA (lo manda el panel desde Compras libres) ----
+  // /checkout/?inmediata=021R&talla=M → arma el pedido con ese producto (precio de Entrega
+  // inmediata del catálogo, nunca el del link) y abre "Información" para que el cliente ponga
+  // sus datos, pague completo y suba el comprobante.
+  var _qs = new URLSearchParams(location.search);
+  if(_qs.get("inmediata")){
+    var _cod = String(_qs.get("inmediata")).trim().toUpperCase(), _talla = String(_qs.get("talla") || "").trim();
+    estado("Preparando su compra…", "Un momento, estamos cargando el producto.");
+    var CAT_URL = "https://xgdijumnmaqfirmckugw.supabase.co", CAT_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
+    fetch(CAT_URL + "/rest/v1/catalogo_web?select=codigo,datos&codigo=eq." + encodeURIComponent(_cod), { headers: { apikey: CAT_KEY, Authorization: "Bearer " + CAT_KEY } })
+      .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(filas){
+        var d = filas && filas[0] && filas[0].datos;
+        var precio = d ? Number(Number(d.precioEntregaInmediata) > 0 ? d.precioEntregaInmediata : d.precio) : 0;
+        if(!d || !(precio > 0)){ estado("Este producto ya no está disponible", "Escríbanos por WhatsApp y le ayudamos con su compra."); return; }
+        var img = (Array.isArray(d.imagenes) && d.imagenes[0]) || d.imagen || "";
+        sessionStorage.setItem("hausline_encargo", JSON.stringify({
+          tipo: "producto",
+          producto: { codigo: _cod, nombre: d.nombre || _cod, marca: d.marca || "", imagen: img, precio: precio, cotizar: false, demora: null, prep: null },
+          opts: { talla: _talla, color: "", cantidad: 1, envio: "estandar", precio: precio, inmediata: true }
+        }));
+        location.replace("/checkout/?paso=info");
+      })
+      .catch(function(){ estado("No pudimos cargar el producto", "Revise su conexión y vuelva a abrir el enlace, o escríbanos por WhatsApp."); });
+    return;
+  }
 
   // ---- Router ----
   var PASO=new URLSearchParams(location.search).get("paso");
