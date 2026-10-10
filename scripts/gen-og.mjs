@@ -183,6 +183,26 @@ const paginaProducto = (producto) => {
       availability: 'https://schema.org/InStock',
       url: canonica,
       seller: { '@type': 'Organization', name: 'HAUSLINE' },
+      // Google Merchant listings: política de devoluciones y envío (Search Console los pedía).
+      // Ventas por encargo = finales (terminos.html §6): no se aceptan devoluciones.
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'NI',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+      },
+      // Envío dentro de Nicaragua: el traslado internacional va incluido; la entrega local cuesta
+      // hasta US$ 8 (delivery en Managua; bus a departamentos es menos). Tiempos del envío estándar:
+      // 4-5 días de preparación + tránsito = 20 a 25 días (config.js HAUSLINE_ENVIO.estandar).
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', maxValue: '8.00', currency: 'USD' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'NI' },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: { '@type': 'QuantitativeValue', minValue: 4, maxValue: 5, unitCode: 'DAY' },
+          transitTime: { '@type': 'QuantitativeValue', minValue: 16, maxValue: 20, unitCode: 'DAY' },
+        },
+      },
     }
   }
   const resenas = resenasPorProducto.get(codigo.trim().toUpperCase()) || []
