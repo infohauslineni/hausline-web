@@ -32,7 +32,7 @@ const TITULOS_COLECCION = {
   "nuevos":            "Nuevo en HAUSLINE",
   "ofertas":           "Ofertas",
   "entrega-inmediata": "Entrega inmediata",
-  "en-camino": "En camino · Apártelo ya",
+  "en-camino": "Llega pronto · Apártelo ya",
   "favoritos":         "Sus favoritos",
   "vistos":            "Vistos recientemente",
   "marcas":            "Marcas"
@@ -192,7 +192,7 @@ function crearCard(producto, modoInmediata){
 
   let etiquetas = "";
   if(inmediata) etiquetas += `<span class="etiqueta inmediata">Entrega inmediata</span>`;
-  else if(enCaminoModo || (producto.enCamino && !producto.entregaInmediata)) etiquetas += `<span class="etiqueta encamino">En camino</span>`;
+  else if(enCaminoModo || (producto.enCamino && !producto.entregaInmediata)) etiquetas += `<span class="etiqueta encamino">Llega pronto</span>`;
   if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
   // Etiquetas opcionales que hayas activado en el producto
@@ -1556,7 +1556,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
 
   // Disponibilidad según el contexto
   $("#modalDisponibilidad").innerHTML = modoEnCaminoActual
-    ? `<div class="disponibilidad encargo">En camino · Apártelo ya</div>`
+    ? `<div class="disponibilidad encargo">Llega pronto · Apártelo ya</div>`
     : modoInmediataActual
     ? `<div class="disponibilidad inmediata">Entrega inmediata</div>`
     : `<div class="disponibilidad encargo">Disponible por encargo</div>`;
@@ -1596,7 +1596,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     $("#modalAvisoInmediata").innerHTML +=
       `<div class="aviso-encamino">
          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
-         <span><b>Viene en camino</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Apártelo ya con el 50% y se lo entregamos apenas llegue.</span>
+         <span><b>Llega pronto</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Ya viene en camino: apártelo ya con el 50% y se lo entregamos apenas llegue.</span>
        </div>`;
   }
 
