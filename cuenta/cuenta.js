@@ -615,7 +615,21 @@
         });
       } catch (e) { /* sin catálogo: se usan los tiempos generales */ }
     }
-    return codigos.map(function (c) { return tiemposCache[c]; }).filter(Boolean);
+    // Tiempo REAL de preparación (panel → Tiempos reales): por producto o por marca; gana sobre el admin.
+    var real = await prepReal();
+    return codigos.map(function (c) {
+      var d = tiemposCache[c];
+      var pr = typeof buscarProducto === "function" ? buscarProducto(c) : null;
+      var r = (real.productos || {})[c] || (pr && (real.marcas || {})[String(pr.marca || "").trim().toUpperCase()]);
+      var a = Math.round(Number(r && r.min) || 0);
+      if (a > 0) d = Object.assign({ demora: null }, d || {}, { prep: { min: a, max: Math.max(a, Math.round(Number(r.max) || 0)) } });
+      return d;
+    }).filter(Boolean);
+  }
+  var prepRealPromesa = null;
+  function prepReal() {
+    if (!prepRealPromesa) prepRealPromesa = (sb ? Promise.resolve(sb.rpc("preparacion_tienda")).then(function (r) { return (r && r.data) || {}; }) : Promise.resolve({})).catch(function () { return {}; });
+    return prepRealPromesa;
   }
   var EN_PREPARACION = { pedido_confirmado: 1, en_preparacion: 1, control_calidad: 1 };
   function esPrep(h) { return h.estado_codigo ? (h.estado_codigo === "en_preparacion" || h.estado_codigo === "control_calidad") : /prepar|calidad/i.test(String(h.estado || "")); }

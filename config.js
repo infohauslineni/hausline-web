@@ -79,7 +79,32 @@ function demoraDe(producto){
 // días. Sin dato, el producto usa el general (4 a 5 días). Es la misma con envío rápido
 // (la preparación no se acelera). La diferencia contra el general corre la entrega
 // estimada: 2 a 3 días de preparación → 18 a 23 días en estándar.
+// PREPARACIÓN REAL: el panel (Reportes → Tiempos reales → "Usar en la tienda") guarda cuánto tarda
+// de verdad cada marca o producto. Gana sobre la "Preparación aprox." del admin y sirve también para
+// los productos que no están en el admin. Se guarda en el teléfono para tenerla al instante.
+var HAUSLINE_PREP_REAL = (function(){ try{ return JSON.parse(localStorage.getItem("hausline_prep_real") || "null"); }catch(e){ return null; } })();
+function prepRealDe(producto){
+  var m = HAUSLINE_PREP_REAL;
+  if(!producto || !m) return null;
+  var r = (m.productos || {})[String(producto.codigo || "").trim().toUpperCase()] || (m.marcas || {})[String(producto.marca || "").trim().toUpperCase()];
+  var a = Math.round(Number(r && r.min) || 0);
+  return a > 0 ? { min: a, max: Math.max(a, Math.round(Number(r.max) || 0)) } : null;
+}
+function cargarPreparacionReal(){
+  if(typeof SUPABASE_URL !== "string" || !SUPABASE_URL) return;
+  fetch(SUPABASE_URL + "rpc/preparacion_tienda", { method:"POST", headers:{ "Content-Type":"application/json", apikey:SUPABASE_ANON_KEY, Authorization:"Bearer " + SUPABASE_ANON_KEY }, body:"{}" })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(v){
+      if(!v || typeof v !== "object") return;
+      HAUSLINE_PREP_REAL = v;
+      try{ localStorage.setItem("hausline_prep_real", JSON.stringify(v)); }catch(e){}
+      // Si ya hay un producto abierto, se repinta su fecha de entrega con el tiempo real.
+      try{ if(typeof actualizarEnvioUI === "function" && document.body.classList.contains("en-producto")) actualizarEnvioUI(); }catch(e){}
+    }).catch(function(){});
+}
 function preparacionDe(producto){
+  var real = prepRealDe(producto);
+  if(real) return real;
   var a = Math.round(Number(producto && producto.prepMin) || 0);
   if(!(a > 0)) return null;
   return { min: a, max: Math.max(a, Math.round(Number(producto.prepMax) || 0)) };
@@ -245,3 +270,6 @@ const HAUSLINE_TIKTOK    = "https://tiktok.com/@hausline.niof";
       }).catch(function(){});
   }catch(e){}
 })();
+
+// Tiempos reales de preparación (ver prepRealDe).
+cargarPreparacionReal();
