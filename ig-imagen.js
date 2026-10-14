@@ -81,7 +81,7 @@
   //   encamino  → viene en camino: se puede apartar ya con el 50%
   function textosModo(modo){
     if(modo === "inmediata") return { kicker: "ENTREGA INMEDIATA", titulo: "Disponible ya", sello: "LISTO PARA ENTREGAR", boton: "PEDILO EN ", subStory: "Ya en Nicaragua, sin esperar el encargo · ", piePost: "Ya en Nicaragua · pedilo en " + SITIO };
-    if(modo === "encamino") return { kicker: "EN CAMINO", titulo: "Apártelo ya", sello: "LLEGA PRONTO", boton: "APÁRTELO EN ", subStory: "Resérvelo con el 50% · ", piePost: "Llega pronto · apártelo con el 50% en " + SITIO };
+    if(modo === "encamino") return { kicker: "LLEGA PRONTO", titulo: "Apártelo ya", sello: "APARTE CON EL 50%", boton: "APÁRTELO EN ", subStory: "Resérvelo con el 50% · ", piePost: "Llega pronto · apártelo con el 50% en " + SITIO };
     return { kicker: "NUEVO INGRESO", titulo: "Nuevo en HAUSLINE", sello: "", boton: "ENCÁRGUELO EN ", subStory: "Envíos a toda Nicaragua · ", piePost: "Encárguelo en " + SITIO + " · Envíos a toda Nicaragua" };
   }
   function tallasModo(p, modo){
@@ -169,14 +169,14 @@
   function textoPost(p, modo){
     if(modo === "encamino"){
       var tc = tallasModo(p, modo).tallas;
-      return "🚚 En camino a HAUSLINE · ¡Apártelo ya!\n\n"
+      return "🚚 Llega pronto a HAUSLINE · ¡Apártelo ya!\n\n"
         + (p.nombre || "") + "\n"
         + "💵 " + precioTexto(p) + "\n"
         + (tc.length ? "📏 " + (tc.length === 1 ? "Talla: " : "Tallas: ") + tc.join(" · ") + "\n" : "")
         + "⏳ Ya viene en camino: resérvelo hoy con el 50% y se lo entregamos apenas llegue\n\n"
         + "🛒 Apártelo en " + SITIO + "/p/" + encodeURIComponent(p.codigo || "") + "/\n"
         + "📲 WhatsApp " + WHATSAPP + "\n\n"
-        + "#hausline #encamino #preventa #nicaragua #managua #sneakers #streetwear";
+        + "#hausline #llegapronto #preventa #nicaragua #managua #sneakers #streetwear";
     }
     if(modo === "inmediata"){
       var ei = listaEI(p), cant = Number(p.cantidadDisponible) || 0;
@@ -246,7 +246,7 @@
       + (fotos.length > 1 ? '<div class="hlig-fotos"><small>Foto para el post y la story · tocá para cambiarla</small><div class="hlig-tira">'
         + fotos.map(function(u, i){ return '<button class="hlig-ft' + (i ? '' : ' on') + '" type="button" data-f="' + i + '" aria-label="Usar foto ' + (i + 1) + '"><img src="' + esc(u) + '" alt="" loading="lazy"></button>'; }).join("")
         + '</div></div>' : '')
-      + (conEI || conEC || modo !== "nuevo" ? '<div class="hlig-modos">' + (conEC || modo === "encamino" ? '<button class="hlig-modo" type="button" data-m="encamino">🚚 En camino</button>' : '') + (conEI || modo === "inmediata" ? '<button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button>' : '') + '<button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
+      + (conEI || conEC || modo !== "nuevo" ? '<div class="hlig-modos">' + (conEC || modo === "encamino" ? '<button class="hlig-modo" type="button" data-m="encamino">🚚 Llega pronto</button>' : '') + (conEI || modo === "inmediata" ? '<button class="hlig-modo" type="button" data-m="inmediata">⚡ Entrega inmediata</button>' : '') + '<button class="hlig-modo" type="button" data-m="nuevo">✨ Nuevo ingreso</button></div>' : '')
       + '<div class="hlig-grid"><div class="hlig-col"><small>Post · 4:5</small><canvas data-c="post"></canvas><button class="hlig-btn" type="button" data-d="post">⬇ Descargar post</button></div>'
       + '<div class="hlig-col"><small>Story · 9:16</small><canvas data-c="story" style="max-height:560px;object-fit:contain"></canvas><button class="hlig-btn" type="button" data-d="story">⬇ Descargar story</button></div></div>'
       + '<textarea class="hlig-txt" data-t aria-label="Texto de la publicación"></textarea>'
