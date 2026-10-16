@@ -6423,6 +6423,14 @@ const productosPrivados = [];
 
 const PROMOCIONES = [
   {
+    nombre: "Terapia de compras",
+    descuento: 10,                        // 10% en los más vendidos (post de IG)
+    codigos: ["GG007", "GG018", "GGW011", "CL0003", "D&C019", "016R"],
+    desde: "2026-10-15T00:00:00-06:00",
+    hasta: "2026-10-22T23:59:59-06:00",   // se apaga sola
+    activa: true
+  },
+  {
     nombre: "Octubre Rosa",
     descuento: 10,                        // 10% en todo lo de dama
     categoria: "Dama",
