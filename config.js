@@ -91,7 +91,7 @@ function prepRealDe(producto){
   return a > 0 ? { min: a, max: Math.max(a, Math.round(Number(r.max) || 0)) } : null;
 }
 function cargarPreparacionReal(){
-  if(typeof SUPABASE_URL !== "string" || !SUPABASE_URL) return;
+  if(typeof SUPABASE_URL !== "string" || !SUPABASE_URL || typeof fetch !== "function") return;
   fetch(SUPABASE_URL + "rpc/preparacion_tienda", { method:"POST", headers:{ "Content-Type":"application/json", apikey:SUPABASE_ANON_KEY, Authorization:"Bearer " + SUPABASE_ANON_KEY }, body:"{}" })
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(v){
