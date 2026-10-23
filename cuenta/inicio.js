@@ -89,9 +89,10 @@
       lista = lista.slice(0, 16);
       if (lista.length < 4) return vitrinaHtml;
       var tarjeta = function (d) {
-        var tag = d.enCamino ? "Llega pronto" : d.entregaInmediata ? "Inmediata" : "Nuevo";
+        var tag = d.enCamino ? "Llega pronto" : d.entregaInmediata ? "Entrega inmediata" : "Nuevo";
+        var tono = d.enCamino ? " es-pronto" : d.entregaInmediata ? " es-inmediata" : "";
         var precio = d.entregaInmediata && Number(d.precioEntregaInmediata) > 0 ? d.precioEntregaInmediata : (Number(d.precioOferta) > 0 ? d.precioOferta : d.precio);
-        return '<a class="cta-vitrina-item" href="/p/' + encodeURIComponent(d._codigo) + '/"><span class="cta-vitrina-foto" style="position:relative"><span class="cta-vitrina-tag">' + tag + '</span>' +
+        return '<a class="cta-vitrina-item" href="/p/' + encodeURIComponent(d._codigo) + '/"><span class="cta-vitrina-foto"><span class="cta-vitrina-tag' + tono + '">' + tag + '</span>' +
           '<img src="' + esc(miniatura(d.imagen)) + '" data-orig="' + esc(C.img(d.imagen)) + '" alt="" loading="lazy" decoding="async"></span>' +
           "<small>" + esc(d.marca || "HAUSLINE") + "</small><span>" + esc(d.nombre) + "</span><b>" + monto(precio) + "</b></a>";
       };

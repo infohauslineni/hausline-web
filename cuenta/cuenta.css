@@ -308,12 +308,15 @@ body.con-nav .cta-page{ padding-bottom:110px; }
 .cta-vitrina-viewport:hover .cta-vitrina-pista, .cta-vitrina-viewport:active .cta-vitrina-pista{ animation-play-state:paused; }
 @keyframes cta-vitrina{ to{ transform:translateX(-50%); } }
 .cta-vitrina-item{ flex:none; width:138px; text-decoration:none; color:inherit; }
-.cta-vitrina-foto{ display:block; width:138px; height:138px; border-radius:14px; overflow:hidden; background:#f4f2ee; border:1px solid var(--borde); }
+.cta-vitrina-foto{ position:relative; display:block; width:138px; height:138px; border-radius:14px; overflow:hidden; background:#f4f2ee; border:1px solid var(--borde); }
 .cta-vitrina-foto img{ width:100%; height:100%; object-fit:contain; }
 .cta-vitrina-item small{ display:block; margin-top:7px; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--texto-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.cta-vitrina-item span{ display:block; margin-top:2px; font-size:12.5px; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cta-vitrina-item > span:not(.cta-vitrina-foto){ display:block; margin-top:2px; font-size:12.5px; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cta-vitrina-item b{ display:block; margin-top:3px; font-size:13px; font-weight:600; }
-.cta-vitrina-tag{ position:absolute; margin:8px; padding:3px 7px; border-radius:99px; background:#171310; color:#fff; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+/* Etiqueta sobre la foto (Inmediata / Llega pronto / Nuevo): siempre arriba a la izquierda y encima de la foto. */
+.cta-vitrina-foto .cta-vitrina-tag{ position:absolute; top:8px; left:8px; z-index:2; display:inline-block; max-width:calc(100% - 16px); margin:0; padding:3px 8px; border-radius:99px; background:#171310; color:#fff; font-size:9px; line-height:1.4; font-weight:700; letter-spacing:.06em; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-shadow:0 1px 3px rgba(0,0,0,.18); }
+.cta-vitrina-foto .cta-vitrina-tag.es-inmediata{ background:#15803d; }
+.cta-vitrina-foto .cta-vitrina-tag.es-pronto{ background:#b45309; }
 @media (prefers-reduced-motion: reduce){ .cta-vitrina-pista{ animation:none; } .cta-vitrina-viewport{ overflow-x:auto; } }
 
 /* Cupón vigente en Mi cuenta */
