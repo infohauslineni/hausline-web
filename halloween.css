@@ -56,8 +56,8 @@
   .hw-strip .hw-corto{ display:inline; }
   .hw-strip a{ padding:4px 10px; font-size:10px; white-space:nowrap; }
   .hw-tela{ width:80px; }
-  .hw-arana{ right:26px; }
-  .hw-murcielagos{ width:230px; top:-4px; }
+  .hw-arana{ right:6px; height:60px; }
+  .hw-murcielagos{ width:230px; top:6px; }
 }
 @media (prefers-reduced-motion:reduce){
   .hw-arana,.hw-murcielagos .bat{ animation:none !important; }
