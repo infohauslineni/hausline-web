@@ -1,0 +1,64 @@
+/* ============================================================
+   TEMA HALLOWEEN (temporada). Solo aplica con <html class="hl-halloween">,
+   que pone halloween.js entre el 25 y el 31 de octubre. Fuera de esas
+   fechas este archivo no cambia nada.
+   ============================================================ */
+:root{ --hw-naranja:#E8650F; --hw-naranja-2:#FF8A1F; --hw-noche:#14100D; }
+
+/* Franja de anuncio arriba del header */
+.hw-strip{ display:none; }
+.hl-halloween .hw-strip{
+  display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;
+  background:var(--hw-noche); color:#FBE3CC; text-align:center;
+  padding:9px 16px; font-size:12.5px; font-weight:600; letter-spacing:.06em;
+}
+.hw-strip .hw-corto{ display:none; }
+.hw-strip b{ color:var(--hw-naranja-2); letter-spacing:.12em; }
+.hw-strip a{
+  display:inline-flex; align-items:center; border-radius:999px; padding:5px 12px;
+  background:var(--hw-naranja); color:var(--hw-noche); font-weight:700; font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; text-decoration:none;
+}
+.hw-strip a:hover{ background:var(--hw-naranja-2); }
+
+/* Banda de mensajes: noche con letras naranja */
+.hl-halloween .banda{ background:linear-gradient(90deg,var(--hw-noche),#2a1a0f 50%,var(--hw-noche)); color:var(--hw-naranja-2); }
+.hl-halloween .banda-item::after{ background:var(--hw-naranja); opacity:1; }
+
+/* Portada: telaraña, araña colgando y murciélagos */
+.hl-halloween .hl-hero{ position:relative; }
+.hw-deco{ display:none; }
+.hl-halloween .hw-deco{ display:block; position:absolute; pointer-events:none; color:var(--hw-noche); }
+.hl-halloween .hl-hero-eyebrow{ color:var(--hw-naranja); }
+.hw-tela{ top:0; left:0; width:clamp(90px,16vw,190px); opacity:.55; }
+.hw-tela.der{ left:auto; right:0; transform:scaleX(-1); }
+.hw-arana{ top:0; right:clamp(40px,14vw,220px); width:28px; height:clamp(70px,11vw,130px); animation:hw-baja 4.5s ease-in-out infinite; transform-origin:top center; }
+.hw-murcielagos{ top:clamp(-6px,0vw,6px); left:50%; width:clamp(240px,46vw,620px); transform:translateX(-50%); }
+.hw-murcielagos .bat{ animation:hw-vuela 3.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+.hw-murcielagos g:nth-child(2) .bat{ animation-delay:.6s; }
+.hw-murcielagos g:nth-child(3) .bat{ animation-delay:1.2s; }
+.hl-halloween .hl-hero-titulo{ position:relative; z-index:1; }
+
+@keyframes hw-baja{ 0%,100%{ transform:translateY(-8px); } 50%{ transform:translateY(6px); } }
+@keyframes hw-vuela{ 0%,100%{ transform:translateY(0) scaleY(1); } 50%{ transform:translateY(-7px) scaleY(.82); } }
+
+/* Etiqueta de la temporada en las tarjetas con descuento */
+.hl-halloween .etiqueta.oferta,
+.hl-halloween .etiqueta.descuento{ background:var(--hw-naranja) !important; color:var(--hw-noche) !important; }
+
+/* Botón principal de la tienda con un toque naranja al pasar el mouse */
+.hl-halloween .btn-principal:hover,
+.hl-halloween .btn-comprar:hover{ box-shadow:0 0 0 3px rgba(232,101,15,.35); }
+
+@media (max-width:600px){
+  .hl-halloween .hw-strip{ gap:8px; padding:8px 12px; font-size:11.5px; letter-spacing:.03em; flex-wrap:nowrap; }
+  .hw-strip .hw-largo{ display:none; }
+  .hw-strip .hw-corto{ display:inline; }
+  .hw-strip a{ padding:4px 10px; font-size:10px; white-space:nowrap; }
+  .hw-tela{ width:80px; }
+  .hw-arana{ right:26px; }
+  .hw-murcielagos{ width:230px; top:-4px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .hw-arana,.hw-murcielagos .bat{ animation:none !important; }
+}
