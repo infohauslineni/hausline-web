@@ -1,8 +1,8 @@
 // TEMA HALLOWEEN: se prende solo del 25 al 31 de octubre de 2026 (hora de Nicaragua) y se apaga
 // solo el 1 de noviembre. Para verlo antes o después: ?halloween=1. Para apagarlo: ACTIVO = false.
 // Agrega la clase hl-halloween (estilos en halloween.css), la franja del cupón, mensajes en la
-// banda y la decoración de la portada. No toca precios: el descuento es el cupón HALLOWEEN10
-// (30 y 31 de octubre), que ya valida la tienda.
+// banda y la decoración de la portada. No toca precios: el descuento es un cupón que ya valida la
+// tienda: TRATO10 (27 al 31 de octubre) hasta el 29 y HALLOWEEN10 el 30 y 31.
 (function(){
   "use strict";
   var ACTIVO = true;
@@ -20,8 +20,8 @@
   try{
     if(typeof mensajesBanda !== "undefined" && Array.isArray(mensajesBanda)){
       mensajesBanda.unshift(
-        enSale ? "🎃 Halloween Sale · 10 % en todo con HALLOWEEN10" : "🎃 Halloween Sale · 30 y 31 de octubre",
-        "Comente TRATO en nuestro Instagram y le enviamos un cupón",
+        enSale ? "🎃 Halloween Sale · 10 % en todo con HALLOWEEN10" : "🎃 Truco o trato · 10 % en todo con TRATO10",
+        enSale ? "Solo hoy y mañana · 30 y 31 de octubre" : "Halloween Sale · 30 y 31 de octubre",
         "🦇 Edición Halloween HAUSLINE"
       );
     }
@@ -34,7 +34,7 @@
     div.setAttribute("role", "note");
     div.innerHTML = enSale
       ? "🎃 <span class=\"hw-largo\">" + (ultimoDia ? "<b>ÚLTIMO DÍA</b> · " : "") + "Halloween Sale: <b>10 % en toda la tienda</b> con el código <b>HALLOWEEN10</b></span><span class=\"hw-corto\">" + (ultimoDia ? "<b>ÚLTIMO DÍA</b> · " : "") + "<b>10 % en todo</b> · HALLOWEEN10</span> <a href=\"/?cupon=HALLOWEEN10\">Usar cupón</a>"
-      : "🎃 <span class=\"hw-largo\">Se viene el <b>Halloween Sale</b>: 30 y 31 de octubre, <b>10 % en toda la tienda</b></span><span class=\"hw-corto\"><b>Halloween Sale</b> · 30 y 31 de octubre</span>";
+      : "🎃 <span class=\"hw-largo\">Truco o trato: <b>10 % en toda la tienda</b> con el código <b>TRATO10</b> · hasta el 31 de octubre</span><span class=\"hw-corto\"><b>10 % en todo</b> · TRATO10</span> <a href=\"/?cupon=TRATO10\">Usar cupón</a>";
     document.body.insertBefore(div, document.body.firstChild);
   }
 
