@@ -11,6 +11,7 @@
   var ahora = new Date();
   var forzado = /[?&]halloween=1\b/.test(location.search);
   if(!ACTIVO || (!forzado && (ahora < DESDE || ahora >= HASTA))) return;
+  if(/[?&]navidad=/.test(location.search)) return; // vista previa de Navidad
 
   document.documentElement.classList.add("hl-halloween");
   var enSale = ahora >= SALE_DESDE || /[?&]halloween=sale\b/.test(location.search);

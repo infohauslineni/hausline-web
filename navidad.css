@@ -1,0 +1,45 @@
+/* ============================================================
+   TEMA NAVIDAD (temporada). Solo aplica con <html class="hl-navidad">,
+   que pone navidad.js del 1 de noviembre al 24 de diciembre.
+   ============================================================ */
+:root{ --nv-verde:#1F4D3A; --nv-verde-2:#2B6A50; --nv-oro:#C9A24A; --nv-crema:#F7F1E3; }
+
+/* Franja con la cuenta regresiva, arriba del header */
+.nv-strip{ display:none; }
+.hl-navidad .nv-strip{
+  display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;
+  background:var(--nv-verde); color:var(--nv-crema); text-align:center;
+  padding:9px 16px; font-size:12.5px; font-weight:500; letter-spacing:.04em;
+}
+.nv-strip b{ color:#F2D58A; font-weight:700; }
+.nv-strip .nv-corto{ display:none; }
+.nv-strip a{
+  display:inline-flex; align-items:center; border-radius:999px; padding:5px 12px;
+  background:var(--nv-oro); color:#1B140C; font-weight:700; font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; text-decoration:none;
+}
+
+/* Portada: nieve suave y ceja dorada */
+.hl-navidad .hl-hero{ position:relative; overflow:hidden; }
+.hl-navidad .hl-hero-eyebrow{ color:#9C7A2C; }
+.hl-navidad .hl-hero-titulo,.hl-navidad .hl-hero-marcas{ position:relative; z-index:1; }
+.nv-nieve{ display:none; }
+.hl-navidad .nv-nieve{ display:block; position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.nv-nieve i{ position:absolute; top:-24px; color:#C9C2B6; font-style:normal; opacity:.75; animation:nv-cae linear infinite; }
+@keyframes nv-cae{ 0%{ transform:translateY(0) rotate(0deg); } 100%{ transform:translateY(420px) rotate(160deg); opacity:0; } }
+
+/* Aviso de la fecha límite dentro del producto */
+.nv-nota{
+  display:flex; align-items:flex-start; gap:10px; margin-top:12px; padding:11px 13px;
+  border-radius:12px; background:#F1F6F2; border:1px solid #CFE0D6; color:var(--nv-verde);
+  font-size:13px; line-height:1.45;
+}
+.nv-nota b{ font-weight:700; }
+
+@media (max-width:600px){
+  .hl-navidad .nv-strip{ gap:8px; padding:8px 12px; font-size:11.5px; flex-wrap:nowrap; }
+  .nv-strip .nv-largo{ display:none; }
+  .nv-strip .nv-corto{ display:inline; }
+  .nv-strip a{ padding:4px 10px; font-size:10px; white-space:nowrap; }
+}
+@media (prefers-reduced-motion:reduce){ .nv-nieve{ display:none !important; } }
