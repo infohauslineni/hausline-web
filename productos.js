@@ -6507,11 +6507,21 @@ function ofertaVigente(producto){
 // El precio depende del contexto:
 // - modoInmediata = true  -> se está viendo desde "Entrega inmediata"
 // - modoInmediata = false -> se está viendo desde el catálogo normal (encargo)
-function precioVigente(producto, modoInmediata){
-  if(modoInmediata && producto.entregaInmediata && producto.precioEntregaInmediata){
+// Precio SIN descuento según el contexto (el de Entrega inmediata si tiene uno especial).
+function precioBase(producto, modoInmediata){
+  if(modoInmediata && producto.entregaInmediata && Number(producto.precioEntregaInmediata) > 0){
     return Number(producto.precioEntregaInmediata);
   }
+  return Number(producto.precio);
+}
+// Las promociones de la web también aplican en Entrega inmediata: al precio especial de
+// Entrega inmediata se le resta el mismo porcentaje de la promo.
+function precioVigente(producto, modoInmediata){
   const oferta = ofertaDe(producto);
+  if(modoInmediata && producto.entregaInmediata && Number(producto.precioEntregaInmediata) > 0){
+    const base = Number(producto.precioEntregaInmediata);
+    return oferta && Number(oferta.descuento) > 0 ? Math.round(base * (1 - Number(oferta.descuento) / 100)) : base;
+  }
   if(oferta) return oferta.precio;
   return Number(producto.precio);
 }

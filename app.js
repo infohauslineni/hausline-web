@@ -205,7 +205,7 @@ function crearCard(producto, modoInmediata){
     ? `<span class="precio-consultar">Cotiza el precio</span>`
     : oferta
     ? `<span class="precio-actual">${formatoPrecio(precio)}</span>
-       <span class="precio-antes">${formatoPrecio(producto.precio)}</span>`
+       <span class="precio-antes">${formatoPrecio(precioBase(producto, inmediata))}</span>`
     : `<span class="precio-actual">${formatoPrecio(precio)}</span>`;
 
   // Solo en el apartado de entrega inmediata se listan las tallas en stock.
@@ -919,7 +919,7 @@ function pintarPrecioModal(producto, enOferta){
   const total = precio + recargo;
   el.innerHTML = enOferta
     ? `<span class="actual">${formatoPrecio(total)}</span>
-       <span class="antes">${formatoPrecio(producto.precio + recargo)}</span>
+       <span class="antes">${formatoPrecio(precioBase(producto, modoInmediataActual) + recargo)}</span>
        <span class="desc">-${porcentajeDescuento(producto)}%</span>`
     : `<span class="actual">${formatoPrecio(total)}</span>`;
 }
@@ -979,7 +979,7 @@ function actualizarEnvioUI(){
   if(productoActual && !necesitaCotizar(productoActual)){
     const precio = precioVigente(productoActual, false);
     const base = precio + (metodo ? (metodo.recargo || 0) : 0);
-    pintarPrecioModal(productoActual, !!ofertaVigente(productoActual) && !modoInmediataActual);
+    pintarPrecioModal(productoActual, !!ofertaVigente(productoActual));
     const abono = $("#modalAbono");
     if(abono) abono.innerHTML = `Abono para confirmar: <strong>${formatoPrecio(Math.round(base * 0.5))}</strong> (50%)`;
   }
@@ -1525,7 +1525,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
 
   // Si hay promoción se muestra el precio anterior tachado y el descuento.
   // Al vencer la fecha vuelve solo al precio normal.
-  const enOferta = oferta && !modoInmediataActual;
+  const enOferta = oferta;
   pintarPrecioModal(producto, enOferta);
 
   const promo = enOferta ? nombrePromocion(producto) : "";

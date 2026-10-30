@@ -948,9 +948,22 @@
     var CAT_URL = "https://xgdijumnmaqfirmckugw.supabase.co", CAT_KEY = "sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw";
     fetch(CAT_URL + "/rest/v1/catalogo_web?select=codigo,datos&codigo=eq." + encodeURIComponent(_cod), { headers: { apikey: CAT_KEY, Authorization: "Bearer " + CAT_KEY } })
       .then(function(r){ return r.ok ? r.json() : []; })
+      .then(function(filas){ return new Promise(function(listo){
+        // Las promociones de la web (productos.js) también aplican en Entrega inmediata.
+        if(typeof ofertaDe === "function") return listo(filas);
+        var sc = document.createElement("script"); sc.src = "../productos.js?v=20261029a";
+        sc.onload = sc.onerror = function(){ listo(filas); }; document.head.appendChild(sc);
+      }); })
       .then(function(filas){
         var d = filas && filas[0] && filas[0].datos;
         var precio = d ? Number(Number(d.precioEntregaInmediata) > 0 ? d.precioEntregaInmediata : d.precio) : 0;
+        try{
+          if(d && precio > 0 && typeof ofertaDe === "function"){
+            var base = typeof buscarProducto === "function" ? buscarProducto(_cod) : null;
+            var o = ofertaDe(Object.assign({}, base || {}, d, { codigo: _cod, precio: Number(d.precio) || (base && base.precio) || precio }));
+            if(o && Number(o.descuento) > 0) precio = Math.round(precio * (1 - Number(o.descuento) / 100));
+          }
+        }catch(e){}
         if(!d || !(precio > 0)){ estado("Este producto ya no está disponible", "Escríbanos por WhatsApp y le ayudamos con su compra."); return; }
         var img = (Array.isArray(d.imagenes) && d.imagenes[0]) || d.imagen || "";
         sessionStorage.setItem("hausline_encargo", JSON.stringify({
