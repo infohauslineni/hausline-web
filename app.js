@@ -1041,6 +1041,8 @@ function renderInicio(){
   pintarFila("#filaNuevos", productosNuevos(12));
 
   renderHeroMarcas();
+  // Vitrina animada de marcas (arriba) y "Compre por marca" (vitrina.js).
+  if(typeof renderVitrinaMarcas === "function") renderVitrinaMarcas();
   renderMarcas(10);
   renderLookbook();
   renderClientes();
@@ -2360,8 +2362,9 @@ document.addEventListener("click", e => {
     if(valor === "marcas"){
       irInicio();
       marcarNav("coleccion", "marcas");
-      const hm = $("#heroMarcas");
-      if(hm) hm.scrollIntoView({ behavior:"smooth", block:"center" });
+      const cm = $("#comprarMarca");
+      const hm = cm && !cm.hidden ? cm : $("#heroMarcas");
+      if(hm) hm.scrollIntoView({ behavior:"smooth", block:cm && !cm.hidden ? "start" : "center" });
       cerrarMenu();
       return;
     }

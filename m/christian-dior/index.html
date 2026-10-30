@@ -104,6 +104,7 @@
   </script>
 
   <link rel="stylesheet" href="styles.css?v=20261029b">
+  <link rel="stylesheet" href="vitrina.css?v=20261030a">
 <link rel="stylesheet" href="halloween.css?v=20261028b">
 <link rel="stylesheet" href="navidad.css?v=20261028a">
 
@@ -121,7 +122,8 @@
   <script defer src="favoritos.js?v=20261004c"></script>
   <script defer src="carrito.js?v=20261003u"></script>
   <script defer src="supabase-views.js?v=20260929"></script>
-  <script defer src="app.js?v=20261029a"></script>
+  <script defer src="app.js?v=20261030a"></script>
+  <script defer src="vitrina.js?v=20261030a"></script>
   <script defer src="busqueda-ux.js?v=20260927"></script>
   <script defer src="encargo.js?v=20261005a"></script>
   <script defer src="catalogo-remoto.js?v=20261005b"></script>
@@ -294,6 +296,15 @@
         </button>
       </div>
       <div class="fila" id="filaNuevos"></div>
+    </section>
+
+    <!-- Compre por marca: botones con las marcas y sus productos (vitrina.js) -->
+    <section class="seccion" id="comprarMarca" aria-labelledby="tit-comprar-marca" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-comprar-marca">Compre por marca</h2>
+      </div>
+      <div class="cm-chips" role="group" aria-label="Elegir marca"></div>
+      <div class="cm-zona"><div class="cm-lado"></div><div class="cm-grid"></div></div>
     </section>
 
     <!-- Sneakers en tendencia -->
