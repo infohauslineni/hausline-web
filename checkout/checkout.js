@@ -951,7 +951,7 @@
       .then(function(filas){ return new Promise(function(listo){
         // Las promociones de la web (productos.js) también aplican en Entrega inmediata.
         if(typeof ofertaDe === "function") return listo(filas);
-        var sc = document.createElement("script"); sc.src = "../productos.js?v=20261029a";
+        var sc = document.createElement("script"); sc.src = "../productos.js?v=20261029c";
         sc.onload = sc.onerror = function(){ listo(filas); }; document.head.appendChild(sc);
       }); })
       .then(function(filas){

@@ -6334,6 +6334,24 @@ function tallasEIsinEnCamino(producto){
   return quedan;
 }
 
+// Tallas en orden: números de menor a mayor (35, 36.5, 40…), luego letras (XXS … XXXL), y el
+// resto (p. ej. "Única") al final, en el orden en que venían.
+const ORDEN_LETRAS = ["XXXS","XXS","XS","S","M","L","XL","XXL","XXXL","XXXXL","2XL","3XL","4XL"];
+function ordenarTallas(lista){
+  if(!Array.isArray(lista)) return [];
+  const clave = (t) => {
+    const s = String(t).trim().toUpperCase();
+    const n = parseFloat(s.replace(",", "."));
+    if(/^\d/.test(s) && !isNaN(n)) return [0, n];
+    const i = ORDEN_LETRAS.indexOf(s);
+    if(i >= 0) return [1, i];
+    return [2, 0];
+  };
+  return lista.map((t, i) => ({ t, i, k: clave(t) }))
+    .sort((a, b) => a.k[0] - b.k[0] || a.k[1] - b.k[1] || a.i - b.i)
+    .map(x => x.t);
+}
+
 function normalizarProducto(producto, indice){
   const imagenes = (producto.imagenes && producto.imagenes.filter(Boolean).length)
     ? [...new Set(producto.imagenes.filter(Boolean))]
@@ -6343,6 +6361,7 @@ function normalizarProducto(producto, indice){
 
   return {
     ...producto,
+    tallas: ordenarTallas(producto.tallas),
     // Orden en que se agregó al catálogo. El último agregado es el más nuevo,
     // así la sección "Nuevo en HAUSLINE" se actualiza sola.
     orden: indice,
@@ -6366,11 +6385,11 @@ function normalizarProducto(producto, indice){
     // Una talla que viene EN CAMINO todavía no está en Nicaragua: no cuenta como Entrega
     // inmediata (sale solo en "En camino"). Si no queda ninguna talla, deja de ser inmediata.
     entregaInmediata: (producto.entregaInmediata || false) && !(producto.enCamino === true && (producto.tallasEntregaInmediata || []).length && !tallasEIsinEnCamino(producto).length),
-    tallasEntregaInmediata: producto.enCamino === true ? tallasEIsinEnCamino(producto) : (producto.tallasEntregaInmediata || []),
+    tallasEntregaInmediata: ordenarTallas(producto.enCamino === true ? tallasEIsinEnCamino(producto) : (producto.tallasEntregaInmediata || [])),
     // "En camino · Apartalo ya": compras que vienen en camino (Compras libres del panel). Se
     // encargan normal (50%); llegan antes que un encargo nuevo.
     enCamino: producto.enCamino === true,
-    tallasEnCamino: Array.isArray(producto.tallasEnCamino) ? producto.tallasEnCamino : [],
+    tallasEnCamino: ordenarTallas(Array.isArray(producto.tallasEnCamino) ? producto.tallasEnCamino : []),
     coloresEntregaInmediata: producto.coloresEntregaInmediata || [],
     cantidadDisponible: producto.cantidadDisponible !== undefined ? producto.cantidadDisponible : null,
     precioEntregaInmediata: producto.precioEntregaInmediata !== undefined ? producto.precioEntregaInmediata : null,
