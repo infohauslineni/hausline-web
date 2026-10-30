@@ -2537,6 +2537,9 @@ body.en-producto .vista-coleccion{ display:none; }
   line-height:1.4;
 }
 .card-talla.mas{ color:var(--texto-3); border-style:dashed; }
+/* El código va abajo a la izquierda (absoluto): las tallas dejan su espacio para no taparlo. */
+.card-tallas{ justify-content:center; margin-bottom:17px; }
+@media(min-width:640px){ .card-tallas{ margin-bottom:19px; } }
 
 /* ============================================================
    TARJETA DE ENVÍO RÁPIDO
