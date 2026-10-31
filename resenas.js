@@ -28,8 +28,14 @@
       .resena-nombre{font-size:13.5px;font-weight:700;}
       .resena-fecha{font-size:11px;color:#8B857B;white-space:nowrap;}
       .resena-txt{font-size:13px;line-height:1.55;color:#4A443C;}
-      .resena-foto{margin-top:10px;}
-      .resena-foto img{width:100%;max-width:220px;border-radius:10px;border:1px solid #E7E3DC;display:block;}
+      /* Foto del cliente: miniatura pareja (4:5, recorte centrado) que se abre en grande al tocarla */
+      .resena-foto{margin-top:11px;display:block;width:132px;max-width:100%;aspect-ratio:4/5;border:0;padding:0;border-radius:11px;overflow:hidden;background:#EFEDE8;cursor:zoom-in;position:relative;}
+      .resena-foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
+      .resena-foto:hover img{transform:scale(1.04);}
+      .resena-foto::after{content:"Foto del cliente";position:absolute;left:6px;bottom:6px;font-size:10px;font-weight:600;letter-spacing:.03em;color:#fff;background:rgba(23,19,16,.62);padding:3px 7px;border-radius:999px;}
+      .resena-visor{position:fixed;inset:0;z-index:9999;background:rgba(15,12,10,.88);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));cursor:zoom-out;}
+      .resena-visor img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+      .resena-visor button{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#171310;font-size:22px;cursor:pointer;}
       /* Producto reseñado: mini tarjeta para que se vea el modelo */
       .resena-producto{display:flex;align-items:center;gap:10px;margin-top:11px;padding:7px 9px;border:1px solid #E7E3DC;border-radius:11px;background:#F6F4F0;cursor:pointer;transition:border-color .15s,background .15s;}
       .resena-producto:hover{border-color:rgba(23,19,16,.4);background:rgba(0,0,0,.04);}
@@ -83,7 +89,7 @@
 
   function cardHTML(r, opts){
     const mostrarProducto = !!(opts && opts.mostrarProducto);
-    const foto = r.foto_url ? `<div class="resena-foto"><img src="${esc(r.foto_url)}" alt="Foto de reseña de ${esc(r.cliente_nombre)}" loading="lazy"></div>` : "";
+    const foto = r.foto_url ? `<button type="button" class="resena-foto" data-foto-resena="${esc(r.foto_url)}" aria-label="Ver la foto de ${esc(r.cliente_nombre)}"><img src="${esc(r.foto_url)}" alt="Foto de reseña de ${esc(r.cliente_nombre)}" loading="lazy"></button>` : "";
     const txt = r.comentario ? `<p class="resena-txt">${esc(r.comentario)}</p>` : "";
     // Foto del producto reseñado: para que la gente vea cuál fue el modelo.
     // Solo en la sección del inicio; en la página del producto sería redundante.
@@ -184,4 +190,19 @@
   } else {
     iniciarTodo();
   }
+
+  // Foto del cliente en grande al tocarla (cierra con un toque, la X o Escape).
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("[data-foto-resena]");
+    if(!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var v = document.createElement("div");
+    v.className = "resena-visor"; v.setAttribute("role", "dialog"); v.setAttribute("aria-label", "Foto de la reseña");
+    v.innerHTML = '<img alt="Foto de la reseña"><button type="button" aria-label="Cerrar">×</button>';
+    v.querySelector("img").src = b.getAttribute("data-foto-resena");
+    var cerrar = function(){ v.remove(); document.removeEventListener("keydown", tecla); };
+    var tecla = function(ev){ if(ev.key === "Escape") cerrar(); };
+    v.addEventListener("click", cerrar); document.addEventListener("keydown", tecla);
+    document.body.appendChild(v);
+  }, true);
 })();

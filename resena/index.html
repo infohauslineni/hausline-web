@@ -3,71 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <base href="/">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co; font-src 'self' data:; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co; base-uri 'self'; form-action 'self'; object-src 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://xgdijumnmaqfirmckugw.supabase.co https://epslwaxjemlysqtubbfu.supabase.co; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co https://hausline-tracking.vercel.app; base-uri 'self'; form-action 'self'; object-src 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex,follow">
   <title>Deje su reseña | HAUSLINE</title>
-  <meta name="theme-color" content="#050505">
+  <meta name="theme-color" content="#FCFBF9">
   <link rel="icon" href="logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
-    :root{--neg:#050505;--verde:#b7ff00;--linea:rgba(255,255,255,.1);}
-    body{background:#050505;color:#f3f6f3;font-family:'Inter','SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;-webkit-text-size-adjust:100%;}
-    .caja{width:100%;max-width:440px;background:#0e120f;border:1px solid var(--linea);border-radius:20px;padding:28px 24px;}
-    .logo{text-align:center;font-size:22px;font-weight:800;letter-spacing:5px;margin-bottom:4px;}
-    .logo span{color:var(--verde);}
-    .sub{text-align:center;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8a938d;margin-bottom:22px;}
-    h1{font-size:20px;font-weight:800;text-align:center;letter-spacing:-.01em;}
-    .cod{text-align:center;font-size:12px;color:#8a938d;margin-top:6px;margin-bottom:20px;}
-    .estrellas-sel{display:flex;justify-content:center;gap:8px;margin:0 0 22px;}
-    .estrellas-sel button{background:none;border:0;cursor:pointer;padding:2px;line-height:0;}
-    .estrellas-sel svg{width:38px;height:38px;fill:none;stroke:#5f6863;stroke-width:1.5;transition:.12s;}
-    .estrellas-sel button.on svg{fill:var(--verde);stroke:var(--verde);}
-    .campo{margin-bottom:14px;}
-    .campo label{display:block;font-size:12px;font-weight:600;color:#c3c9c5;margin-bottom:5px;}
-    .campo input,.campo textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--linea);border-radius:10px;padding:12px;color:#fff;font-size:15px;font-family:inherit;outline:none;resize:vertical;}
-    .campo input:focus,.campo textarea:focus{border-color:rgba(183,255,0,.5);}
-    .btn{width:100%;margin-top:8px;border:0;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;background:var(--verde);color:#050705;}
+    :root{--bg:#FCFBF9;--card:#FFFFFF;--tinta:#171310;--gris:#6B655C;--suave:#9C958A;--borde:#E7E3DC;--oro:#C9A24A;--rojo:#B42318;}
+    html{-webkit-text-size-adjust:100%;}
+    body{background:var(--bg);color:var(--tinta);font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px max(16px,env(safe-area-inset-left)) 40px;}
+    .caja{width:100%;max-width:460px;background:var(--card);border:1px solid var(--borde);border-radius:22px;padding:30px 24px 26px;box-shadow:0 10px 40px rgba(23,19,16,.06);}
+    .logo{text-align:center;font-size:15px;font-weight:600;letter-spacing:.34em;}
+    .sub{text-align:center;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--suave);margin-top:6px;}
+    h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:32px;line-height:1.08;text-align:center;margin-top:22px;}
+    .cod{text-align:center;font-size:13px;color:var(--gris);margin:8px 0 22px;}
+    .estrellas-sel{display:flex;justify-content:center;gap:6px;}
+    .estrellas-sel button{background:none;border:0;cursor:pointer;padding:4px;line-height:0;border-radius:10px;-webkit-tap-highlight-color:transparent;}
+    .estrellas-sel button:focus-visible{outline:2px solid var(--tinta);}
+    .estrellas-sel svg{width:42px;height:42px;fill:none;stroke:#CFC9BE;stroke-width:1.4;transition:transform .15s, fill .15s, stroke .15s;}
+    .estrellas-sel button.on svg{fill:var(--oro);stroke:var(--oro);}
+    .estrellas-sel button:active svg{transform:scale(.9);}
+    .etiqueta{text-align:center;font-size:13px;font-weight:500;color:var(--gris);min-height:20px;margin:8px 0 20px;}
+    .campo{margin-bottom:16px;}
+    .campo label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+    .campo label small{font-weight:400;color:var(--suave);}
+    textarea{width:100%;background:#FBFAF7;border:1px solid var(--borde);border-radius:12px;padding:12px 13px;color:var(--tinta);font-size:16px;font-family:inherit;line-height:1.5;outline:none;resize:vertical;min-height:110px;}
+    textarea:focus{border-color:var(--tinta);background:#fff;}
+    .foto-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;min-height:92px;border:1.5px dashed #CFC9BE;border-radius:14px;background:#FBFAF7;color:var(--gris);font:500 14px 'Jost',sans-serif;cursor:pointer;padding:14px;text-align:center;}
+    .foto-btn:hover{border-color:var(--tinta);color:var(--tinta);}
+    .foto-btn svg{width:24px;height:24px;flex:none;}
+    .foto-prev{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--borde);background:#F1EFEA;}
+    .foto-prev img{display:block;width:100%;max-height:340px;object-fit:contain;}
+    .foto-quitar{position:absolute;top:10px;right:10px;border:0;border-radius:999px;background:rgba(23,19,16,.82);color:#fff;font:600 12.5px 'Jost',sans-serif;padding:8px 13px;cursor:pointer;}
+    .btn{width:100%;margin-top:6px;border:0;border-radius:999px;padding:16px;font:600 14px 'Jost',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;background:var(--tinta);color:#fff;}
     .btn:disabled{opacity:.55;cursor:default;}
-    .err{color:#ff9a9a;font-size:13px;margin-top:10px;display:none;text-align:center;}
-    .ok{text-align:center;padding:14px 0;}
-    .ok .ic{width:60px;height:60px;border-radius:50%;background:rgba(183,255,0,.14);color:var(--verde);display:grid;place-items:center;margin:0 auto 14px;font-size:30px;}
-    .ok h2{font-size:19px;font-weight:800;margin-bottom:8px;}
-    .ok p{font-size:14px;color:#c3c9c5;line-height:1.6;}
-    .volver{display:block;text-align:center;margin-top:18px;font-size:13px;color:#8a938d;text-decoration:none;}
-    .volver:hover{color:#fff;}
-    .hint{font-size:11px;color:#5f6863;text-align:center;margin-top:14px;line-height:1.5;}
+    .err{color:var(--rojo);font-size:13.5px;margin-top:12px;display:none;text-align:center;}
+    .hint{font-size:12px;color:var(--suave);text-align:center;margin-top:14px;line-height:1.5;}
+    .ok{text-align:center;padding:10px 0 4px;}
+    .ok .ic{width:64px;height:64px;border-radius:50%;background:#F4EBD5;color:#8A6A1F;display:grid;place-items:center;margin:4px auto 16px;font-size:30px;}
+    .ok h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:30px;margin-bottom:8px;}
+    .ok p{font-size:15px;color:var(--gris);line-height:1.6;}
+    .volver{display:inline-block;margin-top:22px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta);text-decoration:none;border-bottom:1px solid var(--tinta);padding-bottom:2px;}
   </style>
 </head>
 <body>
   <div class="caja" id="caja">
-    <div class="logo">HAUS<span>LINE</span></div>
+    <div class="logo">HAUSLINE</div>
     <div class="sub">Su reseña</div>
 
-    <form id="form">
-      <h1>¿Cómo estuvo su experiencia?</h1>
+    <form id="form" novalidate>
+      <h1>¿Cómo le fue con su compra?</h1>
       <p class="cod" id="cod"></p>
 
       <div class="estrellas-sel" id="estrellas" role="radiogroup" aria-label="Calificación">
-        <button type="button" data-v="1" aria-label="1 estrella"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
-        <button type="button" data-v="2" aria-label="2 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
-        <button type="button" data-v="3" aria-label="3 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
-        <button type="button" data-v="4" aria-label="4 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
-        <button type="button" data-v="5" aria-label="5 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="1" role="radio" aria-checked="false" aria-label="1 estrella"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="2" role="radio" aria-checked="false" aria-label="2 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="3" role="radio" aria-checked="false" aria-label="3 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="4" role="radio" aria-checked="false" aria-label="4 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button type="button" data-v="5" role="radio" aria-checked="false" aria-label="5 estrellas"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+      </div>
+      <p class="etiqueta" id="etiqueta">Toque las estrellas</p>
+
+      <div class="campo">
+        <label for="comentario">Su comentario <small>(opcional)</small></label>
+        <textarea id="comentario" rows="4" placeholder="¿Qué le pareció el producto, la calidad, la entrega?" maxlength="500"></textarea>
       </div>
 
       <div class="campo">
-        <label for="comentario">Su comentario (opcional)</label>
-        <textarea id="comentario" rows="4" placeholder="Cuéntenos cómo le fue con su pedido…" maxlength="500"></textarea>
+        <label>Foto de su compra <small>(opcional)</small></label>
+        <div id="fotoZona">
+          <button type="button" class="foto-btn" id="fotoBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            <span>Agregar una foto<br><small>Con su producto puesto o recién llegado</small></span>
+          </button>
+        </div>
+        <input id="fotoInput" type="file" accept="image/*" hidden>
       </div>
 
       <button class="btn" type="submit" id="enviar">Enviar reseña</button>
-      <div class="err" id="err"></div>
-      <p class="hint">Su reseña se publica tras una breve revisión. ¡Gracias por ayudar a otros clientes!</p>
+      <div class="err" id="err" role="alert"></div>
+      <p class="hint">Su reseña se publica después de una breve revisión. ¡Gracias por ayudar a otros clientes!</p>
     </form>
   </div>
 
   <script src="config.js?v=20261014b"></script>
-  <script src="resena/resena.js?v=20261004c"></script>
+  <script src="resena/resena.js?v=20261030a"></script>
 </body>
 </html>
