@@ -350,16 +350,21 @@
     var esCarrito=pend.tipo==="carrito";
     var pago="total", cupon=null;
     var cant=esCarrito?1:Math.max(1,parseInt(pend.opts.cantidad,10)||1);
-    var envioFlag=esCarrito?(pend.items.some(function(it){return it.envio==="rapido";})?"rapido":"estandar"):(pend.opts.envio==="rapido"?"rapido":"estandar");
+    // Productos con "Apartar con $X" (panel): SOLO se apartan con ese monto (sin pagar todo ni 50 %)
+    // y van con envío estándar (sin recargo de rápido).
+    var esFijo=function(it){ return Number(it && it.anticipo)>0; };
+    var soloApartar=!inmediataPend(pend) && (esCarrito ? pend.items.some(esFijo) : esFijo(pend.producto));
+    if(soloApartar) pago="50";
+    var envioFlag=esCarrito?(pend.items.some(function(it){return it.envio==="rapido" && !esFijo(it);})?"rapido":"estandar"):(pend.opts.envio==="rapido" && !esFijo(pend.producto)?"rapido":"estandar");
     var intlFlag=false;
     var paisSel=PAISES_DATA[0], dialSel=PAISES_DATA[0], telManual=false; // Nicaragua por defecto
 
-    function recargoDe(envio,c){ return envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
+    function recargoDe(envio,c,fijo){ return envio==="rapido" && !fijo?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
     function descCupon(base){ if(!cupon) return 0; var d=cupon.tipo==="porcentaje"?base*cupon.valor/100:Math.min(cupon.valor,base); return Math.round(d*100)/100; }
     function calc(){
       var bruto=0, items=[];
-      if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; items.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp,anticipo:it.anticipo}); }); }
-      else { var lp=(Number(pend.producto.precio)||0)*cant+recargoDe(pend.opts.envio,cant); bruto=lp; items.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:cant,lineTotal:lp,anticipo:pend.producto.anticipo}); }
+      if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c,esFijo(it)); bruto+=lp; items.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp,anticipo:it.anticipo}); }); }
+      else { var lp=(Number(pend.producto.precio)||0)*cant+recargoDe(pend.opts.envio,cant,esFijo(pend.producto)); bruto=lp; items.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:cant,lineTotal:lp,anticipo:pend.producto.anticipo}); }
       bruto=Math.round(bruto*100)/100;
       var totalCant=items.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0);
       // Cupón (si lo escribió) tiene prioridad; si no, la mejor promo automática aplicable.
@@ -412,12 +417,10 @@
       +     (inmediataPend(pend)
               // Entrega inmediata: ya está en Nicaragua, se paga completo (no hay apartado del 50%).
               ? '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pago completo</b><small>Entrega inmediata: ya está en Nicaragua</small></button></div>'
-              : '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>'
-                // Producto con "Apartar con $X" (panel): se aparta con ese monto en vez del 50 %.
-                + (conAnticipoFijo(calc().items)
-                  ? '<button type="button" class="tile" data-p="50"><b>Apartar con '+usd(calc().anticipo)+'</b><small>El resto antes de la entrega</small></button>'
-                  : '<button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>')
-                + '</div>')
+              : soloApartar
+              // Producto con "Apartar con $X" (panel): única opción, ese monto ahora y el resto al llegar.
+              ? '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="50"><b>Apartar con '+usd(calc().anticipo)+'</b><small>El resto lo paga cuando el producto esté en Nicaragua</small></button></div>'
+              : '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button><button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button></div>')
       +     ''
       +     '<div class="field"><label class="label">¿Tiene un código de descuento?</label><div data-cupon>'+cuponHTML()+'</div></div>'
       +   '</div>'
@@ -547,13 +550,13 @@
     var codigo;
     if(pend.tipo==="carrito"){
       var envioFlag = ct.envio || (pend.items.some(function(it){return it.envio==="rapido";})?"rapido":"estandar");
-      var payload = pend.items.map(function(it){ var c=Number(it.cantidad)||1; return { producto:it.nombre, producto_codigo:it.codigo||null, marca:it.marca||null, talla:it.talla||null, color:it.color||null, cantidad:c, precio_unitario:it.precioUnitario||0, recargo:(it.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0), envio:it.envio==="rapido"?"rapido":"estandar", imagen:it.imagen||null }; });
+      var payload = pend.items.map(function(it){ var c=Number(it.cantidad)||1; return { producto:it.nombre, producto_codigo:it.codigo||null, marca:it.marca||null, talla:it.talla||null, color:it.color||null, cantidad:c, precio_unitario:it.precioUnitario||0, recargo:(it.envio==="rapido" && !(Number(it.anticipo)>0)?(Number(ENVCFG.rapido.recargo)||0)*c:0), envio:(it.envio==="rapido" && !(Number(it.anticipo)>0))?"rapido":"estandar", imagen:it.imagen||null }; });
       var r1=await (typeof hauslineFetchSolicitud==="function"?hauslineFetchSolicitud:fetch)(SB_URL+"rpc/crear_solicitud_carrito",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:(typeof hauslineAuthHeader==="function"?hauslineAuthHeader():"Bearer "+SB_KEY)},body:JSON.stringify({p_nombre:ct.nombre,p_whatsapp:ct.whatsapp,p_correo:ct.correo,p_ciudad:ct.ciudad,p_direccion:ct.direccion,p_envio:envioFlag,p_pago:ct.pago,p_cupon_codigo:ct.cupon?ct.cupon.codigo:null,p_items:payload})});
       if(!r1.ok) throw await errorHttp(r1,"crear"); codigo=String(await r1.json());
       try{ localStorage.removeItem("hausline_carrito"); }catch(_){}
     } else {
       var p=pend.producto, c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1);
-      var rec=(pend.opts.envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c2:0);
+      var rec=(pend.opts.envio==="rapido" && !(Number(pend.producto.anticipo)>0)?(Number(ENVCFG.rapido.recargo)||0)*c2:0);
       var r2=await (typeof hauslineFetchSolicitud==="function"?hauslineFetchSolicitud:fetch)(SB_URL+"rpc/crear_solicitud_publica",{method:"POST",headers:{"Content-Type":"application/json",apikey:SB_KEY,Authorization:(typeof hauslineAuthHeader==="function"?hauslineAuthHeader():"Bearer "+SB_KEY)},body:JSON.stringify({p_nombre:ct.nombre,p_whatsapp:ct.whatsapp,p_correo:ct.correo,p_ciudad:ct.ciudad,p_direccion:ct.direccion,p_producto:p.nombre,p_producto_codigo:p.codigo||null,p_marca:p.marca||null,p_talla:pend.opts.talla||null,p_color:pend.opts.color||null,p_cantidad:c2,p_precio_unitario:p.precio,p_envio:pend.opts.envio==="rapido"?"rapido":"estandar",p_recargo:rec,p_pago:ct.pago,p_imagen:p.imagen||null,p_cupon_codigo:ct.cupon?ct.cupon.codigo:null})});
       if(!r2.ok) throw await errorHttp(r2,"crear"); codigo=String(await r2.json());
     }
@@ -583,10 +586,10 @@
     var pend; try{ pend=JSON.parse(sessionStorage.getItem("hausline_encargo")||"null"); }catch(e){ pend=null; }
     if(!pend || !pend.contacto){ estado("Empiece su pedido", "Elija un producto en la tienda y complete sus datos para pagar."); return; }
     var esCarrito=pend.tipo==="carrito"; var ct=pend.contacto; var pago = ct.pago==="50"?"50":"total";
-    function recargoDe(envio,c){ return envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
+    function recargoDe(envio,c,fijo){ return envio==="rapido" && !fijo?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
     var bruto=0, sumItems=[];
-    if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; sumItems.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp,anticipo:it.anticipo}); }); }
-    else { var c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1); var lp=(Number(pend.producto.precio)||0)*c2+recargoDe(pend.opts.envio,c2); bruto=lp; sumItems.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:c2,lineTotal:lp,anticipo:pend.producto.anticipo}); }
+    if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c,Number(it.anticipo)>0); bruto+=lp; sumItems.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp,anticipo:it.anticipo}); }); }
+    else { var c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1); var lp=(Number(pend.producto.precio)||0)*c2+recargoDe(pend.opts.envio,c2,Number(pend.producto.anticipo)>0); bruto=lp; sumItems.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:c2,lineTotal:lp,anticipo:pend.producto.anticipo}); }
     bruto=Math.round(bruto*100)/100;
     var totalCant=sumItems.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0);
     var desc=0, descLabel="";

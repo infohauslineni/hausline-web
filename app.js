@@ -885,7 +885,10 @@ function renderSelectorEnvio(producto){
       estandar: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="14" height="12" rx="1.5"/><path d="M15 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18" cy="18.5" r="2"/></svg>`,
       rapido:   `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 10-13h-8l1-7z"/></svg>`
     };
-    cont.innerHTML = ["estandar","rapido"].map(id => {
+    // Los que solo se apartan con monto fijo van solo con envío estándar (ya elegido).
+    const soloEstandar = soloApartar(producto);
+    if(soloEstandar) envioSeleccionado = "estandar";
+    cont.innerHTML = (soloEstandar ? ["estandar"] : ["estandar","rapido"]).map(id => {
       const m = HAUSLINE_ENVIO[id];
       if(!m) return "";
       const precio = m.recargo > 0
@@ -929,12 +932,17 @@ function pintarPrecioModal(producto, enOferta){
 // si no, el 50 % de siempre. `base` = precio (+ envío rápido si lo eligió).
 function textoAbono(producto, base){
   const fijo = Number(producto && producto.anticipo) || 0;
-  if(fijo > 0 && fijo < base) return `Apártelo con: <strong>${formatoPrecio(fijo)}</strong> · el resto antes de la entrega`;
+  if(fijo > 0 && fijo < base) return `Apártelo con: <strong>${formatoPrecio(fijo)}</strong> · el resto (${formatoPrecio(base - fijo)}) lo paga cuando el producto esté en Nicaragua`;
   return `Abono para confirmar: <strong>${formatoPrecio(Math.round(base * 0.5))}</strong> (50%)`;
 }
 function textoApartar(producto){
   const fijo = Number(producto && producto.anticipo) || 0;
   return fijo > 0 ? "con " + formatoPrecio(fijo) : "con el 50%";
+}
+// Producto que SOLO se aparta con su monto fijo (p. ej. originales): sin pagar todo, sin 50 %,
+// sin envío rápido y sin carrito. Entrega inmediata se sigue pagando completo como siempre.
+function soloApartar(producto){
+  return Number(producto && producto.anticipo) > 0 && !modoInmediataActual && !necesitaCotizar(producto);
 }
 
 // Refresca el estimado de entrega y el abono según el envío elegido.
@@ -1576,10 +1584,10 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
   // no tiene sentido pagar/agregar algo sin precio, así que solo se cotiza.
   const btnWa = $("#btnWhatsappProducto");
   if(btnWa && btnWa.lastChild){
-    btnWa.lastChild.textContent = cotizar ? " Cotizar" : modoEnCaminoActual ? " Apartar " + textoApartar(producto) : " Comprar";
+    btnWa.lastChild.textContent = cotizar ? " Cotizar" : (modoEnCaminoActual || soloApartar(producto)) ? " Apartar " + textoApartar(producto) : " Comprar";
   }
   const btnCart = $("#btnAgregarCarrito");
-  if(btnCart) btnCart.hidden = cotizar;
+  if(btnCart) btnCart.hidden = cotizar || soloApartar(producto);
 
   // Disponibilidad según el contexto
   $("#modalDisponibilidad").innerHTML = modoEnCaminoActual

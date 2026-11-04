@@ -97,7 +97,13 @@
     else {
       var le = limite("estandar", productoActual), lr = limite("rapido", productoActual);
       if(!le || !lr) return;
-      if(hoy <= le) texto = "Para recibirlo <b>antes de Navidad</b>, encárguelo a más tardar el <b>" + fecha(le) + "</b> (envío estándar) o el <b>" + fecha(lr) + "</b> con envío rápido.";
+      // Producto que solo se aparta con monto fijo: no tiene envío rápido.
+      var sinRapido = Number(productoActual.anticipo) > 0;
+      if(sinRapido){
+        if(hoy <= le) texto = "Para recibirlo <b>antes de Navidad</b>, apártelo a más tardar el <b>" + fecha(le) + "</b>.";
+        else texto = "Por encargo ya no llega antes de Navidad. Para regalar, vea <b>Entrega inmediata</b> y <b>Llega pronto</b>.";
+      }
+      else if(hoy <= le) texto = "Para recibirlo <b>antes de Navidad</b>, encárguelo a más tardar el <b>" + fecha(le) + "</b> (envío estándar) o el <b>" + fecha(lr) + "</b> con envío rápido.";
       else if(hoy <= lr) texto = "Para recibirlo <b>antes de Navidad</b>, elija <b>envío rápido</b> y encárguelo a más tardar el <b>" + fecha(lr) + "</b>.";
       else texto = "Por encargo ya no llega antes de Navidad. Para regalar, vea <b>Entrega inmediata</b> y <b>Llega pronto</b>.";
     }
