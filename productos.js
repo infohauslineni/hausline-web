@@ -1507,7 +1507,6 @@ cantidadDisponible:1,        // este número decide el texto                    
    subcategoria:"Calzado",
 
   nuevo:true,
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
@@ -1527,7 +1526,6 @@ cantidadDisponible:1,        // este número decide el texto                    
    subcategoria:"Calzado",
 
   nuevo:true,
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
@@ -1547,7 +1545,6 @@ cantidadDisponible:1,        // este número decide el texto                    
    subcategoria:"Calzado",
 
   nuevo:true,
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
@@ -1567,7 +1564,6 @@ cantidadDisponible:1,        // este número decide el texto                    
    subcategoria:"Calzado",
 
   nuevo:true,
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
@@ -1586,7 +1582,6 @@ cantidadDisponible:1,        // este número decide el texto                    
   categoria:"Hombre",
    subcategoria:"Calzado",
   
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
@@ -1606,7 +1601,6 @@ cantidadDisponible:1,        // este número decide el texto                    
    subcategoria:"Calzado",
 
   nuevo:true,
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
@@ -1627,7 +1621,6 @@ cantidadDisponible:1,        // este número decide el texto                    
    subcategoria:"Calzado",
 
   nuevo:true,
-  og100:true,
   imagen:"imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
   imagenes:[
     "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",

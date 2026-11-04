@@ -1044,6 +1044,7 @@ function renderInicio(){
   // 100% Originales: sale solo si hay productos con la etiqueta "100% OG".
   const originales = productos.filter(p => p.og100 === true && !p.ventaLibre);
   const secOriginales = $("#seccionOriginales");
+  document.querySelectorAll("[data-menu-originales]").forEach(b => { b.hidden = !originales.length; });
   if(secOriginales){
     secOriginales.hidden = !originales.length;
     if(originales.length) pintarFila("#filaOriginales", originales.slice(0, 12));
