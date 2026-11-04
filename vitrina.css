@@ -114,3 +114,7 @@
   .vt-slide, .vt-fondo, .vt-texto h2, .vt-texto p, .vt-texto .vt-btn, .vt-mini{ transition:none !important; transform:none !important; }
   .cm-lado, .cm-prod{ animation:none; }
 }
+
+/* ---------- 100% Originales ---------- */
+.seccion-originales h2{ display:flex; align-items:center; gap:10px; }
+.seccion-originales h2::before{ content:"✓"; display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:#C9A24A; color:#fff; font-size:14px; font-weight:700; flex:none; }

@@ -30,6 +30,7 @@ const TITULOS_COLECCION = {
   "tendencia":         "Sneakers en tendencia",
   "populares":         "Más populares",
   "nuevos":            "Nuevo en HAUSLINE",
+  "originales":        "100% Originales",
   "ofertas":           "Ofertas",
   "entrega-inmediata": "Entrega inmediata",
   "en-camino": "Llega pronto · Apártelo ya",
@@ -1040,6 +1041,15 @@ function renderInicio(){
   pintarFila("#filaAccesorios", seleccionDestacados(productos.filter(p => p.categoria === "Accesorios"), 12, 2));
   pintarFila("#filaNuevos", productosNuevos(12));
 
+  // 100% Originales: sale solo si hay productos con la etiqueta "100% OG".
+  const originales = productos.filter(p => p.og100 === true && !p.ventaLibre);
+  const secOriginales = $("#seccionOriginales");
+  if(secOriginales){
+    secOriginales.hidden = !originales.length;
+    if(originales.length) pintarFila("#filaOriginales", originales.slice(0, 12));
+    else { const c = $("#filaOriginales"); if(c) c.innerHTML = ""; }
+  }
+
   renderHeroMarcas();
   // Vitrina animada de marcas (arriba) y "Compre por marca" (vitrina.js).
   if(typeof renderVitrinaMarcas === "function") renderVitrinaMarcas();
@@ -1297,6 +1307,8 @@ function baseColeccion(){
     case "tendencia":         return productos.filter(p => p.categoria === "Hombre" && subcategoriaDe(p) === "Calzado");
     case "populares":         return productos;
     case "nuevos":            return ordenarNuevos(productos.filter(esNuevo)).slice(0, CANTIDAD_NUEVOS);
+    // Originales: los que tienen la etiqueta "100% OG" (se marca en Productos del panel).
+    case "originales":        return productos.filter(p => p.og100 === true);
     case "ofertas":           return productosOferta();
     case "entrega-inmediata": return productosInmediata();
     case "en-camino":         return productosEnCamino();
