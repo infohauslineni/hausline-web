@@ -6393,6 +6393,8 @@ function normalizarProducto(producto, indice){
     //   imagenFit: "contain"  -> muestra la foto completa, sin recortar
     //   escalaImagen: 1.15    -> acerca el producto dentro del recuadro
     imagenFit: producto.imagenFit || "",
+    // Apartar con un monto fijo (opcional, desde el panel). null = abono del 50 %.
+    anticipo: Number(producto.anticipo) > 0 ? Number(producto.anticipo) : null,
     escalaImagen: producto.escalaImagen || null,
 
     // Etiquetas opcionales — todas apagadas. Enciende la que quieras

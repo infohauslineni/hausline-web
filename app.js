@@ -925,6 +925,18 @@ function pintarPrecioModal(producto, enOferta){
     : `<span class="actual">${formatoPrecio(total)}</span>`;
 }
 
+// Texto del abono en el producto: si tiene "Apartar con $X" (panel) se aparta con ese monto;
+// si no, el 50 % de siempre. `base` = precio (+ envío rápido si lo eligió).
+function textoAbono(producto, base){
+  const fijo = Number(producto && producto.anticipo) || 0;
+  if(fijo > 0 && fijo < base) return `Apártelo con: <strong>${formatoPrecio(fijo)}</strong> · el resto antes de la entrega`;
+  return `Abono para confirmar: <strong>${formatoPrecio(Math.round(base * 0.5))}</strong> (50%)`;
+}
+function textoApartar(producto){
+  const fijo = Number(producto && producto.anticipo) || 0;
+  return fijo > 0 ? "con " + formatoPrecio(fijo) : "con el 50%";
+}
+
 // Refresca el estimado de entrega y el abono según el envío elegido.
 // "En camino": la entrega sale de la COMPRA que viene en camino (RPC en_camino_llegada del panel),
 // no del tiempo de un encargo nuevo. Se guarda por código para no pedirla cada vez.
@@ -982,7 +994,7 @@ function actualizarEnvioUI(){
     const base = precio + (metodo ? (metodo.recargo || 0) : 0);
     pintarPrecioModal(productoActual, !!ofertaVigente(productoActual));
     const abono = $("#modalAbono");
-    if(abono) abono.innerHTML = `Abono para confirmar: <strong>${formatoPrecio(Math.round(base * 0.5))}</strong> (50%)`;
+    if(abono) abono.innerHTML = textoAbono(productoActual, base);
   }
 }
 
@@ -1558,13 +1570,13 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     ? `Escríbanos por WhatsApp y le pasamos el precio.`
     : modoInmediataActual
     ? `Disponible ahora, sin abono previo.`
-    : `Abono para confirmar: <strong>${formatoPrecio(Math.round(precio * 0.5))}</strong> (50%)`;
+    : textoAbono(producto, precio);
 
   // Botón principal y "Agregar al carrito" cambian en modo cotización:
   // no tiene sentido pagar/agregar algo sin precio, así que solo se cotiza.
   const btnWa = $("#btnWhatsappProducto");
   if(btnWa && btnWa.lastChild){
-    btnWa.lastChild.textContent = cotizar ? " Cotizar" : modoEnCaminoActual ? " Apartar con el 50%" : " Comprar";
+    btnWa.lastChild.textContent = cotizar ? " Cotizar" : modoEnCaminoActual ? " Apartar " + textoApartar(producto) : " Comprar";
   }
   const btnCart = $("#btnAgregarCarrito");
   if(btnCart) btnCart.hidden = cotizar;
@@ -1611,7 +1623,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     $("#modalAvisoInmediata").innerHTML +=
       `<div class="aviso-encamino">
          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
-         <span><b>Llega pronto</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Ya viene en camino: apártelo ya con el 50% y se lo entregamos apenas llegue.</span>
+         <span><b>Llega pronto</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Ya viene en camino: apártelo ya ${textoApartar(producto)} y se lo entregamos apenas llegue.</span>
        </div>`;
   }
 

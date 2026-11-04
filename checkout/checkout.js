@@ -178,6 +178,16 @@
     $("prog").innerHTML = '<div class="prog">'+step(1,"Información")+line(1)+step(2,"Pago")+line(2)+step(3,"Confirmación")+'</div>';
   }
 
+  // ---- Anticipo al apartar ----
+  // Por producto: su monto fijo "Apartar con" (× cantidad, sin pasar del total de la línea) o,
+  // si no tiene, el 50 %. Espejo de public.anticipo_linea (la base es la que manda).
+  function anticipoTotal(items, total, bruto){
+    var f = bruto>0 ? total/bruto : 1;
+    var s = items.reduce(function(acc,it){ var neto=(Number(it.lineTotal)||0)*f, fijo=Number(it.anticipo)||0; return acc + (fijo>0 ? Math.min(neto, fijo*(Number(it.cantidad)||1)) : neto*0.5); },0);
+    return Math.round(s*100)/100;
+  }
+  function conAnticipoFijo(items){ return items.some(function(it){ return Number(it.anticipo)>0; }); }
+
   // ---- Resumen del pedido (columna lateral) ----
   // o = { items:[{nombre,marca,imagen,cantidad,lineTotal}], subtotal, descuento, cuponCodigo,
   //       total, ahora, parcial, codigo, envioDias }
@@ -194,7 +204,7 @@
     if(o.descuento>0) rows += '<div class="sum-row"><span>Descuento'+(o.cuponCodigo?" ("+esc(o.cuponCodigo)+")":"")+'</span><span class="v" style="color:var(--ok)">− '+usd(o.descuento)+'</span></div>';
     rows += '<div class="sum-row"><span>Envío</span><span class="v">'+(o.envioIntl?'A cotizar':'Coordinado')+'</span></div>';
     var grand = '<div class="sum-grand"><span class="lb">'+(o.parcial?"Anticipo hoy":"Total a pagar")+'</span><span class="amt"><b>'+usd(o.ahora)+'</b><small>≈ '+nio(cordobas(o.ahora))+'</small></span></div>';
-    var pill = o.parcial ? '<div style="text-align:right"><span class="sum-pill">Abono 50% · total '+usd(o.total)+'</span></div>' : '';
+    var pill = o.parcial ? '<div style="text-align:right"><span class="sum-pill">'+(o.fijo?'Apartado':'Abono 50%')+' · total '+usd(o.total)+'</span></div>' : '';
     var code = o.codigo ? '<div class="sum-code"><span>Código de pedido</span><b>'+esc(o.codigo)+'</b></div>' : '';
     // Varios productos: se envían JUNTOS cuando todos estén listos.
     var unidades = o.items.reduce(function(s,it){ return s + (Number(it.cantidad)||1); }, 0);
@@ -257,7 +267,7 @@
     var ahora=items.reduce(function(t,s){ return t+(Number(s.abono)||0); },0);
     var vence=items.reduce(function(m,s){ var v=new Date(s.vence_at).getTime(); return (m===null||v<m)?v:m; },null);
     var todos50=items.every(function(s){ return s.pago_tipo==="50"; });
-    return { estado:estado, total:total, ahora:ahora, vence:vence, parcial:todos50 && ahora<total };
+    return { estado:estado, total:total, ahora:ahora, vence:vence, parcial:todos50 && ahora<total, fijo:todos50 && Math.abs(ahora-Math.round(total*50)/100)>0.05 };
   }
 
   // =========================== PASO 1 · INFORMACIÓN ===========================
@@ -348,8 +358,8 @@
     function descCupon(base){ if(!cupon) return 0; var d=cupon.tipo==="porcentaje"?base*cupon.valor/100:Math.min(cupon.valor,base); return Math.round(d*100)/100; }
     function calc(){
       var bruto=0, items=[];
-      if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; items.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp}); }); }
-      else { var lp=(Number(pend.producto.precio)||0)*cant+recargoDe(pend.opts.envio,cant); bruto=lp; items.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:cant,lineTotal:lp}); }
+      if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; items.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp,anticipo:it.anticipo}); }); }
+      else { var lp=(Number(pend.producto.precio)||0)*cant+recargoDe(pend.opts.envio,cant); bruto=lp; items.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:cant,lineTotal:lp,anticipo:pend.producto.anticipo}); }
       bruto=Math.round(bruto*100)/100;
       var totalCant=items.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0);
       // Cupón (si lo escribió) tiene prioridad; si no, la mejor promo automática aplicable.
@@ -357,9 +367,9 @@
       if(cupon){ desc=descCupon(bruto); descLabel=cupon.codigo; }
       else { var pr=mejorPromo(bruto, totalCant); if(pr){ desc=descFuente(pr.tipo, pr.valor, bruto); descLabel="Promo: "+pr.nombre; } }
       var total=Math.max(0,Math.round((bruto-desc)*100)/100);
-      return { items:items, subtotal:bruto, descuento:desc, descLabel:descLabel, total:total, ahora:pago==="50"?Math.round(total*50)/100:total };
+      return { items:items, subtotal:bruto, descuento:desc, descLabel:descLabel, total:total, anticipo:anticipoTotal(items,total,bruto), ahora:pago==="50"?anticipoTotal(items,total,bruto):total };
     }
-    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", envioDias:diasEnvio(envioFlag,pend), envioFlag:envioFlag, prep:prepPend(pend), demora:demoraPend(pend), envioIntl:intlFlag }; }
+    function sumOpts(){ var t=calc(); return { items:t.items, subtotal:t.subtotal, descuento:t.descuento, cuponCodigo:t.descLabel, total:t.total, ahora:t.ahora, parcial:pago==="50", fijo:conAnticipoFijo(t.items), envioDias:diasEnvio(envioFlag,pend), envioFlag:envioFlag, prep:prepPend(pend), demora:demoraPend(pend), envioIntl:intlFlag }; }
     function pintarResumen(){ var s=$("resumen"); if(s) s.innerHTML=resumenHTML(sumOpts()); }
 
     // Meta Pixel: entró al paso 1 del checkout (empezó a comprar).
@@ -402,7 +412,12 @@
       +     (inmediataPend(pend)
               // Entrega inmediata: ya está en Nicaragua, se paga completo (no hay apartado del 50%).
               ? '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pago completo</b><small>Entrega inmediata: ya está en Nicaragua</small></button></div>'
-              : '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button><button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button></div>')
+              : '<div class="tiles" data-pago><button type="button" class="tile sel" data-p="total"><b>Pagar todo</b><small>El total completo</small></button>'
+                // Producto con "Apartar con $X" (panel): se aparta con ese monto en vez del 50 %.
+                + (conAnticipoFijo(calc().items)
+                  ? '<button type="button" class="tile" data-p="50"><b>Apartar con '+usd(calc().anticipo)+'</b><small>El resto antes de la entrega</small></button>'
+                  : '<button type="button" class="tile" data-p="50"><b>Abono 50%</b><small>La mitad ahora</small></button>')
+                + '</div>')
       +     ''
       +     '<div class="field"><label class="label">¿Tiene un código de descuento?</label><div data-cupon>'+cuponHTML()+'</div></div>'
       +   '</div>'
@@ -570,16 +585,16 @@
     var esCarrito=pend.tipo==="carrito"; var ct=pend.contacto; var pago = ct.pago==="50"?"50":"total";
     function recargoDe(envio,c){ return envio==="rapido"?(Number(ENVCFG.rapido.recargo)||0)*c:0; }
     var bruto=0, sumItems=[];
-    if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; sumItems.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp}); }); }
-    else { var c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1); var lp=(Number(pend.producto.precio)||0)*c2+recargoDe(pend.opts.envio,c2); bruto=lp; sumItems.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:c2,lineTotal:lp}); }
+    if(esCarrito){ pend.items.forEach(function(it){ var c=Number(it.cantidad)||1; var lp=(Number(it.precioUnitario)||0)*c+recargoDe(it.envio,c); bruto+=lp; sumItems.push({nombre:it.nombre,marca:it.marca,talla:it.talla,imagen:it.imagen,cantidad:c,lineTotal:lp,anticipo:it.anticipo}); }); }
+    else { var c2=Math.max(1,parseInt(pend.opts.cantidad,10)||1); var lp=(Number(pend.producto.precio)||0)*c2+recargoDe(pend.opts.envio,c2); bruto=lp; sumItems.push({nombre:pend.producto.nombre,marca:pend.producto.marca,talla:pend.opts.talla,imagen:pend.producto.imagen,cantidad:c2,lineTotal:lp,anticipo:pend.producto.anticipo}); }
     bruto=Math.round(bruto*100)/100;
     var totalCant=sumItems.reduce(function(n,i){ return n+(Number(i.cantidad)||1); },0);
     var desc=0, descLabel="";
     if(ct.cupon){ desc=descFuente(ct.cupon.tipo, ct.cupon.valor, bruto); descLabel=ct.cupon.codigo; }
     else { var pr=mejorPromo(bruto, totalCant); if(pr){ desc=descFuente(pr.tipo, pr.valor, bruto); descLabel="Promo: "+pr.nombre; } }
     var total=Math.max(0,Math.round((bruto-desc)*100)/100);
-    var ahora = pago==="50"?Math.round(total*50)/100:total;
-    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:descLabel, total:total, ahora:ahora, parcial:pago==="50", envioIntl: !!(ct.pais && ct.pais!=="Nicaragua"), demora:demoraPend(pend) });
+    var ahora = pago==="50"?anticipoTotal(sumItems,total,bruto):total;
+    var sumHTML=resumenHTML({ items:sumItems, subtotal:bruto, descuento:desc, cuponCodigo:descLabel, total:total, ahora:ahora, parcial:pago==="50", fijo:conAnticipoFijo(sumItems), envioIntl: !!(ct.pais && ct.pais!=="Nicaragua"), demora:demoraPend(pend) });
 
     $("ck").innerHTML='<div class="grid"><div class="col-main">'
       + '<button class="back rv" data-volver>← Volver a mis datos</button>'
@@ -684,7 +699,7 @@
     ultimoEstado=c.estado;
     var pagado=c.estado==="pagado", vencido=c.estado==="vencido";
     var sumItems=items.map(function(s){ return { nombre:s.producto, marca:s.marca, talla:s.talla, imagen:s.imagen, cantidad:s.cantidad, lineTotal:s.total }; });
-    var sumHTML=resumenHTML({ items:sumItems, subtotal:c.total, descuento:0, total:c.total, ahora:c.ahora, parcial:c.parcial, codigo:codigo });
+    var sumHTML=resumenHTML({ items:sumItems, subtotal:c.total, descuento:0, total:c.total, ahora:c.ahora, parcial:c.parcial, fijo:c.fijo, codigo:codigo });
 
     if(pagado){
       $("ck").innerHTML='<div class="grid"><div class="col-main">'
@@ -951,7 +966,7 @@
       .then(function(filas){ return new Promise(function(listo){
         // Las promociones de la web (productos.js) también aplican en Entrega inmediata.
         if(typeof ofertaDe === "function") return listo(filas);
-        var sc = document.createElement("script"); sc.src = "../productos.js?v=20261029c";
+        var sc = document.createElement("script"); sc.src = "../productos.js?v=20261103b";
         sc.onload = sc.onerror = function(){ listo(filas); }; document.head.appendChild(sc);
       }); })
       .then(function(filas){
