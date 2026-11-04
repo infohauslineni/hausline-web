@@ -68,7 +68,7 @@ jobs:
         run: |
           git config user.name "hausline-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add p sitemap.xml imgM imgG
+          git add p sitemap.xml imgM imgG catalogo-respaldo.json
           if git diff --cached --quiet; then
             echo "Sin cambios en /p ni sitemap — nada que subir."
           else

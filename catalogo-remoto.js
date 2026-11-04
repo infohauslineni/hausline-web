@@ -15,17 +15,29 @@ async function cargarProductosDelPanel(){
   // Necesita que productos.js ya haya cargado (productos + normalizarProducto).
   if(typeof productos === "undefined" || typeof normalizarProducto !== "function") return;
 
-  let filas;
+  // 1) Supabase con tiempo límite (6 s). 2) Si está lento, caído o saturado: la copia de
+  // respaldo que vive en este mismo sitio (catalogo-respaldo.json, se actualiza cada 15 min).
+  // Así la tienda siempre muestra los productos, precios y ocultos correctos.
+  async function traer(url, opciones, ms){
+    const ctrl = typeof AbortController === "function" ? new AbortController() : null;
+    const t = ctrl ? setTimeout(() => ctrl.abort(), ms) : null;
+    try{
+      const r = await fetch(url, Object.assign({}, opciones, ctrl ? { signal: ctrl.signal } : {}));
+      if(!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      if(!Array.isArray(j) || !j.length) throw new Error("vacío");
+      return j;
+    } finally { if(t) clearTimeout(t); }
+  }
+  let filas = null;
   try{
-    const r = await fetch(
+    filas = await traer(
       `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos,activo&order=created_at.asc`,
-      { headers: { apikey: CATALOGO_PANEL.key, Authorization: "Bearer " + CATALOGO_PANEL.key } }
-    );
-    if(!r.ok) return;
-    filas = await r.json();
+      { headers: { apikey: CATALOGO_PANEL.key, Authorization: "Bearer " + CATALOGO_PANEL.key } }, 6000);
   }catch(e){
-    console.warn("Catálogo del panel no disponible:", e);
-    return;
+    console.warn("Catálogo del panel lento o no disponible, se usa el respaldo:", e && e.message);
+    try{ filas = await traer("/catalogo-respaldo.json?v=" + Math.floor(Date.now() / 900000), {}, 8000); }
+    catch(e2){ console.warn("Respaldo del catálogo no disponible:", e2 && e2.message); return; }
   }
   if(!Array.isArray(filas) || !filas.length) return;
 

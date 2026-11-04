@@ -301,3 +301,21 @@ for (const codigo of codigosGenerados) {
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entradas.join('\n')}\n</urlset>\n`
 fs.writeFileSync(path.join(raiz, 'sitemap.xml'), sitemap, 'utf8')
 console.log(`✓ sitemap.xml regenerado con ${codigosGenerados.length} productos (URLs /p/)`)
+
+// --- RESPALDO DEL CATÁLOGO (para que la tienda nunca se quede sin productos) ---
+// Copia de catalogo_web servida desde el mismo sitio (GitHub Pages / CDN). Si Supabase está
+// lento o caído, catalogo-remoto.js usa este archivo. Solo se reemplaza con una respuesta
+// buena (nunca con un error o una lista vacía). Se actualiza cada 15 min con el workflow.
+try {
+  const r = await fetch(
+    `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos,activo&order=created_at.asc`,
+    { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } }
+  )
+  const filas = r.ok ? await r.json() : null
+  if (Array.isArray(filas) && filas.length) {
+    fs.writeFileSync(path.join(raiz, 'catalogo-respaldo.json'), JSON.stringify(filas), 'utf8')
+    console.log(`✓ catalogo-respaldo.json: ${filas.length} productos del panel`)
+  } else console.warn('⚠ Respaldo del catálogo: Supabase no respondió bien, se deja el anterior.')
+} catch (e) {
+  console.warn('⚠ Respaldo del catálogo no actualizado:', e?.message || e)
+}
