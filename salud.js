@@ -74,7 +74,9 @@
   // Sin archivo = código inyectado por el navegador o una app (la CSP no deja correr scripts
   // inline nuestros), p. ej. el puente de Instagram/Facebook en iPhone (window.webkit.messageHandlers).
   function nuestro(archivo) { return !!archivo && (archivo.indexOf(location.origin) === 0 || /cdn\.jsdelivr\.net\/npm\/@supabase/.test(archivo)); }
-  var RUIDO = /webkit\.messageHandlers|_AutofillCallbackHandler|__gCrWeb|instantSearchSDKJSBridgeClearHighlight|Java object is gone|ResizeObserver loop/i;
+  // También billeteras cripto y navegadores de apps (MetaMask, Trust, TikTok, WeChat…) que inyectan
+  // su código en cualquier página (p. ej. "window.ethereum.selectedAddress"): no son fallas de la tienda.
+  var RUIDO = /webkit\.messageHandlers|_AutofillCallbackHandler|__gCrWeb|instantSearchSDKJSBridgeClearHighlight|Java object is gone|ResizeObserver loop|ethereum|web3|solana|phantom|tronWeb|metamask|__firefox__|zaloJSV2|WeixinJSBridge|ToutiaoJSBridge|bytedance|getReadModeConfig/i;
   window.addEventListener("error", function (e) {
     if (!e || !e.message || e.message === "Script error." || RUIDO.test(e.message) || !nuestro(e.filename)) return;
     error("js_error", e.message, { archivo: String(e.filename || "").replace(location.origin, "").split("?")[0], linea: e.lineno || null });
