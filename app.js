@@ -576,6 +576,29 @@ function actualizarAccesosOfertas(){
   });
 }
 
+// Una página que quedó ABIERTA (p. ej. en el teléfono desde ayer) no se enteraba de que una
+// oferta venció: seguía mostrando el precio rebajado. Cada minuto, y al volver a la pestaña,
+// se revisa qué productos están en oferta; si cambió (venció o empezó una), se repinta todo.
+(function vigilarOfertas(){
+  let firma = null;
+  function revisar(){
+    try{
+      const ahora = productosOferta().map(p => p.codigo + ":" + precioVigente(p, false)).join("|");
+      if(firma === null || ahora === firma){ firma = ahora; return; }
+      firma = ahora;
+      if(typeof renderInicio === "function") renderInicio();
+      actualizarAccesosOfertas();
+      if(typeof coleccionActual !== "undefined" && coleccionActual && typeof abrirColeccion === "function"){
+        abrirColeccion(coleccionActual.tipo, coleccionActual.valor, coleccionActual.titulo, true);
+      }
+      if(document.body.classList.contains("en-producto") && typeof repintarPrecios === "function") repintarPrecios();
+    }catch(e){}
+  }
+  setTimeout(revisar, 8000);
+  setInterval(revisar, 60000);
+  document.addEventListener("visibilitychange", () => { if(!document.hidden) revisar(); });
+})();
+
 function renderCategoriasVisuales(){
   const cont = $("#filaCategorias");
   if(!cont) return;
