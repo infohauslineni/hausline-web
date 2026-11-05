@@ -1,0 +1,7 @@
+# HAUSLINE - cómo reportar un problema de seguridad
+Contact: mailto:alerta@hauslineshopni.es
+Contact: https://wa.me/50578995116
+Expires: 2027-11-05T00:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://hauslineshopni.es/.well-known/security.txt
+Policy: https://hauslineshopni.es/privacidad.html

@@ -2,12 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <script src="/anti-marco.js?v=20261105a"></script>
   <!-- La app cambia la URL a /p/CODIGO al ver un producto (para compartir con
        foto). Esta base asegura que las rutas relativas (imágenes, css, js) se
        resuelvan SIEMPRE desde la raíz y no contra /p/ (si no, las fotos 404). -->
   <base href="/">
   <!-- Seguridad: limita de dónde puede cargar recursos el navegador (anti inyección de código). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co https://epslwaxjemlysqtubbfu.supabase.co https://www.facebook.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co wss://epslwaxjemlysqtubbfu.supabase.co https://xgdijumnmaqfirmckugw.supabase.co wss://xgdijumnmaqfirmckugw.supabase.co https://connect.facebook.net https://www.facebook.com; frame-src https://www.facebook.com; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://xgdijumnmaqfirmckugw.supabase.co https://epslwaxjemlysqtubbfu.supabase.co https://www.facebook.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://epslwaxjemlysqtubbfu.supabase.co wss://epslwaxjemlysqtubbfu.supabase.co https://xgdijumnmaqfirmckugw.supabase.co wss://xgdijumnmaqfirmckugw.supabase.co https://connect.facebook.net https://www.facebook.com; frame-src https://www.facebook.com; base-uri 'self'; form-action 'self' https://www.facebook.com; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Audemars Piguet · HAUSLINE</title>
