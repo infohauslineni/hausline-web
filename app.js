@@ -2308,6 +2308,12 @@ function renderFavoritos(){
 // --- Delegación general de clics ---
 document.addEventListener("click", e => {
 
+  // Enlaces vacíos (href="#", p. ej. los productos de la vitrina de marcas): NUNCA navegan.
+  // Con <base href="/">, "#" apunta a la portada: abría el producto y enseguida el enlace
+  // llevaba de vuelta al inicio, así que parecía que no se abría nada.
+  const enlaceVacio = e.target.closest && e.target.closest('a[href="#"]');
+  if(enlaceVacio) e.preventDefault();
+
   // Añadir al carrito desde la tarjeta (no abre el producto).
   const btnAgregar = e.target.closest("[data-agregar]");
   if(btnAgregar){
