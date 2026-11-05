@@ -124,6 +124,7 @@
     if (!cont) return;
     cont.innerHTML = partes.join("");
     C.conectarCopiar(cont);
+    if (C.revisarEncuestas) C.revisarEncuestas(cont);
     cont.querySelectorAll(".cta-encuesta-est a").forEach(function (a) { a.addEventListener("click", function () { try { localStorage.setItem("hausline_encuesta_" + entregado.codigo, "1"); } catch (e) {} }); });
   }
 

@@ -184,6 +184,7 @@
         (prod ? '<a class="cta-btn linea" href="/p/' + encodeURIComponent(prod.codigo) + '/">Comprar de nuevo</a>' : "") + "</div>");
     }
     main.innerHTML = html;
+    if (C.revisarEncuestas) C.revisarEncuestas(main);
     // Preparación aprox. del producto y aviso de demora (se llena cuando llega el catálogo).
     if (C.avisoTiempos) C.avisoTiempos(p).then(function (t) { var c = document.getElementById("pedTiempos"); if (c && t) c.innerHTML = '<div style="margin-top:12px;display:grid;gap:12px">' + t + "</div>"; }).catch(function () {});
     main.querySelectorAll("[data-rb]").forEach(function (b) { b.addEventListener("click", function () { accionReembolso(b.dataset.rb); }); });

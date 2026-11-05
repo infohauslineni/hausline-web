@@ -15,6 +15,26 @@
   var elCod = document.getElementById("cod");
   if(codigo && elCod) elCod.textContent = "Pedido " + codigo;
 
+  // Una sola reseña por producto del pedido: si ya la envió, no se muestra el formulario.
+  var CLAVE = "hausline_resena_" + codigo.toUpperCase() + (prod ? "_" + prod.toUpperCase() : "");
+  function yaEnviada(){
+    document.getElementById("caja").innerHTML =
+      '<div class="logo">HAUSLINE</div>' +
+      '<div class="ok">' +
+        '<div class="ic">★</div>' +
+        '<h2>Ya recibimos su reseña</h2>' +
+        '<p>Solo se puede enviar una reseña por producto de cada pedido. ¡Gracias por compartir su experiencia con HAUSLINE!</p>' +
+        '<a class="volver" href="/">Volver a la tienda</a>' +
+      '</div>';
+  }
+  function marcarEnviada(){ try { localStorage.setItem(CLAVE, "1"); localStorage.setItem("hausline_encuesta_" + codigo.toUpperCase(), "1"); } catch(e) {} }
+  if(codigo){
+    fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resenaEstado: true, codigo: codigo, producto: prod || null }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(d && d.ok && d.enviada){ marcarEnviada(); yaEnviada(); } })
+      .catch(function(){});
+  }
+
   // ---------- Estrellas ----------
   var cont = document.getElementById("estrellas"), etiqueta = document.getElementById("etiqueta");
   function marcar(n){
@@ -73,6 +93,7 @@
     codigo: "El enlace de la reseña no es válido. Ábralo de nuevo desde su correo.",
     pedido: "No encontramos ese pedido. Ábralo de nuevo desde su correo.",
     demasiadas: "Este pedido ya tiene reseñas registradas. ¡Gracias!",
+    ya_enviada: "Ya recibimos su reseña de este producto. ¡Gracias!",
     foto_grande: "La foto es muy pesada. Pruebe con otra.",
     foto_invalida: "No se pudo usar esa foto. Pruebe con otra.",
   };
@@ -88,10 +109,12 @@
       var res = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resenaPublica: true, codigo: codigo, estrellas: estrellas, comentario: document.getElementById("comentario").value.trim(), producto: prod || null, foto: foto })
+        body: JSON.stringify({ resenaPublica: true, codigo: codigo, estrellas: estrellas, comentario: document.getElementById("comentario").value.trim(), producto: prod || null, foto: foto, anonimo: !document.getElementById("mostrarNombre").checked })
       });
       var data = await res.json().catch(function(){ return null; });
+      if(data && data.error === "ya_enviada"){ marcarEnviada(); return yaEnviada(); }
       if(!res.ok || !data || data.ok === false) throw new Error((data && data.error) || "error");
+      marcarEnviada();
       document.getElementById("caja").innerHTML =
         '<div class="logo">HAUSLINE</div>' +
         '<div class="ok">' +

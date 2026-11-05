@@ -742,11 +742,28 @@
     });
   }
   // Encuesta de 1 toque: cada estrella lleva a la reseña con esa calificación ya marcada.
+  // Si ya envió la reseña, revisarEncuestas() la cambia por un "Gracias" (una sola por producto).
   function encuestaEntrega(codigo, producto, titulo) {
     var base = "/resena/?c=" + encodeURIComponent(codigo) + (producto ? "&p=" + encodeURIComponent(producto) : "");
-    return '<div class="cta-card cta-pad cta-encuesta"><p class="cta-encuesta-t">' + esc(titulo || "¿Cómo le fue con su pedido?") + '</p>' +
+    var enviada = false;
+    try { enviada = localStorage.getItem("hausline_resena_" + String(codigo).toUpperCase() + (producto ? "_" + String(producto).toUpperCase() : "")) === "1"; } catch (e) {}
+    if (enviada) return encuestaGracias();
+    return '<div class="cta-card cta-pad cta-encuesta" data-resena-c="' + esc(codigo) + '" data-resena-p="' + esc(producto || "") + '"><p class="cta-encuesta-t">' + esc(titulo || "¿Cómo le fue con su pedido?") + '</p>' +
       '<p class="cta-nota" style="margin:2px 0 10px;font-size:12.5px">Toque una estrella. Su opinión ayuda a otros clientes.</p><div class="cta-encuesta-est">' +
       [1, 2, 3, 4, 5].map(function (n) { return '<a href="' + base + "&e=" + n + '" aria-label="' + n + (n === 1 ? " estrella" : " estrellas") + '">★</a>'; }).join("") + "</div></div>";
+  }
+  function encuestaGracias() {
+    return '<div class="cta-card cta-pad cta-encuesta"><p class="cta-encuesta-t">✓ Gracias por su reseña</p><p class="cta-nota" style="margin:2px 0 0;font-size:12.5px">Ya la recibimos. Se publica después de una breve revisión.</p></div>';
+  }
+  // Pregunta al panel si esas encuestas ya tienen reseña; si sí, se cambian por el "Gracias".
+  function revisarEncuestas(raiz) {
+    (raiz || document).querySelectorAll("[data-resena-c]").forEach(function (el) {
+      var codigo = el.getAttribute("data-resena-c"), producto = el.getAttribute("data-resena-p") || null;
+      fetch("https://hausline-tracking.vercel.app/api/notificar-estado", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resenaEstado: true, codigo: codigo, producto: producto }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) { if (d && d.ok && d.enviada) el.outerHTML = encuestaGracias(); })
+        .catch(function () {});
+    });
   }
   // Precio actual de un producto según el catálogo cargado en la página (productos.js + panel).
   function precioActual(codigo) {
@@ -768,7 +785,7 @@
 
   window.HauslineCuenta = {
     avisoTiempos: avisoTiempos,
-    misCupones: misCupones, tarjetaCupon: tarjetaCupon, conectarCopiar: conectarCopiar, encuestaEntrega: encuestaEntrega, precioActual: precioActual, bajasDePrecio: bajasDePrecio, favoritosCuenta: favoritosCuenta,
+    misCupones: misCupones, tarjetaCupon: tarjetaCupon, conectarCopiar: conectarCopiar, encuestaEntrega: encuestaEntrega, revisarEncuestas: revisarEncuestas, precioActual: precioActual, bajasDePrecio: bajasDePrecio, favoritosCuenta: favoritosCuenta,
     autoActualizar: autoActualizar, visor: visor,
     sb: sb, SITIO: SITIO, ETAPAS: ETAPAS, etapa: etapa, grupo: grupo,
     esc: esc, img: img, fecha: fecha, monto: monto, param: param, destinoSeguro: destinoSeguro,
