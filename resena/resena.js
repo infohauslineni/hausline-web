@@ -109,7 +109,7 @@
       var res = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resenaPublica: true, codigo: codigo, estrellas: estrellas, comentario: document.getElementById("comentario").value.trim(), producto: prod || null, foto: foto, anonimo: !document.getElementById("mostrarNombre").checked })
+        body: JSON.stringify({ resenaPublica: true, codigo: codigo, estrellas: estrellas, comentario: document.getElementById("comentario").value.trim(), producto: prod || null, foto: foto })
       });
       var data = await res.json().catch(function(){ return null; });
       if(data && data.error === "ya_enviada"){ marcarEnviada(); return yaEnviada(); }
