@@ -1038,6 +1038,34 @@ h1,h2,h3{ margin:0; font-weight:700; letter-spacing:-.02em; }
   z-index:3;
   transition:background var(--t-rapida) var(--ease), transform var(--t-rapida) var(--ease);
 }
+/* Cinta "100% OG": banda roja en diagonal sobre la esquina de arriba a la derecha,
+   por debajo y a la izquierda del corazón (no lo tapa). El centro de la banda queda
+   sobre la diagonal de la esquina, a ~70px de ella. */
+.cinta-og{
+  position:absolute;
+  top:50px;right:50px;
+  width:190px;
+  padding:4px 0;
+  transform:translate(50%,-50%) rotate(45deg);
+  background:var(--rojo);
+  color:#fff;
+  font-size:10.5px;
+  font-weight:700;
+  line-height:1.25;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  text-align:center;
+  white-space:nowrap;
+  box-shadow:0 2px 6px rgba(0,0,0,.22);
+  z-index:2;
+  pointer-events:none;
+}
+@media (max-width:600px){
+  .cinta-og{ top:38px;right:38px;width:140px;padding:2px 0;font-size:8.5px;letter-spacing:.1em; }
+  /* En tarjetas OG el corazón se achica y va a la puntita, para que no tape la cinta. */
+  .card-img.con-og .btn-fav{ top:5px;right:5px;width:26px;height:26px; }
+  .card-img.con-og .btn-fav svg{ width:14px;height:14px; }
+}
 .btn-fav:hover{ background:rgba(5,5,5,.75); }
 .btn-fav:active{ transform:scale(.86); }
 .btn-fav svg{

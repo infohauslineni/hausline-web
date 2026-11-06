@@ -196,8 +196,11 @@ function crearCard(producto, modoInmediata){
   else if(enCaminoModo || (producto.enCamino && !producto.entregaInmediata)) etiquetas += `<span class="etiqueta encamino">Llega pronto</span>`;
   if(oferta) etiquetas += `<span class="etiqueta oferta">-${desc}%</span>`;
   if(esNuevo(producto)) etiquetas += `<span class="etiqueta nuevo">Nuevo</span>`;
-  // Etiquetas opcionales que hayas activado en el producto
+  // Etiquetas opcionales que hayas activado en el producto. "100% OG" no va en la columna:
+  // sale como cinta roja en diagonal en la esquina de la foto (más limpio).
+  const og = producto.og100 === true;
   etiquetasActivas(producto).forEach(e => {
+    if(e.propiedad === "og100") return;
     etiquetas += `<span class="etiqueta ${e.color}">${esc(e.texto)}</span>`;
   });
 
@@ -241,10 +244,11 @@ function crearCard(producto, modoInmediata){
 
   return `
     <article class="card" data-codigo="${esc(producto.codigo)}" ${inmediata ? 'data-modo="inmediata"' : enCaminoModo ? 'data-modo="encamino"' : ""}>
-      <div class="card-img">
+      <div class="card-img${og ? " con-og" : ""}">
         <img class="${claseAjuste}" ${imgMini(producto.imagen)} alt="${esc(nombreProducto(producto))}" loading="lazy" decoding="async"${estiloEscala}>
         <div class="etiquetas"><div class="card-rating" data-rating="${esc(producto.codigo)}"></div>${etiquetas}</div>
         <span class="foto-marca" aria-hidden="true">HAUSLINE</span>
+        ${og ? `<span class="cinta-og">100% OG</span>` : ""}
         <button class="btn-fav ${fav ? "activo" : ""}" type="button"
                 data-fav="${esc(producto.codigo)}"
                 aria-label="${fav ? "Quitar de favoritos" : "Guardar en favoritos"}">

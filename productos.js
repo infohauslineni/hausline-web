@@ -6598,7 +6598,7 @@ const ETIQUETAS_OPCIONALES = [
   { propiedad: "edicionLimitada", texto: "Edición limitada", color: "dorado" },
   { propiedad: "restock",         texto: "De vuelta",        color: "verde"  },
   { propiedad: "recomendado",     texto: "Recomendado",      color: "blanco" },
-  { propiedad: "og100",           texto: "100% OG",          color: "dorado" }
+  { propiedad: "og100",           texto: "100% OG",          color: "rojo"   }
 ];
 
 // Devuelve las etiquetas opcionales activas de un producto.
