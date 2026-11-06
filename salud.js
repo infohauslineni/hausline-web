@@ -80,6 +80,16 @@
   window.addEventListener("error", function (e) {
     if (!e || !e.message || e.message === "Script error." || RUIDO.test(e.message) || !nuestro(e.filename)) return;
     error("js_error", e.message, { archivo: String(e.filename || "").replace(location.origin, "").split("?")[0], linea: e.lineno || null });
+    // El catálogo (productos.js) no llegó a cargar (casi siempre mala señal): la página queda sin
+    // productos. Se recarga sola UNA vez por pestaña para volver a intentarlo.
+    if (/\bproductos\b/.test(e.message) && /find variable|not defined/i.test(e.message)) {
+      try {
+        if (!sessionStorage.getItem("hl_reintento_catalogo")) {
+          sessionStorage.setItem("hl_reintento_catalogo", "1");
+          setTimeout(function () { location.reload(); }, 1200);
+        }
+      } catch (x) { /* sin almacenamiento: no se reintenta */ }
+    }
   });
   window.addEventListener("unhandledrejection", function (e) {
     var r = e && e.reason;
