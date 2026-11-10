@@ -364,3 +364,10 @@ body{ letter-spacing:.01em; }
 .cta-foto, .cta-fotos a{ border-radius:0; }
 .cta-card{ box-shadow:0 1px 2px rgba(20,17,16,.03), 0 12px 32px rgba(20,17,16,.04); }
 .cta-skel{ background:linear-gradient(100deg,#F1EFEB 30%,#FBFAF8 50%,#F1EFEB 70%); background-size:220% 100%; }
+
+/* Esquinas suaves */
+:root{ --radio:14px; --radio-sm:10px; }
+.cta-btn{ border-radius:12px; }
+.cta-input{ border-radius:10px; }
+.cta-chip{ border-radius:999px; }
+.cta-foto, .cta-fotos a{ border-radius:12px; }
