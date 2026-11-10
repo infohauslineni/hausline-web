@@ -58,7 +58,6 @@ const productosBase = [
   imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0001/CL001.jfif",
   descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
   tallas:["37","38","39","40","41","42","43","44"],
- promocionHasta:"",
  
 },
 
@@ -6483,8 +6482,10 @@ function fechaVigente(fecha){
 // Devuelve la promoción que le toca a un producto, o null si no tiene.
 // Tiene prioridad el precio de oferta puesto en el producto.
 function ofertaDe(producto){
-  // 1) Oferta propia del producto (precioOferta + promocionHasta)
-  if(producto.precioOferta && fechaVigente(producto.promocionHasta)){
+  // 1) Oferta propia del producto (precioOferta + promocionHasta). Sin fecha = oferta PERMANENTE
+  //    (hasta que se quite el precio de oferta en el panel). Igual que el panel.
+  if(Number(producto.precioOferta) > 0 && Number(producto.precioOferta) < Number(producto.precio)
+     && (!producto.promocionHasta || fechaVigente(producto.promocionHasta))){
     return {
       precio: Number(producto.precioOferta),
       nombre: producto.nombrePromocion || "Oferta",

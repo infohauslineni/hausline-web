@@ -26,7 +26,7 @@ document.addEventListener("error",function(e){ var t=e.target; if(t&&t.tagName==
 
   function aviso(el, texto, tipo){ el.textContent = texto; el.className = "aviso " + (tipo || ""); if(texto) el.scrollIntoView({ behavior:"smooth", block:"nearest" }); }
   function llenarSelect(sel, valores, vac){ sel.innerHTML = (vac ? '<option value="">—</option>' : "") + valores.map(v => `<option value="${v}">${v}</option>`).join(""); }
-  function enOferta(d){ return d && Number(d.precioOferta) > 0 && d.promocionHasta && new Date(d.promocionHasta) > new Date(); }
+  function enOferta(d){ return d && Number(d.precioOferta) > 0 && Number(d.precioOferta) < Number(d.precio) && (!d.promocionHasta || new Date(d.promocionHasta) > new Date()); }
   function precioTxt(d){
     if(d.cotizar || !(Number(d.precio) > 0)) return "A consultar";
     if(enOferta(d)) return `<span class="precio-tachado">$${d.precio}</span><b>$${d.precioOferta}</b>`;
