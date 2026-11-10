@@ -248,3 +248,12 @@ section[aria-labelledby="tit-populares"], #seccionTendencias{ display:none !impo
 .hl-modelo-marca{ font-size:10.5px !important; color:var(--texto-2) !important; letter-spacing:.16em !important; }
 .hl-modelo-nombre{ font-size:24px !important; }
 .hl-modelo-cant{ font-size:11.5px !important; color:var(--texto-2) !important; letter-spacing:.12em !important; }
+
+/* ---------- Ofertas: precio nuevo en ROJO y el anterior tachado en gris ---------- */
+:root{ --rojo-oferta:#C62828; }
+.card-precio:has(.precio-antes) .precio-actual,
+.modal-precio:has(.antes) .actual{ color:var(--rojo-oferta) !important; }
+.precio-antes, .modal-precio .antes{ color:#8F8A82 !important; text-decoration:line-through !important; text-decoration-color:#8F8A82 !important; text-decoration-thickness:1px !important; font-weight:400 !important; }
+.etiqueta.oferta{ color:var(--rojo-oferta) !important; }
+.modal-precio .desc{ color:var(--rojo-oferta) !important; border-color:var(--rojo-oferta) !important; }
+.promo-activa{ color:var(--rojo-oferta) !important; }
