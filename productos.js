@@ -43,1095 +43,7 @@
 // ============================================================
 
 const productosBase = [
-
-  {
-  codigo:"CL0001",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0001/CL001.jfif",
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"],
- promocionHasta:"",
- 
-},
-
-{
-  codigo:"CL0002",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0002/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0003",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0003/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0004",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0004/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0005",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0005/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0005/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0006",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0006/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0006/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0007",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0007/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0007/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0008",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0008/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0008/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0009",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0009/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0009/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0010",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0010/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0010/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0011",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0011/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0011/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0012",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0012/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0012/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0013",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0013/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0013/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0014",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0014/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0014/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0015",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0015/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0015/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0016",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0016/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0016/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0017",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0017/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0017/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0018",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0018/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0018/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0019",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0019/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0019/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0020",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0020/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0020/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0021",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0021/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0021/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0022",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0022/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0022/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0023",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0023/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0023/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0024",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0024/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0024/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0025",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0025/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/1.jpeg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/2.jpeg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/3.jpeg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0025/4.jpeg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0026",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0026/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0026/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0027",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0027/2.jpg",
-  imagenes:[
-    
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0027/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0028",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/1.webp",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/2.webp",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/3.webp",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0028/4.webp",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0029",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:165,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0029/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0029/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0030",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:165,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0030/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0030/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0031",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:165,
-  precioOferta:144,
-  descuento:10,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0031/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0031/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0032",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0032/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0033",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0033/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0034",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:164,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0034/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0034/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0035",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0035/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0036",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0036/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0037",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:144,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0037/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0038",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0038/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0038/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0039",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0039/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0039/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0040",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0040/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0040/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0041",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0041/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0041/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0042",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:172,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0042/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0042/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0043",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0043/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0043/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CL0044",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0044/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0044/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"CL0045",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0045/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0045/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"CL0046",
-  marca:"Christian Louboutin",
-  nombre:"Christian Louboutin",
-  precio:160,
-  promocionHasta:"2026-07-10T23:59:59",
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Loubutin/CL0046/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/1.jpg",
-     "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/2.jpg",
-      "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/3.jpg",
-       "imgP/ZAPATOS MEN/Christian Loubutin/CL0046/4.jpg",
-  ],
-  descripcion:"LOUBOUTIN TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-{
-  codigo:"AM001",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MQCUEEN",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM001/+.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/+.jpeg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/7bb7336a.jpeg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/96548a9c.jpeg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM001/fd4b494a.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AM002",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MQCUEEN",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/1.jpeg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/2.jpeg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/3.jpeg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AM003",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MQCUEEN",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM003/1.jpg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM003/2.PNG",
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AM004",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander MCQUEEN",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM004/1.jpg",
-    
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"AM005",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander SWAROSKI",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-destacadonuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM005/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/1.jpeg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/2.jpeg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/3.jpeg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/4.jpeg",
-        "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/5.jpeg",
-    
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"AM006",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander grey",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-destacadonuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM006/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/1.jpg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/2.jpg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/3.jpg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM006/4.jpg",
-        "imgP/ZAPATOS MEN/Alexander MCqueen/AM005/5.jpeg",
-    
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-{
-  codigo:"AM007",
-  marca:"ALEAXANDER MCQUEEN",
-  nombre:"Alexander SWAROSKI",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-destacadonuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Alexander MCqueen/AM007/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/1.jpeg",
-     "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/2.jpeg",
-      "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/3.jpeg",
-       "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/4.jpeg",
-        "imgP/ZAPATOS MEN/Alexander MCqueen/AM007/5.jpeg",
-    
-      
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
+  // Calzado reiniciado (nov-2026): ahora se sube desde el panel. Copia: rama respaldo-2026-11-09.
 {
   codigo:"STY001",
   marca:"STUSSY",
@@ -1160,7 +72,6 @@ destacadonuevo:true,
   tallas:["S","M","L","XL"]
 },
 
-
 {
   codigo:"STY002",
   marca:"STUSSY",
@@ -1187,2105 +98,6 @@ destacadonuevo:true,
   tallas:["S","M","L","XL"]
 },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"AR001",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR001/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR001/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR001/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR001/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR002",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:140,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR002/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR002/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR002/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR002/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR003",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR003/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR003/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR003/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR003/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR004",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR004/1.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR004/2.jpeg",
-    "imgP/ZAPATOS MEN/AMIRI/AR004/3.jpeg",
-     "imgP/ZAPATOS MEN/AMIRI/AR004/4.jpeg", 
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"AR005",
-  marca:"AMIRI",
-  nombre:"AMIRI",
-  precio:170,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/AMIRI/AR005/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/AMIRI/AR005/1.webp",
-    "imgP/ZAPATOS MEN/AMIRI/AR005/2.webp",
-    "imgP/ZAPATOS MEN/AMIRI/AR005/3.webp",
-     
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-{
-  codigo:"BL001",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL001/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL001/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL001/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL001/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"],
-
-  // ---- EJEMPLO DE ENTREGA INMEDIATA (así se configura cualquier producto) ----
-  // Borra estas líneas cuando ya no tengas este par en existencia.
-  entregaInmediata:false,                       // lo saca en la sección "Entrega inmediata"
-  tallasEntregaInmediata:["41","42","43"],     // SOLO estas tallas se podrán pedir
-  cantidadDisponible:1,                        // cuántos pares tienes ahora
-  precioEntregaInmediata:139,                  // precio especial (opcional)
-  envioRapido:false,                            // etiqueta azul "Envío rápido"
-
-  // ---- ETIQUETAS OPCIONALES (ejemplo activado) ----
-  // Ver la lista completa en ETIQUETAS_OPCIONALES más abajo.
-  ultimasUnidades:false,        // enciende la etiqueta
-cantidadDisponible:1,        // este número decide el texto                      // etiqueta roja "Últimas unidades"
-},
-{
-  codigo:"BL002",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL002/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL002/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL002/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL003",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL003/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL003/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL003/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL003/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL004",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL004/1.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL004/2.jpeg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL004/3.jpeg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL004/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL005",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:148,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL005/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL005/1.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL005/2.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL005/3.jpg",
-     "imgP/ZAPATOS MEN/BALENCIAGA/BL005/4.jpg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL006",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:190,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL006/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL006/1.jpeg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BL007",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA",
-  precio:90,
-   subcategoria:"Calzado",
-
-  categoria:"Hombre",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL007/1.jpeg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"BL008",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA SLIDES",
-  precio:90,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  destacadoNuevo:false,
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL008/1.jpg",
-  imagenes:[
-    
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/1.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/2.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/3.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/4.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/5.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL008/6.jpg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["35","36","37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"BL009",
-  marca:"BALENCIAGA",
-  nombre:"BALENCIAGA SLIDES",
-  precio:90,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  destacadoNuevo:false,
-   nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BALENCIAGA/BL009/1.jpg",
-  imagenes:[
-    
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/1.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/2.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/3.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/4.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/5.jpg",
-    "imgP/ZAPATOS MEN/BALENCIAGA/BL009/6.jpg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["35","36","37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-{
-  codigo:"BK001",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK001/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK001/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK001/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK001/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK002",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK002/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK002/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK002/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK003",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK003/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK003/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK003/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK003/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK004",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK004/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK004/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK004/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK004/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK005",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-  
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK005/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK005/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK005/3.jpeg",
-     "imgP/ZAPATOS MEN/Birkenstock/BK005/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BK006",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/2.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/3.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK006/4.jpeg"
-  ],
-  descripcion:"TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"BK007",
-  marca:"BIRKENSTOCK",
-  nombre:"Birkenstock",
-  precio:95,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Birkenstock/BK007/3.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK007/1.jpeg",
-    "imgP/ZAPATOS MEN/Birkenstock/BK007/2.jpeg"
-  ],
-  descripcion:"TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-{
-  codigo:"BR001",
-  marca:"BURBERRY",
-  nombre:"BURBERRY",
-  precio:150,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BURBERRY/BR001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BURBERRY/BR001/1.jpeg",
-    "imgP/ZAPATOS MEN/BURBERRY/BR001/2.jpeg",
-    "imgP/ZAPATOS MEN/BURBERRY/BR001/3.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"BR002",
-  marca:"BURBERRY",
-  nombre:"BURBERRY",
-  precio:90,
-  categoria:"Hombre",
-   subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/BURBERRY/BR002/2.jpeg",
-   
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"],
-
-  entregaInmediata:false,
-tallasEntregaInmediata:[""],
-coloresEntregaInmediata:[""],
-cantidadDisponible:1,
-precioEntregaInmediata:0,
-envioRapido: false ,
-},
-
-
-
-
-{
-  codigo:"CH001",
-  marca:"CHRISTIAN DIOR",
-  nombre:"Christian Dior",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Dior/CH001/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Dior/CH001/1.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH001/2.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH001/3.webp",
-     "imgP/ZAPATOS MEN/Christian Dior/CH001/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CH002",
-  marca:"CHRISTIAN DIOR",
-  nombre:"Christian Dior",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Dior/CH002/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Dior/CH002/1.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH002/2.webp",
-    "imgP/ZAPATOS MEN/Christian Dior/CH002/3.webp",
-     "imgP/ZAPATOS MEN/Christian Dior/CH002/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"CH003",
-  marca:"CHRISTIAN DIOR",
-  nombre:"Christian Dior",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Christian Dior/CH003/1.jfif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Christian Dior/CH003/1.jfif",
-    "imgP/ZAPATOS MEN/Christian Dior/CH003/2.jfif",
-    "imgP/ZAPATOS MEN/Christian Dior/CH003/3.jfif",
-     "imgP/ZAPATOS MEN/Christian Dior/CH003/4.jfif",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"CV001",
-  marca:"CONVERSE",
-  nombre:"Converse",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Converse/CV001/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Converse/CV001/1.webp",
-    "imgP/ZAPATOS MEN/Converse/CV001/2.webp",
-    "imgP/ZAPATOS MEN/Converse/CV001/3.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"D&C001",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C001/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C002",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C002/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C003",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C003/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C004",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C004/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C005",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C005/3.jpg",
-
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C006",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C006/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C007",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C007/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C008",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C008/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C009",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C009/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C011",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C011/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C012",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C012/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C013",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/1.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/2.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/3.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C013/4.jpeg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C014",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/1.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/2.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/3.jpeg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C014/4.jpeg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C015",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/4.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C015/2.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C016",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/4.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/4.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C016/3.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"D&C017",
-  marca:"DOLCE&GABANNA",
-  nombre:"Dolce & Gabanna",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/3.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/3.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/1.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/2.jpg",
-    "imgP/ZAPATOS MEN/Dolce & Gabanna/D&C017/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-{
-  codigo:"GG001",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG001/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/1.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/2.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/5.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG001/4.avif",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG002",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG002/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/2.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG002/4.webp",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG003",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/2.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG003/4.jpg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG004",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG004/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG004/2.jpg",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG005",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG005/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/2.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG005/4.webp",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG006",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG006/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/2.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG006/4.webp",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG007",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/2.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/3.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/4.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG007/1.avif",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG008",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/1.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/2.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/3.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/4.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG008/5.avif",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG009",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/1.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/2.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/3.webp",
-    "imgP/ZAPATOS MEN/Golden Goose/GG009/4.webp",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG010",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG010/1.avif",
-    "imgP/ZAPATOS MEN/Golden Goose/GG010/2.avif",
-   
-    "imgP/ZAPATOS MEN/Golden Goose/GG010/4.avif",
-  
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"GG011",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG011/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG011/2.jpg",
-   "imgP/ZAPATOS MEN/Golden Goose/GG011/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG011/4.jpg",
-  
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG012",
-  marca:"GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG012/1.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG012/2.jpg",
-   "imgP/ZAPATOS MEN/Golden Goose/GG012/3.jpg",
-    "imgP/ZAPATOS MEN/Golden Goose/GG012/4.jpg",
-  
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"GG013",
-  marca:"GOLDEN GOOSE",
-  "marca": "GOLDEN GOOSE",
-  nombre:"Golden Goose",
-  precio:149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Golden Goose/GG013/1.png",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Golden Goose/GG013/1.png",
-    "imgP/ZAPATOS MEN/Golden Goose/GG013/2.png",
-   "imgP/ZAPATOS MEN/Golden Goose/GG013/3.png",
-    "imgP/ZAPATOS MEN/Golden Goose/GG013/4.png",
-  
-  ],
-  descripcion:" Men's Ball Star in white nappa with dove gray suede star ,TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-{
-  codigo:"LP001",
-  marca:"LORO PIANA",
-  nombre:"Loro Piana",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Loro Piana/LP001/1.avif",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/1.avif",
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/2.avif",
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/3.avif",
-    "imgP/ZAPATOS MEN/Loro Piana/LP001/4.avif",
-    
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"LV001",
-  marca:"LOUIS VUITTON",
-  nombre:"Louis Vuitton",
-  precio:180,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/1.jpg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/2.jpg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/3.jpg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV001/4.jpg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"LV002",
-  marca:"LOUIS VUITTON",
-  nombre:"Louis Vuitton",
-  precio:180,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/1.jpeg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/2.jpeg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/3.jpeg",
-    "imgP/ZAPATOS MEN/LOUIS VOUITTON/LV002/4.jpeg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"MM001",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/1.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/2.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM001/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM002",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM002/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/1.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/2.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/3.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM002/4.jpg",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM003",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM003/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/1.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/2.jpg",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM003/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM004",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM004/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM004/1.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM004/2.webp",
-        "imgP/ZAPATOS MEN/Maison Margiela/MM004/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM004/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"MM005",
-  marca:"MAISON MARGIELA",
-  nombre:"Maison Margiela",
-  precio:150,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Maison Margiela/MM005/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Maison Margiela/MM005/1.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM005/2.webp",
-        "imgP/ZAPATOS MEN/Maison Margiela/MM005/3.webp",
-    "imgP/ZAPATOS MEN/Maison Margiela/MM005/4.webp",
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW001",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/1.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/2.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/3.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW001/4.jpeg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW002",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW002/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/1.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/2.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/3.jpeg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW002/4.jpeg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW003",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW003/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/1.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/2.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/3.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW003/4.jpg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"OFW004",
-  marca:"OFF-WHITE",
-  nombre:"Off White ",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW004/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/1.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/2.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/3.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW004/4.jpg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"OFW005",
-  marca:"OFF-WHITE",
-  nombre:"Off White Vulcanized",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/OFF-WHITE/OFW005/2.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW005/2.jpg",
-    "imgP/ZAPATOS MEN/OFF-WHITE/OFW005/1.jpg",
-   
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"],
-  entregaInmediata:true,
-
-tallasEntregaInmediata:["41"],
-coloresEntregaInmediata:["BLANCO"],
-cantidadDisponible:1,
-precioEntregaInmediata:160,
-ultimasUnidades:false,        // enciende la etiqueta
-cantidadDisponible: 1 ,     
-envioRapido: true    // este número decide el texto  
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo:"ST001",
-  marca:"SAINT LAURENT",
-  nombre:"Saint Laurent ",
-  precio:148.5,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/SAINT LAURENT/ST001/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/1.webp",
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/2.webp",
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/3.webp",
-    "imgP/ZAPATOS MEN/SAINT LAURENT/ST001/4.webp",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"VL001",
-  marca:"VALENTINO ",
-  nombre:"Valentino Garavani ",
-  precio:164.50,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Valentino/VL001/1.jpg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Valentino/VL001/1.jpg",
-    "imgP/ZAPATOS MEN/Valentino/VL001/2.jpg",
-    "imgP/ZAPATOS MEN/Valentino/VL001/3.jpg",
-    "imgP/ZAPATOS MEN/Valentino/VL001/4.jpg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-{
-  codigo:"VL002",
-  marca:"VALENTINO ",
-  nombre:"Valentino Garavani ",
-  precio:164.50,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/Valentino/VL002/1.webp",
-  imagenes:[
-    "imgP/ZAPATOS MEN/Valentino/VL002/1.webp",
-    "imgP/ZAPATOS MEN/Valentino/VL002/2.webp",
-    "imgP/ZAPATOS MEN/Valentino/VL002/3.webp",
-    "imgP/ZAPATOS MEN/Valentino/VL002/4.webp",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"VJ001",
-  marca:"VEJA ",
-  nombre:"Veja Campo ",
-  precio:148.5,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/VEJA/VJ001/2.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/VEJA/VJ001/2.jpeg",
-    "imgP/ZAPATOS MEN/VEJA/VJ001/1.jpeg",
-    "imgP/ZAPATOS MEN/VEJA/VJ001/3.jpeg",
-    "imgP/ZAPATOS MEN/VEJA/VJ001/4.jpeg",
-],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-{
-  codigo:"PHM001",
-  marca:"PHILIP MODEL",
-  nombre:"Philip Model",
-  precio:160,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo:true,
-  imagen:"imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/1.jpeg",
-  imagenes:[
-    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/1.jpeg",
-    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/2.jpeg",
-    "imgP/ZAPATOS MEN/PHILIP MODEL/PHM001/3.jpeg",
-    
-  ],
-  descripcion:" TIEMPO de entrega 15-25 días",
-  tallas:["37","38","39","40","41","42","43","44"]
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  codigo: "001W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/001.jpg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"],
-  precioOferta:0,
-promocionHasta:"",
-
-
-"entregaInmediata": false,
-    "tallasEntregaInmediata": [40],
-    "cantidadDisponible": 1,
-    "precioEntregaInmediata": 140,
-    "envioRapido": false
-  },
-{
-  codigo: "002W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/002.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "003W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/003.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "004W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/004.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "005W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/005.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "006W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/006.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "007W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/007.jpg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "008W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/008.jpg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "009W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/009.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "010W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/010.png",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "011W",
-  nombre: "CHRISTIAN LOUBUTIN CL",
-  precio: 140,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/011.jpeg",
-  descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "012W",
-  nombre: "CHRISTIAN DIOR CH",
-  precio: 140,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/012.jpeg",
-  descripcion: " CH TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "013W",
-  nombre: "AMIRI ",
-  precio: 140,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/013.jpeg",
-  descripcion: " AMIRI TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "014W",
-  nombre: "GOLDEN GOOSE GGDB",
-  precio: 140,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/014.jpeg",
-  descripcion: " GGDB TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "015W",
-  nombre: "CHISTIAN LOUBUTIN CL",
-  precio: 140,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/015.jpg",
-  descripcion: " CL TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "016W",
-  nombre: "DIOR",
-  precio: 126,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/DIOR/016.1.jpg",
- imagenes:[
-    "imgP/dama/DIOR/016.1.jpg",
-    "imgP/dama/DIOR/016.3.jpg",
-    "imgP/dama/DIOR/01632.jpg",
-    
-  ],
-
-
-  descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-
-{
-  codigo: "017W",
-  nombre: "DIOR",
-  precio: 105,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/DIOR/017.1/1.jpeg",
- imagenes:[
-    "imgP/dama/DIOR/017.1/1.jpeg",
-    
-  ],
-
-
-  descripcion: " TIEMPO  DE ENTREGA 15-25 DIAS",
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-{
-  codigo: "GGW001",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW001/1.png",
-  descripcion: " Women’s Super-Star in worn white leather with tone-on-tone star, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW001/1.png",
-"imgP/dama/GOLDE/GGW001/2.png",
-"imgP/dama/GOLDE/GGW001/3.png",
-"imgP/dama/GOLDE/GGW001/4.png"
-],
-
-
-
-  tallas: ["35","36","37","38","39","40"]
- },
-
-
-{
-  codigo: "GGW002",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW002/1.png",
-  descripcion: " Women's Super-Star in silver glitter with ice-gray suede star, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW002/1.png",
-"imgP/dama/GOLDE/GGW002/2.png",
-"imgP/dama/GOLDE/GGW002/3.png",
-"imgP/dama/GOLDE/GGW002/4.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-{
-  codigo: "GGW003",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW003/4.png",
-  descripcion: " Women's Super-Star in silver glitter with ice-gray suede star, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW003/4.png",
-"imgP/dama/GOLDE/GGW003/3.png",
-"imgP/dama/GOLDE/GGW003/2.png",
-"imgP/dama/GOLDE/GGW003/1.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "GGW004",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW004/1.png",
-  descripcion: " Women's Ball Star with silver Swarovski micro-crystal star and metallic silver leather heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW004/1.png",
-"imgP/dama/GOLDE/GGW004/2.png",
-"imgP/dama/GOLDE/GGW004/3.png",
-"imgP/dama/GOLDE/GGW004/4.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-{
-  codigo: "GGW005",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW005/1.png",
-  descripcion: " Women's Ball Star in white nappa leather with green leather star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW005/1.png",
-"imgP/dama/GOLDE/GGW005/2.png",
-"imgP/dama/GOLDE/GGW005/3.png",
-"imgP/dama/GOLDE/GGW005/4.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-{
-  codigo: "GGW006",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW006/1.png",
-  descripcion: " Women’s Ball Star Wishes in white leather with a red star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW006/1.png",
-"imgP/dama/GOLDE/GGW006/2.png",
-"imgP/dama/GOLDE/GGW006/3.png",
-"imgP/dama/GOLDE/GGW006/4.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-{
-  codigo: "GGW007",
-  nombre: "GOLDEN GOOSE GGDB",
-  
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW007/1.png",
-  descripcion: " Women’s Ball Star Wishes in white nappa leather with bright blue star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW007/1.png",
-"imgP/dama/GOLDE/GGW007/2.png",
-"imgP/dama/GOLDE/GGW007/3.png",
-"imgP/dama/GOLDE/GGW007/4.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-{
-  codigo: "GGW008",
-  nombre: "GOLDEN GOOSE GGDB",
-  "marca": "GOLDEN GOOSE",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/GOLDE/GGW006/1.png",
-  descripcion: " Women’s Ball Star Wishes in white nappa leather with bright blue star and heel tab, TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/GOLDE/GGW006/1.png",
-"imgP/dama/GOLDE/GGW006/2.png",
-"imgP/dama/GOLDE/GGW006/3.png",
-"imgP/dama/GOLDE/GGW006/4.png"
-],
-
-
-  tallas: ["35","36","37","38","39","40"]
-  },
-
-
-{
-  codigo: "VJW001",
-  nombre: "VEJA CAMPO",
-  "marca": "VEJA",
-  precio: 149.99,
-  categoria:"Dama",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/VEJA/VJW001/1.jpg",
-  descripcion: "VEJA Leather Extra Sneakers , TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/VEJA/VJW001/1.jpg",
-"imgP/dama/VEJA/VJW001/2.jpg",
-"imgP/dama/VEJA/VJW001/3.jpg",
-"imgP/dama/VEJA/VJW001/4.jpg",
-"imgP/dama/VEJA/VJW001/5.jpg",
-"imgP/dama/VEJA/VJW001/8.jpg",
-"imgP/dama/VEJA/VJW001/9.jpg",
-"imgP/dama/VEJA/VJW001/10.jpg",
-],
-
-
-  tallas: ["35","36","37","38","39","40","41","42","43","44","45",
-  ]
-  },
-
-{
-  codigo: "VJW-M002",
-  nombre: "VEJA CAMPO",
-  "marca": "VEJA",
-  precio: 149.99,
-  categoria:"Hombre",
-  subcategoria:"Calzado",
-  nuevo: true,
-  imagen:"imgP/dama/VEJA/VJW-M002/1.jpg",
-  descripcion: "VEJA Leather Extra Sneakers , TIEMPO  DE ENTREGA 15-25 DIAS",
-imagenes:[
-   "imgP/dama/VEJA/VJW-M002/1.jpg",
-"imgP/dama/VEJA/VJW-M002/2.jpg",
-"imgP/dama/VEJA/VJW-M002/3.jpg",
-"imgP/dama/VEJA/VJW-M002/4.jpg",
-"imgP/dama/VEJA/VJW-M002/5.jpg",
-"imgP/dama/VEJA/VJW-M002/6.jpg",
-"imgP/dama/VEJA/VJW-M002/7.jpg",
-"imgP/dama/VEJA/VJW-M002/8.jpg",
-],
-
-
-  tallas: ["35","36","37","38","39","40","41","42","43","44","45",
-  ]
-  },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {
   codigo: "BEAR001",
   marca: "Bearbrick",
@@ -3305,15 +117,6 @@ imagenes:[
   tallas:[]
   },
 
-
-
-
-
-
-
-
-
-
 {
   codigo: "ROW1",
   nombre: "SWATCH X AP",
@@ -3324,6 +127,7 @@ imagenes:[
   descripcion: " AP TIEMPO  DE ENTREGA 15-25 DIAS",
 colores:["Pink","Blue","Green","Black & White"],
   },
+
 {
   codigo:"ROW2",
   subcategoria:"Bolsos",
@@ -3335,6 +139,7 @@ colores:["Pink","Blue","Green","Black & White"],
   descripcion:"LV TIEMPO DE ENTREGA 15-25 DIAS",
   colores:["Black"]
 },
+
 {
   codigo: "ROW3",
   subcategoria:"Carteras",
@@ -3362,6 +167,7 @@ colores:[
   "Green"
 ],
   },
+
 {
   codigo:"ROW4",
   subcategoria:"Mochila",
@@ -3379,11 +185,6 @@ colores:[
   descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
   colores:["Black"]
 },
-
-
-
-
-
 
 {
   codigo:"001R",
@@ -3404,6 +205,7 @@ colores:[
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"002R",
   subcategoria:"Ropa",
@@ -3423,6 +225,7 @@ colores:[
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"003R",
   subcategoria:"Ropa",
@@ -3442,6 +245,7 @@ colores:[
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"004R",
   nombre:"JACKET OFFWHITE OFFW",
@@ -3461,6 +265,7 @@ colores:[
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"005R",
   subcategoria:"Ropa",
@@ -3483,6 +288,7 @@ colores:[
   "White"
 ],
 },
+
 {
   codigo:"006R",
   subcategoria:"Ropa",
@@ -3508,6 +314,7 @@ colores:[
   "White"
 ],
 },
+
 {
   codigo:"007R",
   subcategoria:"Ropa",
@@ -3534,6 +341,7 @@ colores:[
   "Black"
 ],
 },
+
 {
   codigo:"008R",
   subcategoria:"Ropa",
@@ -3557,6 +365,7 @@ colores:[
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"009R",
   subcategoria:"Ropa",
@@ -3594,6 +403,7 @@ colores:[
   cantidadDisponible:0,
   precioEntregaInmediata:0,
 },
+
 {
   codigo:"010R",
   subcategoria:"Ropa",
@@ -3614,6 +424,7 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"011R",
   subcategoria:"Ropa",
@@ -3634,6 +445,7 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"012R",
   subcategoria:"Ropa",
@@ -3654,6 +466,7 @@ descripcion:"MCR TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"013R",
   subcategoria:"Ropa",
@@ -3678,6 +491,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"014R",
   subcategoria:"Ropa",
@@ -3701,6 +515,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"015R",
   subcategoria:"Ropa",
@@ -3724,6 +539,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"016R",
   subcategoria:"Ropa",
@@ -3747,6 +563,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"017R",
   subcategoria:"Ropa",
@@ -3770,6 +587,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"018R",
   subcategoria:"Ropa",
@@ -3793,6 +611,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"019R",
   nombre:"HOODIE alo",
@@ -3813,6 +632,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"020R",
   nombre:"T-SHIRT CASA BLANCA",
@@ -3838,6 +658,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "navy blue",
 ],
 },
+
 {
   codigo:"021R",
   subcategoria:"Ropa",
@@ -3861,6 +682,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"022R",
   nombre:"HOODIE ASSC",
@@ -3880,6 +702,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"023R",
   subcategoria:"Ropa",
@@ -3899,6 +722,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"024R",
   subcategoria:"Ropa",
@@ -3918,6 +742,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"025R",
   nombre:"T-SHIRT AMIRI",
@@ -3937,6 +762,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"026R",
   subcategoria:"Ropa",
@@ -3960,6 +786,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "white",
 ],
 },
+
 {
   codigo:"027R",
   nombre:"T-SHIRT AMIRI",
@@ -3979,6 +806,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"028R",
   nombre:"T-SHIRT AMIRI",
@@ -3998,6 +826,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
   tallas:["S","M","L","XL"]
 },
+
 {
   codigo:"029R",
   subcategoria:"Ropa",
@@ -4020,6 +849,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "White"
 ],
 },
+
 {
   codigo:"031R",
   subcategoria:"Ropa",
@@ -4043,6 +873,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 ],
   
 },
+
 {
   codigo:"032R",
   subcategoria:"Ropa",
@@ -4067,6 +898,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "navy blue"
 ],
 },
+
 {
   codigo:"034R",
   subcategoria:"Ropa",
@@ -4090,6 +922,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "White"
 ],
 },
+
 {
   codigo:"035R",
   subcategoria:"Ropa",
@@ -4113,6 +946,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   "White"
 ],
 },
+
 {
   codigo:"036R",
   subcategoria:"Ropa",
@@ -4138,6 +972,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
 
 ],
 },
+
 {
   codigo:"037R",
   subcategoria:"Ropa",
@@ -4158,6 +993,7 @@ descripcion:" TIEMPO DE ENTREGA 15-25 DIAS",
   tallas:["S","M","L","XL"],
   colores:["Negro","Blanco"]
 },
+
 {
   codigo:"038R",
   subcategoria:"Ropa",
@@ -4184,6 +1020,7 @@ colores:[
   "Black"
 ],
 },
+
 {
   codigo:"039R",
   subcategoria:"Ropa",
@@ -4205,6 +1042,7 @@ colores:[
   tallas:["S","M","L","XL"],
   colores:["Negro","Blanco"]
 },
+
 {
   codigo:"040R",
   subcategoria:"Ropa",
@@ -4226,6 +1064,7 @@ colores:[
   tallas:["S","M","L","XL"],
   colores:["Negro","Blanco"]
 },
+
 {
   codigo:"041R",
   subcategoria:"Ropa",
@@ -4249,6 +1088,7 @@ colores:[
   "Black",
 ],
 },
+
 {
   codigo:"042R",
   subcategoria:"Ropa",
@@ -4272,6 +1112,7 @@ colores:[
   "Black",
 ],
 },
+
 {
   codigo:"043R",
   subcategoria:"Ropa",
@@ -4296,6 +1137,7 @@ colores:[
   "white",
 ],
 },
+
 {
   codigo:"044R",
   subcategoria:"Ropa",
@@ -4321,6 +1163,7 @@ colores:[
   "Gray",
 ],
 },
+
 {
   codigo:"045R",
   subcategoria:"Ropa",
@@ -4345,6 +1188,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"047R",
   subcategoria:"Ropa",
@@ -4369,6 +1213,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"048R",
   subcategoria:"Ropa",
@@ -4393,6 +1238,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"051R",
   nombre:"CONJUNTO CASA BLANCA",
@@ -4417,6 +1263,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"052R",
   nombre:"CONJUNTO CASA BLANCA",
@@ -4441,6 +1288,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"053R",
   nombre:"CONJUNTO CASA BLANCA",
@@ -4465,6 +1313,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"054R",
   nombre:"CONJUNTO CASA BLANCA",
@@ -4489,6 +1338,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"055R",
   nombre:"CONJUNTO CASA BLANCA",
@@ -4513,6 +1363,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"056R",
   nombre:"CONJUNTO CASA BLANCA",
@@ -4537,6 +1388,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"057R",
   nombre:"T-SHIRTS CASA BLANCA",
@@ -4561,6 +1413,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"058R",
   nombre:"T-SHIRTS CASA BLANCA",
@@ -4585,6 +1438,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"059R",
   subcategoria:"Ropa",
@@ -4609,6 +1463,7 @@ colores:[
   "Black",
 ],
 },
+
 {
   codigo:"060R",
   subcategoria:"Ropa",
@@ -4633,6 +1488,7 @@ colores:[
    "black",
 ],
 },
+
 {
   codigo:"061R",
   nombre:"Pantalon Chrome Hearts",
@@ -4657,6 +1513,7 @@ colores:[
   
 ],
 },
+
 {
   codigo:"062R",
   nombre:"HOODIE CHROME HEARTS",
@@ -4681,6 +1538,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"063R",
   subcategoria:"Ropa",
@@ -4705,6 +1563,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"064R",
   subcategoria:"Ropa",
@@ -4729,6 +1588,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"065R",
   subcategoria:"Ropa",
@@ -4753,6 +1613,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"066R",
   subcategoria:"Ropa",
@@ -4777,6 +1638,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"067R",
   subcategoria:"Ropa",
@@ -4801,6 +1663,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"069R",
   subcategoria:"Ropa",
@@ -4825,6 +1688,7 @@ colores:[
    "White",
 ],
 },
+
 {
   codigo:"070R",
   subcategoria:"Ropa",
@@ -4850,6 +1714,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"071R",
   subcategoria:"Ropa",
@@ -4875,6 +1740,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"072R",
   subcategoria:"Ropa",
@@ -4908,6 +1774,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"073R",
   subcategoria:"Ropa",
@@ -4933,6 +1800,7 @@ colores:[
    "Black",
 ],
 },
+
 {
   codigo:"074R",
   subcategoria:"Ropa",
@@ -4958,6 +1826,7 @@ colores:[
    
 ],
 },
+
 {
   codigo:"075R",
   subcategoria:"Ropa",
@@ -5013,7 +1882,6 @@ colores:[
    "Black",
 ],
 },
-
 
 {
   codigo:"AA001",
@@ -5328,28 +2196,6 @@ colores:[
 
 },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {
   codigo:"BP001",
   subcategoria:"Ropa",
@@ -5407,7 +2253,8 @@ colores:[
    "Black",
 ],
 },
-   {
+
+{
   codigo:"CHR001",
   nombre:"chrome hearts",
   precio:55,
@@ -5435,7 +2282,8 @@ colores:[
    
 ],
 },
-   {
+
+{
   codigo:"CHR002",
   subcategoria:"Ropa",
   nombre:"T-SHIRT CHROME HEARTS",
@@ -5465,7 +2313,6 @@ colores:[
 ],
 },
 
-
 {
   codigo:"GD001",
   subcategoria:"Ropa",
@@ -5492,7 +2339,6 @@ colores:[
    
 ],
 },
-
 
 {
   codigo:"GD002",
@@ -5521,11 +2367,6 @@ colores:[
 ],
 },
 
-
-// ============================================================
-//  ACCESORIOS — Figuras Bearbrick, KAWS, lentes y manta
-//  Sin tallas. Algunos tienen colores para elegir.
-// ============================================================
 {
   codigo:"BEAR002",
   marca:"Bearbrick",
@@ -5549,6 +2390,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"BEAR003",
   marca:"Bearbrick",
@@ -5566,6 +2408,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"BEAR004",
   marca:"Bearbrick",
@@ -5587,6 +2430,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"BEAR005",
   marca:"Bearbrick",
@@ -5605,6 +2449,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"BEAR006",
   marca:"Bearbrick",
@@ -5619,6 +2464,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"BEAR007",
   marca:"Bearbrick",
@@ -5640,6 +2486,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"BEAR008",
   marca:"Bearbrick",
@@ -5658,6 +2505,7 @@ colores:[
   descripcion:"Figura Bearbrick 400% · 28 cm · BE@RBRICK ABS.",
   tallas:[]
 },
+
 {
   codigo:"KAW001",
   marca:"KAWS",
@@ -5676,6 +2524,7 @@ colores:[
   tallas:[],
   colores:["Negro","Gris","Café"]
 },
+
 {
   codigo:"KAW002",
   marca:"KAWS",
@@ -5695,6 +2544,7 @@ colores:[
   tallas:[],
   colores:["Negro","Gris","Celeste","Rosado"]
 },
+
 {
   codigo:"KAW003",
   marca:"KAWS",
@@ -5715,6 +2565,7 @@ colores:[
   descripcion:"Figura KAWS Time Off · 29 cm · PVC. Incluye caja.",
   tallas:[]
 },
+
 {
   codigo:"KAW004",
   marca:"KAWS",
@@ -5735,6 +2586,7 @@ colores:[
   tallas:[],
   colores:["Gris","Piel"]
 },
+
 {
   codigo:"KAW005",
   marca:"KAWS",
@@ -5753,6 +2605,7 @@ colores:[
   descripcion:"Figura KAWS BFF rosado con traje · 30 cm · PVC.",
   tallas:[]
 },
+
 {
   codigo:"CHROME001",
   marca:"Chrome Hearts",
@@ -5774,6 +2627,7 @@ colores:[
   tallas:[],
   colores:["Transparente / Dorado","Transparente / Plateado","Negro / Dorado","Negro / Plateado"]
 },
+
 {
   codigo:"OFC001",
   marca:"Off-White",
@@ -5794,12 +2648,6 @@ colores:[
   descripcion:"Manta tejida Off-White \"Industrial by Nature\" · 130 x 160 cm · 1 kg.",
   tallas:[]
 },
-
-
-
-
-
-
 
 {
   codigo:"FERRA001",
@@ -5825,14 +2673,6 @@ colores:[
   descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
 
 },
-
-
-
-
-
-
-
-
 
 {
   codigo:"LVB001",
@@ -5860,10 +2700,6 @@ colores:[
 
 },
 
-
-
-
-
 {
   codigo:"SUPR001",
   marca:"SUPREME",
@@ -5889,17 +2725,7 @@ colores:[
 
   descripcion:"TIEMPO DE ENTREGA 15-25 DIAS",
 colores:["ROJO", "NEGRO", "PLATA", "ROSA", "CAFÉ", "AZUL MARINO", "BLANCO"]
-},
-
-
-
-
-
-
-
-
-
-
+}
 
 ];
 
