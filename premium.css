@@ -41,7 +41,7 @@ body{ letter-spacing:.01em; }
 .menu-desktop button.activo{ border-bottom-color:var(--texto); }
 @media(min-width:900px){ .chips{ display:none !important; } }
 .chips button, .chips .chip{ border-radius:0 !important; font-size:11.5px !important; font-weight:500 !important; letter-spacing:.16em; text-transform:uppercase; }
-.buscador-caja{ border-radius:0 !important; background:transparent !important; }
+.buscador-caja{ border-radius:0 !important; }
 .conversor{ border-radius:0 !important; }
 .conversor button{ border-radius:0 !important; letter-spacing:.08em; }
 
@@ -187,6 +187,7 @@ section[aria-labelledby="tit-populares"], #seccionTendencias{ display:none !impo
 /* ---------- Ajustes finos ---------- */
 .hl-navidad .hl-hero{ overflow:visible !important; }
 .buscador-caja, .buscador-caja input{ border-radius:0 !important; }
+.buscador-caja{ background:var(--card) !important; }
 .buscador-caja input{ background:transparent !important; }
 /* Categorías en el teléfono: texto con subrayado en vez de botones */
 .chips{ gap:22px; padding:12px 16px 10px !important; }
@@ -221,3 +222,8 @@ section[aria-labelledby="tit-populares"], #seccionTendencias{ display:none !impo
 .nv-nota{ border-radius:0 !important; background:var(--card) !important; border:1px solid var(--borde) !important; color:var(--texto-2) !important; }
 .nv-nota b{ color:var(--texto) !important; font-weight:500 !important; }
 .aviso-inmediata{ border-radius:0 !important; background:var(--card) !important; border-color:var(--borde) !important; }
+
+/* Comprar por modelo en computadora: una sola fila (los 6 con más estilos). */
+@media(min-width:1100px){ .hl-modelos > .hl-modelo:nth-child(n+7){ display:none; } }
+/* Header sólido: que no se vea el contenido pasando por detrás al bajar. */
+.header{ background:var(--bg) !important; }
