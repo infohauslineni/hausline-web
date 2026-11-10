@@ -201,3 +201,23 @@ section[aria-labelledby="tit-populares"], #seccionTendencias{ display:none !impo
 .card-codigo{ position:static !important; margin-top:2px; }
 .card-info{ flex:0 0 auto !important; }
 .seccion-originales .seccion-cabecera :is(svg, span, i):first-child{ filter:grayscale(1) contrast(1.2); }
+
+/* ---------- Ficha: oferta, disponibilidad y avisos en blanco y negro ---------- */
+.modal-precio{ font-family:var(--font); }
+.modal-precio .desc{ background:transparent !important; border:1px solid #8E1B1B !important; color:#8E1B1B !important; border-radius:0 !important; font-weight:500 !important; letter-spacing:.14em; font-size:10.5px !important; padding:4px 8px !important; }
+.precio-antes, .modal-precio s, .modal-precio del{ color:var(--texto-3) !important; }
+.promo-activa{
+  background:transparent !important; border:0 !important; border-radius:0 !important; padding:0 !important;
+  color:#8E1B1B !important; font-size:10.5px !important; font-weight:500 !important; letter-spacing:.24em; text-transform:uppercase;
+}
+.promo-activa svg{ width:13px !important; height:13px !important; stroke:currentColor !important; }
+.disponibilidad{ border-radius:0 !important; padding:0 !important; background:transparent !important; border:0 !important; font-size:10.5px !important; font-weight:500 !important; letter-spacing:.22em; text-transform:uppercase; }
+.disponibilidad.encargo, .disponibilidad.inmediata{ color:var(--texto) !important; }
+.disponibilidad::before{ width:6px !important; height:6px !important; }
+.disponibilidad.inmediata::before{ background:#2E6B45 !important; }
+.entrega-estim{ border-radius:0 !important; background:var(--card) !important; border:1px solid var(--borde) !important; color:var(--texto) !important; font-weight:400 !important; }
+.entrega-estim strong{ color:var(--texto) !important; font-weight:500 !important; }
+.entrega-estim svg{ stroke:var(--texto) !important; }
+.nv-nota{ border-radius:0 !important; background:var(--card) !important; border:1px solid var(--borde) !important; color:var(--texto-2) !important; }
+.nv-nota b{ color:var(--texto) !important; font-weight:500 !important; }
+.aviso-inmediata{ border-radius:0 !important; background:var(--card) !important; border-color:var(--borde) !important; }
