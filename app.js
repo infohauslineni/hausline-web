@@ -183,6 +183,14 @@ function animarContador(selector){
 
 // modoInmediata = la tarjeta se está mostrando dentro de "Entrega inmediata".
 // En ese contexto muestra el precio y las tallas que hay físicamente.
+// En la tarjeta la marca ya va arriba: si el nombre empieza con ella no se repite
+// ("Christian Louboutin Flats" -> "Flats"). La ficha del producto muestra el nombre completo.
+function nombreSinMarca(producto){
+  const n = String(nombreProducto(producto) || ""), m = String(marcaProducto(producto) || "");
+  if(m && n.toLowerCase().startsWith(m.toLowerCase() + " ")){ const r = n.slice(m.length).trim(); if(r.length >= 3) return r; }
+  return n;
+}
+
 function crearCard(producto, modoInmediata){
   const enCaminoModo = modoInmediata === "encamino" && producto.enCamino;
   const inmediata = !enCaminoModo && !!modoInmediata && producto.entregaInmediata;
@@ -257,7 +265,7 @@ function crearCard(producto, modoInmediata){
       </div>
       <div class="card-info">
         <div class="card-marca">${esc(marcaProducto(producto))}</div>
-        <h3 class="card-nombre">${esc(nombreProducto(producto))}</h3>
+        <h3 class="card-nombre">${esc(nombreSinMarca(producto))}</h3>
         <div class="card-meta">
           <div class="card-precio">${precioHtml}</div>
         </div>

@@ -351,3 +351,16 @@ body.con-nav .cta-page{ padding-bottom:110px; }
   .cta-encuesta-est{ gap:5px; }
   .cta-encuesta-est a{ height:42px; font-size:21px; }
 }
+
+/* ============ HAUSLINE PREMIUM (igual que la tienda) ============ */
+:root{ --bg:#FAF9F7; --texto:#141110; --texto-2:#5F5950; --texto-3:#9A9387; --borde:#E8E4DD; --borde-fuerte:#CFC8BC; --foto-bg:#F1EFEB; --radio:4px; --radio-sm:2px; --sombra:none; }
+body{ letter-spacing:.01em; }
+.cta-h1{ font-weight:500; letter-spacing:0; font-size:40px; }
+.cta-btn{ border-radius:0; font-weight:500; font-size:11.5px; letter-spacing:.26em; min-height:52px; }
+.cta-btn:hover{ opacity:.88; }
+.cta-input{ border-radius:2px; }
+.cta-input:focus{ border-color:var(--texto); box-shadow:none; }
+.cta-chip{ border-radius:0; font-size:10.5px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; }
+.cta-foto, .cta-fotos a{ border-radius:0; }
+.cta-card{ box-shadow:0 1px 2px rgba(20,17,16,.03), 0 12px 32px rgba(20,17,16,.04); }
+.cta-skel{ background:linear-gradient(100deg,#F1EFEB 30%,#FBFAF8 50%,#F1EFEB 70%); background-size:220% 100%; }
