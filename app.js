@@ -642,6 +642,78 @@ function renderMarcas(limite){
   }).join("");
 }
 
+// ============================================================
+// COMPRAR POR MODELO
+// ============================================================
+// Agrupa el calzado publicado por marca + modelo (campo "modelo" que trae el panel). Los
+// productos viejos sin ese campo entran si su nombre menciona el modelo (ej. "Super-Star").
+// Solo salen modelos con 2 o más productos; "Otros" no cuenta como modelo.
+const MIN_POR_MODELO = 2;
+const MAX_MODELOS_INICIO = 12;
+function normTxt(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,""); }
+function modeloValido(m){ return !!m && !/^(otros?|varios|otro modelo)$/i.test(String(m).trim()); }
+function calzadoPublico(){ return productos.filter(p => !p.ventaLibre && subcategoriaDe(p) === "Calzado"); }
+
+function modelosCatalogo(){
+  const base = calzadoPublico();
+  const grupos = new Map();
+  base.forEach(p => {
+    if(!modeloValido(p.modelo)) return;
+    const clave = normMarca(p.marca) + "|" + normTxt(p.modelo);
+    if(!grupos.has(clave)) grupos.set(clave, { marca:p.marca, modelo:String(p.modelo).trim(), items:[] });
+    grupos.get(clave).items.push(p);
+  });
+  base.forEach(p => {
+    if(p.modelo) return;
+    const g = grupoPorNombre(p, grupos);
+    if(g) g.items.push(p);
+  });
+  return [...grupos.values()].filter(g => g.items.length >= MIN_POR_MODELO).sort((a, b) => b.items.length - a.items.length);
+}
+// Producto viejo sin modelo: busca un modelo de su misma marca que aparezca en el nombre.
+function grupoPorNombre(p, grupos){
+  const nombre = normTxt((p.nombreReal || "") + " " + (p.nombre || ""));
+  for(const g of grupos.values()){
+    const m = normTxt(g.modelo);
+    if(m.length >= 5 && normMarca(g.marca) === normMarca(p.marca) && nombre.includes(m)) return g;
+  }
+  return null;
+}
+function productosDeModelo(valor){
+  const [marca, modelo] = String(valor || "").split("|");
+  const g = modelosCatalogo().find(x => normMarca(x.marca) === normMarca(marca) && normTxt(x.modelo) === normTxt(modelo));
+  return g ? g.items : [];
+}
+function tituloModelo(valor){ const [marca, modelo] = String(valor || "").split("|"); return modelo ? `${modelo} · ${marca}` : "Catálogo"; }
+
+function renderModelos(){
+  const sec = $("#comprarModelo"), cont = $("#filaModelos");
+  if(!sec || !cont) return;
+  const lista = modelosCatalogo().slice(0, MAX_MODELOS_INICIO);
+  sec.hidden = !lista.length;
+  cont.innerHTML = lista.map(g => {
+    // Portada: el primer producto con modelo del panel (sus fotos vienen de perfil).
+    const p = g.items.find(x => x.modelo) || g.items[0];
+    const img = p.imagen || "";
+    const n = g.items.length;
+    return `
+      <button class="hl-modelo" type="button" data-modelo="${esc(g.marca + "|" + g.modelo)}">
+        <span class="hl-modelo-foto">${img ? `<img ${imgMini(img)} alt="${esc(g.modelo)}" loading="lazy">` : ""}</span>
+        <span class="hl-modelo-txt">
+          <span class="hl-modelo-marca">${esc(g.marca)}</span>
+          <strong class="hl-modelo-nombre">${esc(g.modelo)}</strong>
+          <span class="hl-modelo-cant">${n} ${n === 1 ? "estilo" : "estilos"}</span>
+        </span>
+      </button>`;
+  }).join("");
+  cont.querySelectorAll(".hl-modelo-foto img").forEach(img => {
+    img.addEventListener("error", function(){
+      const o = this.getAttribute("data-orig");
+      if(o && this.src.indexOf(o) < 0){ this.removeAttribute("data-orig"); this.src = o; } else { this.style.display = "none"; }
+    });
+  });
+}
+
 // Tira de marcas del hero (arriba, bajo el título). Antes eran 12 marcas fijas
 // en el HTML; ahora se arma con TODAS las marcas del catálogo (marcasCatalogo),
 // así aparecen todas y se mantienen al día solas. El HTML deja 12 como respaldo
@@ -1099,6 +1171,7 @@ function renderInicio(){
   }
 
   renderHeroMarcas();
+  renderModelos();
   // Vitrina animada de marcas (arriba) y "Compre por marca" (vitrina.js).
   if(typeof renderVitrinaMarcas === "function") renderVitrinaMarcas();
   renderMarcas(10);
@@ -1184,6 +1257,7 @@ function urlColeccion(tipo, valor){
   // compartir en WhatsApp/Facebook, generada por scripts/gen-og-marcas.mjs).
   if(tipo === "marca")     return "/m/" + slugMarca(valor) + "/";
   if(tipo === "busqueda")  return "/?buscar="    + encodeURIComponent(valor);
+  if(tipo === "modelo")    return "/?modelo="    + encodeURIComponent(valor);
   return null;
 }
 
@@ -1346,6 +1420,7 @@ function baseColeccion(){
   }
   // Marca sin distinguir mayúsculas, espacios ni símbolos (así "DOLCE & GABANNA" = "DOLCE&GABANNA").
   if(tipo === "marca")     return productos.filter(p => normMarca(p.marca) === normMarca(valor));
+  if(tipo === "modelo")    return productosDeModelo(valor);
   // Búsqueda: si el cliente ya estaba dentro de una categoría/subcategoría (p. ej.
   // Ropa) al buscar, los resultados se quedan DENTRO de ese contexto para que no
   // se crucen calzado y ropa. Sin contexto (búsqueda desde el inicio) es global.
@@ -1975,6 +2050,7 @@ window.addEventListener("popstate", () => {
   const coleccion = p.get("coleccion");
   let   marca     = p.get("marca");
   const buscar    = p.get("buscar");
+  const modelo    = p.get("modelo");
   // La marca puede venir por su ruta propia (/m/<slug>/), no solo por ?marca=.
   if(!marca){
     const mm = location.pathname.match(/^\/m\/([^\/]+)\/?$/);
@@ -1987,6 +2063,7 @@ window.addEventListener("popstate", () => {
   else if(coleccion) destino = { tipo:"seccion", valor:coleccion, titulo:TITULOS_COLECCION[coleccion] || "Catálogo" };
   else if(marca)     destino = { tipo:"marca", valor:marca, titulo:marca };
   else if(buscar)    destino = { tipo:"busqueda", valor:buscar, titulo:`Resultados para "${buscar}"` };
+  else if(modelo)    destino = { tipo:"modelo", valor:modelo, titulo:tituloModelo(modelo) };
   else               destino = { tipo:"inicio" };
 
   // ¿El destino es la MISMA vista que ya está montada debajo del producto?
@@ -2009,6 +2086,7 @@ window.addEventListener("popstate", () => {
   if(destino.tipo === "categoria")   abrirColeccion("categoria", destino.valor, destino.titulo, true);
   else if(destino.tipo === "seccion") abrirColeccion("seccion", destino.valor, destino.titulo, true);
   else if(destino.tipo === "marca")   abrirColeccion("marca", destino.valor, destino.titulo, true);
+  else if(destino.tipo === "modelo")  abrirColeccion("modelo", destino.valor, destino.titulo, true);
   else if(destino.tipo === "busqueda"){
     textoBusqueda = destino.valor;
     ["#buscador", "#buscadorMovil"].forEach(s => { if($(s)) $(s).value = destino.valor; });
@@ -2407,6 +2485,15 @@ document.addEventListener("click", e => {
   if(cat){
     e.preventDefault();
     abrirColeccion("categoria", cat.dataset.categoria, cat.dataset.categoria);
+    cerrarMenu();
+    return;
+  }
+
+  // Abrir colección de un modelo (Comprar por modelo)
+  const mod = e.target.closest("[data-modelo]");
+  if(mod){
+    e.preventDefault();
+    abrirColeccion("modelo", mod.dataset.modelo, tituloModelo(mod.dataset.modelo));
     cerrarMenu();
     return;
   }
