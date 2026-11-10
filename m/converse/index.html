@@ -104,10 +104,12 @@
   }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=20261106a">
+  <link rel="stylesheet" href="styles.css?v=20261110a">
   <link rel="stylesheet" href="vitrina.css?v=20261103a">
 <link rel="stylesheet" href="halloween.css?v=20261028b">
 <link rel="stylesheet" href="navidad.css?v=20261028a">
+<link rel="stylesheet" href="premium.css?v=20261110a">
+<script defer src="fotos.js?v=20261110a"></script>
 
   <!-- Scripts con defer en el <head>: se descargan EN PARALELO mientras el
        navegador arma la página (más rápido en móvil), pero se ejecutan en
@@ -123,7 +125,7 @@
   <script defer src="favoritos.js?v=20261004c"></script>
   <script defer src="carrito.js?v=20261003u"></script>
   <script defer src="supabase-views.js?v=20260929"></script>
-  <script defer src="app.js?v=20261106a"></script>
+  <script defer src="app.js?v=20261110a"></script>
   <script defer src="vitrina.js?v=20261030a"></script>
   <script defer src="busqueda-ux.js?v=20260927"></script>
   <script defer src="encargo.js?v=20261103b"></script>
@@ -213,6 +215,14 @@
       <p class="hl-hero-eyebrow">Colección · Temporada 2026</p>
       <p class="hl-hero-titulo">luxury footwear &amp; fashion</p>
       <!-- Tira de marcas retirada (faltaban marcas); el menú "Marcas" lleva a "Compre por marca" -->
+    </section>
+
+    <!-- Comprar por modelo: se arma sola con el calzado publicado (renderModelos en app.js) -->
+    <section class="seccion" id="comprarModelo" aria-labelledby="tit-modelo" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-modelo">Comprar por modelo</h2>
+      </div>
+      <div class="hl-modelos" id="filaModelos"></div>
     </section>
 
     <!-- "Explora por categoría" retirada por decisión de HAUSLINE -->
