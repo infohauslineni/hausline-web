@@ -35,13 +35,22 @@ const CATALOGO_PANEL = {
   url: 'https://xgdijumnmaqfirmckugw.supabase.co',
   key: 'sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw'
 }
+// La base de datos entrega como mucho 1000 filas por pedido: se piden por páginas.
+async function traerTodoPanel(query) {
+  let todo = []
+  for (let desde = 0; ; desde += 1000) {
+    const r = await fetch(`${CATALOGO_PANEL.url}/rest/v1/catalogo_web?${query}&offset=${desde}&limit=1000`,
+      { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } })
+    if (!r.ok) throw new Error('HTTP ' + r.status)
+    const pag = await r.json()
+    if (!Array.isArray(pag)) throw new Error('respuesta rara')
+    todo = todo.concat(pag)
+    if (pag.length < 1000) return todo
+  }
+}
 try {
-  const r = await fetch(
-    `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos&activo=eq.true&order=created_at.asc`,
-    { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } }
-  )
-  if (r.ok) {
-    const filas = await r.json()
+  const filas = await traerTodoPanel('select=codigo,datos&activo=eq.true&or=(datos->>borrador.is.null,datos->>borrador.neq.true)&order=created_at.asc,codigo.asc')
+  {
     if (Array.isArray(filas)) {
       for (const fila of filas) {
         const datos = fila && fila.datos ? fila.datos : null
@@ -57,8 +66,6 @@ try {
       }
     }
     console.log('✓ Panel (Supabase) leído')
-  } else {
-    console.log(`⚠ Panel (Supabase) respondió ${r.status}; se generan solo las marcas de productos.js`)
   }
 } catch (e) {
   console.log(`⚠ Panel (Supabase) no disponible (${e.message}); se generan solo las marcas de productos.js`)

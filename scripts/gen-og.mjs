@@ -27,6 +27,7 @@ const sandbox = { window: {}, document: { createElement: () => ({}) }, console, 
 vm.createContext(sandbox)
 vm.runInContext(`${codigoFuente}\nthis.__data = { productos, nombreProducto, descripcionProducto, precioVigente, marcaProducto, normalizarProducto, buscarProducto, necesitaCotizar, ofertaDe }`, sandbox)
 const { productos, nombreProducto, descripcionProducto, precioVigente, marcaProducto, normalizarProducto, buscarProducto, necesitaCotizar, ofertaDe } = sandbox.__data
+const codigosBase = new Set(productos.map((p) => String(p.codigo).toUpperCase()))
 
 // --- Sumar los productos AGREGADOS DESDE EL PANEL (Supabase · catalogo_web) ---
 // El panel guarda en Supabase, no en productos.js, así que esos productos nuevos
@@ -36,13 +37,22 @@ const CATALOGO_PANEL = {
   url: 'https://xgdijumnmaqfirmckugw.supabase.co',
   key: 'sb_publishable_NwpQth6G3qhpvtnRan3Xfg_8EqPM4Pw'
 }
+// La base de datos entrega como mucho 1000 filas por pedido: se piden por páginas.
+async function traerTodoPanel(query) {
+  let todo = []
+  for (let desde = 0; ; desde += 1000) {
+    const r = await fetch(`${CATALOGO_PANEL.url}/rest/v1/catalogo_web?${query}&offset=${desde}&limit=1000`,
+      { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } })
+    if (!r.ok) throw new Error('HTTP ' + r.status)
+    const pag = await r.json()
+    if (!Array.isArray(pag)) throw new Error('respuesta rara')
+    todo = todo.concat(pag)
+    if (pag.length < 1000) return todo
+  }
+}
 try {
-  const r = await fetch(
-    `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos&activo=eq.true&order=created_at.asc`,
-    { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } }
-  )
-  if (r.ok) {
-    const filas = await r.json()
+  const filas = await traerTodoPanel('select=codigo,datos&activo=eq.true&or=(datos->>borrador.is.null,datos->>borrador.neq.true)&order=created_at.asc,codigo.asc')
+  {
     let agregados = 0
     if (Array.isArray(filas)) {
       for (const fila of filas) {
@@ -61,8 +71,6 @@ try {
       }
     }
     console.log(`✓ Panel (Supabase): ${agregados} producto(s) leídos`)
-  } else {
-    console.log(`⚠ Panel (Supabase) respondió ${r.status}; se generan solo los de productos.js`)
   }
 } catch (e) {
   console.log(`⚠ Panel (Supabase) no disponible (${e.message}); se generan solo los de productos.js`)
@@ -307,11 +315,12 @@ console.log(`✓ sitemap.xml regenerado con ${codigosGenerados.length} productos
 // lento o caído, catalogo-remoto.js usa este archivo. Solo se reemplaza con una respuesta
 // buena (nunca con un error o una lista vacía). Se actualiza cada 15 min con el workflow.
 try {
-  const r = await fetch(
-    `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos,activo&order=created_at.asc`,
-    { headers: { apikey: CATALOGO_PANEL.key, Authorization: 'Bearer ' + CATALOGO_PANEL.key } }
-  )
-  const filas = r.ok ? await r.json() : null
+  // Lo mismo que baja la tienda: todo menos los borradores (esos se agregan solo si tapan
+  // un producto de productos.js, con el código y nada más).
+  const filas = await traerTodoPanel('select=codigo,datos,activo&or=(datos->>borrador.is.null,datos->>borrador.neq.true)&order=created_at.asc,codigo.asc')
+  const borr = (await traerTodoPanel('select=codigo,activo&datos->>borrador=eq.true&order=codigo.asc'))
+    .filter((f) => codigosBase.has(String(f.codigo).toUpperCase()))
+  filas.push(...borr.map((f) => ({ codigo: f.codigo, activo: f.activo, datos: { codigo: f.codigo, borrador: true } })))
   if (Array.isArray(filas) && filas.length) {
     fs.writeFileSync(path.join(raiz, 'catalogo-respaldo.json'), JSON.stringify(filas), 'utf8')
     console.log(`✓ catalogo-respaldo.json: ${filas.length} productos del panel`)

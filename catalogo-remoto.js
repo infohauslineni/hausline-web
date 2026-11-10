@@ -18,22 +18,43 @@ async function cargarProductosDelPanel(){
   // 1) Supabase con tiempo límite (6 s). 2) Si está lento, caído o saturado: la copia de
   // respaldo que vive en este mismo sitio (catalogo-respaldo.json, se actualiza cada 15 min).
   // Así la tienda siempre muestra los productos, precios y ocultos correctos.
-  async function traer(url, opciones, ms){
+  async function traer(url, opciones, ms, vacioOk){
     const ctrl = typeof AbortController === "function" ? new AbortController() : null;
     const t = ctrl ? setTimeout(() => ctrl.abort(), ms) : null;
     try{
       const r = await fetch(url, Object.assign({}, opciones, ctrl ? { signal: ctrl.signal } : {}));
       if(!r.ok) throw new Error("HTTP " + r.status);
       const j = await r.json();
-      if(!Array.isArray(j) || !j.length) throw new Error("vacío");
+      if(!Array.isArray(j) || (!j.length && !vacioOk)) throw new Error("vacío");
       return j;
     } finally { if(t) clearTimeout(t); }
   }
+  // La base de datos entrega como mucho 1000 filas por pedido: se piden por páginas.
+  // Los borradores NO se bajan enteros (son miles de productos sin publicar): solo importan
+  // los que tapan un producto de productos.js, y de esos basta el código.
+  const BASE = `${CATALOGO_PANEL.url}/rest/v1/catalogo_web`;
+  const H = { headers: { apikey: CATALOGO_PANEL.key, Authorization: "Bearer " + CATALOGO_PANEL.key } };
+  async function traerTodo(query){
+    let todo = [];
+    for(let desde = 0; ; desde += 1000){
+      const pag = await traer(`${BASE}?${query}&offset=${desde}&limit=1000`, H, 6000, true);
+      todo = todo.concat(pag);
+      if(pag.length < 1000) return todo;
+    }
+  }
+  async function borradoresDeLaBase(){
+    const cods = [...new Set(productos.map(p => String(p.codigo || "").toUpperCase()).filter(Boolean))];
+    const tandas = [];
+    for(let i = 0; i < cods.length; i += 150) tandas.push(cods.slice(i, i + 150));
+    const res = await Promise.all(tandas.map(t => traer(
+      `${BASE}?select=codigo,activo&datos->>borrador=eq.true&codigo=in.(${t.map(c => encodeURIComponent('"' + c.replace(/"/g, "") + '"')).join(",")})`, H, 6000, true)));
+    return [].concat(...res).map(f => ({ codigo: f.codigo, activo: f.activo, datos: { codigo: f.codigo, borrador: true } }));
+  }
   let filas = null;
   try{
-    filas = await traer(
-      `${CATALOGO_PANEL.url}/rest/v1/catalogo_web?select=codigo,datos,activo&order=created_at.asc`,
-      { headers: { apikey: CATALOGO_PANEL.key, Authorization: "Bearer " + CATALOGO_PANEL.key } }, 6000);
+    filas = await traerTodo("select=codigo,datos,activo&or=(datos->>borrador.is.null,datos->>borrador.neq.true)&order=created_at.asc,codigo.asc");
+    if(!filas.length) throw new Error("vacío");
+    try{ filas = filas.concat(await borradoresDeLaBase()); }catch(e){ /* sin esto solo no se tapan borradores de la base */ }
   }catch(e){
     console.warn("Catálogo del panel lento o no disponible, se usa el respaldo:", e && e.message);
     try{ filas = await traer("/catalogo-respaldo.json?v=" + Math.floor(Date.now() / 900000), {}, 8000); }
