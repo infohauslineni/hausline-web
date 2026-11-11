@@ -1,0 +1,168 @@
+/* ============================================================
+   SECCIONES DE INICIO (mejoras nov-2026) — va DESPUÉS de premium.css
+   · Entrega inmediata destacada · Ofertas en cuadrícula · Compre para Hombre/Dama
+   · Barra "Explore" con variedad en listados y búsquedas · tarjetas alineadas
+   ============================================================ */
+
+/* ---------- Filas: en el teléfono se asoma la 3.ª tarjeta (se nota que hay más) ---------- */
+@media(max-width:479px){
+  .fila{ grid-auto-columns:41vw !important; gap:10px !important; }
+}
+
+/* ---------- Tarjetas parejas: nombre en 2 líneas fijas, así los precios quedan alineados ---------- */
+.card-nombre{
+  display:-webkit-box !important; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden !important; min-height:2.8em;
+}
+.card-meta{ margin-top:8px !important; }
+
+/* ---------- Pastillas de arriba: Ofertas en rojo y Entrega inmediata con punto verde ---------- */
+.chips{ -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent); mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent); }
+.chips .chip-oferta{ color:var(--rojo-oferta, #C62828) !important; }
+.chips .chip-oferta.activo{ border-bottom-color:var(--rojo-oferta, #C62828) !important; }
+.chips .chip-inm::before{ content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:#1E8E4E; margin-right:7px; vertical-align:1px; box-shadow:0 0 0 3px rgba(30,142,78,.16); }
+
+/* ============================================================
+   ENTREGA INMEDIATA — bloque destacado
+   ============================================================ */
+.ei-bloque{
+  background:#F0ECE4; border-radius:22px; padding:22px 0 18px;
+  margin-left:-6px; margin-right:-6px;
+}
+.ei-cabecera{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; padding:0 18px 16px; flex-wrap:wrap; }
+.ei-texto{ flex:1 1 260px; min-width:0; }
+.ei-ceja{
+  display:inline-flex; align-items:center; gap:6px; padding:5px 11px 5px 9px; border-radius:999px;
+  background:#1E8E4E; color:#fff; font:600 10.5px var(--font); letter-spacing:.14em; text-transform:uppercase;
+}
+.ei-ceja svg{ width:12px; height:12px; fill:currentColor; }
+.ei-bloque h2{
+  font-family:var(--serif); font-weight:500; font-size:clamp(30px,4.2vw,44px); line-height:1.05; margin:10px 0 6px;
+}
+.ei-sub{ margin:0; font-size:13.5px; line-height:1.5; color:var(--texto-2); max-width:520px; }
+.ei-sub b{ color:var(--texto); font-weight:600; }
+.ei-ver{
+  display:inline-flex; align-items:center; gap:8px; flex:none; cursor:pointer;
+  background:var(--texto); color:#fff; border:0; border-radius:999px; padding:11px 18px;
+  font:500 11px var(--font); letter-spacing:.16em; text-transform:uppercase;
+}
+.ei-ver svg{ width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2; }
+.ei-fila{ padding:0 18px 6px !important; scroll-padding-left:18px; }
+@media(max-width:639px){ .ei-fila{ grid-auto-columns:58vw !important; gap:12px !important; } }
+.ei-fila .card{ background:var(--card) !important; border-radius:16px !important; box-shadow:0 1px 0 rgba(20,17,16,.04); }
+.ei-fila .card-img{ border-radius:16px 16px 0 0 !important; }
+.ei-fila .card-info{ padding:12px 12px 14px !important; }
+/* Dentro del bloque no hace falta repetir "Entrega inmediata" en cada foto */
+.ei-fila .etiqueta.inmediata{ display:none !important; }
+/* Tallas en stock: cuadritos claros con su título */
+.ei-fila .card-tallas{ display:flex !important; flex-wrap:wrap; gap:5px !important; margin:10px 0 0 !important; align-items:center; justify-content:flex-start !important; }
+.ei-fila .card-tallas::before{ content:"Tallas disponibles"; flex-basis:100%; margin:0 0 2px; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:#1E8E4E; font-weight:600; }
+.ei-fila .card-talla{
+  border:1px solid var(--borde-fuerte, #CFC8BC) !important; border-radius:8px !important; padding:4px 8px !important;
+  min-width:34px !important; text-align:center; font-size:12.5px !important; font-weight:600 !important; background:var(--card) !important;
+}
+.ei-fila .card-talla + .card-talla::before{ content:none !important; }
+.ei-pista{ margin:10px 18px 0; height:3px; border-radius:3px; background:rgba(20,17,16,.10); overflow:hidden; }
+.ei-pista span{ display:block; height:100%; width:30%; border-radius:3px; background:var(--texto); transition:transform .15s linear; }
+@media(min-width:900px){
+  .ei-bloque{ margin-left:0; margin-right:0; padding:32px 0 26px; }
+  .ei-cabecera, .ei-fila{ padding-left:32px !important; padding-right:32px !important; }
+  .ei-pista{ margin:12px 32px 0; }
+}
+
+/* ============================================================
+   OFERTAS — cuadrícula con marcas variadas
+   ============================================================ */
+.of-bloque .seccion-sub b{ color:var(--rojo-oferta, #C62828); font-weight:600; }
+.of-marcas{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding:0 0 14px; -webkit-overflow-scrolling:touch; }
+.of-marcas::-webkit-scrollbar{ display:none; }
+.of-marcas:empty{ display:none; }
+.of-marcas button{
+  flex:none; display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+  border:1px solid var(--borde); background:var(--card); border-radius:999px; padding:8px 13px;
+  font:500 12px var(--font); color:var(--texto);
+}
+.of-marcas button small{ color:var(--rojo-oferta, #C62828); font-weight:600; font-size:11px; }
+.of-marcas button:active{ transform:scale(.97); }
+.of-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 10px; }
+.of-grid > .card:nth-child(n+7){ display:none; }
+@media(min-width:900px){
+  .of-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px 18px; }
+  .of-grid > .card:nth-child(n+7){ display:block; }
+}
+.of-mas{
+  display:block; width:100%; margin-top:18px; cursor:pointer;
+  border:1px solid var(--texto); background:transparent; color:var(--texto); border-radius:999px; padding:14px;
+  font:500 11.5px var(--font); letter-spacing:.16em; text-transform:uppercase;
+}
+@media(min-width:900px){ .of-mas{ width:auto; margin:26px auto 0; padding:14px 34px; } }
+
+/* ============================================================
+   COMPRE PARA — Hombre / Dama
+   ============================================================ */
+.cp-switch{
+  display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px; margin:0 0 14px;
+  background:#ECE8E1; border-radius:999px; max-width:420px;
+}
+.cp-switch button{
+  border:0; background:transparent; border-radius:999px; padding:11px 10px; cursor:pointer;
+  font:600 12px var(--font); letter-spacing:.14em; text-transform:uppercase; color:var(--texto-2);
+  transition:background .25s, color .25s, box-shadow .25s;
+}
+.cp-switch button small{ margin-left:6px; font-weight:500; opacity:.6; letter-spacing:.04em; }
+.cp-switch button.activo{ background:var(--card); color:var(--texto); box-shadow:0 2px 10px rgba(20,17,16,.10); }
+.cp-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+@media(min-width:900px){ .cp-grid{ grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; } }
+.cp-tile{
+  position:relative; overflow:hidden; border:0; padding:0; cursor:pointer; text-align:left;
+  aspect-ratio:1/1; border-radius:16px; background:var(--foto-bg);
+  animation:cp-entra .4s ease both;
+}
+.cp-tile:nth-child(2){ animation-delay:.03s } .cp-tile:nth-child(3){ animation-delay:.06s }
+.cp-tile:nth-child(4){ animation-delay:.09s } .cp-tile:nth-child(5){ animation-delay:.12s } .cp-tile:nth-child(6){ animation-delay:.15s }
+@keyframes cp-entra{ from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:none } }
+.cp-tile img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .8s ease; }
+@media(hover:hover){ .cp-tile:hover img{ transform:scale(1.05); } }
+.cp-tile::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.78)); }
+.cp-txt{ position:absolute; left:12px; right:12px; bottom:11px; z-index:1; color:#fff; display:flex; flex-direction:column; gap:2px; text-shadow:0 1px 8px rgba(0,0,0,.35); }
+.cp-txt b{ font-family:var(--serif); font-weight:600; font-size:22px; line-height:1.05; }
+.cp-txt small{ font-size:11px; letter-spacing:.06em; opacity:.9; }
+.cp-oferta .cp-txt small{ color:#FFD7D2; font-weight:600; }
+.cp-oferta::before{ content:"%"; position:absolute; top:10px; right:10px; z-index:1; width:28px; height:28px; border-radius:50%; background:var(--rojo-oferta, #C62828); color:#fff; display:grid; place-items:center; font:700 13px var(--font); }
+.cp-todo{ background:var(--texto); }
+.cp-todo img{ opacity:.35; }
+.cp-todo .cp-txt b::after{ content:" →"; font-family:var(--font); font-size:16px; }
+@media(prefers-reduced-motion:reduce){ .cp-tile{ animation:none; } }
+
+/* ============================================================
+   COMPRE POR MARCA — el banner cambia de marca
+   ============================================================ */
+.cm-lado.cm-entra{ animation:cm-entra-2 .5s ease both; }
+@keyframes cm-entra-2{ from{ opacity:.35; } to{ opacity:1; } }
+.cm-lado .cm-tipos{ margin:0 0 4px !important; font-size:12px !important; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.75) !important; }
+
+/* ============================================================
+   BARRA "EXPLORE" (variedad en categorías, marcas y búsquedas)
+   ============================================================ */
+.variedad{ margin:4px 0 14px; }
+.vb-titulo{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.vb-titulo span{ font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--texto-3); font-weight:600; }
+.vb-limpiar{ border:0; background:none; padding:0; cursor:pointer; font:500 12px var(--font); color:var(--texto); text-decoration:underline; text-underline-offset:3px; }
+.vb-fila{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px; -webkit-overflow-scrolling:touch; -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); }
+.vb-fila::-webkit-scrollbar{ display:none; }
+.vb-chip{
+  flex:none; display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+  border:1px solid var(--borde); background:var(--card); border-radius:999px; padding:6px 14px 6px 6px;
+  font:500 12.5px var(--font); color:var(--texto); white-space:nowrap;
+}
+.vb-chip:not(.vb-foto){ padding:8px 14px; flex-direction:column; align-items:flex-start; gap:0; border-radius:14px; }
+.vb-chip img{ width:30px; height:30px; border-radius:50%; object-fit:cover; background:var(--foto-bg); }
+.vb-chip b{ font-weight:600; }
+.vb-chip small{ font-size:11px; color:var(--texto-3); }
+.vb-chip.activo{ background:var(--texto); border-color:var(--texto); color:#fff; }
+.vb-chip.activo small{ color:rgba(255,255,255,.7); }
+.vb-oferta{ border-color:rgba(198,40,40,.35); }
+.vb-oferta b, .vb-oferta small{ color:var(--rojo-oferta, #C62828); }
+.vb-inm b{ color:#1E8E4E; }
+.vb-oferta.activo, .vb-inm.activo{ background:var(--texto); }
+.vb-oferta.activo b, .vb-inm.activo b{ color:#fff; }

@@ -81,6 +81,7 @@ let ordenActual = "recomendados";
 let filtroMarca = "";
 let filtroPrecio = "";
 let filtroSub = "";                  // subcategoría activa ("" = todas)
+let filtroTipo = "";                 // modelo/tipo elegido en la barra "Explore" ("" = todos)
 const filtrosActivos = new Set();    // "nuevo" | "oferta" | "inmediata" | "rapido"
 let contextoBusqueda = null;         // categoría/subcategoría desde donde se inició la búsqueda (null = global)
 
@@ -188,6 +189,14 @@ function animarContador(selector){
 function nombreSinMarca(producto){
   const n = String(nombreProducto(producto) || ""), m = String(marcaProducto(producto) || "");
   if(m && n.toLowerCase().startsWith(m.toLowerCase() + " ")){ const r = n.slice(m.length).trim(); if(r.length >= 3) return r; }
+  // Si el nombre es igual a la marca ("Christian Louboutin" / "Christian Louboutin") se
+  // muestra el modelo o el tipo de producto, para no repetir lo mismo dos veces.
+  if(m && n.trim().toLowerCase() === m.trim().toLowerCase()){
+    if(producto.modelo && !/^(otros?|varios)$/i.test(String(producto.modelo).trim())) return String(producto.modelo).trim();
+    if(producto.tipoPrenda) return String(producto.tipoPrenda);
+    const sub = subcategoriaDe(producto);
+    return sub === "Calzado" ? "Sneaker" : (sub || "");
+  }
   return n;
 }
 
@@ -396,6 +405,41 @@ function seleccionDestacados(lista, limite, paso){
   return tomar(rotarDiario(diversificarMarcas(lista), paso), limite);
 }
 
+// Clave de "tipo" de un producto: el modelo si lo tiene (Super-Star, Flats, Stilettos…);
+// si no, el tipo de prenda o la subcategoría. Sirve para mezclar resultados con variedad.
+function tipoProducto(p){
+  if(p.modelo && !/^(otros?|varios|otro modelo)$/i.test(String(p.modelo).trim())) return String(p.modelo).trim();
+  if(p.tipoPrenda) return String(p.tipoPrenda).trim();
+  return subcategoriaDe(p) || "Otros";
+}
+
+// Orden "Recomendados" con VARIEDAD: primero lo que está en Entrega inmediata, y luego se
+// reparten marca + modelo por turnos (así una búsqueda de "louboutin" no muestra 40
+// sneakers seguidos: va alternando sneakers, stilettos, flats…) y se intercalan ofertas.
+// Es determinístico (no cambia al pasar de página).
+function mezclarVariedad(lista){
+  if(lista.length < 3) return lista.slice();
+  const inmediata = lista.filter(p => p.entregaInmediata);
+  const resto = lista.filter(p => !p.entregaInmediata);
+  const grupos = new Map();
+  for(const p of resto){
+    const k = normMarca(p.marca || "") + "|" + String(tipoProducto(p)).toLowerCase();
+    if(!grupos.has(k)) grupos.set(k, []);
+    grupos.get(k).push(p);
+  }
+  // Dentro de cada grupo: las ofertas primero.
+  const colas = [...grupos.values()].map(g => g.filter(ofertaVigente).concat(g.filter(p => !ofertaVigente(p))));
+  // Los grupos grandes arrancan primero, pero todos tienen turno.
+  colas.sort((a, b) => b.length - a.length);
+  const salida = inmediata.slice();
+  let quedan = true;
+  while(quedan){
+    quedan = false;
+    for(const c of colas){ if(c.length){ salida.push(c.shift()); quedan = true; } }
+  }
+  return salida;
+}
+
 // "Nuevo en HAUSLINE": los productos marcados con destacadoNuevo:true.
 // Para que un producto salga aquí (y lleve la etiqueta "Nuevo"), ponle
 // destacadoNuevo:true en productos.js. Rota entre los más nuevos cada día.
@@ -570,11 +614,17 @@ function renderChips(){
   if(!cont) return;
   // El acceso a "Ofertas" solo aparece si hay alguna promoción vigente.
   const hayOfertas = productosOferta().length > 0;
+  const hayInmediata = productosInmediata().length > 0;
+  // Orden pensado para el cliente: Hombre/Dama primero, luego lo que más vende (Ofertas y
+  // Entrega inmediata) y al final el resto de categorías.
+  const chipCat = id => { const c = CATEGORIAS.find(x => x.id === id); return c ? `<button class="chip" type="button" data-categoria="${esc(c.id)}">${esc(c.etiqueta)}</button>` : ""; };
   cont.innerHTML = `
     <button class="chip activo" type="button" data-ir-inicio>Inicio</button>
-    ${CATEGORIAS.map(c => `<button class="chip" type="button" data-categoria="${esc(c.id)}">${esc(c.etiqueta)}</button>`).join("")}
+    ${chipCat("Hombre")}${chipCat("Dama")}
+    ${hayOfertas ? `<button class="chip chip-oferta" type="button" data-coleccion="ofertas">Ofertas</button>` : ""}
+    ${hayInmediata ? `<button class="chip chip-inm" type="button" data-coleccion="entrega-inmediata">Entrega inmediata</button>` : ""}
+    ${CATEGORIAS.filter(c => c.id !== "Hombre" && c.id !== "Dama").map(c => chipCat(c.id)).join("")}
     <button class="chip" type="button" data-coleccion="marcas">Marcas</button>
-    ${hayOfertas ? `<button class="chip" type="button" data-coleccion="ofertas">Ofertas</button>` : ""}
   `;
 }
 
@@ -1127,11 +1177,15 @@ function renderInicio(){
   const secInmediata = document.getElementById("entrega-inmediata");
   if(inmediata.length){
     if(secInmediata) secInmediata.hidden = false;
-    pintarFila("#filaInmediata", tomar(inmediata, 12), true);
+    // Variedad: se reparten por marca para que no salgan seguidos de la misma.
+    pintarFila("#filaInmediata", tomar(diversificarMarcas(inmediata), 12), true);
+    const conteo = document.getElementById("eiConteo");
+    if(conteo) conteo.textContent = inmediata.length === 1 ? "Ver 1 disponible" : `Ver los ${inmediata.length}`;
+    if(typeof pistaFila === "function") pistaFila("#filaInmediata", "#eiPista");
   } else {
     // Sin productos de entrega inmediata: se OCULTA la sección entera (no muestra caja vacía).
     if(secInmediata) secInmediata.hidden = true;
-    contInmediata.innerHTML = "";
+    if(contInmediata) contInmediata.innerHTML = "";
   }
 
   // En camino · Apártelo ya: la sección se oculta sola si no hay nada en camino.
@@ -1151,10 +1205,26 @@ function renderInicio(){
   // Ofertas: la sección se oculta sola si no hay promociones vigentes.
   const ofertas = productosOferta();
   const secOfertas = $("#seccionOfertas");
-  if(ofertas.length){
+  if(ofertas.length && secOfertas){
     secOfertas.hidden = false;
-    pintarFila("#filaOfertas", tomar(ofertas, 12));
-  } else {
+    // Cuadrícula de 6 (8 en computadora) con marcas y modelos variados, rotando cada día;
+    // primero los descuentos más fuertes de cada grupo.
+    const fuertes = ofertas.slice().sort((a, b) => porcentajeDescuento(b) - porcentajeDescuento(a));
+    const enGrid = $("#filaOfertas") && $("#filaOfertas").classList.contains("of-grid");
+    pintarFila("#filaOfertas", tomar(diversificarMarcas(rotarDiario(mezclarVariedad(fuertes), 5)), enGrid ? 8 : 12));
+    const max = Math.max(...ofertas.map(porcentajeDescuento));
+    const resumen = $("#ofertasResumen");
+    if(resumen) resumen.innerHTML = `<b>Hasta -${max}%</b> · ${ofertas.length} productos rebajados`;
+    const mas = $("#ofertasMas");
+    if(mas) mas.textContent = `Ver las ${ofertas.length} ofertas`;
+    const cm = $("#ofertasMarcas");
+    if(cm){
+      const porMarca = new Map();
+      ofertas.forEach(p => { if(!p.marca) return; const g = porMarca.get(p.marca) || { n:0, max:0 }; g.n++; g.max = Math.max(g.max, porcentajeDescuento(p)); porMarca.set(p.marca, g); });
+      cm.innerHTML = [...porMarca.entries()].sort((a, b) => b[1].n - a[1].n).slice(0, 10).map(([m, g]) =>
+        `<button type="button" data-oferta-marca="${esc(m)}">${esc(m)}<small>-${g.max}%</small></button>`).join("");
+    }
+  } else if(secOfertas){
     secOfertas.hidden = true;
     // Se limpia la fila para no dejar productos viejos ocultos en el DOM
     // (si no, un producto podía quedar "repetido" en esta fila oculta).
@@ -1182,6 +1252,8 @@ function renderInicio(){
   renderModelos();
   // Vitrina animada de marcas (arriba) y "Compre por marca" (vitrina.js).
   if(typeof renderVitrinaMarcas === "function") renderVitrinaMarcas();
+  // "Compre para" Hombre / Dama (inicio-secciones.js).
+  if(typeof renderComprarPara === "function") renderComprarPara();
   renderMarcas(10);
   renderLookbook();
   renderClientes();
@@ -1281,6 +1353,7 @@ function abrirColeccion(tipo, valor, titulo, sinHistorial){
   filtroMarca = "";
   filtroPrecio = "";
   filtroSub = "";
+  filtroTipo = "";
   filtrosActivos.clear();
 
   document.body.classList.add("en-coleccion");
@@ -1503,6 +1576,7 @@ function aplicarFiltros(lista){
   }
 
   if(filtroSub) out = out.filter(p => mismaSubcat(subcategoriaDe(p), filtroSub));
+  if(filtroTipo) out = out.filter(p => String(tipoProducto(p)).toLowerCase() === filtroTipo.toLowerCase());
 
   if(filtrosActivos.has("nuevo"))     out = out.filter(esNuevo);
   if(filtrosActivos.has("oferta"))    out = out.filter(ofertaVigente);
@@ -1519,7 +1593,10 @@ function aplicarOrden(lista){
     case "precio-desc": return copia.sort((a,b) => precioVigente(b) - precioVigente(a));
     case "nombre":      return copia.sort((a,b) => nombreProducto(a).localeCompare(nombreProducto(b)));
     case "recientes":   return copia.reverse();
-    default:            return copia;
+    default:
+      // "Nuevos" y "Vistos" conservan su orden propio; el resto se mezcla con variedad.
+      if(coleccionActual && coleccionActual.tipo === "seccion" && /^(nuevos|vistos|favoritos)$/.test(coleccionActual.valor)) return copia;
+      return mezclarVariedad(copia);
   }
 }
 
@@ -1567,9 +1644,71 @@ function renderSubcategorias(){
   cont.hidden = false;
 }
 
+// Barra "Explore": muestra la VARIEDAD que hay dentro de la vista (marcas y modelos con su
+// foto y cantidad, más accesos a Ofertas y Entrega inmediata). Tocar uno filtra al instante.
+function renderVariedad(){
+  const cont = $("#variedadBarra");
+  if(!cont) return;
+  let base = aplicarBusqueda(baseColeccion());
+  if(filtroSub) base = base.filter(p => mismaSubcat(subcategoriaDe(p), filtroSub));
+  const esSeccionFija = coleccionActual && coleccionActual.tipo === "seccion" && /^(favoritos|vistos)$/.test(coleccionActual.valor);
+  if(base.length < 6 || esSeccionFija){ cont.innerHTML = ""; cont.hidden = true; return; }
+
+  const chips = [];
+  // Los números de cada pastilla respetan lo que ya está elegido (marca / modelo).
+  const porMarca = l => filtroMarca ? l.filter(p => normMarca(p.marca) === normMarca(filtroMarca)) : l;
+  const porTipo = l => filtroTipo ? l.filter(p => String(tipoProducto(p)).toLowerCase() === filtroTipo.toLowerCase()) : l;
+  const elegidos = porTipo(porMarca(base));
+  const nOferta = elegidos.filter(ofertaVigente).length;
+  const nInm = elegidos.filter(p => p.entregaInmediata).length;
+  const enOfertas = coleccionActual && coleccionActual.valor === "ofertas";
+  const enInm = coleccionActual && coleccionActual.valor === "entrega-inmediata";
+  if(nOferta && !enOfertas && nOferta < elegidos.length){
+    const max = Math.max(...elegidos.filter(ofertaVigente).map(porcentajeDescuento));
+    chips.push(`<button type="button" class="vb-chip vb-oferta${filtrosActivos.has("oferta") ? " activo" : ""}" data-var-filtro="oferta"><b>Ofertas</b><small>hasta -${max}% · ${nOferta}</small></button>`);
+  }
+  if(nInm && !enInm && nInm < elegidos.length){
+    chips.push(`<button type="button" class="vb-chip vb-inm${filtrosActivos.has("inmediata") ? " activo" : ""}" data-var-filtro="inmediata"><b>Entrega inmediata</b><small>${nInm} ya en Nicaragua</small></button>`);
+  }
+
+  const contar = (lista, clave) => {
+    const m = new Map();
+    lista.forEach(p => {
+      const k = clave(p); if(!k) return;
+      if(!m.has(k)) m.set(k, { nombre:k, n:0, img:"" });
+      const g = m.get(k); g.n++; if(!g.img && p.imagen) g.img = p.imagen;
+    });
+    return [...m.values()].sort((a, b) => b.n - a.n);
+  };
+  const chipFoto = (attr, valor, nombre, n, img, activo) =>
+    `<button type="button" class="vb-chip vb-foto${activo ? " activo" : ""}" ${attr}="${esc(valor)}">` +
+      (img ? `<img ${imgMini(img)} alt="" loading="lazy" decoding="async">` : "") +
+      `<b>${esc(nombre)}</b><small>${n}</small></button>`;
+
+  // Marcas (solo si la vista no es ya de una marca y hay más de una).
+  if(!(coleccionActual && coleccionActual.tipo === "marca")){
+    const marcas = contar(porTipo(base), p => p.marca);
+    if(marcas.length > 1){
+      marcas.slice(0, 10).forEach(m => chips.push(chipFoto("data-var-marca", m.nombre, m.nombre, m.n, m.img, normMarca(filtroMarca) === normMarca(m.nombre))));
+    }
+  }
+  // Modelos / tipos dentro de lo que se ve (Super-Star, Flats, Stilettos, Camiseta…).
+  const tipos = contar(porMarca(base), tipoProducto).filter(t => t.n >= 2 && !/^(otros|calzado|ropa)$/i.test(t.nombre));
+  if(tipos.length > 1){
+    tipos.slice(0, 10).forEach(t => chips.push(chipFoto("data-var-tipo", t.nombre, t.nombre, t.n, t.img, filtroTipo.toLowerCase() === t.nombre.toLowerCase())));
+  }
+
+  if(!chips.length){ cont.innerHTML = ""; cont.hidden = true; return; }
+  const hayFiltro = filtroMarca || filtroTipo || filtrosActivos.has("oferta") || filtrosActivos.has("inmediata");
+  cont.innerHTML = `<div class="vb-titulo"><span>Explore</span>${hayFiltro ? `<button type="button" class="vb-limpiar" data-var-limpiar>Ver todo</button>` : ""}</div>
+    <div class="vb-fila">${chips.join("")}</div>`;
+  cont.hidden = false;
+}
+
 function renderColeccion(){
   const grid = $("#gridColeccion");
   if(!grid) return;
+  try{ renderVariedad(); }catch(e){ console.error("variedad", e); }
 
   const filtrados = aplicarOrden(aplicarFiltros(aplicarBusqueda(baseColeccion())));
   const porPagina = productosPorPagina();
@@ -2556,6 +2695,40 @@ document.addEventListener("click", e => {
     return;
   }
 
+  // Chips de marca dentro de "Ofertas" (inicio): abre Ofertas filtrado por esa marca.
+  const ofMarca = e.target.closest("[data-oferta-marca]");
+  if(ofMarca){
+    abrirColeccion("seccion", "ofertas", TITULOS_COLECCION.ofertas);
+    filtroMarca = ofMarca.dataset.ofertaMarca;
+    const sel = $("#selectMarca"); if(sel) sel.value = filtroMarca;
+    renderColeccion();
+    return;
+  }
+
+  // Barra "Explore" (variedad): marca, modelo/tipo, ofertas o entrega inmediata.
+  const vMarca = e.target.closest("[data-var-marca]");
+  const vTipo = e.target.closest("[data-var-tipo]");
+  const vFiltro = e.target.closest("[data-var-filtro]");
+  const vLimpiar = e.target.closest("[data-var-limpiar]");
+  if(vMarca || vTipo || vFiltro || vLimpiar){
+    if(vLimpiar){ filtroMarca = ""; filtroTipo = ""; filtrosActivos.clear(); }
+    if(vMarca){
+      const m = vMarca.dataset.varMarca;
+      filtroMarca = normMarca(filtroMarca) === normMarca(m) ? "" : m;
+      filtroTipo = "";
+    }
+    if(vTipo){ const t = vTipo.dataset.varTipo; filtroTipo = filtroTipo.toLowerCase() === t.toLowerCase() ? "" : t; }
+    if(vFiltro){
+      const f = vFiltro.dataset.varFiltro, ya = filtrosActivos.has(f);
+      filtrosActivos.clear(); if(!ya) filtrosActivos.add(f);
+    }
+    const sel = $("#selectMarca"); if(sel) sel.value = filtroMarca;
+    $$("[data-filtro]").forEach(c => c.classList.toggle("activo", filtrosActivos.has(c.dataset.filtro)));
+    paginaActual = 1;
+    renderColeccion();
+    return;
+  }
+
   // Filtros rápidos: SOLO UNO a la vez. Tocar otro cambia la selección;
   // tocar el que ya está activo lo apaga.
   const filtro = e.target.closest("[data-filtro]");
@@ -2920,6 +3093,7 @@ $("#selectOrden").addEventListener("change", e => {
 });
 $("#selectMarca").addEventListener("change", e => {
   filtroMarca = e.target.value;
+  filtroTipo = "";
   paginaActual = 1;
   renderColeccion();
 });

@@ -146,13 +146,28 @@
     if(!sec || !cm.marcas[i]) return;
     cm.actual = i;
     var m = cm.marcas[i];
-    sec.querySelectorAll(".cm-chips button").forEach(function(b, j){ b.classList.toggle("activa", j === i); b.setAttribute("aria-pressed", String(j === i)); });
+    var chipsCont = sec.querySelector(".cm-chips");
+    sec.querySelectorAll(".cm-chips button").forEach(function(b, j){
+      b.classList.toggle("activa", j === i); b.setAttribute("aria-pressed", String(j === i));
+      // Lleva la pastilla activa a la vista dentro de su fila (sin mover la página).
+      if(j === i && chipsCont){ var x = b.offsetLeft - (chipsCont.clientWidth - b.offsetWidth) / 2; chipsCont.scrollTo({ left: Math.max(0, x), behavior: "smooth" }); }
+    });
     var lado = sec.querySelector(".cm-lado"), grid = sec.querySelector(".cm-grid");
-    lado.innerHTML = '<img ' + imgMini(m.portada) + ' alt="" loading="lazy" decoding="async">' +
-      '<small>' + m.total + ' ' + (m.total === 1 ? 'producto' : 'productos') + '</small><h3>' + esc(m.nombre) + '</h3>' +
+    // Variedad: se alternan modelos/tipos de la marca (sneakers, tacones, flats…) en vez de
+    // mostrar siempre los mismos; la foto del banner también cambia cada día.
+    var variados = typeof mezclarVariedad === "function" ? mezclarVariedad(m.productos) : m.productos;
+    var dia = Math.floor(Date.now() / 86400000);
+    var conFoto = variados.filter(function(p){ return p.imagen; });
+    var fotoBanner = conFoto.length ? conFoto[(dia + i) % Math.min(conFoto.length, 8)].imagen : m.portada;
+    var tipos = typeof tipoProducto === "function" ? variados.map(tipoProducto).filter(function(t, k, a){ return t && !/^(otros|calzado|ropa)$/i.test(t) && a.indexOf(t) === k; }).slice(0, 3) : [];
+    var ofertas = m.productos.filter(ofertaVigente).length;
+    lado.innerHTML = '<img ' + imgMini(fotoBanner) + ' alt="" loading="lazy" decoding="async">' +
+      '<small>' + m.total + ' ' + (m.total === 1 ? 'producto' : 'productos') + (ofertas ? ' · ' + ofertas + ' en oferta' : '') + '</small><h3>' + esc(m.nombre) + '</h3>' +
+      (tipos.length ? '<p class="cm-tipos">' + tipos.map(esc).join(' · ') + '</p>' : '') +
       (m.desde ? '<p>Desde ' + formatoPrecio(m.desde) + '</p>' : '') +
       '<a class="vt-btn" href="#" data-marca="' + esc(m.nombre) + '">Ver todo <i aria-hidden="true">→</i></a>';
-    grid.innerHTML = m.productos.slice(0, 4).map(function(p){
+    lado.classList.remove("cm-entra"); void lado.offsetWidth; lado.classList.add("cm-entra");
+    grid.innerHTML = variados.slice(0, 4).map(function(p){
       var desc = typeof porcentajeDescuento === "function" ? porcentajeDescuento(p) : 0;
       return '<article class="cm-prod">' +
         '<a href="#" data-codigo="' + esc(p.codigo) + '" class="cm-foto" aria-label="' + esc(nombreProducto(p)) + '"><img ' + imgMini(p.imagen) + ' alt="" loading="lazy" decoding="async">' +
@@ -178,11 +193,30 @@
     }).join("");
     if(!sec.dataset.eventos){
       sec.dataset.eventos = "1";
-      sec.querySelector(".cm-chips").addEventListener("click", function(e){ var b = e.target.closest("[data-cm]"); if(b) pintarMarca(Number(b.dataset.cm)); });
+      sec.querySelector(".cm-chips").addEventListener("click", function(e){ var b = e.target.closest("[data-cm]"); if(b){ cm.tocado = true; pintarMarca(Number(b.dataset.cm)); } });
+      // Si el cliente toca o desliza dentro de la sección, deja de cambiar sola.
+      ["touchstart", "mousedown"].forEach(function(ev){ sec.addEventListener(ev, function(){ cm.tocado = true; }, { passive: true }); });
+      autoMarcas(sec);
     }
-    var idx = Math.max(0, marcas.findIndex(function(m){ return m.nombre === nombreActual; }));
+    var idx = marcas.findIndex(function(m){ return m.nombre === nombreActual; });
+    // Ya no arranca siempre con la misma marca: cada visita empieza con una distinta.
+    if(idx < 0) idx = Math.floor(Math.random() * marcas.length);
     sec.hidden = false;
     pintarMarca(idx);
+  }
+
+  // Cambia de marca sola cada 6 s mientras la sección está en pantalla (y el cliente no
+  // la ha tocado), para que se vea la variedad de marcas sin tener que buscarlas.
+  function autoMarcas(sec){
+    if(quieto) return;
+    var visible = false;
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(es){ visible = es[0].isIntersecting; }, { threshold: 0.35 }).observe(sec);
+    }
+    setInterval(function(){
+      if(!visible || cm.tocado || document.hidden || !cm.marcas.length || !sec.isConnected) return;
+      pintarMarca((cm.actual + 1) % cm.marcas.length);
+    }, 6000);
   }
 
   window.renderVitrinaMarcas = function(){

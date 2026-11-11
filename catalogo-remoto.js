@@ -111,6 +111,8 @@ async function cargarProductosDelPanel(){
 
   // Vuelve a pintar lo que ya está en pantalla para que aparezcan los nuevos.
   try{ if(typeof renderInicio === "function") renderInicio(); }catch(e){}
+  // Las pastillas de arriba (Ofertas / Entrega inmediata) dependen de lo que llegó del panel.
+  try{ if(typeof renderChips === "function" && typeof estadoVista !== "undefined" && estadoVista === "inicio"){ renderChips(); actualizarAccesosOfertas(); } }catch(e){}
   try{ if(typeof renderTendencias === "function") renderTendencias(); }catch(e){}
   try{ if(typeof renderMasVendidos === "function") renderMasVendidos(); }catch(e){}
   // Si hay una colección abierta (categoría/marca), la refresca sin perder el lugar.
