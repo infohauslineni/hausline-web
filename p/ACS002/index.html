@@ -109,6 +109,7 @@
 <link rel="stylesheet" href="halloween.css?v=20261028b">
 <link rel="stylesheet" href="navidad.css?v=20261028a">
 <link rel="stylesheet" href="premium.css?v=20261110f">
+<link rel="stylesheet" href="inicio-secciones.css?v=20261110a">
 <script defer src="fotos.js?v=20261110a"></script>
 
   <!-- Scripts con defer en el <head>: se descargan EN PARALELO mientras el
@@ -125,11 +126,12 @@
   <script defer src="favoritos.js?v=20261004c"></script>
   <script defer src="carrito.js?v=20261003u"></script>
   <script defer src="supabase-views.js?v=20260929"></script>
-  <script defer src="app.js?v=20261110a"></script>
-  <script defer src="vitrina.js?v=20261030a"></script>
+  <script defer src="app.js?v=20261110b"></script>
+  <script defer src="vitrina.js?v=20261110a"></script>
+  <script defer src="inicio-secciones.js?v=20261110a"></script>
   <script defer src="busqueda-ux.js?v=20260927"></script>
   <script defer src="encargo.js?v=20261103b"></script>
-  <script defer src="catalogo-remoto.js?v=20261110a"></script>
+  <script defer src="catalogo-remoto.js?v=20261110b"></script>
   <script defer src="resenas.js?v=20261030a"></script>
   <script defer src="calidad-producto.js?v=20261003a"></script>
   <script defer src="whatsapp.js?v=20260829"></script>
@@ -218,26 +220,47 @@
       <!-- Tira de marcas retirada (faltaban marcas); el menú "Marcas" lleva a "Compre por marca" -->
     </section>
 
-    <!-- Comprar por modelo: se arma sola con el calzado publicado (renderModelos en app.js) -->
-    <section class="seccion" id="comprarModelo" aria-labelledby="tit-modelo" hidden>
+
+    <!-- Compre para: Hombre / Dama con accesos visuales por tipo (inicio-secciones.js) -->
+    <section class="seccion cp-bloque" id="comprarPara" aria-labelledby="tit-comprar-para" hidden>
       <div class="seccion-cabecera">
-        <h2 id="tit-modelo">Comprar por modelo</h2>
+        <h2 id="tit-comprar-para">Compre para</h2>
       </div>
-      <div class="hl-modelos" id="filaModelos"></div>
+      <div class="cp-switch" role="tablist" aria-label="Elegir Hombre o Dama">
+        <button type="button" role="tab" data-cp="Hombre" aria-selected="true" class="activo">Hombre</button>
+        <button type="button" role="tab" data-cp="Dama" aria-selected="false">Dama</button>
+      </div>
+      <div class="cp-grid" id="cpGrid"></div>
     </section>
 
-    <!-- "Explora por categoría" retirada por decisión de HAUSLINE -->
-    <div id="filaCategorias" hidden></div>
+    <!-- Entrega inmediata: bloque destacado para que se entienda que YA están en Nicaragua -->
+    <section class="seccion ei-bloque" id="entrega-inmediata" aria-labelledby="tit-inmediata">
+      <div class="ei-cabecera">
+        <div class="ei-texto">
+          <span class="ei-ceja"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg> Ya en Nicaragua</span>
+          <h2 id="tit-inmediata">Entrega inmediata</h2>
+          <p class="ei-sub">Estos productos ya están aquí: <b>se entregan enseguida, sin esperar el encargo</b>. Solo hay las tallas que ve en cada uno.</p>
+        </div>
+        <button class="ei-ver" type="button" data-coleccion="entrega-inmediata"><span id="eiConteo">Ver todo</span> <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="fila ei-fila" id="filaInmediata"></div>
+      <div class="ei-pista" id="eiPista" aria-hidden="true"><span></span></div>
+    </section>
 
-    <!-- Entrega inmediata -->
-    <section class="seccion" id="entrega-inmediata" aria-labelledby="tit-inmediata">
+    <!-- Ofertas: arriba y en cuadrícula, con marcas variadas -->
+    <section class="seccion of-bloque" id="seccionOfertas" aria-labelledby="tit-ofertas" hidden>
       <div class="seccion-cabecera">
-        <h2 id="tit-inmediata">Entrega inmediata</h2>
-        <button class="ver-todo" type="button" data-coleccion="entrega-inmediata">
+        <div>
+          <h2 id="tit-ofertas">Ofertas</h2>
+          <p class="seccion-sub" id="ofertasResumen"></p>
+        </div>
+        <button class="ver-todo" type="button" data-coleccion="ofertas">
           Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
       </div>
-      <div class="fila" id="filaInmediata"></div>
+      <div class="of-marcas" id="ofertasMarcas"></div>
+      <div class="of-grid" id="filaOfertas"></div>
+      <button class="of-mas" type="button" data-coleccion="ofertas" id="ofertasMas">Ver todas las ofertas</button>
     </section>
 
     <!-- Llega pronto · Apártelo ya (compras que vienen en camino) -->
@@ -262,6 +285,29 @@
       <div class="fila" id="filaNuevos"></div>
     </section>
 
+    <!-- Comprar por modelo: se arma sola con el calzado publicado (renderModelos en app.js) -->
+    <section class="seccion" id="comprarModelo" aria-labelledby="tit-modelo" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-modelo">Comprar por modelo</h2>
+      </div>
+      <div class="hl-modelos" id="filaModelos"></div>
+    </section>
+
+    <!-- Compre por marca: botones con las marcas y sus productos (vitrina.js) -->
+    <section class="seccion" id="comprarMarca" aria-labelledby="tit-comprar-marca" hidden>
+      <div class="seccion-cabecera">
+        <h2 id="tit-comprar-marca">Compre por marca</h2>
+      </div>
+      <div class="cm-chips" role="group" aria-label="Elegir marca"></div>
+      <div class="cm-zona"><div class="cm-lado"></div><div class="cm-grid"></div></div>
+    </section>
+
+    <!-- "Explora por categoría" retirada por decisión de HAUSLINE -->
+    <div id="filaCategorias" hidden></div>
+
+
+
+
     <!-- 100% Originales: productos con la etiqueta "100% OG" (se marcan en Productos del panel) -->
     <section class="seccion seccion-originales" id="seccionOriginales" aria-labelledby="tit-originales" hidden>
       <div class="seccion-cabecera">
@@ -276,14 +322,6 @@
       <div class="fila" id="filaOriginales"></div>
     </section>
 
-    <!-- Compre por marca: botones con las marcas y sus productos (vitrina.js) -->
-    <section class="seccion" id="comprarMarca" aria-labelledby="tit-comprar-marca" hidden>
-      <div class="seccion-cabecera">
-        <h2 id="tit-comprar-marca">Compre por marca</h2>
-      </div>
-      <div class="cm-chips" role="group" aria-label="Elegir marca"></div>
-      <div class="cm-zona"><div class="cm-lado"></div><div class="cm-grid"></div></div>
-    </section>
 
     <!-- Sneakers en tendencia -->
     <section class="seccion" aria-labelledby="tit-tendencia">
@@ -350,16 +388,6 @@
       <div class="fila" id="filaAccesorios"></div>
     </section>
 
-    <!-- Ofertas -->
-    <section class="seccion" id="seccionOfertas" aria-labelledby="tit-ofertas" hidden>
-      <div class="seccion-cabecera">
-        <h2 id="tit-ofertas">Ofertas</h2>
-        <button class="ver-todo" type="button" data-coleccion="ofertas">
-          Ver todo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
-      <div class="fila" id="filaOfertas"></div>
-    </section>
 
     <!-- Marcas populares: retirada; las marcas ahora van con foto en el hero (#heroMarcas) -->
     <div id="filaMarcas" hidden></div>
@@ -530,6 +558,7 @@
     </div>
 
     <div class="subcats" id="subcatsBarra" role="tablist" aria-label="Subcategorías" hidden></div>
+    <div class="variedad" id="variedadBarra" hidden></div>
 
     <div class="filtros-barra" id="filtrosBarra">
       <select class="select-orden" id="selectOrden" aria-label="Ordenar productos">
