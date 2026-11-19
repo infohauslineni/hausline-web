@@ -266,17 +266,58 @@
 
   var FOTO_LABEL = { control_calidad: "Control de calidad", recibido_hausline: "Su producto", producto: "Producto", empaque: "Empaquetado", recibido_local: "Recibido" };
   var FOTO_ORDEN = ["control_calidad", "recibido_hausline", "producto", "empaque", "recibido_local"];
+  // Foto del producto: las del catálogo viejo vienen como "imgP/..." (relativas): desde /pedido/
+  // hay que pedirlas desde la raíz de la tienda.
+  function urlImagen(u) {
+    u = String(u || "").trim();
+    if (!u || /^(https?:|data:|blob:|\/)/i.test(u)) return u;
+    return "/" + u.split("/").map(function (x) { return encodeURIComponent(decodeURIComponent(x)); }).join("/");
+  }
+  // Nombre del producto para el cliente: "Marca · Producto · Talla 38".
+  function nombreProducto(it) {
+    return [it.marca, it.producto].filter(Boolean).join(" · ") + (it.talla ? " · Talla " + it.talla : "");
+  }
+  // Cada foto sabe de qué producto es (pedido_item_id, se elige en el panel al subirla). El
+  // título lo dice también en la foto ampliada.
   function galeria(p) {
+    var items = p.productos || [];
     var g = [];
-    FOTO_ORDEN.forEach(function (t) { (p.imagenes || []).forEach(function (f) { if (f.url && f.tipo === t) g.push({ url: f.url, titulo: FOTO_LABEL[t] }); }); });
+    FOTO_ORDEN.forEach(function (t) {
+      (p.imagenes || []).forEach(function (f) {
+        if (!f.url || f.tipo !== t) return;
+        var it = f.pedido_item_id ? items.filter(function (x) { return x.id === f.pedido_item_id; })[0] : null;
+        g.push({ url: f.url, tipo: t, item: it ? it.id : null, titulo: FOTO_LABEL[t] + (it && items.length > 1 ? " · " + nombreProducto(it) : "") });
+      });
+    });
+    g.forEach(function (f, i) { f.indice = i; });
     return g;
   }
-  function tarjetaFotos(g) {
+  function botonFoto(f) {
+    return '<button type="button" data-foto="' + f.indice + '" aria-label="Ver foto ampliada"><img src="' + esc(f.url) + '" alt="' + esc(f.titulo) + '" loading="lazy"></button>';
+  }
+  // Pedido de varios productos: las fotos van bajo cada producto (con su foto y su nombre);
+  // las que no son de un producto en particular van al final, en "Todo el pedido".
+  function fotosPorProducto(g, items) {
+    var html = items.map(function (it) {
+      var fs = g.filter(function (f) { return f.item === it.id; });
+      if (!fs.length) return "";
+      return '<div class="seg-fotos-prod"><div class="seg-fotos-prod-h">' +
+        (it.imagen ? '<img src="' + esc(urlImagen(it.imagen)) + '" alt="" loading="lazy">' : "") +
+        "<span><b>" + esc([it.marca, it.producto].filter(Boolean).join(" · ")) + "</b>" + (it.talla ? "<small>Talla " + esc(it.talla) + (Number(it.cantidad) > 1 ? " · " + esc(it.cantidad) + " unidades" : "") + "</small>" : "") + "</span></div>" +
+        '<div class="cta-fotos">' + fs.map(botonFoto).join("") + "</div></div>";
+    }).join("");
+    var resto = g.filter(function (f) { return !f.item; });
+    if (resto.length) html += '<div class="seg-fotos-prod"><div class="seg-fotos-prod-h"><span><b>Todo el pedido</b></span></div><div class="cta-fotos">' + resto.map(botonFoto).join("") + "</div></div>";
+    return html;
+  }
+  function tarjetaFotos(g, p) {
     if (!g.length) return "";
-    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de su pedido</h2><div class="cta-card cta-pad"><p class="cta-nota" style="margin:0 0 10px">Fotos reales de su producto en control de calidad y cada etapa. Toque una para verla en grande.</p>' +
-      (g.length === 1
+    var items = (p && p.productos) || [];
+    var porProducto = items.length > 1 && g.some(function (f) { return f.item; });
+    return '<section class="cta-sec"><h2 class="cta-sec-h">Fotos de su pedido</h2><div class="cta-card cta-pad"><p class="cta-nota" style="margin:0 0 10px">Fotos reales de ' + (porProducto ? "cada producto" : "su producto") + ' en control de calidad y cada etapa. Toque una para verla en grande.</p>' +
+      (porProducto ? fotosPorProducto(g, items) : g.length === 1
         ? '<button type="button" class="seg-foto-unica" data-foto="0" aria-label="Ver foto ampliada"><img src="' + esc(g[0].url) + '" alt="' + esc(g[0].titulo) + '"><span>' + esc(g[0].titulo) + "</span></button>"
-        : '<div class="cta-fotos">' + g.map(function (f, i) { return '<button type="button" data-foto="' + i + '" aria-label="Ver foto ampliada"><img src="' + esc(f.url) + '" alt="' + esc(f.titulo) + '" loading="lazy"></button>'; }).join("") + "</div>") +
+        : '<div class="cta-fotos">' + g.map(botonFoto).join("") + "</div>") +
       "</div></section>";
   }
   function tarjetaEtapas(p) {
@@ -305,7 +346,7 @@
     main.innerHTML =
       '<a class="cta-link seg-volver" href="/pedido/">‹ Consultar otro pedido</a>' +
       tarjetaPedido(p) + '<div style="margin-top:12px">' + tarjetaEstado(p) + "</div>" + '<div id="segDemora"></div>' +
-      (cancelado ? "" : tarjetaFotos(g)) + tarjetaEtapas(p) + tarjetaDetalle(p) +
+      (cancelado ? "" : tarjetaFotos(g, p)) + tarjetaEtapas(p) + tarjetaDetalle(p) +
       '<section class="cta-sec"><div class="cta-card cta-pad"><p style="margin:0;font-weight:600">Todos sus pedidos en un solo lugar</p><p class="cta-nota" style="margin-top:4px">Opcional: cree su cuenta gratis con el mismo correo de su compra y verá todos sus pedidos juntos, desde cualquier teléfono.</p><a class="cta-btn linea" style="margin-top:12px" href="/cuenta/pedido/?id=' + encodeURIComponent(p.codigo) + '">Ir a Mi cuenta</a></div></section>' +
       '<section class="cta-sec"><div class="cta-card cta-pad seg-ayuda"><p style="margin:0;font-weight:600">¿Necesita ayuda con su pedido?</p><p class="cta-nota" style="margin-top:4px">Nuestro equipo está listo para ayudarle.</p><a class="cta-btn" style="margin-top:12px" href="' + C.linkWhatsApp("Hola, necesito ayuda con mi pedido " + p.codigo + ".") + '" target="_blank" rel="noopener noreferrer">WhatsApp HAUSLINE</a></div></section>';
     void avisoDemora(p)

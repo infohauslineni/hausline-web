@@ -213,7 +213,7 @@
       if (t[0] === "control_calidad" && items.length > 1) {
         var porItem = items.map(function (it) {
           var fs = del.filter(function (f) { return f.item === it.id; });
-          return fs.length ? '<p style="margin:12px 0 8px;font-size:13px;font-weight:600">' + esc([it.marca, it.producto].filter(Boolean).join(" · ")) + '</p><div class="cta-fotos">' + fs.map(boton).join("") + "</div>" : "";
+          return fs.length ? '<p style="margin:12px 0 8px;font-size:13px;font-weight:600">' + esc([it.marca, it.producto].filter(Boolean).join(" · ") + (it.talla ? " · Talla " + it.talla : "")) + '</p><div class="cta-fotos">' + fs.map(boton).join("") + "</div>" : "";
         }).join("");
         var generales = del.filter(function (f) { return !f.item || !items.some(function (it) { return it.id === f.item; }); });
         cuerpo = porItem + (generales.length ? '<p style="margin:12px 0 8px;font-size:13px;font-weight:600">Pedido completo</p><div class="cta-fotos">' + generales.map(boton).join("") + "</div>" : "");
