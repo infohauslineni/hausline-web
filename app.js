@@ -200,6 +200,20 @@ function nombreSinMarca(producto){
   return n;
 }
 
+// Las tallas de "Llega pronto" y "Entrega inmediata" vienen UNA POR PAR (2 pares de la 40 =
+// "40, 40"): el dato se usa para contar cuántos quedan, pero al cliente se le muestra cada talla una vez.
+function tallasUnicas(lista){ return [...new Set((lista || []).map(t => String(t).trim()).filter(Boolean))]; }
+// Resumen corto para la tarjeta: "39 a 43" si son seguidas, o "39 · 41 · 43" (+N si son muchas).
+function resumenTallas(lista){
+  const u = tallasUnicas(lista);
+  const nums = u.map(Number);
+  if(u.length >= 3 && nums.every(n => Number.isFinite(n))){
+    const o = [...nums].sort((a, b) => a - b);
+    if(o.every((n, i) => i === 0 || n - o[i - 1] <= 1)) return `${o[0]} a ${o[o.length - 1]}`;
+  }
+  return u.length > 4 ? u.slice(0, 4).join(" · ") + ` +${u.length - 4}` : u.join(" · ");
+}
+
 function crearCard(producto, modoInmediata){
   const enCaminoModo = modoInmediata === "encamino" && producto.enCamino;
   const inmediata = !enCaminoModo && !!modoInmediata && producto.entregaInmediata;
@@ -232,14 +246,9 @@ function crearCard(producto, modoInmediata){
   // Solo en el apartado de entrega inmediata se listan las tallas en stock.
   let tallasHtml = "";
   if(enCaminoModo && producto.tallasEnCamino.length){
-    tallasHtml = `<div class="card-tallas">${producto.tallasEnCamino.slice(0, 4).map(t => `<span class="card-talla">${esc(t)}</span>`).join("")}</div>`;
+    tallasHtml = `<div class="card-tallas"><span class="card-talla">${esc(resumenTallas(producto.tallasEnCamino))}</span></div>`;
   } else if(inmediata && producto.tallasEntregaInmediata.length){
-    const visibles = producto.tallasEntregaInmediata.slice(0, 4);
-    const resto = producto.tallasEntregaInmediata.length - visibles.length;
-    tallasHtml = `<div class="card-tallas">
-      ${visibles.map(t => `<span class="card-talla">${esc(t)}</span>`).join("")}
-      ${resto > 0 ? `<span class="card-talla mas">+${resto}</span>` : ""}
-    </div>`;
+    tallasHtml = `<div class="card-tallas"><span class="card-talla">${esc(resumenTallas(producto.tallasEntregaInmediata))}</span></div>`;
   }
 
   // Por defecto la foto se recorta para que el producto llene la tarjeta.
@@ -1869,7 +1878,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
       ? `<button class="aviso-inmediata" type="button" data-ver-inmediata="${esc(producto.codigo)}">
            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
            <span>Hay unidades listas para entrega inmediata en
-           ${esc(producto.tallasEntregaInmediata.join(", "))}${
+           ${esc(tallasUnicas(producto.tallasEntregaInmediata).join(", "))}${
              producto.coloresEntregaInmediata.length
                ? " · " + esc(producto.coloresEntregaInmediata.join(", ")) : ""
            }. Verlas</span>
@@ -1880,7 +1889,7 @@ function abrirProducto(codigo, modoInmediata, sinHistorial){
     $("#modalAvisoInmediata").innerHTML +=
       `<div class="aviso-encamino">
          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>
-         <span><b>Llega pronto</b>${producto.tallasEnCamino.length ? " · talla " + esc(producto.tallasEnCamino.join(", ")) : ""}. Ya viene en camino: apártelo ya ${textoApartar(producto)} y se lo entregamos apenas llegue.</span>
+         <span><b>Llega pronto</b>${producto.tallasEnCamino.length ? " · talla " + esc(tallasUnicas(producto.tallasEnCamino).join(", ")) : ""}. Ya viene en camino: apártelo ya ${textoApartar(producto)} y se lo entregamos apenas llegue.</span>
        </div>`;
   }
 
@@ -2029,7 +2038,7 @@ function cambiarImagen(delta){
 function renderSelectores(producto){
   // Tallas: en el apartado de entrega inmediata solo las que hay en stock;
   // en el catálogo normal todas, porque se piden por encargo.
-  const tallas = modoEnCaminoActual ? producto.tallasEnCamino : tallasDisponibles(producto, modoInmediataActual);
+  const tallas = tallasUnicas(modoEnCaminoActual ? producto.tallasEnCamino : tallasDisponibles(producto, modoInmediataActual));
   const selTallas = $("#selectorTallas");
   if(tallas.length){
     selTallas.hidden = false;
@@ -2076,7 +2085,7 @@ function renderAcordeon(producto){
   if(producto.envioRapido) detalles.push("Envío rápido");
   secciones.push({ titulo: "Detalles", cuerpo: `<ul>${detalles.map(d => `<li>${d}</li>`).join("")}</ul>` });
 
-  const tallas = modoEnCaminoActual ? producto.tallasEnCamino : tallasDisponibles(producto, modoInmediataActual);
+  const tallas = tallasUnicas(modoEnCaminoActual ? producto.tallasEnCamino : tallasDisponibles(producto, modoInmediataActual));
   if(tallas.length){
     secciones.push({
       titulo: "Tallas disponibles",

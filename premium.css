@@ -319,3 +319,8 @@ section[aria-labelledby="tit-populares"], #seccionTendencias{ display:none !impo
 .modal-precio .desc{ border-radius:6px !important; }
 .entrega-estim, .nv-nota, .aviso-inmediata{ border-radius:12px !important; }
 .modal-caja{ border-radius:18px !important; }
+
+/* Tallas en la tarjeta: una sola línea a la izquierda ("TALLAS  39 a 43"). */
+.card .card-tallas{ justify-content:flex-start !important; flex-wrap:nowrap !important; align-items:baseline; width:100%; overflow:hidden; }
+.card .card-tallas .card-talla{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px !important; font-weight:500 !important; }
+.card .card-tallas .card-talla + .card-talla::before{ content:none; }
