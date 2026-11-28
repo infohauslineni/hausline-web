@@ -166,3 +166,8 @@
 .vb-inm b{ color:#1E8E4E; }
 .vb-oferta.activo, .vb-inm.activo{ background:var(--texto); }
 .vb-oferta.activo b, .vb-inm.activo b{ color:#fff; }
+
+/* Tallas completas en la fila de Entrega inmediata: el título arriba y el cuadrito debajo,
+   sin cortar el texto con "…" (premium.css las forzaba a una sola línea). */
+.ei-fila .card .card-tallas{ flex-wrap:wrap !important; overflow:visible !important; }
+.ei-fila .card .card-tallas .card-talla{ white-space:normal !important; overflow:visible !important; text-overflow:clip !important; max-width:100%; line-height:1.35; text-align:left; }

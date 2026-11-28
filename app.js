@@ -211,7 +211,8 @@ function resumenTallas(lista){
     const o = [...nums].sort((a, b) => a - b);
     if(o.every((n, i) => i === 0 || n - o[i - 1] <= 1)) return `${o[0]} a ${o[o.length - 1]}`;
   }
-  return u.length > 4 ? u.slice(0, 4).join(" · ") + ` +${u.length - 4}` : u.join(" · ");
+  // Todas las tallas, completas (antes se cortaba en 4 + "+N" y el cliente no veía las demás).
+  return u.join(" · ");
 }
 
 function crearCard(producto, modoInmediata){

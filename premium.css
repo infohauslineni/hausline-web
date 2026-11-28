@@ -322,5 +322,5 @@ section[aria-labelledby="tit-populares"], #seccionTendencias{ display:none !impo
 
 /* Tallas en la tarjeta: una sola línea a la izquierda ("TALLAS  39 a 43"). */
 .card .card-tallas{ justify-content:flex-start !important; flex-wrap:nowrap !important; align-items:baseline; width:100%; overflow:hidden; }
-.card .card-tallas .card-talla{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px !important; font-weight:500 !important; }
+.card .card-tallas .card-talla{ white-space:normal; overflow:visible; font-size:13px !important; font-weight:500 !important; line-height:1.35; }
 .card .card-tallas .card-talla + .card-talla::before{ content:none; }
